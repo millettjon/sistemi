@@ -1,11 +1,6 @@
 ; --------------------------------------------------
 ; Main file for clojure Sistemi Moderni web application.
 
-; --------------------------------------------------
-; QUESTIONS
-; 
-; - Is the stacktrace useful?  (:use ring.middleware.stacktrace)
-
 (ns sistemi.core
   (:use compojure.core
 	ring.adapter.jetty)
@@ -13,8 +8,9 @@
   (:require [swank.swank]))
 
 (defroutes main-routes
-  (GET "/" [] "<h1>Hello Sistemi Moderni World!</h1>")
+  (GET "/" [] "<h1>Bonjour Sistemi Moderni Monde!!</h1>")
   (route/not-found "<h1>Page not found</h1>"))
 
-;; Start swank repl.
+; Start swank repl.
+; Useful when starting via "lein ring server"
 (swank.swank/start-repl)
