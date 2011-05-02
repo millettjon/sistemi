@@ -1,7 +1,3 @@
-/* Notes:
-   - Vertical Centering: http://blog.themeforest.net/tutorials/vertical-centering-with-css/
-*/
-
 html, body {
     margin:0; padding:0;
     height:100%;
@@ -12,8 +8,8 @@ body {
     background-color:#000;
 }
 
-
-/* Vertically centered floating div. */
+/* Vertically centered floating div.
+   Ref: Vertical Centering: http://blog.themeforest.net/tutorials/vertical-centering-with-css */
 #floater {
     position:relative; float:left;
     height:50%;	margin-bottom:-361px;
@@ -23,7 +19,6 @@ body {
 /* Horizontally centered div. */
 #centered {
     position:relative; clear:left;
-    /* height:722px; width:80%; max-width:1060px; min-width:400px; */
     height:722px; width:1060px;
     margin:0 auto;
 }
