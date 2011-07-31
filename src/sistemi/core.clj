@@ -1,11 +1,12 @@
 (ns sistemi.core
-  ( :use net.cgrand.moustache
-         net.cgrand.enlive-html
-         ring.util.response
-         ring.middleware.file
-         ring.middleware.file-info
-         ring.middleware.stacktrace
-         [ring.adapter.jetty :only [run-jetty]]))
+  (:use net.cgrand.moustache
+        net.cgrand.enlive-html
+        ring.util.response
+        ring.middleware.file
+        ring.middleware.file-info
+        ring.middleware.stacktrace
+        [ring.adapter.jetty :only (run-jetty)]
+        [clojure.tools.logging :only (info error)]))
 
 (def handlers (app
                wrap-stacktrace
@@ -14,6 +15,7 @@
                wrap-file-info
                (wrap-file "www")
                ["sailing"] "clear sailing"
+               ; todo: add a custom 404 here
                ))
 
 
@@ -21,7 +23,7 @@
 
 ;; Starts a swank server. Useful when running locally from foreman.
 (defn start-swank []
-  (println "Starting swank.")
+  (info "Starting swank.")
   ; Use eval here since swank-clojure may not be available in production (e.g., heroku).
   (eval '(do (require 'swank.swank)
              (swank.swank/start-server :host "localhost" :port 4005))))
@@ -32,6 +34,11 @@
   ; Start jetty.
   (let [port (Integer/parseInt (System/getenv "PORT"))]
     (run-jetty #'handlers {:port port})))
+
+;; - Update the format to work with foreman.
+;;   12:44:03.657 [main] INFO  sistemi.core - Starting swank.
+;; - Set default log level to INFO.
+
 
 ;; ? did the original app use a var?
 ;;   - use a var in dev mode?
@@ -45,9 +52,7 @@
 ;;     - http://stackoverflow.com/questions/2671454/heroku-how-to-see-all-the-logs
 ;;     ? remote syslog server?
 ;; - get reloading working in dev environment
-;;   - 
 ;; - get working on heroku
-;; - remove gae related stuff
 ;; - checkin to github
 ;; - get a dev environment working for copeland
 ;;   - http://stackoverflow.com/questions/5939878/git-make-development-and-master-track-different-repos-sensible
