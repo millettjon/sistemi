@@ -1,5 +1,5 @@
 (ns sistemi.test.core
-  (:use [sistemi.core] :reload)
+  (:use [sistemi.core])
   (:use [clojure.test]))
 
 (deftest replace-me ;; FIXME: write
