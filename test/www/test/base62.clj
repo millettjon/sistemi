@@ -1,5 +1,5 @@
-(ns sistemi.test.base62
-  (:require [sistemi.base62 :as b62])
+(ns www.test.base62
+  (:require [www.base62 :as b62])
   (:use [clojure.test]))
 
 (deftest encode

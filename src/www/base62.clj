@@ -1,4 +1,4 @@
-(ns sistemi.base62
+(ns www.base62
   "Functions for working with base62 strings."
   (:refer-clojure :exclude [rand])
   (:import java.security.SecureRandom))
@@ -17,5 +17,3 @@
 (defn rand [length]
   "Returns a cryptographically secure base62 string of the given length."
   (apply str (repeatedly length #(char (nth digits (.nextInt (SecureRandom/getInstance "SHA1PRNG") 62))))))
-
-; add tests
