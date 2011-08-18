@@ -1,8 +1,8 @@
-(ns config
+(ns app.config
   "Merges configuration maps from different sources into a single map."
   (:require [clj-yaml.core :as yaml]
             [clojure.string :as str])
-  (:use [util :only (safely)]
+  (:use [util.except :only (safely)]
         [clojure.contrib.def :only (defvar)]
         [clojure.contrib.map-utils :only (deep-merge-with)]))
 
@@ -85,6 +85,6 @@
   (apply deep-merge-with (fn [a b] b) maps))
 
 (defn set-config!
-  "Applies merge-configs to the list of configuration maps and sets the result in *config*."
+  "Applies function merge-configs to the list of configuration maps and sets the result in *config*."
   [& maps]
   (alter-var-root #'*config* (constantly (apply merge-configs maps))))

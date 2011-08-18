@@ -1,4 +1,5 @@
-(ns util
+(ns util.except
+  "Macros for handling and throwing exceptions."
   (:use clojure.contrib.strint))
 
 (defmacro safely

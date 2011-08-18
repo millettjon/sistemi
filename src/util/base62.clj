@@ -1,4 +1,4 @@
-(ns www.base62
+(ns util.base62
   "Functions for working with base62 strings."
   (:refer-clojure :exclude [rand])
   (:import java.security.SecureRandom))

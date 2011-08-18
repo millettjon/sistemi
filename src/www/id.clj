@@ -1,6 +1,6 @@
 (ns www.id
   (:require [clojure.tools.logging :as log]
-            [www.base62 :as b62]))
+            [util.base62 :as b62]))
 
 ;; Generate a human readable reasonable unique request identifer for use in log messages.
 ;;

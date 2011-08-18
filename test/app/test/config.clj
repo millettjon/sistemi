@@ -1,13 +1,13 @@
-(ns test.config
+(ns app.test.config
   (:use [clojure.test]
-        config))
+        app.config))
 
 (deftest environment-map-test
   (is (map? (environment-map)))
   (is (= (environment-map "USERNAME") {:username (get (System/getenv) "USERNAME")})))
 
 (deftest file-map-test
-  (is (= (file-map "test/test/config.yaml") {:foo "bar"})))
+  (is (= (file-map "test/app/test/config.yaml") {:foo "bar"})))
 
 (deftest merge-configs-test
   (doseq [[maps result]

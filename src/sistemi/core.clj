@@ -9,8 +9,8 @@
         www.middleware.request-id
         [ring.adapter.jetty :only (run-jetty)]
         clj-logging-config.log4j
-        config
-        run-level
+        app.config
+        app.run-level
         clojure.java.browse
         clojure.contrib.strint)
   (:import (java.io File)))
@@ -74,6 +74,7 @@
 (def handlers (app
                wrap-stacktrace
                ;; (wrap-reload '[adder.middleware adder.core])
+               ;; wrap-locale
                wrap-file-info
                (wrap-file "www")
                wrap-request-id

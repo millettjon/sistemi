@@ -1,7 +1,7 @@
-(ns run-level
+(ns app.run-level
   (:require [clojure.tools.logging :as log])
-  (:use [config :only (*config*)]
-        [util :only (affirm)]
+  (:use [app.config :only (*config*)]
+        [util.except :only (affirm)]
         [clojure.contrib.def :only (defvar)]))
 
 (defn- get-run-level
