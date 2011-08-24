@@ -1,18 +1,14 @@
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
-  (:use net.cgrand.moustache
-        net.cgrand.enlive-html
+  (:use (net.cgrand moustache enlive-html)
+        (ring.middleware file file-info stacktrace cookies)
         ring.util.response
-        ring.middleware.file
-        ring.middleware.file-info
-        ring.middleware.stacktrace
-        www.middleware.request-id
         [ring.adapter.jetty :only (run-jetty)]
         clj-logging-config.log4j
-        app.config
-        app.run-level
         clojure.java.browse
-        clojure.contrib.strint)
+        clojure.contrib.strint
+        (www.middleware request-id locale spy)
+        (app config run-level))
   (:import (java.io File)))
 
 ;; TODO: use template namespaces (clojure.contribe.ns-utils immigrate)
@@ -63,25 +59,64 @@
 ;; setup monitoring for all sites
 ;; - http://newrelic.com/
 
-;; TODO: Create a wrapper?
 ;; (enlive/template checkout "pay/checkout.html")
 (deftemplate checkout (File. "www/pay/checkout.html") [])
 
-;; ? where should templates go?
-;; ? how will languages be realized?
+(def handlers
+  (app
+   wrap-stacktrace
+   ;; (wrap-reload '[adder.middleware adder.core])
+   wrap-request-id          ; add a unique request id for logging
+   wrap-cookies
+;;   (spy :prefix "start" :keys [:accept-language :uri :query-string] :response true)
+   (spy :prefix "start" :response true)
+   wrap-locale              ; get locale from path; redirect if not present
+   (spy :prefix "locale" :keys [:locale])
+   wrap-file-info
+   (wrap-file "www")        ; serve static files from the www directory
+   ["pay" "test"] "testing paypal"
+   ["pay" "checkout"] (-> (checkout) response constantly)
+   ["/"] "not found"
+   ;; TODO: Add a custom 404 here.
+   ))
+
 
 ;; ===== RING HANDLERS =====
 (def handlers (app
                wrap-stacktrace
                ;; (wrap-reload '[adder.middleware adder.core])
-               ;; wrap-locale
+               wrap-request-id          ; add a unique request id for logging
+               (spy :prefix "before" :keys [:uri :query-string] :response true)
+
+               ;; [[foo #"((en|it|es|fr))"]] "testing"
+               [[foo #"(?:en|it|es|fr|de)"] &] (fn [req] (response (str "testing: " foo)))
+
+               wrap-locale              ; get locale from path; redirect if not present
+               (spy :prefix "after" :keys [:uri :locale])
                wrap-file-info
-               (wrap-file "www")
-               wrap-request-id
+               (wrap-file "www")        ; serve static files from the www directory
                ["pay" "test"] "testing paypal"
                ["pay" "checkout"] (-> (checkout) response constantly)
                ;; TODO: Add a custom 404 here.
                ))
+
+;; ? where should templates go?
+;; ? how will languages be realized?
+
+;; - pages are localized by prefixing the url with a locale component
+;;   ? how does this work?
+;;   ? is there a fallback mechanism to select a default page if a locale specific one doesn't exist?
+;; - page links use relative paths to preserve the locale portion
+
+;; How to POST forms using links
+;; - http://natbat.net/2009/Jun/10/styling-buttons-as-links/
+;; - http://www.xlevel.org.uk/post/How-to-style-a-HTML-Form-button-as-a-Hyperlink-using-CSS.aspx
+;; - http://www.creativespirits.com.au/treasurechest/replaceSubmitButtonByTextLink.html
+;; - http://www.thesitewizard.com/archive/textsubmit.shtml
+;; - http://www.velocityreviews.com/forums/t160562-form-with-a-link-instead-of-a-button.html
+
+;; How to Improve the quality of your software: find an old computer 
+;; - http://news.ycombinator.com/item?id=2911935
 
 ;; ===== MAIN =====
 (defn -main
