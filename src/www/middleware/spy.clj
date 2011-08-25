@@ -7,6 +7,8 @@
   [app :prefix "spy" :keys nil :response nil]
   (fn [req]
     (debug (str prefix ".request: " (if keys (select-keys req keys) req)))
-    (let [response (app req)]
-      (if response (debug (str prefix ".response: " response)))
+    (let [dump-response response
+          response (app req)]
+      (if dump-response
+        (debug (str prefix ".response: " response)))
       response)))
