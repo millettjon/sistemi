@@ -28,4 +28,6 @@
 
                  ;; database
                  [postgresql/postgresql "8.4-702.jdbc4"]
-                 [org.clojure/java.jdbc "0.0.5"]])
+                 [org.clojure/java.jdbc "0.0.5"]]
+
+  :dev-dependencies [[ring-mock "0.1.1"]])
