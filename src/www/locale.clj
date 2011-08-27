@@ -38,14 +38,16 @@
   "Detects the user's preferred locale."
   [req]
   (or
-   ;; TODO: check for a locale cookie
+   ;; TODO: test this
+   ;; Use the locale from their cookie if that was passed.
+   (to-locale (get-in req [:cookies "locale" :value]))
 
-   ;; check if we support a language in their accept-language header
+   ;; Check if we support a language in their accept-language header.
    (some (fn [[[lang]]]
            (if-let [kw (locales (keyword lang))] kw))
          (parse-accept-language req))
 
-   ;; else use the default locale.
+   ;; Else use the default locale.
    default-locale))
 
 (defn wrap-locale

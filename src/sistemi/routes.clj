@@ -1,9 +1,11 @@
 (ns sistemi.routes
-  (:require [www.url :as url])
+  (:require [www.url :as url]
+            [clj-time.core :as time])
   (:use (net.cgrand moustache enlive-html)
-        (ring.middleware file file-info params)
+        (ring.middleware file file-info params keyword-params)
         (ring.middleware stacktrace lint cookies) ; dev items
         ring.util.response
+        ring.persistent-cookies
         sistemi.handlers
         (www.middleware request-id spy)
         www.locale)
@@ -55,12 +57,12 @@
 
 (defn change-locale
   "Handles a request to change the user's locale. The new locale setting is persisted in a cookie
- and the user is redirected to the new locale's version of the referring page."
+ and the user is redirected to the selected locale's version of the referring page."
   [req]
   ;; Validate the request method.
   (assert-method req :post)
 
-  (let [lang (get-in req [:params "lang"])
+  (let [lang (get-in req [:params :lang])
         locale (to-locale lang)]
 
     ;; Validate the form parameters.
@@ -72,16 +74,22 @@
            (not (url/self-referred? req))
            (raise-403 req (str "Third party referals not supported (referer=" referer ").")))
 
-      ;; TODO: set the cookie
-
       ;; Calculate the localized uri and redirect.
       ;; If referrer is not present then redirect to /.
       (let [uri (if referer
                   (second (re-matches #"/[^/]+(/.*)"
                                       (:uri (url/parse referer)))) ; remove locale
-                  "/")]
-        (redirect (url/canonicalize req (str "/" (name locale) uri)))))))
+                  "/")
+            response (redirect (url/canonicalize req (str "/" (name locale) uri)))]
 
+        ;; Set the cookie.
+        (assoc response :cookies
+          [(persistent-cookie :locale (name locale) (time/date-time 2020 01 01) {:path "/"})])))))
+
+;; TODO: add tests
+;; TODO: move the above code somewhere else
+;; TODO: make the above code cleaner.
+;; TODO: function to set a cookie for 1 month, quarter, year, decade out 
 ;; TODO: function to localize a uri
 ;; TODO: function to unlocalize a uri
 
@@ -100,6 +108,8 @@
    ;; TODO: cache control
    wrap-request-id          ; add a unique request id for logging
    wrap-params              ; parse form and query string params
+   wrap-keyword-params
+   ;; TODO: use keyword params?
    wrap-cookies
    wrap-file-info
 
@@ -120,25 +130,3 @@
         ;; If not file exists, detect a locale and redirect.
         locale-redirect)))
 
-   ;; TODO: Create a 500 error page (see wrap stacktrace?).
-
-
-;; Form
-;; - Use POST (to /en/profile/locale)
-;;   - search engines won't follow
-;;   - works with javascript disabled (how to test this?)
-;; - Style buttons as links (if possible).
-;; - Params
-;;   - language to set (disable selection of language currently being viewed)
-;;   - uri to redirect to (can this be detected using referrer?)
-;;     ? do all browsers send referrer? apparently but:
-;;       - browsers can be configured to not send it
-;;       - security proxies can hide or alter it
-;;     - safer to not rely on referrer
-
-;; How to POST forms using links
-;; - http://natbat.net/2009/Jun/10/styling-buttons-as-links/
-;; - http://www.xlevel.org.uk/post/How-to-style-a-HTML-Form-button-as-a-Hyperlink-using-CSS.aspx
-;; - http://www.creativespirits.com.au/treasurechest/replaceSubmitButtonByTextLink.html
-;; - http://www.thesitewizard.com/archive/textsubmit.shtml
-;; - http://www.velocityreviews.com/forums/t160562-form-with-a-link-instead-of-a-button.html

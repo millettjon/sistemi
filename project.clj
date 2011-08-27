@@ -19,6 +19,7 @@
                  [ring/ring-jetty-adapter "0.3.11"]
                  [net.cgrand/moustache "1.0.0"]
                  [enlive "1.0.0"]
+                 [ring-persistent-cookies "0.1.0"]
 
                  ;; web client
                  [clj-http "0.1.3"]
