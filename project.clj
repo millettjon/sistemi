@@ -30,4 +30,5 @@
                  [postgresql/postgresql "8.4-702.jdbc4"]
                  [org.clojure/java.jdbc "0.0.5"]]
 
-  :dev-dependencies [[ring-mock "0.1.1"]])
+  :dev-dependencies [[ring-mock "0.1.1"]
+                     [radagast "1.0.0"]])
