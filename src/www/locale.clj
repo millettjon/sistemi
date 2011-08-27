@@ -6,7 +6,7 @@
         clojure.contrib.strint
         ring.util.response))
 
-(defvar locales #{:en :es :fr :it}
+(defvar locales #{:en :es :fr :it :de}
   "The set of all supported locales.")
 
 (defn to-locale

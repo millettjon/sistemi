@@ -50,6 +50,7 @@
 ;; TODO: Factor this out to a new file.
 ;; TODO: Do we want html in the url? probably since ultimately it is html format.
 ;; TODO: Figure out how to make templates reload during development.
+;; TODO: Localize the strings to spanish.
 (deftemplate select-language
   (File. "www/raw/profile/select-language.html")
   []
@@ -99,24 +100,23 @@
    ;; TODO: Add a 500 wrapper (like wrap-stacktrace bug logs).
    ;; TODO: Log POST params?
    ;; TODO: Log request maps for easy replay?
-   spy
    wrap-stacktrace
    wrap-lint
-   wrap-condition
+   wrap-condition           ; handle 4xx errors raised from below
    ;; (wrap-reload '[adder.middleware adder.core])
    ;; TODO: gzip
    ;; TODO: cache control
    wrap-request-id          ; add a unique request id for logging
    wrap-params              ; parse form and query string params
-   wrap-keyword-params
-   ;; TODO: use keyword params?
-   wrap-cookies
+   wrap-keyword-params      ; keywordize the params map
+   wrap-cookies             ; convert cookies to/from a map
    wrap-file-info
 
    ;; Locale is the first URI segment.
    [[locale to-locale] &] (app
                                (wrap-locale locale)
-                               (wrap-file (str "www/" (name locale)))
+                               (wrap-file (str "www/" (name locale)))          ; serve locale specific files first
+                               (wrap-file (str "www/" (name default-locale)))  ; but fallback to the default locale
                                ["profile" "select-language.html"] (-> (select-language) response constantly)
                                [&] make-404)
 
@@ -127,6 +127,6 @@
    [&] (app
         ;; Serve existing files out of the root directory.
         (wrap-file "www")
-        ;; If not file exists, detect a locale and redirect.
+        ;; If no file exists, detect a locale and redirect.
         locale-redirect)))
 
