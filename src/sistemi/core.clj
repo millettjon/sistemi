@@ -5,6 +5,7 @@
         clojure.java.browse
         clojure.contrib.strint
         (app config run-level)
+        [www.locale :only (set-translations!)]
         sistemi.routes))
 
 ;; ===== LOGGING =====
@@ -13,6 +14,7 @@
 ;; %X   MDC
 ;; %c   logger name (class)
 ;; %m   message
+;; %t   thread
 (set-loggers!
  :root     {:level :info :pattern "%p|%X{id}|%c|%m%n"}
  "sistemi" {:level :debug}
@@ -29,6 +31,9 @@
    (environment-map "PORT" "DATABASE_URL" "PAYPAL"))
 
 (log/info (<< "Using configuration ~{*config*}."))
+
+;; String translations get their own map.
+(set-translations! (file-map "etc/translations.yaml"))
 
 ;; ===== SWANK =====
 ;; Starts a swank server. Useful when running locally from foreman.

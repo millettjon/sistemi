@@ -2,8 +2,7 @@
   "Generates a unique request id."
   (:use ring.middleware.file
         [clojure.tools.logging :only (debug)]
-        [clj-logging-config.log4j :only (with-logging-context)]
-        )
+        [clj-logging-config.log4j :only (with-logging-context)])
   (:require [www.id :as id]))
 
 (defn wrap-request-id

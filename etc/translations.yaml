@@ -1,0 +1,12 @@
+# String translations for internationalization.
+en:
+  select-language:
+    title: "Select Language"
+    prompt: "Select a language"
+es:
+  select-language:
+    title: "Cambiar Idioma"
+    prompt: "Eligir un idioma"
+fr:
+it:
+de:

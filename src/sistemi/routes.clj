@@ -1,5 +1,6 @@
 (ns sistemi.routes
-  (:require [www.url :as url]
+  (:require [clojure.tools.logging :as log]
+            [www.url :as url]
             [clj-time.core :as time])
   (:use (net.cgrand moustache enlive-html)
         (ring.middleware file file-info params keyword-params)
@@ -35,26 +36,32 @@
 ;;   - localized   /raw/en
 ;;     ? fallback to common if no localized version?
 
-;; - create an html form to change the language
-;; - create a handler to handle the form POST
-;; - store the language selection in a cookie
-;; - read the language cookie when redirecting from naked uris
-;; - create a shared version ofselect-language.html
-;; - see if string translation is useful for reuse of the same template
-;;   - "Select Language" -> "Cambiar Idioma"
-;;   ? how to balance this versus doing it directly in the html (e.g., multiple copies)
-;;   - ideally,
-;;     - share one template and insert string translations
-;;     - fallback to english if no translation is provided
-
 ;; TODO: Factor this out to a new file.
 ;; TODO: Do we want html in the url? probably since ultimately it is html format.
 ;; TODO: Figure out how to make templates reload during development.
-;; TODO: Localize the strings to spanish.
+
 (deftemplate select-language
   (File. "www/raw/profile/select-language.html")
   []
-  [:div#name] (content "jon"))
+  [:title] (content (i18n :select-language :title))
+  [:span#prompt] (content (i18n :select-language :prompt)))
+
+;; TODO: Make a context per page?
+;;   (with-i18n-in :select-language)
+;;   (i18n ...)  ;; searches translations
+;;   ? how can the search be limited to a specific subset of the strings relevant to the page?
+;;     ? rebind *translations*? would work, but then how could the global strings be accessed?
+;;     ? use a different query format instead of keys?
+;;       /select-language/title
+;;       ../title
+;;       title
+;;       - keywords can have / and . in their name
+;;       - allow keywords or strings?
+;;       ? how would it know which "page" is relevant? (with-i18n :select-language body)
+;;         ? store context in dynamic variable?
+;;     ? use a different function?
+;;     ? add an option to the funtion signature
+;; TODO: learn about multimethods
 
 (defn change-locale
   "Handles a request to change the user's locale. The new locale setting is persisted in a cookie
@@ -87,13 +94,14 @@
         (assoc response :cookies
           [(persistent-cookie :locale (name locale) (time/date-time 2020 01 01) {:path "/"})])))))
 
+;; (time/in 10 :years)
+
 ;; TODO: add tests
 ;; TODO: move the above code somewhere else
 ;; TODO: make the above code cleaner.
 ;; TODO: function to set a cookie for 1 month, quarter, year, decade out 
 ;; TODO: function to localize a uri
 ;; TODO: function to unlocalize a uri
-
 
 (def routes
   (app
@@ -105,7 +113,7 @@
    wrap-condition           ; handle 4xx errors raised from below
    ;; (wrap-reload '[adder.middleware adder.core])
    ;; TODO: gzip
-   ;; TODO: cache control
+   ;; TODO: cache control (http://groups.google.com/group/ring-clojure/browse_thread/thread/cc8f72a15ae7fbc3)
    wrap-request-id          ; add a unique request id for logging
    wrap-params              ; parse form and query string params
    wrap-keyword-params      ; keywordize the params map
@@ -117,7 +125,7 @@
                                (wrap-locale locale)
                                (wrap-file (str "www/" (name locale)))          ; serve locale specific files first
                                (wrap-file (str "www/" (name default-locale)))  ; but fallback to the default locale
-                               ["profile" "select-language.html"] (-> (select-language) response constantly)
+                               ["profile" "select-language.html"] (-> (doall (select-language)) response constantly)
                                [&] make-404)
 
    ;; Shared handlers.
