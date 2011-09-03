@@ -5,7 +5,8 @@
         clojure.java.browse
         clojure.contrib.strint
         (app config run-level)
-        [www.locale :only (set-translations!)]
+        app.config.core
+        locale.core
         sistemi.routes))
 
 ;; ===== LOGGING =====
@@ -22,17 +23,21 @@
 
 (log/info (<< "Generated boot-id '~{www.id/boot-id}'."))
 
-;; ===== CONFIGURATION =====
-(log/info (<< "Entering run level '~{*run-level*}'."))
+;; ===== RUN LEVEL =====
+(init-run-level!)
+(log/info (<< "Entering run level '~{run-level}'."))
 
+;; ===== CONFIGURATION =====
 (set-config!
    (file-map "etc/default.yaml")
-   (file-map  (str "etc/" (name *run-level*) ".yaml"))
+   (file-map  (str "etc/" (name run-level) ".yaml"))
    (environment-map "PORT" "DATABASE_URL" "PAYPAL"))
 
-(log/info (<< "Using configuration ~{*config*}."))
+(log/info (<< "Using configuration ~{config}."))
 
-;; String translations get their own map.
+;; ===== LOCALIZATION =====
+(set-locales! #{:en :es :fr :it :de})
+(set-default-locale! :en)
 (set-translations! (file-map "etc/translations.yaml"))
 
 ;; ===== SWANK =====
@@ -48,8 +53,10 @@
   "Starts jetty.
    Also launches swank and a browser if configured."
   []
-  (if (:swank *config*)
+  (if (conf :swank)
     (start-swank))
-  (if (:launch-browser *config*)
-    (browse-url  (<< "http://localhost:~(:port *config*)")))
-  (run-jetty #'routes {:port (:port *config*)}))
+  (let [port (conf :port)]
+    (when (conf :launch-browser)
+      (browse-url  (<< "file://~(System/getProperty \"user.dir\")/autodoc/index.html"))
+      (browse-url  (<< "http://localhost:~{port}")))
+    (run-jetty #'routes {:port port})))
