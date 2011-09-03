@@ -32,4 +32,5 @@
                  [org.clojure/java.jdbc "0.0.5"]]
 
   :dev-dependencies [[ring-mock "0.1.1"]
-                     [radagast "1.0.0"]])
+                     [radagast "1.0.0"]
+                     [org.clojars.weavejester/autodoc "0.9.0"]])
