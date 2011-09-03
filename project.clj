@@ -33,4 +33,6 @@
 
   :dev-dependencies [[ring-mock "0.1.1"]
                      [radagast "1.0.0"]
-                     [org.clojars.weavejester/autodoc "0.9.0"]])
+                     [org.clojars.weavejester/autodoc "0.9.0"]]
+
+  :autodoc { :name "Sistemi Moderni", :page-title "Sistemi Moderni Documentation"})
