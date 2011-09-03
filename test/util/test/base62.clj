@@ -1,6 +1,6 @@
 (ns util.test.base62
   (:require [util.base62 :as b62])
-  (:use [clojure.test]))
+  (:use clojure.test))
 
 (deftest encode
   (doseq [[s n] [["0" 0]
