@@ -1,6 +1,7 @@
 (ns app.test.run-level
   (:use clojure.test
-        app.run-level))
+        app.run-level
+        util.environment))
 
 (defn- resolve-predicate
   "Takes a level keyword and returns the var for its predicate function."
@@ -8,6 +9,10 @@
   (ns-resolve 'app.run-level (symbol (str (name level) "?"))))
 
 (deftest test-init-run-level!
+  (testing "environment"
+    (binding [environment {"RUN_LEVEL" "staging"}]
+      (init-run-level!)
+      (is (= run-level :staging))))
   (testing "no args"
     (init-run-level!)
     (is (= run-level :development))

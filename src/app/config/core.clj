@@ -5,7 +5,7 @@
   (:use [clojure.contrib.def :only (defvar)]
         [clojure.contrib.map-utils :only (deep-merge-with)]
         app.config.core
-        util.except))
+        (util environment except)))
 
 ;; ===== VARS =====
 (defvar config {}
@@ -33,10 +33,9 @@
             (let [[k v] kv]
               (assoc m (normalize-key k) (read-yaml-safely v))))
           {}
-          (let [env (into {} (System/getenv))]
-            (if (empty? keys)
-              env
-              (select-keys env keys)))))
+          (if (empty? keys)
+            environment
+            (select-keys environment keys))))
 
 (defn file-map
   "Returns a configuration file as a map."
