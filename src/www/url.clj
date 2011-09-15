@@ -17,7 +17,7 @@
       :http (str "http://" server (case port 80 "" (str ":" port)) uri)
       :https (str "https://" server (case port 443 "" (str ":" port)) uri))))
 
-;; Note: borrowed from ring-mock...
+;; Note: stolen from ring-mock...
 (defn parse
   "Parses a URL into a minimal ring request map."
   [uri]

@@ -12,10 +12,7 @@
   (remove-ns 'util.test.example.test-plus)
   (require 'util.test.example.test-plus :reload)
 
-  (is (contains? (meta (var util.test.example.test-plus/example1)) :test)))
-
-;; (deftest import-examples
-;;   )
+  (is (contains? (meta (ns-resolve 'util.test.example.test-plus 'example1)) :test)))
 
 ;; test adding an example to a function
 ;; test adding an example to a macro
