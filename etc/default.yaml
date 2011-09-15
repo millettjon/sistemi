@@ -1,2 +1,5 @@
+internationalization:
+  locales: [en, es]
+  default-locale: en
 paypal:
   version: "78.0"

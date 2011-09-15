@@ -36,9 +36,9 @@
 (log/info (<< "Using configuration ~{config}."))
 
 ;; ===== LOCALIZATION =====
-(set-locales! #{:en :es :fr :it :de})
-(set-default-locale! :en)
-(set-translations! (file-map "etc/translations.yaml"))
+(let [m (conf :internationalization)]
+  (set-locales! (m :locales))
+  (set-default-locale! (m :default-locale)))
 
 ;; ===== SWANK =====
 ;; Starts a swank server. Useful when running locally from foreman.
