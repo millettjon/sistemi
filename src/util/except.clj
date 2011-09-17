@@ -18,7 +18,7 @@
   "Throws a RuntimeException with the given message. When multiple arguments are passed, cl-format
   is used to build the message string."
   ([message]
-     (throw (RuntimeException. message)))
+     (throw (RuntimeException. ^String message)))
   ([format-string & format-args]
      (die (apply cl-format nil format-string format-args))))
 

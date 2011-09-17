@@ -122,14 +122,14 @@
 (defn canonical
   "Returns the canonical form of a path."
   [path]
-  (.getPath (.getCanonicalFile (File. path))))
+  (.getPath (.getCanonicalFile (File. ^String path))))
 
 (defn file-seq-bf [dir]
   "Returns a seq of all files and subdirectories of a directory in breadth first order."
   (let [dir (io/file dir)
         children (.listFiles dir)
-        subdirs (filter #(.isDirectory %) children)
-        files (filter #(.isFile %) children)]
+        subdirs (filter #(.isDirectory ^File %) children)
+        files (filter #(.isFile ^File %) children)]
     (concat [dir] files (mapcat file-seq-bf subdirs))))
 
 (defn dir-seq-bf
@@ -137,5 +137,5 @@
   [dir]
   (let [dir (io/file dir)
         children (.listFiles dir)
-        subdirs (filter #(.isDirectory %) children)]
+        subdirs (filter #(.isDirectory ^File %) children)]
     (concat [dir] (mapcat dir-seq-bf subdirs))))

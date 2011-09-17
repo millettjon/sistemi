@@ -3,7 +3,8 @@
             [clojure.contrib.string :as str]
             [clojure.tools.logging :as log])
   (:use [clojure.contrib (condition :only (handler-case *condition*))]
-        [util fs]))
+        [util fs])
+  (:import java.io.File))
 
 (defn wrap-condition
   "Ring wrapper that handles http error conditions."
@@ -20,8 +21,8 @@
   [root]
   (reduce
    (fn [m dir]
-     (let [cname (.getName dir)
-           cpath (str/drop (inc (count root)) (.getPath dir)) ; unqualify
+     (let [cname (.getName ^File dir)
+           cpath (str/drop (inc (count root)) (.getPath ^File dir)) ; unqualify
            file (io/file dir "code.clj")]
        (if (.exists file)
          ;; Note: The handler def should be the last sexp in the file.

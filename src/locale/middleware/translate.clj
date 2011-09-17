@@ -7,7 +7,8 @@
   (:use [locale.core :only (locales default-locale)]
         [util (except :only (check))
               fs]
-        [sistemi.handlers :only (make-404)]))
+        [sistemi.handlers :only (make-404)])
+  (:import java.io.File))
 
 (defn- load-yaml-safely
   "Loads a map from a yaml file and returns it.  The top level keys are coerced to strings.  If the
@@ -84,8 +85,8 @@
   [root]
   (reduce
    (fn [[localized canonical] dir]
-     (let [cname (.getName dir)
-           cpath (str/drop (count root) (.getPath dir))
+     (let [cname (.getName ^File dir)
+           cpath (str/drop (count root) (.getPath ^File dir))
            file (io/file dir "name.yml")
            name-map (-> (or (load-yaml-safely file)
                             (default-translation-map cname))
@@ -112,8 +113,8 @@
   [root]
   (reduce
    (fn [m dir]
-     (let [cname (.getName dir)
-           cpath (str/drop (inc (count root)) (.getPath dir)) ; TODO: unqualify
+     (let [cname (.getName ^File dir)
+           cpath (str/drop (inc (count root)) (.getPath ^File dir)) ; TODO: unqualify
            file (io/file dir "strings.yml")
            name-map (when (.exists file)
                       (-> (load-yaml-safely file)
@@ -128,19 +129,6 @@
 ;; TODO: Add checks and balances.
 ;; - List which pages/templates are never used (request log analysis).
 ;; - List which translations are never used ().
-;;   - mark and sweep?
-;;   - generations?
-;;   - stats agent?
-;;     - dump usage message to an event queue
-;;       - operations are idempotent and order independent
-;;       - udpate last event time (:type string :key [/en/profile/select-language.html :foo :bar] :time time)
-;;       - each event should have a unique key
-;;       - periodically flush to db (set if newer ...)
-;;       - might need to store created-on date to not garbage collect new entries... (or just a manual touch)
-;;    (last-used type key time)
-;;       {:type string {key time}}
-;;       db: id type key time (pk is (type,key))
-;;       uses: handler, page, snippet, translation
 ;; TODO: List strings which are missing a translation (when page string translations are loaded).
 
 (defn wrap-translate
