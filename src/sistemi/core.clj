@@ -1,3 +1,7 @@
+(clojure.core/require 'util.reflection)
+(util.reflection/warn-on-reflection
+ "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
+
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
   (:use [ring.adapter.jetty :only (run-jetty)]
