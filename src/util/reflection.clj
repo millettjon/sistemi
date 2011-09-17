@@ -3,6 +3,11 @@
   (:require [clojure.contrib.string :as str])
   (:import (java.io ByteArrayOutputStream PrintStream PrintWriter)))
 
+;; See: http://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
+;; TODO: Write tests.
+;; MAYBE: Make into a macro
+;; MAYBE: Take a list form for siblings in a nested namespace
+
 (defn- filter-err
   "Filters standard error by passing all records to filter-fn. Output is dropped if filter-fn returns nil."
   [filter-fn]
@@ -44,7 +49,3 @@
        record))))
 
 #_(warn-on-reflection "clojure.contrib" "ring.util.servlet" "clj_logging_config" "clj_yaml" "clj_stacktrace" "ring")
-;; TODO: Write tests.
-;; TODO: Fix all warnings.
-;; TODO: Make into a macro
-;; TODO: Take a list form for siblings in a nested namespace
