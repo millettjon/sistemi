@@ -1,6 +1,6 @@
 ;; Dependency versions last checked on 7/27/11.
 (defproject sistemi "0.1"
-  :description "Sistemi Moderni website"
+  :description "Sistemi Moderni Website"
   :dependencies [
                  ;; clojure
                  [org.clojure/clojure "1.2.1"]

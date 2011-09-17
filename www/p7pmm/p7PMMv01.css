@@ -1,0 +1,204 @@
+/* 
+  -----------------------------------
+  Pop Menu Magic 2
+  by Project Seven Development
+  www.projectseven.com
+  Menu Type: Vertical
+  Style Theme: 01 - Multicolor
+  -----------------------------------
+*/
+
+/*Menu Outer Wrapper*/
+#p7PMM_1 { /*added because nivo slider was overlapping */
+	z-index: 1000; 
+}
+.p7PMMv01 {
+	width: auto;
+	font-size: 12px;
+	text-align: left;
+	line-height: normal;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 0;
+	margin-left: -10px;
+	text-transform: uppercase;
+	height: 508px;
+}
+/*Hide Sub-Menu in Design View*/
+.p7PMMv01 ul div {
+	display: none;
+}
+/*
+TOP LEVEL MENU
+*/
+.p7PMMv01 ul {
+	padding: 0;
+	margin-top: 0;
+	margin-right: 0;
+	margin-bottom: 0;
+	margin-left: 0px;
+}
+.p7PMMv01 li {
+	list-style-type: none;
+	margin-bottom: 3px;
+}
+/*Top Level Links*/
+.p7PMMv01 a {
+	display: block;
+	text-decoration: none;
+	padding: 4px 12px;
+	color: #A6A6A6!important;
+	text-align: left;
+}
+.p7PMMv01 a:hover {
+	color: #FFF !important;
+	background-color: #AB003A;
+}
+/*Sub Level*/
+.p7PMMv01 ul ul {
+	z-index: 20000;
+	width: 200px;
+	border: 1px solid #000;
+	margin-left: 5px;
+}
+.p7PMMv01 ul ul li {
+	margin: 0;
+	border: 1px solid #FFFFFF;
+}
+.p7PMMv01 ul ul a {
+	border: 0;
+	text-align: left;
+	overflow: hidden;
+	padding-top: 6px;
+	padding-right: 12px;
+	padding-bottom: 6px;
+	padding-left: 12px;
+}
+/*Third Level (Flyouts in horizontal menu)*/
+.p7PMMv01 ul ul ul {}
+/*
+Syntax for special classes programatically assigned to first and last links and also LIs
+See user guide for more information
+*/
+.p7PMMv01 ul a.pmmfirst {
+}
+.p7PMMv01 ul a.pmmlast {
+}
+.p7PMMv01 ul li.pmmfirst {
+}
+.p7PMMv01 ul li.pmmlast {
+}
+/*
+SPECIAL IMAGE-BASED RULES
+*/
+.p7PMMv01 img {
+	border: 0;
+}
+.p7PMMv01 .p7PMM_img {
+	padding: 0;
+	border: 0;
+	background-image: none;
+	background-color: transparent;
+}
+/*Special Multicolor Rules*/
+/* .p7PMMv01 .root_1 li, .p7PMMv01 .root_1 ul a, .p7PMMv01 .root_1 a:hover,
+.p7PMMv01 .root_1 a.trig_open, .p7PMMv01 .root_1 a.trig_open_left {
+	background-color: #333 !important;
+	color: #D8D8D8 !important;
+	border-color: #000;
+}
+.p7PMMv01 .root_2 li, .p7PMMv01 .root_2 ul a, .p7PMMv01 .root_2 a:hover,
+.p7PMMv01 .root_2 a.trig_open, .p7PMMv01 .root_2 a.trig_open_left {
+	background-color: #956F84 !important;
+	color: #FFF !important;
+	border-color: #000;
+}
+.p7PMMv01 .root_3 li, .p7PMMv01 .root_3 ul a, .p7PMMv01 .root_3 a:hover,
+.p7PMMv01 .root_3 a.trig_open, .p7PMMv01 .root_3 a.trig_open_left {
+	background-color: #669CC4 !important;
+	color: #FFF !important;
+	border-color: #000;
+}
+.p7PMMv01 .root_4 li, .p7PMMv01 .root_4 ul a, .p7PMMv01 .root_4 a:hover,
+.p7PMMv01 .root_4 a.trig_open, .p7PMMv01 .root_4 a.trig_open_left {
+	background-color: #C1DF4A !important;
+	color: #000 !important;
+	border-color: #000;
+}
+.p7PMMv01 .root_5 li, .p7PMMv01 .root_5 ul a, .p7PMMv01 .root_5 a:hover,
+.p7PMMv01 .root_5 a.trig_open, .p7PMMv01 .root_5 a.trig_open_left {
+	background-color: #FFDB4A !important;
+	color: #000 !important;
+	border-color: #000;
+}
+.p7PMMv01 .root_1 ul a:hover, .p7PMMv01 .root_1 ul a.trig_open, .p7PMMv01 .root_1 ul a.trig_open_left {
+	background-color: #666 !important;
+	color: #FFF !important;
+}
+.p7PMMv01 .root_2 ul a:hover, .p7PMMv01 .root_2 ul a.trig_open, .p7PMMv01 .root_2 ul a.trig_open_left {
+	background-color: #A68898 !important;
+	color: #000 !important;
+}
+.p7PMMv01 .root_3 ul a:hover, .p7PMMv01 .root_3 ul a.trig_open, .p7PMMv01 .root_3 ul a.trig_open_left {
+	background-color: #98BDD8 !important;
+	color: #000 !important;
+}
+.p7PMMv01 .root_4 ul a:hover, .p7PMMv01 .root_4 ul a.trig_open, .p7PMMv01 .root_4 ul a.trig_open_left {
+	background-color: #9EBE21 !important;
+	color: #FFF !important;
+}
+.p7PMMv01 .root_5 ul a:hover, .p7PMMv01 .root_5 ul a.trig_open, .p7PMMv01 .root_5 ul a.trig_open_left {
+	background-color: #333 !important;
+	color: #FFF !important;
+} */
+/*
+TRIGGERS and CUURENT MARK RULES
+The Closed state relates to trigger items when their child menus are not showing
+The Open state relates to trigger items when their child menus are showing
+Selectors appended with _left Automatically change arrow position and orientation
+if sub levels are set to fly out to the left
+*/
+
+/*Sub Level*/
+.p7PMMv01 ul a.trig_closed {
+	background-image: url(img/pmm_east_dark.gif);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+.p7PMMv01 ul a.trig_closed_up {
+	background-image: url(img/pmm_north_dark.gif);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+.p7PMMv01 ul a.trig_closed_left {
+	background-image: url(img/pmm_west_dark.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+.p7PMMv01 ul ul a.trig_closed {
+	background-image: url(img/pmm_east_light.gif);
+	background-repeat: no-repeat;
+	background-position: right center;
+}
+.p7PMMv01 ul ul a.trig_closed_left {
+	background-image: url(img/pmm_west_light.gif);
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+.p7PMMv01 ul a.trig_open, .p7PMMv01 ul a.trig_open_left {
+	color: #FFF !important;
+	background-color: #AB003A !important;
+}
+.p7PMMv01 ul ul a.trig_open, .p7PMMv01 ul ul a.trig_open_left {
+	color: #FFF !important;
+	background-color: #AB003A !important;
+}
+/*The Current Marker (You are here) links*/
+.p7PMMv01 .current_mark {
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.p7PMMv01 ul ul .current_mark {
+	font-weight: bold;
+	color: #FFFFFF;
+}
