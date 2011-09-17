@@ -1,10 +1,13 @@
 (ns util.reflection
   "Filters out reflection warning messages from specified namespaces."
-  (:require [clojure.contrib.string :as str])
+  (:require [clojure.contrib.string :as str]
+;            [clojure.tools.logging :as log]
+            )
   (:import (java.io ByteArrayOutputStream PrintStream PrintWriter)))
 
 ;; See: http://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
 ;; TODO: Write tests.
+;; TODO: Log reflection warnings as real warnings.
 ;; MAYBE: Make into a macro
 ;; MAYBE: Take a list form for siblings in a nested namespace
 
@@ -36,7 +39,7 @@
   "Sets *warn-on-reflection* to true and replaces System.err with a PrintStream that
    filters reflection warnings for the specified namesapces."
   [& namespaces]
-  (.println System/err (str "Filtering *err* to suppress reflection warnings for: " namespaces "."))
+  (.println System/err (str "Filtering *err* to capture reflection warnings for: " namespaces "."))
   (set! *warn-on-reflection* true)
   (filter-err
    (fn [record]
@@ -45,7 +48,19 @@
          (cond
           (contains? namespaces ns-name) nil
           (some #(.startsWith ns-name %1) namespaces) nil
-          :default record))
+          ;; Log a warning. Prefix a string to prevent capture in recursion.  Will this deadlock?
+          ;;:default (log/warn (str "** " record))
+          :default record
+          ))
        record))))
 
-#_(warn-on-reflection "clojure.contrib" "ring.util.servlet" "clj_logging_config" "clj_yaml" "clj_stacktrace" "ring")
+;; How to pass log messages through without double processing them?
+;; - send to logger using an agent to avoid deadlock?
+;; - append a magic string to avoid double processing? YUCK
+;; Options:
+;; - subclass stderr,stdout before logging frameworks are initialized (done)
+;; - Then *later* call logging functions?
+;;   - 
+;; interaction w/ log capture?
+;; post process output with another script?
+

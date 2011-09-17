@@ -3,16 +3,9 @@
         (ring.middleware file file-info params keyword-params content-type)
         (ring.middleware stacktrace lint cookies) ; dev items
         (www.middleware request-id spy)
-        ;; (locale [core :only (default-locale locales)]
-        ;;         (middleware (locale translate))
-        ;;         (handler redirect))
-        ;; (locale [core :only (default-locale locales)]
-        ;;         [middleware (locale translate)]
-        ;;         [handler redirect])
         [locale.core :only (default-locale locales)]
         (locale.middleware locale translate)
         locale.handler.redirect
-
         (sistemi [handlers :only (make-404)]
                  [middleware :only (wrap-condition wrap-handler)])))
 
