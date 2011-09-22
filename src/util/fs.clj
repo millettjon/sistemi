@@ -68,14 +68,19 @@
                s (replace-re #"(?<!\A)/$" "" s)] ; remove a trailing slash
            s)))))
 
+(defn qualify
+  "Makes the path absolute if not already."
+  ([path] (qualify path "/"))
+  ([path dir]
+     (cond
+      (nil? path) nil
+      (= \/ (first path)) path
+      :default (str dir path))))
+
 (defn ffs
   "Calls fs on the arguments and makes the result fully qualified by prepending a leading / if necessary."
   [& args]
-  (let [path (apply fs args)]
-    (cond
-     (nil? path) nil
-     (= \/ (first path)) path
-     :default (str "/" path))))
+  (qualify (apply fs args)))
 
 (defn relative?
   "Returns true if the path is a relative path."
@@ -84,6 +89,11 @@
    (nil? path) (throw (NullPointerException.))
    (empty? path) true
    :default (not= \/ (first path))))
+
+(defn absolute?
+  "Returns true if the path is an absolute path."
+  [path]
+  (not (relative? path)))
 
 (defn fs-seq
  "Takes a list of paths splits them into segments and returns the flattened seq."

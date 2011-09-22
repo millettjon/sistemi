@@ -6,6 +6,7 @@
             [log.readably :as logr]
             [www.url :as url]))
 
+;; TODO: See if the circuit breaker pattern is useful: http://blog.higher-order.net/2010/05/05/circuitbreaker-clojure-1-2/
 ;; TODO: ? Is the http.agent-api is more appropriate (http://richhickey.github.com/clojure-contrib/http.agent-api.html)?
 ;; - limit concurrency to paypal
 ;; - allow request to return immediately to client (or after a timeout)

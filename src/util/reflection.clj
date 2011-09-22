@@ -39,7 +39,7 @@
   "Sets *warn-on-reflection* to true and replaces System.err with a PrintStream that
    filters reflection warnings for the specified namesapces."
   [& namespaces]
-  (.println System/err (str "Filtering *err* to capture reflection warnings for: " namespaces "."))
+  (.println System/err (str "Filtering *err* to suppress reflection warnings for: " namespaces "."))
   (set! *warn-on-reflection* true)
   (filter-err
    (fn [record]

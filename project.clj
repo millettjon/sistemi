@@ -35,4 +35,6 @@
                      [radagast "1.0.0"]
                      [org.clojars.weavejester/autodoc "0.9.0"]]
 
+  :extra-classpath-dirs ["opt/gdata/gdata-core-1.0-minimal.jar"]
+
   :autodoc { :name "Sistemi Moderni", :page-title "Sistemi Moderni Documentation"})

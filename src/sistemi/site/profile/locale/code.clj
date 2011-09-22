@@ -3,51 +3,46 @@
             [clj-time.core :as time])
   (:use ring.util.response
         ring.persistent-cookies
-        [sistemi.handlers :only (assert-method raise-403)]
-        [locale.core :only (locales)]))
+        [sistemi.handlers :only (raise-403)]
+        [locale.core :only (locales)]
+        [util.except :only (safely)]
+        [util.fs :only (ffs fs-seq)]))
 
 (defn handle
   "Handles a request to change the user's locale. The new locale setting is persisted in a cookie
    and the user is redirected to the selected locale's version of the referring page."
   [req]
-  ;; Validate the request method.
-  ;; TODO: define a multi-method to handle POST?
-  ;; TODO: or just allow POST routing using moustache?
-  (assert-method req :post)
 
   (let [lang (get-in req [:params :lang])
-        locale (locales lang)]
+        locale (locales lang)
+        target (get-in req [:params :target])
+        referer (get-in req [:headers "referer"])]
 
-    ;; Validate the form parameters.
+    ;; Validate form parameters.
     (when-not locale (raise-403 req (str "Invalid parameter lang=" lang ".")))
 
-    (let [referer (get-in req [:headers "referer"])]
-      ;; Validate the referrer. Only allow requests from the same server.
-      (and referer
-           (not (url/self-referred? req))
-           (raise-403 req (str "Third party referals not supported (referer=" referer ").")))
+    ;; Validate client supplied inputs and compute the redirect target.
+    (let [uri (cond
+               ;; TODO: Block if the target is from a different website?
+               ;; TODO: Encode target. (url/url target)
+               target (if-let [url (safely (url/url target) nil)]
+                        (if (some #(get url %) [:scheme :host :port])
+                          (raise-403 req (str "Invalid parameter target=" target " (not a locale url)."))
+                          (str url))
+                        (raise-403 req (str "Invalid parameter target=" target ".")))
+               
+               referer (if (not (url/self-referred? req)) ; Only allow requests from the same server.
+                         (raise-403 req (str "Third party referals not supported (referer=" referer ")."))
+                         ((req :luri) locale ((req :curi) (:uri (url/parse referer)))))
 
-      ;; Calculate the localized uri and redirect.
-      ;; If referrer is not present then redirect to /.
-      (let [uri (if referer
-;;                  (fs-rest (:uri (url/parse referer))) ; remove locale
-                  ;; Translate the uri.
-                  ((req :luri) locale ((req :curi) (:uri (url/parse referer))))
-                  "/")
-            ;;response (redirect (url/canonicalize req (str "/" (name locale) uri)))
-            response (redirect (url/canonicalize req uri))]
+               :default (ffs locale))
+          response (redirect (url/canonicalize req uri))
+          ]
 
-        ;; Set the cookie.
-        (assoc response :cookies
-               [(persistent-cookie :locale (name locale) (time/date-time 2020 01 01) {:path "/"})])))))
-
+      (-> response
+          (assoc :cookies [(persistent-cookie :locale locale (time/date-time 2020 01 01) {:path "/"})])
+          (content-type "text/html; charset=utf-8")))))
 
 ;; TODO: (time/in 10 :years)
-;; TODO: make the above code cleaner.
 ;; TODO: function to set a cookie for 1 month, quarter, year, decade out 
 ;; TODO: add tests
-;; TODO: function to localize a uri
-;; TODO: function to unlocalize a uri
-
-;; NOTE: load-file returns the result of the last form executed in the file.
-;; That could be used to set the handler ...

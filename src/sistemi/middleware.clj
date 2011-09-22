@@ -7,7 +7,7 @@
   (:import java.io.File))
 
 (defn wrap-condition
-  "Ring wrapper that handles http error conditions."
+  "Ring wrapper that handles http error conditions raised from further down the handler stack."
   [app]
   (fn [req]
     (handler-case :type
@@ -36,7 +36,7 @@
 ;;(load-handlers "src/sistemi/site")
 
 (defn wrap-handler
-  "Calls a handler is one is defined for the current uri. Otherwise pass the request to the next
+  "Calls a handler if one is defined for the current URI. Otherwise passes the request to the next
    middleware."
   [app root & opts]
   (let [handler-map (load-handlers root)]

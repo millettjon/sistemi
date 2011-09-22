@@ -7,6 +7,7 @@
   (:use [locale.core :only (locales default-locale)]
         [util (except :only (check))
               fs]
+        [www.url :only (url)]
         [sistemi.handlers :only (make-404)])
   (:import java.io.File))
 
@@ -67,19 +68,20 @@
      (set/union locales (keys m)))))
 
 (defn- check-names
-  "Checks that all name values are strings."
+  "Checks that all name values are strings and encodes any unsafe characters."
   [m file]
   (let [cname (m default-locale)]
     (reduce
      (fn [m [locale lname]]
-       (if (string? lname)
-         m
-         (do (log/error (str "Invalid entry '" lname "' for locale '"
-                             locale "' in file '" file "'."))
-                             (assoc m locale cname))))
+       (let [is-string (string? lname)]
+         (prn "is-string" is-string)
+         (or is-string (log/error (str "Invalid entry '" lname "' for locale '" locale "' in file '" file "'.")))
+         (assoc m locale (str (url (if is-string lname cname))))
+         ))
      m m)))
+#_(load-name-translations "src/sistemi/site")
 
-(defn- load-name-translations
+(defn load-name-translations
   "Loads all path name translation files under a directory root and returns an array of two maps.
    The first map maps canonical URI paths to localized ones and the second map vice versa."
   [root]
@@ -88,7 +90,8 @@
      (let [cname (.getName ^File dir)
            cpath (str/drop (count root) (.getPath ^File dir))
            file (io/file dir "name.yml")
-           name-map (-> (or (load-yaml-safely file)
+           name-map (-> (or (and (empty? cpath) (default-translation-map cname))
+                            (load-yaml-safely file)
                             (default-translation-map cname))
                         (check-canonical cname file)
                         (check-locales file)
@@ -97,24 +100,28 @@
        (reduce
         (fn [[lm cm] [locale lname]]
           (let [lpath (let [ppath (parent cpath)]
-                        (if (root? ppath)
-                          (ffs locale lname)
+                        (if (nil? ppath)
+                          (ffs locale)
                           (fs (lm (ffs locale ppath)) lname)))
                 lm (assoc lm (ffs locale cpath) lpath)
-                cm (assoc cm lpath cpath)]
+                cm (assoc cm (ffs lpath) (if (empty? cpath) "/" cpath))]
             [lm cm]))
         [localized canonical] name-map)))
-   [{} {}] (rest (dir-seq-bf root))))
-;;(load-name-translations "src/sistemi/site")
+   [{} {}] (dir-seq-bf root)))
+#_(load-name-translations "src/sistemi/site")
 
-(defn- load-string-translations
+;; TODO: Move these notes somewhere.
+;; - Keep the canonical path uri safe (i.e., no special chars that need encoding).
+;; - Encode the path translations as they are read from name.yml.
+
+(defn load-string-translations
   "Loads all string translations files under a root directory and returns a
    map of canonical URI path to a submap of string translations."
   [root]
   (reduce
    (fn [m dir]
      (let [cname (.getName ^File dir)
-           cpath (str/drop (inc (count root)) (.getPath ^File dir)) ; TODO: unqualify
+           cpath (str/drop (inc (count root)) (.getPath ^File dir)) ; TODO: unqualify; load strings for root path
            file (io/file dir "strings.yml")
            name-map (when (.exists file)
                       (-> (load-yaml-safely file)
@@ -131,41 +138,49 @@
 ;; - List which translations are never used ().
 ;; TODO: List strings which are missing a translation (when page string translations are loaded).
 
-(defn wrap-translate
+(defn wrap-translate-uri
   "Request wrapper that:
    - Translates :uri from a localized to a canonical version.
-   - Adds a function :strings to lookup string translations for the page.
    - Adds a function :luri to translate canonical uris to localized versions."
-  [app root]
-  (let [[localized canonical] (load-name-translations root)
-        page-strings (load-string-translations root)]
-    (fn [req]
-      (let [locale (req :locale)
-            luri (req :uri)
-            fluri (ffs locale luri)]
-        (if-let [curi (canonical fluri)]
-          (app (assoc req
-                 ;; canonical URI
-                 :uri curi
-                 ;; fn to translate strings for the current locale and page
-                 :strings (let [strings (page-strings (ffs locale curi) {})]
-                            (fn [& keys]
-                              (or (get-in strings keys)
-                                  (let [key (str/join "-" (map name keys))]
-                                    (log/warn (str "No translation for key " key " on page=" fluri "."))
-                                    (str "(" key ")")))))
-                 ;; fn to localize urls
-                 :luri (fn this
-                         ([curi] (this locale curi))
-                         ([locale curi]
-                            (or (localized (ffs locale curi))
-                                (log/warn (str "No translation for uri " curi ".")))))
+  [app localized canonical]
+  (fn [req]
+    (let [locale (req :locale)
+          luri (req :uri)
+          fluri (ffs locale luri)]
+      (if-let [curi (canonical fluri)]
+        (app (assoc req
+               ;; canonical URI
+               :uri curi
+               ;; fn to localize urls
+               :luri (fn this
+                       ([curi] (this locale curi))
+                       ([locale curi]
+                          (or (localized (ffs locale curi))
+                              (log/warn (str "No translation for uri " curi ".")))))
 
-                 ;; map to canonicalize uri
-                 ;; TODO: This is *only* used when changing locales. Can/should it can be passed another way?
-                 :curi canonical))
+               ;; map to canonicalize uri
+               ;; TODO: This is *only* used when changing locales. Can/should it can be passed another way?
+               :curi canonical))
 
-          ;; Return a 404 if no path can be found.
-          (make-404 req))))))
+        ;; Return a 404 if no path can be found.
+        (make-404 req)))))
 
+(defn wrap-translate-strings
+  "Request wrapper that adds a function :strings to lookup string translations for the page."
+  [app page-strings canonical]
+  (fn [req]
+    (let [locale (req :locale)
+          luri (req :uri)
+          fluri (ffs locale luri)]
+      (if-let [curi (canonical fluri)]
+        (app (assoc req
+               ;; fn to translate strings for the current locale and page
+               :strings (let [strings (page-strings (ffs locale curi) {})]
+                          (fn [& keys]
+                            (or (get-in strings keys)
+                                (let [key (str/join "-" (map name keys))]
+                                  (log/warn (str "No translation for key " key " on page=" fluri "."))
+                                  (str "(" key ")")))))))
 
+        ;; Pass through the same request if there are no strings.
+        (app req)))))

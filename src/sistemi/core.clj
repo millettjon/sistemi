@@ -10,8 +10,7 @@
         clojure.contrib.strint
         (app config run-level)
         app.config.core
-        locale.core
-        sistemi.routes))
+        locale.core))
 
 ;; ===== LOGGING =====
 ;; See: https://github.com/malcolmsparks/clj-logging-config
@@ -23,8 +22,10 @@
 (set-loggers!
  :root     {:level :info :pattern "%p|%X{id}|%c|%m%n"}
  "sistemi" {:level :debug}
- "www" {:level :debug})
+;; "www" {:level :debug}
+ )
 
+(require 'www.middleware.request-id)
 (log/info (<< "Generated boot-id '~{www.id/boot-id}'."))
 
 ;; ===== RUN LEVEL =====
@@ -51,6 +52,10 @@
   (log/info "Starting swank.")
   (eval '(do (require 'swank.swank)
              (swank.swank/start-server :host "localhost" :port 4005))))
+
+;; ===== ROUTES =====
+;; Defer loading of routes until localization has been initialized.
+(use 'sistemi.routes)
 
 ;; ===== MAIN =====
 (defn -main
