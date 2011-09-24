@@ -6,7 +6,8 @@
             [clojure.contrib.string :as str])
   (:use [locale.core :only (locales default-locale)]
         [util (except :only (check))
-              fs]
+              fs
+              (core :only (contains-in?))]
         [www.url :only (url)]
         [sistemi.handlers :only (make-404)])
   (:import java.io.File))
@@ -74,7 +75,6 @@
     (reduce
      (fn [m [locale lname]]
        (let [is-string (string? lname)]
-         (prn "is-string" is-string)
          (or is-string (log/error (str "Invalid entry '" lname "' for locale '" locale "' in file '" file "'.")))
          (assoc m locale (str (url (if is-string lname cname))))
          ))
@@ -131,7 +131,7 @@
           (assoc m (ffs locale cpath) string-map))
         m name-map)))
    {} (dir-seq-bf root)))
-;;(load-string-translations "src/sistemi/site")
+#_(load-string-translations "src/sistemi/site")
 
 ;; TODO: Add checks and balances.
 ;; - List which pages/templates are never used (request log analysis).
@@ -170,17 +170,18 @@
   [app page-strings canonical]
   (fn [req]
     (let [locale (req :locale)
-          luri (req :uri)
-          fluri (ffs locale luri)]
-      (if-let [curi (canonical fluri)]
-        (app (assoc req
-               ;; fn to translate strings for the current locale and page
-               :strings (let [strings (page-strings (ffs locale curi) {})]
-                          (fn [& keys]
-                            (or (get-in strings keys)
-                                (let [key (str/join "-" (map name keys))]
-                                  (log/warn (str "No translation for key " key " on page=" fluri "."))
-                                  (str "(" key ")")))))))
-
-        ;; Pass through the same request if there are no strings.
-        (app req)))))
+          uri (req :uri)]
+      (app (assoc req
+             :strings (let [strings (page-strings (ffs locale uri) {})]
+                        (fn [& keys]
+                          (let [val (get-in strings keys)
+                                ;; Map values have their string value stored under the key :_.
+                                val (if (map? val) (val :_) val)
+                                ;; Strings in the default locale use their key as the value by default.
+                                val (or val (and (= locale default-locale)
+                                                 (contains-in? strings keys)
+                                                 (name (last keys))))]
+                            (or val
+                                (do
+                                  (log/warn (str "No translation for key " keys " (locale=" locale ", page=" uri ")."))
+                                  (str "(" (str/join "-" (map name keys)) ")")))))))))))

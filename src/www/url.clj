@@ -1,5 +1,6 @@
 (ns www.url
   "URL related functions."
+  (:require ring.middleware.params)
   (:require [clojure.string :as str])
   (:use [util.fs :only (fs fs-seq qualify absolute?)])
   (:import (clojure.lang Keyword IPersistentMap)

@@ -15,6 +15,17 @@
       (handle :http
         (:response *condition*)))))
 
+(defn wrap-doall
+  "Ring wrapper that calls doall on the response content. This forces enlive templates to be
+   rendered so that exceptions can be handled in a user friendly manner."
+  [app]
+  (fn [req]
+    (let [response (app req)
+          body (:body response)]
+      (if (seq? body)
+        (assoc response :body (doall body))
+        response))))
+
 (defn- load-handlers
   "Loads all page handlers under a directory directory and returns a
    map of handler functions keyed by canonical uri."

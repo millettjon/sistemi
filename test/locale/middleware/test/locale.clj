@@ -1,21 +1,22 @@
-(ns locale.handler.test.redirect
+(ns locale.middleware.test.locale
   (:use [clojure.test]
         locale.core
-        locale.handler.redirect))
+        locale.middleware.locale))
 
 (deftest parse-accept-language-test
-  (are [x y] (= (@#'locale.handler.redirect/parse-accept-language {:headers {"accept-language" x}}) y)
+  (are [x y] (= (@#'locale.middleware.locale/parse-accept-language {:headers {"accept-language" x}}) y)
        "en,es,fr"                   [[["en"] 1] [["es"] 1] [["fr"] 1]]
        "en-US,es,fr"                [[["en" "US"] 1] [["es"] 1] [["fr"] 1]]
        "en-a-b-c-d"                 [[["en" "a" "b" "c" "d"] 1]]
        "en;q=0.3"                   [[["en"] 0.3]]
-       "en,fr;q=0.3,es;q=0.8,de"    [[["en"] 1] [["de"] 1] [["es"] 0.8] [["fr"] 0.3]])
-  (is (= (@#'locale.handler.redirect/parse-accept-language {:headers {}}) nil)))
+       "en,fr;q=0.3,es;q=0.8,de"    [[["en"] 1] [["de"] 1] [["es"] 0.8] [["fr"] 0.3]]
+       )
+  (is (= (@#'locale.middleware.locale/parse-accept-language {:headers {}}) nil)))
 
 (deftest detect-locale-test
   (binding [default-locale "en"
             locales #{"en" "es" "fr" "it" "de"}]
-    (are [x y] (= (@#'locale.handler.redirect/detect-locale {:headers {"accept-language" x}}) y)
+    (are [x y] (= (@#'locale.middleware.locale/detect-locale {:headers {"accept-language" x}}) y)
        "es"                         "es"
        "fo"                         default-locale
        "fr-ab"                      "fr"

@@ -10,7 +10,8 @@
         clojure.contrib.strint
         (app config run-level)
         app.config.core
-        locale.core))
+        locale.core
+        sistemi.routes))
 
 ;; ===== LOGGING =====
 ;; See: https://github.com/malcolmsparks/clj-logging-config
@@ -54,8 +55,7 @@
              (swank.swank/start-server :host "localhost" :port 4005))))
 
 ;; ===== ROUTES =====
-;; Defer loading of routes until localization has been initialized.
-(use 'sistemi.routes)
+(def routes (build-routes))
 
 ;; ===== MAIN =====
 (defn -main

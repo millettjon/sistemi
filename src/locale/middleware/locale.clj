@@ -16,14 +16,14 @@
      second
      #(compare %2 %1) ; note: use compare w/ swapped args since reverse breaks sort stability
      (map (fn [part]
-            (let [[l q] (str/split part #";")]
-              [(str/split l #"-")
+            (let [[l q] (str/split #";" part)]
+              [(str/split #"-" l)
                (if q
                  ;; parse the quality
                  (Double/parseDouble (second (re-matches #"q=(.+)" q)))
                  ;; quality defaults to 1
                  1)]))
-          (str/split al #",")))))
+          (str/split #"," al)))))
 
 (defn- detect-locale
   "Makes a best guess at which locale should be used."
