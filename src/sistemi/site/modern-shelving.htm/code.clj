@@ -2,7 +2,7 @@
   (:require [clojure.tools.logging :as log])
   (:use net.cgrand.enlive-html
         [ring.util.response :only (response content-type)]
-        [clojure.contrib.string :only (lower-case)]
+        [clojure.string :only (lower-case)]
         locale.core)
   (:import java.io.File))
 

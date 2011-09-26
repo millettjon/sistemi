@@ -1,6 +1,6 @@
 (ns util.except
   "Macros for handling and throwing exceptions."
-  (:use [clojure.contrib.pprint :only (cl-format)]))
+  (:use [clojure.pprint :only (cl-format)]))
 
 (defmacro safely
   "Evaluates an expression safely by catching any exceptions thrown.

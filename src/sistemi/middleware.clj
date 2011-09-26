@@ -1,8 +1,8 @@
 (ns sistemi.middleware
   (:require [clojure.java.io :as io]
-            [clojure.contrib.string :as str]
+            [clojure.contrib.str-utils2 :as stru]
             [clojure.tools.logging :as log])
-  (:use [clojure.contrib (condition :only (handler-case *condition*))]
+  (:use [clojure.mono-contrib (condition :only (handler-case *condition*))]
         [util fs])
   (:import java.io.File))
 
@@ -33,7 +33,7 @@
   (reduce
    (fn [m dir]
      (let [cname (.getName ^File dir)
-           cpath (str/drop (inc (count root)) (.getPath ^File dir)) ; unqualify
+           cpath (stru/drop (.getPath ^File dir) (inc (count root))) ; unqualify
            file (io/file dir "code.clj")]
        (if (.exists file)
          ;; Note: The handler def should be the last sexp in the file.

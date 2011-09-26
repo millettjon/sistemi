@@ -1,8 +1,6 @@
 (ns util.reflection
   "Filters out reflection warning messages from specified namespaces."
-  (:require [clojure.contrib.string :as str]
-;            [clojure.tools.logging :as log]
-            )
+  (:require [clojure.string :as str])
   (:import (java.io ByteArrayOutputStream PrintStream PrintWriter)))
 
 ;; See: http://blogs.oracle.com/nickstephen/entry/java_redirecting_system_out_and
@@ -33,6 +31,7 @@
 
 (defn- path-to-ns
   [path]
+  (prn "************* path=" path)
   (str/escape {\/ \. \_ \-} path))
 
 (defn warn-on-reflection

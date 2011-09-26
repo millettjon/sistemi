@@ -1,7 +1,7 @@
 (ns www.middleware.spy
   (:use [clojure.tools.logging :only (info)]
         [clojure.contrib.def :only (defnk)]
-        [clojure.contrib.string :only (join upper-case)]))
+        [clojure.string :only (join upper-case)]))
 
 (defnk spy
   "Spies on a request logging it."

@@ -3,7 +3,9 @@
             [clj-yaml.core :as yaml]
             [clojure.tools.logging :as log]
             [clojure.set :as set]
-            [clojure.contrib.string :as str])
+            [clojure.string :as str]
+            [clojure.contrib.string :as strc]
+            [clojure.contrib.str-utils2 :as stru])
   (:use [locale.core :only (locales default-locale)]
         [util (except :only (check))
               fs
@@ -88,7 +90,7 @@
   (reduce
    (fn [[localized canonical] dir]
      (let [cname (.getName ^File dir)
-           cpath (str/drop (count root) (.getPath ^File dir))
+           cpath (stru/drop (.getPath ^File dir) (count root))
            file (io/file dir "name.yml")
            name-map (-> (or (and (empty? cpath) (default-translation-map cname))
                             (load-yaml-safely file)
@@ -108,7 +110,7 @@
             [lm cm]))
         [localized canonical] name-map)))
    [{} {}] (dir-seq-bf root)))
-#_(load-name-translations "src/sistemi/site")
+;(load-name-translations "src/sistemi/site")
 
 ;; TODO: Move these notes somewhere.
 ;; - Keep the canonical path uri safe (i.e., no special chars that need encoding).
@@ -121,7 +123,7 @@
   (reduce
    (fn [m dir]
      (let [cname (.getName ^File dir)
-           cpath (str/drop (inc (count root)) (.getPath ^File dir)) ; TODO: unqualify; load strings for root path
+           cpath (stru/drop (.getPath ^File dir) (inc (count root))) ; TODO: unqualify; load strings for root path
            file (io/file dir "strings.yml")
            name-map (when (.exists file)
                       (-> (load-yaml-safely file)

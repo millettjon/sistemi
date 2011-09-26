@@ -14,7 +14,7 @@
    Line level debugging doesn't work.
 "
   (:use clojure.test
-        clojure.contrib.pprint))
+        clojure.pprint))
 
 ;; TODO: Can example document itself?
 
@@ -44,7 +44,7 @@
       (with-out-str
         (println)
         (println heading)
-        (with-pprint-dispatch *code-dispatch* (pprint example))
+        (with-pprint-dispatch code-dispatch (pprint example))
         (println "=>" result)))
      
      ;; Append the example code to the namespace's metadata.

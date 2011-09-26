@@ -1,7 +1,8 @@
 (ns util.fs
   "Utilities for manipulating / separated paths."
-  (:require [clojure.contrib.io :as io])
-  (:use [clojure.contrib.string :only (split replace-re)])
+  (:require [clojure.java.io :as io])
+  (:use [clojure.string :only (split)]
+        [clojure.contrib.string :only (replace-re)])
   (:import java.io.File))
 
 ;; GOALS
@@ -102,7 +103,7 @@
     (let [args (filter #(not (empty? %1)) args)]
       (seq (filter #(not (empty? %1))
                    (flatten
-                    (map #(split #"/" %1) args)))))))
+                    (map #(split %1 #"/") args)))))))
 
 (defn fs-rest
   "Removes the first path segment."

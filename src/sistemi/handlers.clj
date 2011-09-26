@@ -1,7 +1,7 @@
 (ns sistemi.handlers
   (:require [clojure.string :as str])
   (:use ring.util.response
-        [clojure.contrib.condition :only (raise)]))
+        [clojure.mono-contrib.condition :only (raise)]))
 
 (defn make-403
   "Returns a custom 403 (forbidden) response."

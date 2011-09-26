@@ -1,5 +1,5 @@
 (ns locale.middleware.locale
-  (:require [clojure.contrib.string :as str])
+  (:require [clojure.string :as str])
   (:use locale.core))
 
 (defn wrap-locale

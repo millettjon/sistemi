@@ -1,6 +1,6 @@
-(clojure.core/require 'util.reflection)
-(util.reflection/warn-on-reflection
- "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
+;; (clojure.core/require 'util.reflection)
+;; (util.reflection/warn-on-reflection
+;;  "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
@@ -32,6 +32,13 @@
 ;; ===== RUN LEVEL =====
 (init-run-level!)
 (log/info (<< "Entering run level '~{run-level}'."))
+(log/info (<< "Clojure version: '~(clojure-version)'"))
+;; java.version
+;; user.dir
+;; java.vm.version
+;; java.vm.name
+;; java.runtime.version
+;; java.vendor
 
 ;; ===== CONFIGURATION =====
 (set-config!
@@ -46,16 +53,36 @@
   (set-locales! (m :locales))
   (set-default-locale! (m :default-locale)))
 
+;; ===== ROUTES =====
+;; Build routes after localization settigns are initialized.
+(def routes (build-routes))
+
 ;; ===== SWANK =====
 ;; Starts a swank server. Useful when running locally from foreman.
 ;; Note: Uses eval since swank-clojure may not be available in production (e.g., heroku).
 (defn start-swank []
   (log/info "Starting swank.")
   (eval '(do (require 'swank.swank)
-             (swank.swank/start-server :host "localhost" :port 4005))))
+             (swank.swank/start-server :host "localhost" :port 4005)))
 
-;; ===== ROUTES =====
-(def routes (build-routes))
+  ;; Inject doc and javadocc into clojure core so they are there for the repl.
+  ;; ? Why does this only work inside an require eval?
+  ;;   ? Do symbols get evaluated at macro expansion time?
+  ;; When compiling, the namespace is set by the ns in the file.
+  ;; Later, it is set to "user".
+
+  #_ (require 'clojure.java.javadoc) ; unable to resolve symbol ort. WTF?
+  #_ (eval (intern 'clojure.core 'javadoc clojure.java.javadoc/javadoc))  ; fails
+  #_(eval '(do
+           #_(require 'clojure.repl)
+           #_(let [orig-ns *ns*]
+             (in-ns 'clojure.core)
+             (def #^{:macro true} doc #'clojure.repl/doc)
+             (in-ns orig-ns))
+           ;; Note: This works, but only injects it into namespaces started after this...
+           ;; Note: Why is the eval needed?
+           (require 'clojure.java.javadoc)
+           (intern 'clojure.core 'javadoc clojure.java.javadoc/javadoc))))
 
 ;; ===== MAIN =====
 (defn -main
