@@ -14,8 +14,8 @@
   (is (= (@#'locale.middleware.locale/parse-accept-language {:headers {}}) nil)))
 
 (deftest detect-locale-test
-  (binding [default-locale "en"
-            locales #{"en" "es" "fr" "it" "de"}]
+  (with-redefs [default-locale "en"
+                locales #{"en" "es" "fr" "it" "de"}]
     (are [x y] (= (@#'locale.middleware.locale/detect-locale {:headers {"accept-language" x}}) y)
        "es"                         "es"
        "fo"                         default-locale

@@ -5,8 +5,8 @@
         ring.mock.request))
 
 (deftest routes-test
-  (binding [default-locale "en"
-            locales #{"en" "es"}]
+  (with-redefs [default-locale "en"
+              locales #{"en" "es"}]
     (let [routes (build-routes)]
       (are [args result] (= result
                             (let [m (routes (apply request args))

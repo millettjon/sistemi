@@ -10,7 +10,7 @@
 
 (deftest test-init-run-level!
   (testing "environment"
-    (binding [environment {"RUN_LEVEL" "staging"}]
+    (with-redefs [environment {"RUN_LEVEL" "staging"}]
       (init-run-level!)
       (is (= run-level :staging))))
   (testing "no args"
