@@ -31,8 +31,7 @@
 
 (defn- path-to-ns
   [path]
-  (prn "************* path=" path)
-  (str/escape {\/ \. \_ \-} path))
+  (str/escape path {\/ \. \_ \-}))
 
 (defn warn-on-reflection
   "Sets *warn-on-reflection* to true and replaces System.err with a PrintStream that
