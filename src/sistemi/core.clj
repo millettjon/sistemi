@@ -75,6 +75,7 @@
   ;;   ? Do symbols get evaluated at macro expansion time?
   ;; When compiling, the namespace is set by the ns in the file.
   ;; Later, it is set to "user".
+  ;; See Gilardi Scenario: http://technomancy.us/143
 
   #_ (require 'clojure.java.javadoc) ; unable to resolve symbol ort. WTF?
   #_ (eval (intern 'clojure.core 'javadoc clojure.java.javadoc/javadoc))  ; fails
@@ -101,3 +102,4 @@
       (browse-url  (<< "file://~(System/getProperty \"user.dir\")/autodoc/index.html"))
       (browse-url  (<< "http://localhost:~{port}")))
     (run-jetty #'routes {:port port})))
+
