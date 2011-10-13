@@ -3,7 +3,7 @@
             [clj-time.core :as time])
   (:use ring.util.response
         ring.persistent-cookies
-        [sistemi.handlers :only (raise-403)]
+        [sistemi.handlers :only (throw-403)]
         [locale.core :only (locales)]
         [util.except :only (safely)]
         [util.fs :only (ffs fs-seq)]))
@@ -19,7 +19,7 @@
         referer (get-in req [:headers "referer"])]
 
     ;; Validate form parameters.
-    (when-not locale (raise-403 req (str "Invalid parameter lang=" lang ".")))
+    (when-not locale (throw-403 req (str "Invalid parameter lang=" lang ".")))
 
     ;; Validate client supplied inputs and compute the redirect target.
     (let [uri (cond
@@ -27,12 +27,12 @@
                ;; TODO: Encode target. (url/url target)
                target (if-let [url (safely (url/url target) nil)]
                         (if (some #(get url %) [:scheme :host :port])
-                          (raise-403 req (str "Invalid parameter target=" target " (not a locale url)."))
+                          (throw-403 req (str "Invalid parameter target=" target " (not a locale url)."))
                           (str url))
-                        (raise-403 req (str "Invalid parameter target=" target ".")))
-               
+                        (throw-403 req (str "Invalid parameter target=" target ".")))
+
                referer (if (not (url/self-referred? req)) ; Only allow requests from the same server.
-                         (raise-403 req (str "Third party referals not supported (referer=" referer ")."))
+                         (throw-403 req (str "Third party referals not supported (referer=" referer ")."))
                          ((req :luri) locale ((req :curi) (:uri (url/parse referer)))))
 
                :default (ffs locale))
@@ -44,5 +44,5 @@
           (content-type "text/html; charset=utf-8")))))
 
 ;; TODO: (time/in 10 :years)
-;; TODO: function to set a cookie for 1 month, quarter, year, decade out 
+;; TODO: function to set a cookie for 1 month, quarter, year, decade out
 ;; TODO: add tests

@@ -114,8 +114,8 @@
   [req uri]
   (let [{server :server-name port :server-port} req]
     (case (:scheme req)
-      :http (str "http://" server (case port 80 "" (str ":" port)) uri)
-      :https (str "https://" server (case port 443 "" (str ":" port)) uri))))
+      :http (str "http://" server (case (int port) 80 "" (str ":" port)) uri)
+      :https (str "https://" server (case (int port) 443 "" (str ":" port)) uri))))
 
 ;; Note: stolen from ring-mock...
 (defn parse

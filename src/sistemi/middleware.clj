@@ -2,18 +2,17 @@
   (:require [clojure.java.io :as io]
             [clojure.contrib.str-utils2 :as stru]
             [clojure.tools.logging :as log])
-  (:use [clojure.mono-contrib (condition :only (handler-case *condition*))]
+  (:use [slingshot.core :only [try+]]
         [util fs])
   (:import java.io.File))
 
-(defn wrap-condition
-  "Ring wrapper that handles http error conditions raised from further down the handler stack."
+(defn wrap-exception-response
+  "Ring wrapper that catches response maps thrown as exceptions from further down the handler stack."
   [app]
   (fn [req]
-    (handler-case :type
+    (try+
       (app req)
-      (handle :http
-        (:response *condition*)))))
+      (catch map? m m))))
 
 (defn wrap-doall
   "Ring wrapper that calls doall on the response content. This forces enlive templates to be

@@ -2,9 +2,7 @@
 ;; TODO: Consider disabling this for production.
 (clojure.core/require 'util.reflection)
 (util.reflection/warn-on-reflection
-  "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
-
-(println (seq (.getURLs (java.lang.ClassLoader/getSystemClassLoader))))
+  "clojure.contrib" "slingshot" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
@@ -37,7 +35,7 @@
 (init-run-level!)
 (log/info (<< "Entering run level '~{run-level}'."))
 (log/info (<< "Clojure version: '~(clojure-version)'"))
-(log/info (str "Classpath: " (seq (.getURLs (java.lang.ClassLoader/getSystemClassLoader)))))
+;; (log/info (str "Classpath: " (seq (.getURLs (java.lang.ClassLoader/getSystemClassLoader)))))
 ;; java.version
 ;; user.dir
 ;; java.vm.version
@@ -102,4 +100,3 @@
       (browse-url  (<< "file://~(System/getProperty \"user.dir\")/autodoc/index.html"))
       (browse-url  (<< "http://localhost:~{port}")))
     (run-jetty #'routes {:port port})))
-

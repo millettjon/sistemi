@@ -7,7 +7,7 @@
         (locale.middleware locale translate)
         locale.handler.redirect
         (sistemi [handlers :only (make-404)]
-                 [middleware :only (wrap-condition wrap-handler wrap-doall)])))
+                 [middleware :only (wrap-exception-response wrap-handler wrap-doall)])))
 
 (defn build-routes
   []
@@ -22,7 +22,7 @@
      wrap-request-id          ; add a unique request id for logging
      wrap-request-log
      wrap-stacktrace
-     wrap-condition           ; handle 4xx errors raised from below
+     wrap-exception-response  ; handle responses thrown as exceptions (e.g., 4xx errors)
      ;; (wrap-reload '[adder.middleware adder.core])
      ;; TODO: gzip
      ;; TODO: cache control (http://groups.google.com/group/ring-clojure/browse_thread/thread/cc8f72a15ae7fbc3)

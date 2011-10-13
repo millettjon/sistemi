@@ -1,7 +1,7 @@
 (ns sistemi.handlers
   (:require [clojure.string :as str])
   (:use ring.util.response
-        [clojure.mono-contrib.condition :only (raise)]))
+        [slingshot.core :only [throw+]]))
 
 (defn make-403
   "Returns a custom 403 (forbidden) response."
@@ -28,18 +28,13 @@
       (status 405)
       (header "Allow" (str/upper-case (name method)))))
 
-(defn raise-http
-  "Raises an http condition storing the response in the condition map."
-  [resp]
-  (raise :type :http :response resp))
-
-(defn raise-403
-  "Shorthand for (raise-http (make-403 req message))."
+(defn throw-403
+  "Throws a 403 response."
   [req message]
-  (raise-http (make-403 req message)))
+  (throw+ (make-403 req message)))
 
 (defn assert-method
-  "Asserts that the request uses the given method. Otherwise, raises a condition with an http 405 ring response."
+  "Asserts that the request uses the given method. Otherwise, throws a 405 response."
   [req method]
   (when (not= (:request-method req) method)
-    (raise-http (make-405 req method))))
+    (throw+ (make-405 req method))))

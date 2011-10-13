@@ -11,7 +11,7 @@
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.3.0"]
-                     ;;                 [org.clojure.contrib/condition "1.3.0-SNAPSHOT"] ; TODO: use production version when ready
+                     [slingshot "0.5.0"]
 
                      ;; logging
                      [org.clojure/tools.logging "0.1.2" #_"0.2.3"]
@@ -49,14 +49,9 @@
                          ]
 
       :extra-classpath-dirs [;; Jars not available in maven.
-                             ;; "opt/gdata/gdata-core-1.0-minimal.jar"
-                             ;; Custom builds for clojure 1.3 compatability.
-                             ;; "opt/clj-logging-config/clj-logging-config-1.7.0.jar"
-                             "opt/contrib"
                              "opt/autodoc/autodoc-0.9.0.jar" ; weavjester; note, copy to lib/dev for lein autodoc to work
                              ]
 
       :autodoc { :name "Sistemi Moderni", :page-title "Sistemi Moderni Documentation"}
-      :aot [clojure.mono-contrib.condition.Condition] ;; TODO: Remove this?
       )
   )
