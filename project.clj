@@ -1,5 +1,5 @@
 (let
-    ;; Hack to support a local file based maven repositor on heroku.
+    ;; Hack to support a local file based maven repository on heroku.
     [local-repo (str "file://" (System/getProperty "user.dir") "/repo")]
 
     (defproject sistemi "0.1"
@@ -31,7 +31,7 @@
                      [sistemi/gdata-core-minimal "1.0"] ; CUSTOM: stripped down gdata client
 
                      ;; web client
-                     ;;                 [clj-http "0.1.3"]
+                     [clj-http "0.2.5"]
 
                      ;; configuration
                      [clj-yaml "0.3.0-SNAPSHOT"]
@@ -42,16 +42,5 @@
                      ]
 
       :dev-dependencies [[ring-mock "0.1.1" :exclusions [org.clojure/clojure]]
-                         ;;[org.clojars.weavejester/autodoc "0.9.0"]  ;; BREAKS ENLIVE
-                         ;; AUTODOC DEPS; TODO: Remove when autodoc works with clojure 1.3.
-                         [org.clojure/data.json "0.1.1" :exclusions [org.clojure/clojure]]
-                         [org.clojure/tools.namespace "0.1.0" :exclusions [org.clojure/clojure]]
-                         ]
-
-      :extra-classpath-dirs [;; Jars not available in maven.
-                             "opt/autodoc/autodoc-0.9.0.jar" ; weavjester; note, copy to lib/dev for lein autodoc to work
-                             ]
-
-      :autodoc { :name "Sistemi Moderni", :page-title "Sistemi Moderni Documentation"}
-      )
-  )
+                         [lein-marginalia "0.6.1"]]
+      ))
