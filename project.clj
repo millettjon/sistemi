@@ -11,7 +11,7 @@
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.3.0"]
-                     [slingshot "0.5.0"]
+                     [slingshot "0.9.0"]
 
                      ;; logging
                      [org.clojure/tools.logging "0.1.2" #_"0.2.3"]
