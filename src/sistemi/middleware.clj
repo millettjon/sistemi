@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.contrib.str-utils2 :as stru]
             [clojure.tools.logging :as log])
-  (:use [slingshot.core :only [try+]]
+  (:use [slingshot.slingshot :only [try+]]
         [util fs])
   (:import java.io.File))
 
@@ -26,7 +26,7 @@
         response))))
 
 (defn- load-handlers
-  "Loads all page handlers under a directory directory and returns a
+  "Loads all page handlers under a directory and returns a
    map of handler functions keyed by canonical uri."
   [root]
   (reduce

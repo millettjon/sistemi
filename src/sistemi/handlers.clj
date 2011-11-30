@@ -1,7 +1,7 @@
 (ns sistemi.handlers
   (:require [clojure.string :as str])
   (:use ring.util.response
-        [slingshot.core :only [throw+]]))
+        [slingshot.slingshot :only [throw+]]))
 
 (defn make-403
   "Returns a custom 403 (forbidden) response."

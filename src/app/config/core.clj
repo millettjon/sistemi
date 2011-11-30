@@ -19,15 +19,15 @@
   (safely (yaml/parse-string s) s))
 
 (defn- normalize-key
-  "Normalizes a key by replacing underscore to dash and converting to lowercase."
+  "Normalizes a key by replacing underscore with dash and converting to lowercase."
   [k]
   (-> k (str/replace "_" "-") str/lower-case keyword))
 
 ;; ===== PUBLIC FUNCTIONS =====
 (defn environment-map
   "Returns the environment as a map. Keys are normalized by converting underscore to dash,
-   lowercasing, and kewyordizing.  YAML parseable values are coerced from yaml to clojure.  A list
-   of keys can be supplied to select the desired map entries."
+   lowercasing, and keywordizing.  YAML parseable values are coerced from yaml to clojure.  A list
+   of keys can be supplied to restrict the set of environment variables."
   [& keys]
   (reduce (fn [m kv]
             (let [[k v] kv]

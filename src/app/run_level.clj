@@ -69,3 +69,5 @@
        (alter-var-root #'run-levels (constantly (set (check levels set?))))
        (alter-var-root #'run-level (constantly (check level levels))))
      (make-predicates)))
+
+(init-run-level!)

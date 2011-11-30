@@ -2,7 +2,7 @@
 ;; TODO: Consider disabling this for production.
 (clojure.core/require 'util.reflection)
 (util.reflection/warn-on-reflection
-  "clojure.contrib" "slingshot" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
+  "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
@@ -44,11 +44,7 @@
 ;; java.vendor
 
 ;; ===== CONFIGURATION =====
-(set-config!
-   (file-map "etc/default.yaml")
-   (file-map  (str "etc/" (name run-level) ".yaml"))
-   (environment-map "PORT" "DATABASE_URL" "PAYPAL"))
-
+(use 'sistemi.config)
 (log/info (<< "Using configuration ~{config}."))
 
 ;; ===== LOCALIZATION =====
