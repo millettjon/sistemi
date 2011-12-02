@@ -93,6 +93,6 @@
     (start-swank))
   (let [port (conf :port)]
     (when (conf :launch-browser)
-      (browse-url  (<< "file://~(System/getProperty \"user.dir\")/autodoc/index.html"))
+      (browse-url  (<< "file://~(System/getProperty \"user.dir\")/docs/uberdoc.html"))
       (browse-url  (<< "http://localhost:~{port}")))
     (run-jetty #'routes {:port port})))
