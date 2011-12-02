@@ -7,8 +7,8 @@ launch-browser: true
 # Paypal sandbox login.
 # The password and signature are passed in the environment.
 paypal:
-  user: foo
-  url: http://fubar.paypal.com
+  version: "78.0"
+  url: "https://api-3t.sandbox.paypal.com/nvp"
 
 # Use the local postgres database.
 database-url: postgres://localhost/sistemi

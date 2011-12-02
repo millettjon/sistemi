@@ -6,49 +6,50 @@
             [log.readably :as logr]
             [www.url :as url]))
 
-;; TODO: See if the circuit breaker pattern is useful: http://blog.higher-order.net/2010/05/05/circuitbreaker-clojure-1-2/
-;; TODO: ? Is the http.agent-api is more appropriate (http://richhickey.github.com/clojure-contrib/http.agent-api.html)?
+;; TODO: ? Is the circuit breaker pattern useful (http://blog.higher-order.net/2010/05/05/circuitbreaker-clojure-1-2/)?
+;; TODO: ? Is the http.agent-api appropriate (http://richhickey.github.com/clojure-contrib/http.agent-api.html)?
 ;; - limit concurrency to paypal
 ;; - allow request to return immediately to client (or after a timeout)
-;; - provide endpoint for client to poll for status
-;; TODO: learn about agents
+;; TODO: add tests
 
-;; TODO: Factor out the configurable items.
-(defn call
+(defn- sanitize
+  "Remove sensitive information from a map."
+  [m]
+  (let [redacted-map (select-keys m [:USER :PWD :SIGNATURE])
+        redacted-map (zipmap (keys redacted-map) (repeat (count redacted-map) "-redacted-"))]
+    (merge m redacted-map)))
+
+(defn- call
   "Calls a paypal NVP (name-value-pair) method and returns the result."
-  [method params]
-  (let [fparams (merge params {:USER "seller_1301328605_biz_api1.sistemimoderni.com"
-                               :PWD "1301328617"
-                               :SIGNATURE "A67JHhtiGB0VpBJwFhFIoh1sRh1jAcab39wpr0cwYobasj4xRoJtiV.S"
-                               :VERSION "78.0"
-                               :METHOD method})
-        rparams (hash-map :form-params fparams)]
-    (logr/info "request" (if (contains? fparams :PWD) (assoc fparams :PWD "-redacted-") fparams))
-    (let [resp (client/post "https://api-3t.sandbox.paypal.com/nvp" rparams)]
+  [conf method params]
+  (let [form-params (merge params (select-keys conf [:USER :PWD :SIGNATURE :VERSION]) {:METHOD method})
+        request-params (hash-map :form-params form-params)]
+    (logr/info "request" (sanitize form-params))
+    (let [resp (client/post (:URL conf) request-params)]
       (logr/info "response" resp)
       resp)))
 
-(defn parse
-  "Parses a paypal NVP response and returns the result as a map."
+(defn- parse
+  "Parses a paypal NVP response and returns the result as a keywordized map."
   [resp]
-  (let [v (str/split (:body resp) #"&")
-        v1 (map (fn [kvpair] (str/split kvpair #"=")) v)
-        v2 (apply hash-map (map url/decode (flatten v1)))
-        ]
-    v2))
+  (reduce (fn [m kvpair]
+            (let [[k v] (str/split kvpair #"=")]
+              (assoc m (keyword k) (url/decode v))))
+          {}
+          (str/split (:body resp) #"&")))
 
-(defn check
+(defn- check
   "Checks an NVP response map for errors. If an error is found, logs the error and throws an exception."
   [nvp]
-  (when (not (= "Success" (get nvp "ACK")))
-    (let [message (str/join "|" (map (fn [e] (get nvp (str "L_" (name e) "0"))) [:SEVERITYCODE :ERRORCODE :SHORTMESSAGE :LONGMESSAGE  ]))]
-      (prn message)                     ; TODO: disable printing
+  (logr/info "check: nvp:" nvp)
+  (when (not= "Success" (:ACK nvp))
+    (let [message (str/join "|" (map (fn [e] ((keyword (str "L_" (name e) "0")) nvp)) [:SEVERITYCODE :ERRORCODE :SHORTMESSAGE :LONGMESSAGE]))]
       (log/error message)
-;      (throw (RuntimeException. message)) ; TODO: enable exceptions
-      )))
+      (throw (RuntimeException. message))))
+  nvp)
 
-(defn client
-  [method params]
-  (-> (call method params)
+(defn do-request
+  [conf method params]
+  (-> (call conf method params)
       parse
       check))
