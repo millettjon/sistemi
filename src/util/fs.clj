@@ -76,7 +76,7 @@
      (cond
       (nil? path) nil
       (= \/ (first path)) path
-      :default (str dir path))))
+      :default (ffs dir path))))
 
 (defn ffs
   "Calls fs on the arguments and makes the result fully qualified by prepending a leading / if necessary."
@@ -113,7 +113,6 @@
       (apply (if (relative? path) fs ffs) (rest (fs-seq path)))))
 
 ;; TODO: Remove 0 arity unless needed (e.g., for apply).
-;; TODO: See if type hints are necessary.
 
 (defn parent
   "Returns the parent path of a path or nil if there is no parent."

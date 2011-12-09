@@ -69,5 +69,14 @@
        "/a/b"  "/b"
        "/a/b/" "/b"
        "a/b"   "b"
-       )
-  )
+       ))
+
+(deftest test-qualify
+  (are [a b] (= (apply qualify a) b)
+       [nil] nil
+       ["/a/b/c" "/ab"] "/a/b/c"
+       ["abc"] "/abc"
+       ["a/b" "/c"] "/c/a/b"
+       ["a/b" "/c/"] "/c/a/b"
+       ["a/b" "c/"] "/c/a/b"
+       ))
