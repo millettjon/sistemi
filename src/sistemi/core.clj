@@ -53,7 +53,7 @@
   (set-default-locale! (m :default-locale)))
 
 ;; ===== ROUTES =====
-;; Build routes after localization settigns are initialized.
+;; Build routes after localization settings are initialized.
 (def routes (build-routes))
 
 ;; ===== SWANK =====
