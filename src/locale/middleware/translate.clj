@@ -65,7 +65,7 @@
         (and (contains? m locale) (locales locale)) m
         (locales locale) (do (log/error (str "No entry for locale '" locale "' in file '" file "'."))
                              (assoc m locale cname))
-        :default (do (log/error (str "Ignoring entry for uknown locale '" locale "' in file '" file "'."))
+        :default (do (log/error (str "Ignoring entry for unknown locale '" locale "' in file '" file "'."))
                      (dissoc m locale))))
      m
      (set/union locales (keys m)))))
@@ -78,8 +78,7 @@
      (fn [m [locale lname]]
        (let [is-string (string? lname)]
          (or is-string (log/error (str "Invalid entry '" lname "' for locale '" locale "' in file '" file "'.")))
-         (assoc m locale (str (url (if is-string lname cname))))
-         ))
+         (assoc m locale (str (url (if is-string lname cname))))))
      m m)))
 #_(load-name-translations "src/sistemi/site")
 
@@ -157,8 +156,9 @@
                :luri (fn this
                        ([curi] (this locale curi))
                        ([locale curi]
-                          (or (localized (ffs locale curi))
-                              (log/warn (str "No translation for uri " curi ".")))))
+                          (let [curi (if (relative? curi) (qualify curi (parent (req :uri)))  curi)] 
+                               (or (localized (ffs locale curi))
+                                   (log/warn (str "No translation for uri " curi "."))))))
 
                ;; map to canonicalize uri
                ;; TODO: This is *only* used when changing locales. Can/should it can be passed another way?
