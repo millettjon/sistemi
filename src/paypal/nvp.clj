@@ -1,5 +1,6 @@
 (ns paypal.nvp
   "Functions for working with the Paypal NVP API."
+  (:use paypal.config)
   (:require [clj-http.client :as client]
             [clojure.string :as str]
             [clojure.tools.logging :as log]
@@ -12,20 +13,25 @@
 ;; - allow request to return immediately to client (or after a timeout)
 ;; TODO: add tests
 
-(defn- sanitize
+(defn sanitize
   "Remove sensitive information from a map."
   [m]
-  (let [redacted-map (select-keys m [:USER :PWD :SIGNATURE])
+  (let [redacted-map (select-keys m [:user :pwd :signature])
         redacted-map (zipmap (keys redacted-map) (repeat (count redacted-map) "-redacted-"))]
     (merge m redacted-map)))
 
 (defn- call
   "Calls a paypal NVP (name-value-pair) method and returns the result."
   [conf method params]
-  (let [form-params (merge params (select-keys conf [:USER :PWD :SIGNATURE :VERSION]) {:METHOD method})
+  (let [site-conf ((keyword (:site conf)) site-conf)
+        form-params (merge
+                     (select-keys site-conf [:version])
+                     (select-keys conf [:user :pwd :signature])
+                     params
+                     {:method method})
         request-params (hash-map :form-params form-params)]
     (logr/info "request" (sanitize form-params))
-    (let [resp (client/post (:URL conf) request-params)]
+    (let [resp (client/post (:url site-conf) request-params)]
       (logr/info "response" resp)
       resp)))
 
@@ -34,7 +40,7 @@
   [resp]
   (reduce (fn [m kvpair]
             (let [[k v] (str/split kvpair #"=")]
-              (assoc m (keyword k) (url/decode v))))
+              (assoc m (keyword (str/lower-case k)) (url/decode v))))
           {}
           (str/split (:body resp) #"&")))
 
@@ -42,8 +48,8 @@
   "Checks an NVP response map for errors. If an error is found, logs the error and throws an exception."
   [nvp]
   (logr/info "check: nvp:" nvp)
-  (when (not= "Success" (:ACK nvp))
-    (let [message (str/join "|" (map (fn [e] ((keyword (str "L_" (name e) "0")) nvp)) [:SEVERITYCODE :ERRORCODE :SHORTMESSAGE :LONGMESSAGE]))]
+  (when (not= "Success" (:ack nvp))
+    (let [message (str/join "|" (map (fn [e] ((keyword (str "L_" (name e) "0")) nvp)) [:severitycode :errorcode :shortmessage :longmessage]))]
       (log/error message)
       (throw (RuntimeException. message))))
   nvp)

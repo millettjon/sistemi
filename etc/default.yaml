@@ -1,5 +1,12 @@
 internationalization:
   locales: [en, es]
   default-locale: en
+  default-territories:
+    en: GB
+    fr: FR
+    de: DE
+    es: ES
+    it: IT
 paypal:
-  #version: "84.0-2276209"
+  site: "sandbox"
+  version: "84.0"
