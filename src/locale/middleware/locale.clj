@@ -3,10 +3,12 @@
   (:use locale.core))
 
 (defn wrap-locale
-  "Saves the locale in the request map."
+  "Strips off the locale from the URI and saves it in the request map."
   [app locale]
   (fn [req]
-    (app (assoc req :locale locale))))
+    (app (-> req
+             (assoc :locale locale :uri (req :path-info))
+             (dissoc :path-info)))))
 
 (defn- parse-accept-language
   "Parses the Accept-language header."
