@@ -11,34 +11,35 @@
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.3.0"]
-                     [slingshot "0.9.0"]
+                     [slingshot "0.10.0"]
 
                      ;; logging
-                     [org.clojure/tools.logging "0.1.2" #_"0.2.3"]
-                     ;; [clj-logging-config "1.7.0"] ; put back once it works w/ clojure 1.3
-                     [sistemi/clj-logging-config "1.7.0"] ; CUSTOM: fixed to work w/ clojure 1.3
-                     [org.slf4j/slf4j-api "1.6.1"]
-                     [org.slf4j/slf4j-log4j12 "1.6.1"]
+                     [clj-logging-config "1.9.5"]
+                     [org.slf4j/slf4j-api "1.6.4"]
+                     [org.slf4j/slf4j-log4j12 "1.6.4"]
                      [log4j "1.2.16"]
 
                      ;; web server
-                     [ring/ring-core "0.3.11"]
-                     [ring/ring-devel "0.3.11"]
-                     [ring/ring-jetty-adapter "0.3.11"]
-                     [net.cgrand/moustache "1.0.0"]
-                     [enlive "1.0.0"]
+                     [ring/ring-core "1.0.0"]
+                     [ring/ring-devel "1.0.0"]
+                     [ring/ring-jetty-adapter "1.0.0"]
+                     [net.cgrand/moustache "1.1.0"]
                      [ring-persistent-cookies "0.1.0"]
+
+                     ;; html
+                     [enlive "1.0.0"]
+                     [hiccup "0.3.7"]
                      [sistemi/gdata-core-minimal "1.0"] ; CUSTOM: stripped down gdata client
 
                      ;; web client
                      [clj-http "0.2.5"]
 
                      ;; configuration
-                     [clj-yaml "0.3.0-SNAPSHOT"]
+                     [clj-yaml "0.3.1"]
 
                      ;; database
                      [postgresql/postgresql "8.4-702.jdbc4"]
-                     [org.clojure/java.jdbc "0.0.5"]
+                     [org.clojure/java.jdbc "0.1.1"]
                      ]
 
       :dev-dependencies [[ring-mock "0.1.1" :exclusions [org.clojure/clojure]]
