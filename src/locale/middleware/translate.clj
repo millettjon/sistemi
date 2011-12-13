@@ -156,9 +156,12 @@
                :luri (fn this
                        ([curi] (this locale curi))
                        ([locale curi]
+                          ;; FIX: Relative urls are incorrectly qualified for non english.
+                          ;; The uri of the current request is in the actual locale,
+                          ;; whereas the relative part is in the canonical locale.
                           (let [curi (if (relative? curi) (qualify curi (parent (req :uri)))  curi)] 
-                               (or (localized (ffs locale curi))
-                                   (log/warn (str "No translation for uri " curi "."))))))
+                            (or (localized (ffs locale curi))
+                                (log/warn (str "No translation for uri " curi "."))))))
 
                ;; map to canonicalize uri
                ;; TODO: This is *only* used when changing locales. Can/should it can be passed another way?
