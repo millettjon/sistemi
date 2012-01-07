@@ -2,15 +2,6 @@
 
 mvn install:install-file \
   -DlocalRepositoryPath=repo \
-  -Dfile=opt/clj-logging-config/clj-logging-config-1.7.0.jar \
-  -DgroupId=sistemi \
-  -DartifactId=clj-logging-config \
-  -Dversion=1.7.0 \
-  -Dpackaging=jar \
-  -DgeneratePom=true
-
-mvn install:install-file \
-  -DlocalRepositoryPath=repo \
   -Dfile=opt/gdata/gdata-core-1.0-minimal.jar \
   -DgroupId=sistemi \
   -DartifactId=gdata-core-minimal \
