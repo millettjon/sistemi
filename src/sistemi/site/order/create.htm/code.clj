@@ -1,15 +1,8 @@
 (ns sistemi.site.order.create
   (:use net.cgrand.enlive-html
-        [ring.util.response :only (response content-type)]
+        [ring.util.response :only (response)]
         locale.core)
   (:import java.io.File))
-
-;; TODO: Move this code into locale. Where should it be initialized from?
-(use 'app.config)
-(defn full-locale
-  [locale]
-  (let [territory (conf :internationalization :default-territories (keyword locale))]
-    (str (name locale) "_" territory)))
 
 (deftemplate html
   (File. "www/raw/order/create.html")
@@ -20,7 +13,10 @@
   ;; Set the page title.
   [:title] (content (strings :title))
 
-  ;; Internationalize the checkout button.
+  ;; Localize the form target url.
+  [:form] (set-attr :action ((req :luri) "/order/checkout"))
+
+  ;; Localize the checkout button.
   [:img] (set-attr :src (str "https://www.paypal.com/" (full-locale (req :locale)) "/i/btn/btn_xpressCheckout.gif"))
 
   ;; Set the Content-Type to utf-8

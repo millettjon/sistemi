@@ -1,14 +1,13 @@
 (ns app.run-level
-  (:use [clojure.contrib.def :only (defvar)]
-        (util environment except)))
+  (:use (util environment except)))
 
 ;; ===== VARS =====
 
-(defvar run-levels
+(def run-levels
   "Set of valid run levels."
   nil)
 
-(defvar run-level
+(def run-level
   "Runtime level of the process."  
   nil)
 

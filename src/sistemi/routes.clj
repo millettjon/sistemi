@@ -63,3 +63,5 @@
                     [&] locale-redirect)
           [&] make-404))
     ))
+#_(do (in-ns 'sistemi.core)
+      (def routes (build-routes)))

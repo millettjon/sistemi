@@ -4,13 +4,12 @@
             [clojure.tools.logging :as log]
             [clojure.set :as set]
             [clojure.string :as str]
-            [clojure.contrib.string :as strc]
-            [clojure.contrib.str-utils2 :as stru])
+            [clojure.contrib.str-utils2 :as stru]
+            [www.url :as url])
   (:use [locale.core :only (locales default-locale)]
         [util (except :only (check))
               fs
               (core :only (contains-in?))]
-        [www.url :only (url)]
         [sistemi.handlers :only (make-404)])
   (:import java.io.File))
 
@@ -78,7 +77,7 @@
      (fn [m [locale lname]]
        (let [is-string (string? lname)]
          (or is-string (log/error (str "Invalid entry '" lname "' for locale '" locale "' in file '" file "'.")))
-         (assoc m locale (str (url (if is-string lname cname))))))
+         (assoc m locale (str (url/new-URL (if is-string lname cname))))))
      m m)))
 #_(load-name-translations "src/sistemi/site")
 

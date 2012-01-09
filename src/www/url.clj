@@ -1,145 +1,162 @@
 (ns www.url
-  "URL related functions."
-  (:require ring.middleware.params)
-  (:require [clojure.string :as str])
-  (:use [util.fs :only (fs fs-seq qualify absolute?)])
+  "Functions for working with URLs."
+  (:require ring.middleware.params
+            [clojure.string :as str]
+            [util.fs :as fs])
   (:import (clojure.lang Keyword IPersistentMap)
            (java.net URLDecoder URLEncoder URI)
            (com.google.gdata.util.common.base CharEscapers PercentEscaper)))
 
-(defn- parse-params
-  [s]
-  (reduce (fn [m [key val]] (assoc m (keyword key) val))
-          {}
-          (#'ring.middleware.params/parse-params s "UTF-8")))
+;; ========== CONSTANTS =======================================
+(def standard-ports
+  "Map of standard protocol ports."
+  {:http 80
+   :https 443})
 
+;; ========== DECODE =======================================
 (defn decode
   "Returns the UTF-8 URL decoded version of the given string."
   [s]
   (URLDecoder/decode s "UTF-8"))
 
-;; encode-data? encode-url
-;; Use this for POSTS
-;; rename escape-post?
-#_(defn encode
-  "Returns the UTF-8 URL decoded version of the given string."
-  [s]
-  (URLEncoder/encode s "UTF-8"))
+;; ========== ENCODE =======================================
+;; Use google's escape classes since java.net's URL and URI don't
+;; properly escape international characters in the various URL parts
+;; (e.g., path, query string etc).
 
 (def ^PercentEscaper path-escaper
   (CharEscapers/uriPathEscaper))
 
 (defn encode-path-segment
+  "Encodes one segment of a URL path."
   [^String s]
   (.escape path-escaper s))
-#_(encode-path-segment "estantería")
+
+(defn encode-path
+  "Encodes the entire URL path."
+  [path]
+  (when path
+    (let [s (apply fs/fs (map encode-path-segment (fs/fs-seq path)))]
+      (if (fs/absolute? path)
+        (or (fs/qualify s) "/")
+        s))))
 
 (def ^PercentEscaper query-escaper
   (CharEscapers/uriQueryStringEscaper))
 
 (defn encode-query-segment
+  "Encodes one segment of a URL query string (i.e., a key or a value)."
   [^String s]
   (.escape query-escaper s))
-#_(encode-query-segment "estantería")
-
-(defn encode-path
-  [path]
-  (when path
-    (let [s (apply fs (map encode-path-segment (fs-seq path)))]
-      (if (absolute? path)
-        (qualify s)
-        s))))
-#_(encode-path "estantería")
 
 (defn encode-query
+  "Encodes the URL's query string map."
   [m]
   (str/join
    "&"
    (map (fn [entry] (str/join "=" (map #(-> %1 name encode-query-segment) entry)))
            m)))
-#_(encode-query {:a23 "bí"})
 
+;; ========== RECORD =======================================
+;;
+;; Creating a record to represent URLs has the following advantages:
+;; - automatic string conversion via str
+;; - multimethod dispatch on URLs as distinct from ring request maps
+;;
+;; Note: java.net.URI is not that useful as it:
+;; - fails to properly encode the path (e.g., international chars are not encoded)
+;; - encodes the query string as one chunk and doesn't allow finer
+;;   grained control needed to serialize a map
+;;
 (defrecord URL [#^Keyword scheme #^String host #^Integer port #^String path #^IPersistentMap query]
   Object
-  (toString [this]
-    (let [a (when scheme
-              [(name scheme) ":" "//" host
-               (cond (= :http scheme) (if-not (= (or port 80) 80) [":" port])
-                     (= :https scheme) (if-not (= (or port 443) 443) [":" port])
-                     :default [":" port])
-               ])
-          a (flatten (filter identity a))
+  (toString
+    [this]
+    (let [a [(when scheme [(name scheme) ":"])
+             (when host ["//" host])
+             (cond
+              (nil? port) nil
+              (not= port (standard-ports scheme)) [":" port])]
+          a (filter identity (flatten a))
           ;; Encode the path.
-          a (if path
-              (concat a (let [s (encode-path path)]
-                          (if (empty? a) s (qualify s))))
-              a)
+          a (concat a (let [s (encode-path path)]
+                        (if (empty? a) [s]      ; leave a relative path unchanged
+                            (if (= "/" path)
+                              nil                   ; omit a single "/"
+                              [(fs/qualify s)]))))  ; prepend a "/" if the url is not relative 
           ;; Encode the query string
           a (if query
               (concat a ["?" (encode-query query)])
-              a)
-          ]
-      (apply str a))
-    ))
+              a)]
+      (apply str a))))
 
-#_(str (url "http://fubar.com"))
-#_(str (url "http://fubar.com/a/b/estantería?lang=en&target=/estantería-moderna.htm"))
-#_(str (url "foo"))
-#_(str (url "/foo"))
+;; ========== CONSTRUCTORS =======================================
 
-#_(:query (url "http://fubar.com/a/b/estantería?lang=en&target=/estanter%C3%ADa-moderna.htm"))
-#_(str (url "/a/b/estantería"))
+(defn- normalize
+  "Normalizes the path when creating a new URL."
+  [url]
+  (let [path (:path url)]
+    (if (str/blank? path)
+      (assoc url :path "/")
+      url)))
 
-#_ (url "a")
-#_ (:scheme (url "a"))
-#_ ((url "a") :path)
+(defn parse-params
+  "Parses a query string into a map. Keys are coerced to keywords. UTF-8 encoding is assumed."
+  [s]
+  (reduce (fn [m [key val]] (assoc m (keyword key) val))
+          {}
+          (#'ring.middleware.params/parse-params s "UTF-8")))
 
-(defmulti url
-  "Coerce argument to a URL instance."
+(defmulti new-URL
+  "Creates a new URL record from the argument."
   class)
 
-(defmethod url String
-  [s]
-  (let [uri    (URI. s)
-        scheme (.getScheme uri)
-        host   (.getHost uri)
-        port   (if (not= (.getPort uri) -1) (.getPort uri))
-        path   (let [s (.getRawPath uri)] (if (str/blank? s) "/" (decode s)))
-        query  (if-let [qs (.getQuery uri)] (parse-params qs))]
-    (URL. (keyword scheme) host port path query)))
-
-(defn canonicalize
-  "Makes a canonical URL by combining the scheme, server, and port from a request map with the
-   desired URI."
-  [req uri]
-  (let [{server :server-name port :server-port} req]
-    (case (:scheme req)
-      :http (str "http://" server (case (int port) 80 "" (str ":" port)) uri)
-      :https (str "https://" server (case (int port) 443 "" (str ":" port)) uri))))
-
-;; Note: stolen from ring-mock...
-(defn parse
-  "Parses a URL into a minimal ring request map."
+(defmethod new-URL String
   [uri]
-  (let [uri    (URI. uri)
-        host   (.getHost uri)
-        port   (if (not= (.getPort uri) -1) (.getPort uri))
-        scheme (.getScheme uri)
-        path   (.getRawPath uri)]
-    {:server-port    (or port 80)
-     :server-name    host
-     :uri            (if (str/blank? path) "/" path)
-     :scheme         (keyword scheme)
-     }))
+  (let [uri (URI. uri)
+        scheme (keyword (.getScheme uri))
+        host (.getHost uri)
+        port (let [i (.getPort uri)]
+               (if (= -1 i)
+                 nil
+                 (if (= i (standard-ports scheme))
+                   nil
+                   i)))
+        path (.getRawPath uri)
+        query (if-let [qs (.getQuery uri)] (parse-params qs))]
+    (normalize (URL. scheme host port path query))))
 
-(defn self-referred?
-  "Returns true if the request and it's referer header reference the same server."
-  [req]
-  (apply = (map #(select-keys %1 [:scheme :server-name :server-port])
-                [req
-                 (parse (get-in req [:headers "referer"]))])))
+(defmethod new-URL IPersistentMap
+  [m]
+  (let [m (if (:server-name m)
+            ;; Coerce from a ring request map.
+            (URL. (:scheme m) (:server-name m) (:server-port m) (:uri m) (:query-params m))
+            ;; Create directly from a map.
+            (merge (URL. nil nil nil nil nil) m))]
+    (normalize m)))
 
-;; TODO: Add this as a test.
-;; (self-referred?
-;;  {:scheme :http :server-name "localhost" :server-port 5000
-;;   :headers {"referer" "http://localhost:5000/foo"}})
+(defmethod new-URL URL
+  [url]
+  url)
+
+;; ========== MISC =======================================
+
+(defn qualify
+  "Qualifies a relative url using an absolute one. Arguments are coerced to URL."
+  [rurl aurl]
+  (let [;; coerce arguments to url if necessary
+        rurl (new-URL rurl)
+        aurl (new-URL aurl)
+        urls [rurl aurl]]
+    (assoc rurl
+      :scheme (some :scheme urls)
+      :host (some :host urls)
+      :port (some :port urls)
+      :path (fs/qualify (:path rurl) (:path aurl)))))
+
+(defn localize
+  "Localizes a canonical url. Relative urls are qualified before localization."
+  [url req]
+  (let [url (new-URL url)
+        path ((:luri req) (fs/qualify (:path url) (fs/parent (req :uri))))]
+    (merge url {:path path})))

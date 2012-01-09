@@ -1,8 +1,7 @@
 (ns util.environment
-  "Utilities for working with environment variables."
-  (:use [clojure.contrib.def :only (defvar)]))
+  "Utilities for working with environment variables.")
 
-(defvar environment
-  (into {} (System/getenv))
+(def environment
   "Coerce the environment map into a clojure map for easier use and to
-   support rebinding in unit tests.")
+   support rebinding in unit tests."
+  (into {} (System/getenv)))

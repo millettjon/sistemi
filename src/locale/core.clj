@@ -1,14 +1,19 @@
 (ns locale.core
   "Core definitions for the locale library."
-  (:use [clojure.contrib.def :only (defvar)]
-        [util.except :only (check)]))
+  (:use [util.except :only (check)]))
 
 ;; ===== VARS =====
-(defvar locales #{}
-  "The set of all supported locales.")
+(def locales
+  "The set of all supported locales."
+   #{})
 
-(defvar default-locale nil
-  "The default locale.")
+(def default-locale
+  "The default locale."
+  nil)
+
+(def default-territories
+  ""
+  {})
 
 ;; ===== FUNCTIONS =====
 (defn set-locales!
@@ -23,3 +28,15 @@
   (alter-var-root
    #'default-locale
    (constantly (check (locales key) "Invalid locale '~A'."))))
+
+(defn set-default-territories!
+  "Sets the root binding for default-territories."
+  [m]
+  (alter-var-root #'default-territories
+                  (constantly m)))
+
+(defn full-locale
+  "Returns the full locale for a locale prefix."
+  [locale]
+  (let [territory (get default-territories (keyword locale))]
+    (str (name locale) "_" territory)))

@@ -39,13 +39,14 @@
        ))
 
 (deftest test-parent
-  (are [a b] (= (apply parent a) b)
-       []           nil
-       [""]         nil
-       ["/a"]       "/"
-       ["a"]        nil
-       ["a/b"]      "a"
-       ["a/b/c"]   "a/b"
+  (are [a b] (= (parent a) b)
+       ""         ""
+       "/"        "/"
+       "/a"       "/"
+       "/a/b"     "/a"
+       "a"        ""
+       "a/b"      "a"
+       "a/b/c"   "a/b"
        ))
 
 (deftest test-relative?
@@ -78,5 +79,4 @@
        ["abc"] "/abc"
        ["a/b" "/c"] "/c/a/b"
        ["a/b" "/c/"] "/c/a/b"
-       ["a/b" "c/"] "/c/a/b"
        ))

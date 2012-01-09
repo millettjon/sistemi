@@ -49,7 +49,7 @@
   [nvp]
   (logr/info "check: nvp:" nvp)
   (when (not= "Success" (:ack nvp))
-    (let [message (str/join "|" (map (fn [e] ((keyword (str "L_" (name e) "0")) nvp)) [:severitycode :errorcode :shortmessage :longmessage]))]
+    (let [message (str/join "|" (map (fn [e] ((keyword (str "l_" (name e) "0")) nvp)) [:severitycode :errorcode :shortmessage :longmessage]))]
       (log/error message)
       (throw (RuntimeException. message))))
   nvp)

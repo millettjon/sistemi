@@ -1,7 +1,8 @@
 (ns sistemi.site.order.checkout
   (:require [clojure.tools.logging :as log]
             [www.url :as url])
-  (:use [ring.util.response :only (redirect)]))
+  (:use [locale.core :only (full-locale)]
+        [ring.util.response :only (redirect)]))
 
 ;; TODO: Log paypal interaction.
 ;; TODO: Persist transaction to database.
@@ -10,28 +11,14 @@
 ;; ? is this because the generated functions have no source metadata?
 ;; ? how does code navigation work?
 
-;; TODO:keep app.config code out of both paypal and web handlers
-;;   how? where? why?
-
 (use 'paypal)
 (use 'app.config)
-
-;; call paypal checkout function
-;; log paypal interaction
-;; persist to database
-;; parse token from response and redirect
 
 (defn xc-money
   "Formats a money amount for use with PayPal."
   [amount]
   (format "%1.2f" amount))
 
-(defn canonicalize
-  "Canonicalizes and localizes a url path."
-  [req path]
-  (url/canonicalize req ((:luri req) path)))
-
-;; TODO: Pass the locale to the paypal side.
 (defn make-paypal-order
   [req amount]
   (let [amount (xc-money amount)
@@ -42,24 +29,20 @@
                    :l_paymentrequest_0_desc0 "Custom Shelving: 150x100x30; Modern; Green."
                    :l_paymentrequest_0_amt0 amount
                    :l_paymentrequest_0_qty0 "1"
-                   :returnurl (canonicalize req "confirm.htm")
-                   :cancelurl (canonicalize req "cancel.htm")}]
-    sale-data
-    #_(with-conf (conf :paypal)
-        (xc-setup sale-data))))
+                   :returnurl (url/qualify (url/localize "confirm.htm" req))
+                   :cancelurl (url/qualify (url/localize "cancel.htm" req))
+                   :localecode (full-locale (:locale req))}]
+    (with-conf (conf :paypal)
+      (xc-setup sale-data))))
 
-;; TODO: Redirect to they paypal express checkout process.
-#_(defn redirect-to-paypal-checkout
+(defn redirect-to-express-checkout
   [order]
-  )
-;; TODO: Factor out url to conf.
-#_(browse-url (str "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" (:token checkout-map)))
-
+  (with-conf (conf :paypal)
+    (xc-redirect-url (:token order))))
 
 (defn handle
   [req]
   (let [amount (Double. (get-in req [:params :amount]))
         order (make-paypal-order req amount)]
-    (log/info "=====ORDER=====" order)
-    )
-  (redirect "http://www.yahoo.com"))
+    (log/info "XC ORDER" order)
+    (redirect (redirect-to-express-checkout order))))

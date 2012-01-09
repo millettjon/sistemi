@@ -23,9 +23,7 @@
 
     ;; Validate client supplied inputs and compute the redirect target.
     (let [uri (cond
-               ;; TODO: Block if the target is from a different website?
-               ;; TODO: Encode target. (url/url target)
-               target (if-let [url (safely (url/url target) nil)]
+               target (if-let [url (safely (url/new-URL target) nil)]
                         (if (some #(get url %) [:scheme :host :port])
                           (throw-403 req (str "Invalid parameter target=" target " (not a locale url)."))
                           (str url))
@@ -33,11 +31,10 @@
 
                referer (if (not (url/self-referred? req)) ; Only allow requests from the same server.
                          (throw-403 req (str "Third party referals not supported (referer=" referer ")."))
-                         ((req :luri) locale ((req :curi) (:uri (url/parse referer)))))
+                         ((req :luri) locale ((req :curi) (:path (url/new-URL referer)))))
 
                :default (ffs locale))
-          response (redirect (url/canonicalize req uri))
-          ]
+          response (redirect (url/qualify uri req))]
 
       (-> response
           (assoc :cookies [(persistent-cookie :locale locale (time/date-time 2020 01 01) {:path "/"})])

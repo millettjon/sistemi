@@ -2,14 +2,14 @@
   "Global configuration map and related helper functions."
   (:require [clj-yaml.core :as yaml]
             [clojure.string :as str])
-  (:use [clojure.contrib.def :only (defvar)]
-        [clojure.contrib.map-utils :only (deep-merge-with)]
+  (:use [clojure.contrib.map-utils :only (deep-merge-with)]
         app.config.core
         (util environment except)))
 
 ;; ===== VARS =====
-(defvar config {}
-  "Global configuration map. Initialized to the environment.")
+(def config 
+  "Global configuration map. Initialized to the environment."
+  {})
 
 ;; ===== PRIVATE FUNCTIONS =====
 (defn- read-yaml-safely

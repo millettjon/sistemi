@@ -1,8 +1,8 @@
 (ns util.fs
   "Utilities for manipulating / separated paths."
-  (:require [clojure.java.io :as io])
-  (:use [clojure.string :only (split)]
-        [clojure.contrib.string :only (replace-re)])
+  (:require [clojure.java.io :as io]
+            [clojure.contrib.str-utils2 :as stru])
+  (:use [clojure.string :only (split)])
   (:import java.io.File))
 
 ;; GOALS
@@ -65,23 +65,9 @@
        (if (empty? args)
          nil
          (let [s (apply str (interpose "/" args))
-               s (replace-re #"/{2,}" "/" s) ; replace repeated slashes with a single slash
-               s (replace-re #"(?<!\A)/$" "" s)] ; remove a trailing slash
+               s (stru/replace s #"/{2,}" "/")  ; replace repeated slashes with a single slash
+               s (stru/replace s #"(?<!\A)/$" "")]  ; remove a trailing slash
            s)))))
-
-(defn qualify
-  "Makes the path absolute if not already."
-  ([path] (qualify path "/"))
-  ([path dir]
-     (cond
-      (nil? path) nil
-      (= \/ (first path)) path
-      :default (ffs dir path))))
-
-(defn ffs
-  "Calls fs on the arguments and makes the result fully qualified by prepending a leading / if necessary."
-  [& args]
-  (qualify (apply fs args)))
 
 (defn relative?
   "Returns true if the path is a relative path."
@@ -95,6 +81,20 @@
   "Returns true if the path is an absolute path."
   [path]
   (not (relative? path)))
+
+(defn qualify
+  "Qualifies a relative path."
+  ([path] (qualify path "/"))
+  ([path dir]
+     (cond
+      (nil? path) nil
+      (absolute? path) path
+      :default (fs dir path))))
+
+(defn ffs
+  "Calls fs on the arguments and makes the result fully qualified by prepending a leading / if necessary."
+  [& args]
+  (qualify (apply fs args)))
 
 (defn fs-seq
  "Takes a list of paths splits them into segments and returns the flattened seq."
@@ -112,16 +112,17 @@
       nil
       (apply (if (relative? path) fs ffs) (rest (fs-seq path)))))
 
-;; TODO: Remove 0 arity unless needed (e.g., for apply).
-
 (defn parent
-  "Returns the parent path of a path or nil if there is no parent."
-  ([] nil)
-  ([path]
-     (let [seq (butlast (fs-seq path))] 
-          (if (and (empty? seq) (> (count path) 1) (= \/ (nth path 0)) )
-            "/"
-            (apply fs (butlast (fs-seq path)))))))
+  "Returns the parent path of a path. The parent of \"/\" is \"/\" and the parent of \"\" is \"\"."
+  [path]
+  (let [segments (butlast (fs-seq path))]
+    (if (empty? segments)
+      (cond (nil? path) nil
+            (and (> (count path) 0) (= \/ (nth path 0))) "/"
+            :default "")
+      (if (relative? path)
+        (apply fs segments)
+        (apply ffs segments)))))
 
 (defn root?
   "Returns true if the path is the root path i.e., \"/\"."

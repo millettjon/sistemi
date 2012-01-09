@@ -40,11 +40,12 @@
 #_(browse-url (str "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" (:token checkout-map)))
 ;; buyer_1301327961_per@sistemimoderni.com
 ;; visa/delta/electron
-;; 4342506098458263
-;; 3/2016
+;;   4342506098458263
+;;   03/16
+;;   000
 ;; must use valid address and phone number
 
-;; http://localhost:5000/en/confirm.htm?token=EC-5LR968397J2504621&PayerID=YGZNZL2T74SPS
+;; http://localhost:5000/en/order/confirm.htm?token=EC-2CX87631XB186964J&PayerID=YGZNZL2T74SPS
 (def details-map
   (with-conf (conf :paypal)
     (xc-details {:token "EC-5LR968397J2504621"})))
@@ -59,8 +60,6 @@
              (select-keys details-map [:token :payerid :paymentrequest_0_amt])
              {:paymentrequest_0_paymentaction "Sale"}))))
 
-;; QUESTIONS
-;; ? Should we capture payment after shipping?
 
 ;; CUSTOMIZING EXPRESS CHECKOUT
 ;; https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECCustomizing
@@ -82,6 +81,11 @@
 ;;   - regular testers can't test at all WTF?
 ;; - neither the total nor any items show up
 
+;; http://localhost:5000/en/order/confirm.htm?token=EC-4MA98371JS754964S&PayerID=YGZNZL2T74SPS
+
+;; how to do automated testing?
+;; - html-unit
+;; - clojurescript
 
 ;; ----------
 ;; Client gets redirected back to the return or cancel url.

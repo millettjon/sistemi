@@ -6,4 +6,4 @@
 (defn locale-redirect
   "Redirect a request to the root of the localized site."
   [req]
-  (redirect (url/canonicalize req (ffs (req :locale)))))
+  (redirect (url/qualify (ffs (req :locale)) req)))

@@ -2,7 +2,7 @@
 ;; TODO: Consider disabling this for production.
 (clojure.core/require 'util.reflection)
 (util.reflection/warn-on-reflection
-  "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace")
+  "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
@@ -50,7 +50,8 @@
 ;; ===== LOCALIZATION =====
 (let [m (conf :internationalization)]
   (set-locales! (m :locales))
-  (set-default-locale! (m :default-locale)))
+  (set-default-locale! (m :default-locale))
+  (set-default-territories! (m :default-territories)))
 
 ;; ===== ROUTES =====
 ;; Build routes after localization settings are initialized.
