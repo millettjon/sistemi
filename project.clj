@@ -35,6 +35,7 @@
                      [clj-http "0.2.5"]
 
                      ;; configuration
+                     [fidjet "0.0.1"]
                      [clj-yaml "0.3.1"]
 
                      ;; database
