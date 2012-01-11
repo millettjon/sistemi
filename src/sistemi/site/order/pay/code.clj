@@ -21,11 +21,12 @@
 ;;   - is there a way to have paypal pass through an order id we generate?
 (defn handle
   [req]
-  (let [amount (get-in req [:params :paymentrequest_0_amt])
-        token (req :token)
+  (let [params (req :params)
+        amount (params :paymentrequest_0_amt)
+        token (params :token)
         result (pay-paypal-order amount req)]
     (log/info "XC PAY" result)
-    (redirect (url/qualify (url/localize {:path "view.htm" :query {:id token}} req)))))
+    (redirect (str (url/qualify (url/localize {:path "view.htm" :query {:id token}} req) req)))))
 
 ;; TODO: Can something else other than the token be used?
 ;; TODO: Are there any other related nvp api calls?
