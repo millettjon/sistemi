@@ -1,5 +1,6 @@
 (ns sistemi.site.profile.locale
   (:require [www.url :as url]
+            [www.request :as request]
             [clj-time.core :as time])
   (:use ring.util.response
         ring.persistent-cookies
@@ -29,7 +30,7 @@
                           (str url))
                         (throw-403 req (str "Invalid parameter target=" target ".")))
 
-               referer (if (not (url/self-referred? req)) ; Only allow requests from the same server.
+               referer (if (not (request/self-referred? req)) ; Only allow requests from the same server.
                          (throw-403 req (str "Third party referals not supported (referer=" referer ")."))
                          ((req :luri) locale ((req :curi) (:path (url/new-URL referer)))))
 

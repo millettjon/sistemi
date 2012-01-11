@@ -43,7 +43,7 @@
              m))
          m)))
    {} (dir-seq-bf root)))
-;;(load-handlers "src/sistemi/site")
+#_(load-handlers "src/sistemi/site")
 
 (defn wrap-handler
   "Calls a handler if one is defined for the current URI. Otherwise passes the request to the next

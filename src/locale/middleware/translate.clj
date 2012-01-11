@@ -83,12 +83,14 @@
 
 (defn load-name-translations
   "Loads all path name translation files under a directory root and returns an array of two maps.
-   The first map maps canonical URI paths to localized ones and the second map vice versa."
+   The first maps canonical URI paths to localized ones and the second vice versa."
   [root]
+  ;; Process each directory under the website root.
   (reduce
    (fn [[localized canonical] dir]
-     (let [cname (.getName ^File dir)
+     (let [;; cname (.getName ^File dir)
            cpath (stru/drop (.getPath ^File dir) (count root))
+           cname (.getName ^File (File. cpath))
            file (io/file dir "name.yml")
            name-map (-> (or (and (empty? cpath) (default-translation-map cname))
                             (load-yaml-safely file)
@@ -97,10 +99,11 @@
                         (check-locales file)
                         (check-names file)
                         (check-extensions))]
+       ;; Process each translation of the directory's name.
        (reduce
         (fn [[lm cm] [locale lname]]
           (let [lpath (let [ppath (parent cpath)]
-                        (if (nil? ppath)
+                        (if (= "" cpath)  ; return the locale for the root path
                           (ffs locale)
                           (fs (lm (ffs locale ppath)) lname)))
                 lm (assoc lm (ffs locale cpath) lpath)
@@ -108,7 +111,7 @@
             [lm cm]))
         [localized canonical] name-map)))
    [{} {}] (dir-seq-bf root)))
-;(load-name-translations "src/sistemi/site")
+
 
 ;; TODO: Move these notes somewhere.
 ;; - Keep the canonical path uri safe (i.e., no special chars that need encoding).
@@ -147,6 +150,11 @@
     (let [locale (req :locale)
           luri (req :uri)
           fluri (ffs locale luri)]
+      (log/info "1.entering let1" 42)
+      (log/info "1.if-let1" (canonical fluri))
+      (log/info "1.localized" localized)
+      (log/info "1.canonical" canonical)
+      (log/info "1.fluri" fluri)
       (if-let [curi (canonical fluri)]
         (app (assoc req
                ;; canonical URI
@@ -158,7 +166,7 @@
                           ;; FIX: Relative urls are incorrectly qualified for non english.
                           ;; The uri of the current request is in the actual locale,
                           ;; whereas the relative part is in the canonical locale.
-                          (let [curi (if (relative? curi) (qualify curi (parent (req :uri)))  curi)] 
+                          (let [curi (if (relative? curi) (qualify curi (parent (req :uri))) curi)] 
                             (or (localized (ffs locale curi))
                                 (log/warn (str "No translation for uri " curi "."))))))
 
