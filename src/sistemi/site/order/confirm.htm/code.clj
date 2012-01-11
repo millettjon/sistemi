@@ -1,6 +1,7 @@
 (ns sistemi.site.order.confirm
   (:require [clojure.tools.logging :as log]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [www.url :as url])
   (:use paypal
         app.config
         [locale.core :only (full-locale)]
@@ -31,7 +32,7 @@
 ;;       prevent a double press? Paypal prevents double processing...
 
 (defn view
-  [details]
+  [req details]
   (html [:html
          [:head
           [:title "Confirm Order"]]
@@ -39,7 +40,7 @@
           [:h2 "Order Details"]
           [:table (map (fn [k] [:tr [:td k] [:td (k details)]])
                        (sort (keys details)))]
-          [:form {:action "pay" :method "post"}
+          [:form {:action (url/localize "pay" req) :method "post"}
            ;; TODO: Store these in the session.
            (map #(apply hidden-field %) (select-keys details [:token :payerid :paymentrequest_0_amt :paymentrequest_0_currencycode]))
 ;;           (hidden-field :paymentrequest_0_paymentaction "Sale") 
@@ -53,4 +54,4 @@
     (let [qp (-> req :query-params normalize-keys)
           details (xc-details (select-keys qp [:token]))]
       (log/info "XC DETAILS" details)
-      (response (view details)))))
+      (response (view req details)))))

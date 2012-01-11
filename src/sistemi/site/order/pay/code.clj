@@ -14,8 +14,8 @@
     (with-conf (conf :paypal)
       (xc-pay (merge pay-data (select-keys (req :params) [:token :payerid]))))))
 
-;; hmn, paypal redirects like this: so it has to be https!
-;; http://localhost:5000/en/order/confirm.htm?token=EC-2CX87631XB186964J&PayerID=YGZNZL2T74SPS
+;; TODO: Figure out what should be saved in the database and what in a cookie?
+;; 
 ;; TODO: save the pertinent items in a session cookie
 ;;   - amount
 ;;   - is there a way to have paypal pass through an order id we generate?
