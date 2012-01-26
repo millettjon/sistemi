@@ -2,10 +2,11 @@
   "Functions for working with URLs."
   (:require ring.middleware.params
             [clojure.string :as str]
-            [util.fs :as fs])
+            [util.path :as path])
   (:import (clojure.lang Keyword IPersistentMap)
            (java.net URLDecoder URLEncoder URI)
-           (com.google.gdata.util.common.base CharEscapers PercentEscaper)))
+           (com.google.gdata.util.common.base CharEscapers PercentEscaper)
+           (util.path Path)))
 
 ;; ========== CONSTANTS =======================================
 (def standard-ports
@@ -27,35 +28,40 @@
 (def ^PercentEscaper path-escaper
   (CharEscapers/uriPathEscaper))
 
-(defn encode-path-segment
+(defn encode-path-part
   "Encodes one segment of a URL path."
   [^String s]
   (.escape path-escaper s))
 
 (defn encode-path
-  "Encodes the entire URL path."
+  "Encodes a URL path."
   [path]
-  (when path
-    (let [s (apply fs/fs (map encode-path-segment (fs/fs-seq path)))]
-      (if (fs/absolute? path)
-        (or (fs/qualify s) "/")
-        s))))
+  (let [path (path/new-path path)]
+    (assoc path :parts (map encode-path-part (:parts path)))))
 
 (def ^PercentEscaper query-escaper
   (CharEscapers/uriQueryStringEscaper))
 
-(defn encode-query-segment
+(defn encode-query-part
   "Encodes one segment of a URL query string (i.e., a key or a value)."
   [^String s]
   (.escape query-escaper s))
 
+(into {} (map (fn [[k v]] [(name k) v]) {:a "A"}))
+
 (defn encode-query
-  "Encodes the URL's query string map."
+  "Encodes a URL query string."
   [m]
-  (str/join
-   "&"
-   (map (fn [entry] (str/join "=" (map #(-> %1 name encode-query-segment) entry)))
-           m)))
+  (into {} (map
+            (fn [[k v]] [k (encode-query-part v)])
+            m)))
+
+(defn encode
+  "Returns a new URL with the path and query string encoded."
+  [url]
+  (assoc url
+    :path (encode-path (:path url))
+    :query (encode-query (:query url))))
 
 ;; ========== RECORD =======================================
 ;;
@@ -68,7 +74,13 @@
 ;; - encodes the query string as one chunk and doesn't allow finer
 ;;   grained control needed to serialize a map
 ;;
-(defrecord URL [#^Keyword scheme #^String host #^Integer port #^String path #^IPersistentMap query]
+
+(defn query-to-str
+  "Coerces a query from a map to a string."
+  [query]
+  (apply str (flatten (interpose "&" (map (fn [entry] (interpose "=" (map name entry))) query)))))
+
+(defrecord URL [#^Keyword scheme #^String host #^Integer port #^IPersistentMap path #^IPersistentMap query]
   Object
   (toString
     [this]
@@ -78,27 +90,22 @@
               (nil? port) nil
               (not= port (standard-ports scheme)) [":" port])]
           a (filter identity (flatten a))
-          ;; Encode the path.
-          a (concat a (let [s (encode-path path)]
-                        (if (empty? a) [s]      ; leave a relative path unchanged
-                            (if (= "/" path)
-                              nil                   ; omit a single "/"
-                              [(fs/qualify s)]))))  ; prepend a "/" if the url is not relative 
-          ;; Encode the query string
-          a (if query
-              (concat a ["?" (encode-query query)])
+
+          ;; Serialize the path.
+          a (let [p (or path "")]
+              (concat a [(if (empty? a)
+                           p
+                           (let [p (path/qualify p)]
+                             (if-not (path/root? p)
+                               p)))]))
+          
+          ;; Serialize the query string.
+          a (if-not (empty? query)
+              (concat a ["?"] (query-to-str query))
               a)]
       (apply str a))))
 
 ;; ========== CONSTRUCTORS =======================================
-
-(defn- normalize
-  "Normalizes the path when creating a new URL."
-  [url]
-  (let [path (:path url)]
-    (if (str/blank? path)
-      (assoc url :path "/")
-      url)))
 
 (defn parse-params
   "Parses a query string into a map. Keys are coerced to keywords. UTF-8 encoding is assumed."
@@ -122,18 +129,22 @@
                  (if (= i (standard-ports scheme))
                    nil
                    i)))
-        path (.getRawPath uri)
+        path (path/new-path (.getRawPath uri))
         query (if-let [qs (.getQuery uri)] (parse-params qs))]
-    (normalize (URL. scheme host port path query))))
+    (URL. scheme host port path query)))
 
 (defmethod new-URL IPersistentMap
   [m]
   (let [m (if (:server-name m)
             ;; Coerce from a ring request map.
-            (URL. (:scheme m) (:server-name m) (:server-port m) (:uri m) (:query-params m))
+            (URL. (:scheme m) (:server-name m) (:server-port m) (path/new-path (or (:uri m) "")) (:query-params m))
             ;; Create directly from a map.
             (merge (URL. nil nil nil nil nil) m))]
-    (normalize m)))
+    m))
+
+(defmethod new-URL Path
+  [path]
+  (new-URL {:path path}))
 
 (defmethod new-URL URL
   [url]
@@ -152,11 +163,11 @@
       :scheme (some :scheme urls)
       :host (some :host urls)
       :port (some :port urls)
-      :path (fs/qualify (:path rurl) (:path aurl)))))
+      :path (path/qualify (:path rurl) (:path aurl)))))
 
 (defn localize
   "Localizes a canonical url. Relative urls are qualified before localization."
   [url req]
   (let [url (new-URL url)
-        path ((:luri req) (fs/qualify (:path url) (fs/parent (req :uri))))]
+        path ((:luri req) (path/qualify (:path url) (path/parent (req :uri))))]
     (merge url {:path path})))

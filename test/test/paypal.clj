@@ -43,7 +43,7 @@
 ;;   4342506098458263
 ;;   03/16
 ;;   000
-;; must use valid address and phone number
+;; Note: a valid address and phone number are required
 
 ;; http://localhost:5000/en/order/confirm.htm?token=EC-2CX87631XB186964J&PayerID=YGZNZL2T74SPS
 (def details-map

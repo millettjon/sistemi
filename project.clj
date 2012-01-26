@@ -20,9 +20,9 @@
                      [log4j "1.2.16"]
 
                      ;; web server
-                     [ring/ring-core "1.0.0"]
-                     [ring/ring-devel "1.0.0"]
-                     [ring/ring-jetty-adapter "1.0.0"]
+                     [ring/ring-core "1.0.1"]
+                     [ring/ring-devel "1.0.1"]
+                     [ring/ring-jetty-adapter "1.0.1"]
                      [net.cgrand/moustache "1.1.0"]
                      [ring-persistent-cookies "0.1.0"]
 

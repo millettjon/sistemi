@@ -1,13 +1,14 @@
 (ns sistemi.site.profile.locale
   (:require [www.url :as url]
+            [util.path :as path]
             [www.request :as request]
             [clj-time.core :as time])
   (:use ring.util.response
         ring.persistent-cookies
         [sistemi.handlers :only (throw-403)]
         [locale.core :only (locales)]
-        [util.except :only (safely)]
-        [util.fs :only (ffs fs-seq)]))
+        locale.translate
+        [util.except :only (safely)]))
 
 (defn handle
   "Handles a request to change the user's locale. The new locale setting is persisted in a cookie
@@ -32,10 +33,10 @@
 
                referer (if (not (request/self-referred? req)) ; Only allow requests from the same server.
                          (throw-403 req (str "Third party referals not supported (referer=" referer ")."))
-                         ((req :luri) locale ((req :curi) (:path (url/new-URL referer)))))
+                         (localize (canonicalize (:path (url/new-URL referer)) req) (assoc req :locale locale)))
 
-               :default (ffs locale))
-          response (redirect (url/qualify uri req))]
+               :default (path/qualify locale))
+          response (redirect (str (url/qualify uri req)))]
 
       (-> response
           (assoc :cookies [(persistent-cookie :locale locale (time/date-time 2020 01 01) {:path "/"})])

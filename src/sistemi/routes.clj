@@ -43,27 +43,27 @@
      [[locale locales] &]
      (app
       (wrap-locale locale)
-      (wrap-file (str "www/" locale))                       ; Serve locale specific files first.
-      (wrap-file (str "www/" default-locale))               ; Fallback to the default locale.
-      (wrap-file "www")                                     ; Fallback to the web root.
-      (wrap-translate-uri localized-paths canonical-paths)  ; Translate the uri.
-      (wrap-translate-strings strings canonical-paths)      ; Add the string translation map.
-      (wrap-handler code-root :template-root "www/raw")     ; Call a handler if one is defined for the uri.
-      [&] make-404)
+      ;; (wrap-file (str "www/" locale))                  ; Serve locale specific files first.
+      ;; (wrap-file (str "www/" default-locale))          ; Fallback to the default locale.
+
+      ;; Serve static files from the web root (except templates).
+      [#".*(?<!\.htm)$"] [(wrap-file "www/raw") [&] pass]
+
+      ;; Handle templates and custom handlers.
+      [&] [(wrap-translate-uri localized-paths canonical-paths) ; Translate the uri.
+           (wrap-translate-strings strings canonical-paths)     ; Add the string translation map.
+           (wrap-handler code-root :template-root "www/raw")    ; Call a handler if one is defined for the uri.
+           [&] pass])
 
      ;; Handle requests for viewing raw templates.
-     ["raw" &] (app
-                (wrap-file "www/raw")
-                (wrap-file "www")
-                [&] pass)
+     ["raw" &] [(wrap-file "www/raw") [&] pass]
 
-     ;; Handle naked URIs.
-     [&] (app ; Use a nested app to add middleware.
-          (wrap-file "www")  ; Serve files out of the web root.
-          [""] (app wrap-detect-locale
-                    [&] locale-redirect)
-          [&] make-404))
-    ))
+     ;; Redirect the main home page to a localized version.
+     [""] [wrap-detect-locale
+           [&] locale-redirect]
+
+     ;; For naked URLs, serve static resources out of the web root.
+     [&] [(wrap-file "www/raw") [&] make-404])))
 
 ;; Run this to reload the routes.
 #_(do (in-ns 'sistemi.core)

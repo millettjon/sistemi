@@ -1,9 +1,9 @@
 (ns sistemi.middleware
   (:require [clojure.java.io :as io]
             [clojure.contrib.str-utils2 :as stru]
-            [clojure.tools.logging :as log])
-  (:use [slingshot.slingshot :only [try+]]
-        [util fs])
+            [clojure.tools.logging :as log]
+            [util.path :as path])
+  (:use [slingshot.slingshot :only [try+]])
   (:import java.io.File))
 
 (defn wrap-exception-response
@@ -37,12 +37,12 @@
        (if (.exists file)
          ;; Note: The handler def should be the last sexp in the file.
          (try
-           (assoc m (ffs cpath) (load-file (.getPath file)))
+           (assoc m (str (path/qualify cpath)) (load-file (.getPath file)))
            (catch Exception x
              (log/error x (str "Exception loading file " file))
              m))
          m)))
-   {} (dir-seq-bf root)))
+   {} (path/dir-seq-bf root)))
 #_(load-handlers "src/sistemi/site")
 
 (defn wrap-handler

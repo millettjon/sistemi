@@ -43,8 +43,7 @@
                                                    "#")
                                             a {:tag :a :attrs {:href href} :content (language-names lang)}]
                                         (assoc li :content [a])))
-                                ["en" "fr" "de" "it" "es"]))
-  )
+                                ["en" "fr" "de" "it" "es"])))
 
 ;; TODO: Run transformations in lockstep where possible.
 ;; TODO: Review the whole document for other possible translations.
@@ -57,6 +56,7 @@
 
 (defn handle
   [req]
+  (prn "****************** IN ROOT CODE **********************")
   (-> (html req (req :strings))
       (response)
       ;; Set the content type explicitly since this is served from / and has no .htm extension.
