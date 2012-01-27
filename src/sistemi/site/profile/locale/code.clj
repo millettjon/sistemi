@@ -25,7 +25,7 @@
 
     ;; Validate client supplied inputs and compute the redirect target.
     (let [uri (cond
-               target (if-let [url (safely (url/new-URL target) nil)]
+               target (if-let [url (safely (url/new-URL (url/encode-path target)) nil)]
                         (if (some #(get url %) [:scheme :host :port])
                           (throw-403 req (str "Invalid parameter target=" target " (not a locale url)."))
                           (str url))

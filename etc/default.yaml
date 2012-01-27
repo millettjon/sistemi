@@ -1,5 +1,5 @@
 internationalization:
-  locales: [en, es]
+  locales: [en, es, fr]
   default-locale: en
   default-territories:
     en: GB

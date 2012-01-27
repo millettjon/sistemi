@@ -25,7 +25,7 @@ en:
     feedback:
   copyright:
     - "Copyright 2011 SISTEMI MODERNI."
-    - "All rights reserved."
+    - "Todos Derechos Reservados."
 es:
   title: "Muebles de Estantería Moderna : Sistemi Moderni"
   version: "versión alpha"
@@ -49,9 +49,6 @@ es:
     gallery: "gallery"
     blog: "blog"
     feedback: "sugerencias"
-  copyright:
-    - "© 2011 SISTEMI MODERNI."
-    - "Todos los derechos reservados."
 fr:
   my-account: "Mon Compte"
   cart: "Panier"
@@ -73,6 +70,4 @@ fr:
     gallery: "Gallérie"
     blog: "blog"
     feedback: "Vos Impressions"
-  copyright:
-    - "© 2011 SISTEMI MODERNI."
-    - "(all rights reserved)"
+

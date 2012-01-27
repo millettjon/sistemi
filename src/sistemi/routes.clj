@@ -46,17 +46,15 @@
       ;; (wrap-file (str "www/" locale))                  ; Serve locale specific files first.
       ;; (wrap-file (str "www/" default-locale))          ; Fallback to the default locale.
 
-      ;; Serve static files from the web root (except templates).
-      [#".*(?<!\.htm)$"] [(wrap-file "www/raw") [&] pass]
-
       ;; Handle templates and custom handlers.
-      [&] [(wrap-translate-uri localized-paths canonical-paths) ; Translate the uri.
-           (wrap-translate-strings strings canonical-paths)     ; Add the string translation map.
-           (wrap-handler code-root :template-root "www/raw")    ; Call a handler if one is defined for the uri.
-           [&] pass])
+      (wrap-translate-uri localized-paths canonical-paths) ; Translate the uri.
+      (wrap-translate-strings strings canonical-paths)     ; Add the string translation map.
+      (wrap-handler code-root :template-root "www/raw")    ; Call a handler if one is defined for the uri.
+      (wrap-file "www/raw")                                ; Serve static files.
+      [&] pass)
 
      ;; Handle requests for viewing raw templates.
-     ["raw" &] [(wrap-file "www/raw") [&] pass]
+     ["raw" &] [(wrap-file "www") [&] pass]
 
      ;; Redirect the main home page to a localized version.
      [""] [wrap-detect-locale

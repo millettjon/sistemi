@@ -164,7 +164,8 @@
                :canonical-paths canonical))
 
         ;; Return nil no path can be found.
-        nil))))
+        #_ nil
+        (app req)))))
 
 (defn wrap-translate-strings
   "Request wrapper that adds a function :strings to lookup string translations for the page."
