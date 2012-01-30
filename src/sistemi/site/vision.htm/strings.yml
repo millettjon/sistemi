@@ -1,5 +1,5 @@
 en:
-  title: "Modern Shelving Furniture : Sistemi Moderni"
+  title: "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
   version: "alpha version"
   my-account: "My Account"
   cart: "Cart"
@@ -25,9 +25,16 @@ en:
     feedback:
   copyright:
     - "Copyright 2011 SISTEMI MODERNI."
-    - "Todos Derechos Reservados."
+    - "All rights reserved."
+  vision:
+    title: "Our Vision"
+    text: >
+      <span class="redtxt">SistemiModerni</span> is founded to bring you high design
+      and high quality for a reasonable price. We believe that the world must stop
+      creating low quality disposable goods. We also believe that you can and should
+      have things your way. That is why we empower you to personalize all of our offerings.
 es:
-  title: "Muebles de Estantería Moderna : Sistemi Moderni"
+#  title: "Visión de Muebles Modernos : "
   version: "versión alpha"
   my-account: "Mi Cuenta"
   cart: "Carro"
@@ -49,6 +56,9 @@ es:
     gallery: "gallery"
     blog: "blog"
     feedback: "sugerencias"
+  copyright:
+    - "© 2011 SISTEMI MODERNI."
+    - "Todos los derechos reservados."
 fr:
   my-account: "Mon Compte"
   cart: "Panier"
@@ -70,4 +80,15 @@ fr:
     gallery: "Gallérie"
     blog: "blog"
     feedback: "Vos Impressions"
-
+  copyright:
+    - "© 2011 SISTEMI MODERNI."
+    - "(all rights reserved)"
+  vision:
+    title: "Notre Vision"
+    text: >
+      <span class="redtxt">SistemiModerni</span> a été créée pour vous
+      offrir design et qualité au meilleur prix. Nous estimons qu’il faut
+      arrêter de fabriquer des produits jetables de qualité médiocre. Nous
+      pensons aussi que vous  devriez pouvoir disposer des  produits tels 
+      que vous les imaginez.  C’est pour cela que nous tenons à vous donner
+      les moyens de personnaliser toute les gammes de nos produits.

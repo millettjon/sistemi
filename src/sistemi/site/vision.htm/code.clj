@@ -55,7 +55,7 @@ menu item using keys to lookup a string translation."
         (assoc node :content (list (f n)))))))
 
 (deftemplate html
-  (File. "www/raw/modern-shelving.htm")
+  (File. "www/raw/vision.htm")
   [req tr]
 
   ;; Set the lang attribute for the document.
@@ -112,11 +112,12 @@ menu item using keys to lookup a string translation."
   [:div#p7PMM_1 :> :ul :> (nth-child 8) :> :a] (menu-content tr :feedback)
 
   ;; COPYRIGHT
-  [:div#copyright] (content (interpose {:tag :br} (tr :copyright))))
+  [:div#copyright] (content (interpose {:tag :br} (tr :copyright)))
 
-;; TODO: factor common stuff into modules: menu, header, footer
-;; TODO: auto reload string and route changes in development
-;; ? should req be a dynamic variable? like config w/ fidjet?
+  ;; CONTENT
+  [:div#col3b :div.title] (content (tr :vision :title))
+  [:div#col3b :> (nth-child 3)] (html-content (tr :vision :text))
+  )
 
 
 (defn handle
