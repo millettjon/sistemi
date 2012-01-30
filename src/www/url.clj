@@ -107,6 +107,15 @@
 
 ;; ========== CONSTRUCTORS =======================================
 
+(defn- normalize-port
+  "Normalizes the port field by setting it to nil if the port is a standard value for the given scheme."
+  [port scheme]
+  (if (= -1 port)
+    nil
+    (if (= port (standard-ports scheme))
+      nil
+      port)))
+
 (defn parse-params
   "Parses a query string into a map. Keys are coerced to keywords. UTF-8 encoding is assumed."
   [s]
@@ -123,12 +132,7 @@
   (let [uri (URI. uri)
         scheme (keyword (.getScheme uri))
         host (.getHost uri)
-        port (let [i (.getPort uri)]
-               (if (= -1 i)
-                 nil
-                 (if (= i (standard-ports scheme))
-                   nil
-                   i)))
+        port (normalize-port (.getPort uri) scheme)
         path (path/new-path (.getRawPath uri))
         query (if-let [qs (.getQuery uri)] (parse-params qs))]
     (URL. scheme host port path query)))
@@ -137,7 +141,7 @@
   [m]
   (let [m (if (:server-name m)
             ;; Coerce from a ring request map.
-            (URL. (:scheme m) (:server-name m) (:server-port m) (path/new-path (or (:uri m) "")) (:query-params m))
+            (URL. (:scheme m) (:server-name m) (normalize-port (:server-port m) (:scheme m)) (path/new-path (or (:uri m) "")) (:query-params m))
             ;; Create directly from a map.
             (merge (URL. nil nil nil nil nil) m))]
     m))
