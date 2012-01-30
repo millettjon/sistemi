@@ -1,4 +1,4 @@
-(ns sistemi.site.modern-shelving-html
+(ns sistemi.site.modern-shelving-htm
   (:require [clojure.tools.logging :as log]
             [clojure.string :as str])
   (:use net.cgrand.enlive-html

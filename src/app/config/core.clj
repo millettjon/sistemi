@@ -45,12 +45,20 @@
 (defn merge-configs
   "Deeply merges the list of configuration maps. Values from rightmost maps take precedence."
   [& maps]
-  (apply deep-merge-with (fn [a b] b) maps))
+  (apply deep-merge-with (fn [& l] (last l)) maps))
 
 (defn set-config!
   "Applies function merge-configs to the list of configuration maps and sets the result in config."
   [& maps]
+  ;; Ensure that all arguments are maps.
+  (doseq [m maps] (check m map?))
   (alter-var-root #'config (constantly (apply merge-configs maps))))
 
 ;; Intialize the configuration to the environment.
 (set-config! (environment-map))
+
+
+
+
+
+
