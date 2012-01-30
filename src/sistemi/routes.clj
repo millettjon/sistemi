@@ -18,7 +18,7 @@
      ;; TODO: Add a 500 wrapper (like wrap-stacktrace bug logs)
      ;; TODO: Log POST params?
      ;; TODO: Log request maps for easy replay?
-     #_(spy :prefix "foo")
+     spy
      wrap-lint
      wrap-request-id          ; add a unique request id for logging
      wrap-request-log
