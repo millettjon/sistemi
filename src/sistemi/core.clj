@@ -28,8 +28,7 @@
 ;; "www" {:level :debug}
  )
 
-(require 'www.middleware.request-id)
-(log/info (<< "Generated boot-id '~{www.id/boot-id}'."))
+(log/info (<< "Using boot-id '~{www.id/boot-id}'."))
 
 ;; ===== RUN LEVEL =====
 (init-run-level!)

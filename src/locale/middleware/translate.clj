@@ -121,29 +121,10 @@
 ;; - Keep the canonical path uri safe (i.e., no special chars that need encoding).
 ;; - Encode the path translations as they are read from name.yml.
 
-(defn load-string-translations
-  "Loads all string translations files under a root directory and returns a
-   map of canonical URI path to a submap of string translations."
-  [root]
-  (reduce
-   (fn [m dir]
-     (let [cname (.getName ^File dir)
-           cpath (stru/drop (.getPath ^File dir) (inc (count root))) ; TODO: unqualify; load strings for root path
-           file (path/to-file dir "strings.yml")
-           name-map (when (.exists ^File file)
-                      (-> (load-yaml-safely file)
-                          (check-locales file)))]
-       (reduce
-        (fn [m [locale string-map]]
-          (assoc m (path/joinq locale cpath) string-map))
-        m name-map)))
-   {} (path/dir-seq-bf root)))
-#_(load-string-translations "src/sistemi/site")
 
 ;; TODO: Add checks and balances.
 ;; - List which pages/templates are never used (request log analysis).
 ;; - List which translations are never used ().
-;; TODO: List strings which are missing a translation (when page string translations are loaded).
 
 (defn wrap-translate-uri
   "Translates the request :uri and injects path translation maps into the request."
@@ -167,23 +148,3 @@
         #_ nil
         (app req)))))
 
-(defn wrap-translate-strings
-  "Request wrapper that adds a function :strings to lookup string translations for the page."
-  [app page-strings canonical]
-  (fn [req]
-    (let [locale (req :locale)
-          uri (req :uri)]
-      (app (assoc req
-             :strings (let [strings (page-strings (path/joinq locale uri) {})]
-                        (fn [& keys]
-                          (let [val (get-in strings keys)
-                                ;; Map values have their string value stored under the key :_.
-                                val (if (map? val) (val :_) val)
-                                ;; Strings in the default locale use their key as the value by default.
-                                val (or val (and (= locale default-locale)
-                                                 (contains-in? strings keys)
-                                                 (name (last keys))))]
-                            (or val
-                                (do
-                                  (log/warn (str "No translation for key " keys " (locale=" locale ", page=" uri ")."))
-                                  (str "(" (str/join "-" (map name keys)) ")")))))))))))
