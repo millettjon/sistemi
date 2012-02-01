@@ -47,8 +47,6 @@
   [^String s]
   (.escape query-escaper s))
 
-(into {} (map (fn [[k v]] [(name k) v]) {:a "A"}))
-
 (defn encode-query
   "Encodes a URL query string."
   [m]
@@ -80,7 +78,7 @@
   [query]
   (apply str (flatten (interpose "&" (map (fn [entry] (interpose "=" (map name entry))) query)))))
 
-(defrecord URL [#^Keyword scheme #^String host #^Integer port #^IPersistentMap path #^IPersistentMap query]
+(defrecord URL [#^Keyword scheme #^String host #^Integer port #^IPersistentMap path #^IPersistentMap query #^String fragment]
   Object
   (toString
     [this]
@@ -102,6 +100,9 @@
           ;; Serialize the query string.
           a (if-not (empty? query)
               (concat a ["?"] (query-to-str query))
+              a)
+          a (if fragment
+              (concat a ["#" fragment])
               a)]
       (apply str a))))
 
@@ -134,16 +135,17 @@
         host (.getHost uri)
         port (normalize-port (.getPort uri) scheme)
         path (path/new-path (.getRawPath uri))
-        query (if-let [qs (.getQuery uri)] (parse-params qs))]
-    (URL. scheme host port path query)))
+        query (if-let [qs (.getQuery uri)] (parse-params qs))
+        fragment (.getFragment uri)]
+    (URL. scheme host port path query fragment)))
 
 (defmethod new-URL IPersistentMap
   [m]
   (let [m (if (:server-name m)
             ;; Coerce from a ring request map.
-            (URL. (:scheme m) (:server-name m) (normalize-port (:server-port m) (:scheme m)) (path/new-path (or (:uri m) "")) (:query-params m))
+            (URL. (:scheme m) (:server-name m) (normalize-port (:server-port m) (:scheme m)) (path/new-path (or (:uri m) "")) (:query-params m) (:fragment m))
             ;; Create directly from a map.
-            (merge (URL. nil nil nil nil nil) m))]
+            (merge (URL. nil nil nil nil nil nil) m))]
     m))
 
 (defmethod new-URL Path
@@ -168,10 +170,3 @@
       :host (some :host urls)
       :port (some :port urls)
       :path (path/qualify (:path rurl) (:path aurl)))))
-
-(defn localize
-  "Localizes a canonical url. Relative urls are qualified before localization."
-  [url req]
-  (let [url (new-URL url)
-        path ((:luri req) (path/qualify (:path url) (path/parent (req :uri))))]
-    (merge url {:path path})))

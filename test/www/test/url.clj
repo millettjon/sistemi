@@ -60,10 +60,15 @@
 
 (deftest to-string-test
   (are [s] (= (str (url/new-URL s)) s)
+       ""
        "/"
        "abc"
        "/foo"
        "//foo"
+       "#"
+       "foo#"
+       "foo#bar"
+       "/foo?bar=baz#ccc"
        "http://foo:8080/bar"
        "http://foo/bar"
        "https://foo/bar/baz"
@@ -79,14 +84,4 @@
        "bar/baz?qux=42" "http://foo" "http://foo/bar/baz?qux=42"
        "baz" "http://foo/bar" "http://foo/bar/baz"
        "baz" "https://foo:8118/bar" "https://foo:8118/bar/baz"))
-
-(deftest localize-test
-  (let [req {:luri #(path/join "/en" %)}]
-    (are [a b c] (= (str (url/localize a (merge req b))) c)
-         "bar" {:uri "/foo"} "/en/bar"
-         "baz" {:uri "/foo/bar"} "/en/foo/baz"
-         "/baz" {:uri "/foo/bar"} "/en/baz"
-         "baz" {:uri "/"} "/en/baz"
-         "view.htm?id=abc" {:uri "/order/pay.htm"}
-         "/en/order/view.htm?id=abc")))
 
