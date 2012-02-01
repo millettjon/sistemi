@@ -13,6 +13,13 @@
        "abc"
        "abc/def"))
 
+(deftest test-split
+  (are [a b] (= (split a) b)
+       "" []
+       "a" ["a"]
+       "a/b" ["a" "b"]
+       "/a/b/c" ["a" "b" "c"]))
+
 (deftest test-join
   (are [a b] (= (str (apply join a)) b)
        [""]        ""

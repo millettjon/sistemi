@@ -98,6 +98,11 @@
   (let [paths (map #(new-path %) paths)]
     (reduce #(assoc %1 :parts (concat (:parts %1) (:parts %2))) paths)))
 
+(defmulti-path split
+  "Splits a path into segments."
+  [path]
+  (:parts path))
+
 (defn qualify
   "Qualifies a relative path using a parent path or / if no parent path is supplied."
   ([path]
