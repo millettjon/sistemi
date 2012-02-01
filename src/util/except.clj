@@ -5,8 +5,10 @@
 (defmacro safely
   "Evaluates an expression safely by catching any exceptions thrown.
    If an exception is thrown, the fallback value is returned."
-  [expr fallback]
-  `(try ~expr (catch Exception x# ~fallback)))
+  ([expr]
+     `(safely ~expr nil))
+  ([expr fallback]
+     `(try ~expr (catch Exception x# ~fallback))))
 
 (defmacro swallow
   "Evaluates an expression swallowing any exceptions. Returns the result of evaluating expr or the

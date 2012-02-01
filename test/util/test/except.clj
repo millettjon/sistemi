@@ -5,8 +5,11 @@
 (deftest test-safely
   (are [x y] (= y (safely x :failed))
        :worked              :worked
-       (throw (Exception.)) :failed
-       ))
+       (throw (Exception.)) :failed)
+  (are [a b] (= (safely a) b)
+       42 42
+       nil nil
+       (throw (Exception.)) nil))
 
 (deftest test-swallow
   (is (= :worked (swallow :worked)))
