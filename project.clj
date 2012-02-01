@@ -41,8 +41,9 @@
                      ;; database
                      [postgresql/postgresql "8.4-702.jdbc4"]
                      [org.clojure/java.jdbc "0.1.1"]
-                     ]
+
+                     ;; swank
+                     [swank-clojure "1.4.0"]]
 
       :dev-dependencies [[ring-mock "0.1.1" :exclusions [org.clojure/clojure]]
-                         [lein-marginalia "0.6.1"]]
-      ))
+                         [lein-marginalia "0.6.1"]]))
