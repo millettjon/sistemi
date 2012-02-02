@@ -21,10 +21,9 @@
     (binding [req/*req* req]
       (app req))))
 
-(defn wrap-doall
-  "Middleware that calls doall on the response content. This forces
-   enlive templates to be rendered a) any dynamic vars are still in
-   scope and b) exceptions can be handled in a user friendly manner."
+(defn wrap-render
+  "Middleware that realizez (i.e., renders) the response content sequence.
+   Useful for rendering templates while dynamic vars are still in scope."
   [app]
   (fn [req]
     (let [response (app req)

@@ -1,7 +1,12 @@
 (ns sistemi.site)
 
 (def strings
-  {:en {:version "alpha version"
+  {:en {; splash page
+        :title "Modern Shelving Furniture : Sistemi Moderni"
+        :select-a-language "Select A Language"
+
+        ; layout
+        :version "alpha version"
         :my-account "My Account"
         :cart "Cart"
         :sales "Trade & Contract Sales"
@@ -23,7 +28,12 @@
         :copyright ["Copyright 2011 SISTEMI MODERNI."
                     "All rights reserved."]}
 
-   :es {:version "versión alpha"
+   :es {; splash page
+        :title "Muebles de Estantería Moderna : Sistemi Moderni"
+        :select-a-language "Eligir Idioma"
+
+        ; layout
+        :version "versión alpha"
         :my-account "Mi Cuenta"
         :cart "Carro"
         :sales "Ventas de comercio y contrato"
@@ -45,7 +55,11 @@
         :copyright ["© 2011 SISTEMI MODERNI."
                     "Todos los derechos reservados."]}
 
-   :fr {:my-account "Mon Compte"
+   :fr {; splash page
+        :select-a-language "Choisissez une Langue"
+
+        ; layout
+        :my-account "Mon Compte"
         :cart "Panier"
         :sales "Vente Professionnels"
         :signup "S’abonner aux emails"

@@ -1,5 +1,6 @@
 (ns sistemi.site.order.pay
   (:require [clojure.tools.logging :as log]
+            [sistemi.translate :as tr]
             [www.url :as url])
   (:use paypal
         app.config
@@ -26,7 +27,7 @@
         token (params :token)
         result (pay-paypal-order amount req)]
     (log/info "XC PAY" result)
-    (redirect (str (url/qualify (url/localize {:path "view.htm" :query {:id token}} req) req)))))
+    (redirect (str (url/qualify (tr/localize "view.htm" {:query {:id token}}) req)))))
 
 ;; TODO: Can something else other than the token be used?
 ;; TODO: Are there any other related nvp api calls?

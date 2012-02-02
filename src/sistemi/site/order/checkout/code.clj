@@ -1,5 +1,6 @@
 (ns sistemi.site.order.checkout
   (:require [clojure.tools.logging :as log]
+            [sistemi.translate :as tr]
             [www.url :as url])
   (:use [locale.core :only (full-locale)]
         [ring.util.response :only (redirect)]))
@@ -29,8 +30,8 @@
                    :l_paymentrequest_0_desc0 "Custom Shelving: 150x100x30; Modern; Green."
                    :l_paymentrequest_0_amt0 amount
                    :l_paymentrequest_0_qty0 "1"
-                   :returnurl (url/qualify (url/localize "confirm.htm" req) req)
-                   :cancelurl (url/qualify (url/localize "cancel.htm" req) req)
+                   :returnurl (url/qualify (tr/localize "confirm.htm") req)
+                   :cancelurl (url/qualify (tr/localize "cancel.htm") req)
                    :localecode (full-locale (:locale req))}]
     (with-conf (conf :paypal)
       (xc-setup sale-data))))

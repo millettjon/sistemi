@@ -47,7 +47,7 @@
       ;; Handle templates and custom handlers.
       (wrap-translate-uri localized-paths canonical-paths) ; Translate the uri.
       wrap-request                                         ; Binds *req* to the current request.
-      wrap-doall                                           ; Force realization of body seq while *req* is in scope.
+      wrap-render                                          ; Force realization of body seq while *req* is in scope.
       (wrap-handler code-root :template-root "www/raw")    ; Call a handler if one is defined for the uri.
       (wrap-file "www/raw")                                ; Serve static files.
       [&] pass)
@@ -65,5 +65,9 @@
 ;; Run this to reload the routes.
 #_(do (in-ns 'sistemi.core)
       (def routes (build-routes)))
+
 (require 'sistemi.site)
 (require 'sistemi.site.vision-htm)
+(require 'sistemi.site.modern-shelving-htm)
+(ns user
+  (:use clojure.repl))

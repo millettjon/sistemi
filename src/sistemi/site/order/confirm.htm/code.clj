@@ -1,6 +1,7 @@
 (ns sistemi.site.order.confirm
   (:require [clojure.tools.logging :as log]
             [clojure.string :as str]
+            [sistemi.translate :as tr]
             [www.url :as url])
   (:use paypal
         app.config
@@ -40,7 +41,7 @@
           [:h2 "Order Details"]
           [:table (map (fn [k] [:tr [:td k] [:td (k details)]])
                        (sort (keys details)))]
-          [:form {:action (url/localize "pay" req) :method "post"}
+          [:form {:action (tr/localize "pay") :method "post"}
            ;; TODO: Store these in the session.
            (map #(apply hidden-field %) (select-keys details [:token :payerid :paymentrequest_0_amt :paymentrequest_0_currencycode]))
 ;;           (hidden-field :paymentrequest_0_paymentaction "Sale") 
