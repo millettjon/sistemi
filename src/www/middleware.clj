@@ -1,10 +1,12 @@
 (ns www.middleware
   (:require [clojure.tools.logging :as log]
             [clojure.string :as str]
+            [ring.util.response :as ring]
             [www.id :as id]
             [www.request :as req])
   (:use [clojure.contrib.def :only (defnk)] 
-        [clj-logging-config.log4j :only (with-logging-context)]))
+        [clj-logging-config.log4j :only (with-logging-context)]
+        [slingshot.slingshot :only [try+]]))
 
 (defn wrap-request-id
   "Generates a unique request id and saves it in the logging context."
@@ -14,12 +16,29 @@
       (log/debug "Created new request id.")
       (app req))))
 
+(defn wrap-ping
+  "Checks for the url \"/ping\" and returns a simple \"pong\".
+   Otherwise, delegates to app."
+  [app]
+  (fn [req]
+    (if (= (:uri req) "/ping")
+      (ring/response "pong")
+      (app req))))
+
 (defn wrap-request
   "Binds the dynamic var www/*req* to the current request."
   [app]
   (fn [req]
     (binding [req/*req* req]
       (app req))))
+
+(defn wrap-exception-response
+  "Ring wrapper that catches response maps thrown as exceptions from further down the handler stack."
+  [app]
+  (fn [req]
+    (try+
+      (app req)
+      (catch map? m m))))
 
 (defn wrap-render
   "Middleware that realizez (i.e., renders) the response content sequence.

@@ -7,7 +7,7 @@
         (locale.middleware locale translate)
         locale.handler.redirect
         (sistemi [handlers :only (make-404)]
-                 [middleware :only (wrap-exception-response wrap-handler)])))
+                 [middleware :only (wrap-handler)])))
 
 (defn build-routes
   []
@@ -17,6 +17,7 @@
      ;; TODO: Add a 500 wrapper (like wrap-stacktrace bug logs)
      ;; TODO: Log POST params?
      ;; TODO: Log request maps for easy replay?
+     wrap-ping                ; handles /ping requests to check round trips
      wrap-lint
      wrap-request-id          ; add a unique request id for logging
      spy

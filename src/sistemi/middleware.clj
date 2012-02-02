@@ -3,16 +3,31 @@
             [clojure.contrib.str-utils2 :as stru]
             [clojure.tools.logging :as log]
             [util.path :as path])
-  (:use [slingshot.slingshot :only [try+]])
   (:import java.io.File))
 
-(defn wrap-exception-response
-  "Ring wrapper that catches response maps thrown as exceptions from further down the handler stack."
-  [app]
-  (fn [req]
-    (try+
-      (app req)
-      (catch map? m m))))
+;; how do i tell what the url is for a handler?
+;; - before, was loading paths based on the exact path with code.clj appended
+;; - now, some name mangling will be required
+;; modern-shelving.htm -> modern_shelving_htm.clj
+;;   - hmm, - clojure cannot have . in ns name
+;;          - java cannot have - or . in class name
+;;          - the filename can be anything as long as the ns name is ok
+;;            - but load-file must be used in this case (not require)
+;;              - hence wrap reload won't work
+;;          ? use path-name map in ns to determine actual url path and translations?
+;; - remove.clj
+;; - convert trailing _htm to .htm
+;; - convert _ to -
+;; notes:
+;; - _ no longer supported in path names
+;; - all .clj files are interpreted as handlers?
+;; url:  modern-shelving.htm
+;; ns:   modern-shelving-htm
+;; class/file: modern_shelving_htm
+;;
+;; ? how does it work w/ wrap-reload?
+;; ? can classes register their paths when they get loaded?
+;;   - update the global path translation, handler, and string maps?
 
 (defn- load-handlers
   "Loads all page handlers under a directory and returns a
