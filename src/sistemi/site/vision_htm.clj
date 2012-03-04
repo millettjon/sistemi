@@ -25,8 +25,8 @@
                        que vous les imaginez.  C’est pour cela que nous tenons à vous donner
                        les moyens de personnaliser toute les gammes de nos produits.")}}})
 
-(defn vision
-  "Applies vision-page transformations."
+(defn page
+  "Applies page transformations."
   [node]
   (at node
       [:div#col3b :div.title] (content (translate :vision :title))
@@ -34,6 +34,6 @@
 
 (defn handle
   [req]
-  (response (standard-page vision)))
+  (response (standard-page page)))
 
 (sistemi.registry/register)
