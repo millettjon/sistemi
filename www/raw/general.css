@@ -159,7 +159,7 @@ body {
 	text-decoration:none; padding-top: 5px; padding-bottom: 5px; border: 1px solid #FFFFFF; 
 }
 
-.red {
+.white2 {
 	font-family: "Crimson Roman", "Times New Roman", serif;
 	background:#B20937;
 	font-size: 18px;
@@ -170,7 +170,7 @@ body {
 	line-height: 18px;
 	margin-top: -1px;
 }
-#nav1 li a.red {
+#nav1 li a.white2 {
 	padding-top: 4px;
 	padding-bottom: 0px;
 }
@@ -628,13 +628,12 @@ height:auto;
 	padding-left: 0;
 	margin-left: 15px;
 }
-.redtxt {
+.graytxt {
 	color: #999999;
-	font-size: large;
 }
 .graytextlarge {
 	font-family: Ubuntu, Arial, sans-serif;
-	font-size: large;
+	font-size: 2em;
 	color: #CCCCCC;
 	font-weight: bold;
 }
@@ -677,4 +676,29 @@ form {
 	margin-left: 0px;
 	clear: right;
 	color: #FFFFFF;
+}
+.graycol {
+	display: block;
+	float: left;
+	width: 427px;
+	color: #FFFFFF;
+	font-family: UbuntuRegular, Arial, sans-serif;
+	background-color: #818282;
+	height: 427px;
+	font-size: 2em;
+	text-align: right;
+}
+.redtxt {
+	color: #AD0039;
+	padding-top: 20px;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+}
+.submitbtn-left {
+
+	clear: both;
+	float: left;
+	margin-top: 5px;
+	margin-right: -20px;
 }
