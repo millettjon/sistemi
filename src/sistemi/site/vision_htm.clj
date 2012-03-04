@@ -1,5 +1,8 @@
 (ns sistemi.site.vision-htm
-  (:require [util.string :as stru]))
+  (:require [util.string :as stru])
+  (:use net.cgrand.enlive-html
+        [ring.util.response :only (response)]
+        [sistemi translate layout]))
 
 (def names
   {:es "visíon"
@@ -21,5 +24,16 @@
                        pensons aussi que vous  devriez pouvoir disposer des  produits tels 
                        que vous les imaginez.  C’est pour cela que nous tenons à vous donner
                        les moyens de personnaliser toute les gammes de nos produits.")}}})
+
+(defn vision
+  "Applies vision-page transformations."
+  [node]
+  (at node
+      [:div#col3b :div.title] (content (translate :vision :title))
+      [:div#col3b :> (nth-child 3)] (html-content (translate :vision :text))))
+
+(defn handle
+  [req]
+  (response (standard-page vision)))
 
 (sistemi.registry/register)
