@@ -2,13 +2,18 @@
   (:require [www.url :as url]
             [util.path :as path]
             [www.request :as request]
-            [clj-time.core :as time])
+            [clj-time.core :as time]
+            [locale.translate :as tr-l]
+            [sistemi.registry :as registry]
+            [sistemi.translate :as tr-s])
   (:use ring.util.response
         ring.persistent-cookies
         [sistemi.handler :only (throw-403)]
         [locale.core :only (locales)]
-        locale.translate
         [util.except :only (safely)]))
+
+(def names
+  {:es "locale"})
 
 (defn handle
   "Handles a request to change the user's locale. The new locale setting is persisted in a cookie
@@ -33,7 +38,7 @@
 
                referer (if (not (request/self-referred? req)) ; Only allow requests from the same server.
                          (throw-403 req (str "Third party referals not supported (referer=" referer ")."))
-                         (localize (canonicalize (:path (url/new-URL referer)) req) (assoc req :locale locale)))
+                         (tr-l/localize (tr-s/canonicalize (:path (url/new-URL referer))) registry/localized-paths (assoc req :locale locale)))
 
                :default (path/qualify locale))
           response (redirect (str (url/qualify uri req)))]
@@ -45,3 +50,5 @@
 ;; TODO: (time/in 10 :years)
 ;; TODO: function to set a cookie for 1 month, quarter, year, decade out
 ;; TODO: add tests
+
+(sistemi.registry/register)

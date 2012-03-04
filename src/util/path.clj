@@ -50,7 +50,8 @@
   `(do
      (defmulti ~name ~docstring? class)
      (defmethod ~name IPersistentMap ~@body)
-     (defmethod ~name String [s#] (~name (new-path s#)))))
+     (defmethod ~name String [s#] (~name (new-path s#)))
+     (defmethod ~name File [s#] (~name (new-path s#)))))
 
 (defmulti-path relative?
   "Returns true if the path is a relative path."
@@ -72,6 +73,17 @@
   [path]
   (and (absolute? path) (blank? path)))
 
+(defmulti-path last
+  "Returns the name of the last part in the path."
+  [path]
+  (core/last (:parts path)))
+
+(defmulti-path extension
+  "Returns the extension if any."
+  [path]
+  (if-let [name (last path)]
+    (second (re-find #"\.([^\.]+)$" name))))
+
 (defmulti-path parent
   "Returns the parent path of a path. The parent of \"/\" is \"/\" and the parent of \"\" is \"\"."
   [path]
@@ -87,16 +99,13 @@
   [path]
   (assoc path :parts (core/rest (:parts path)) :relative true))
 
-(defmulti-path last
-  "Returns the name of the last part in the path."
-  [path]
-  (core/last (:parts path)))
-
 (defn join
   "Joins arguments into a single path."
   [& paths]
   (let [paths (map #(new-path %) paths)]
-    (reduce #(assoc %1 :parts (concat (:parts %1) (:parts %2))) paths)))
+    (if (empty? paths)
+      (new-path "")
+      (reduce #(assoc %1 :parts (concat (:parts %1) (:parts %2))) paths))))
 
 (defmulti-path split
   "Splits a path into segments."
@@ -137,6 +146,10 @@
   "Calls join on the arguments and the coerces the result to a File."
   [part & parts] (File. ^String (to-str (apply join part parts))))
 
+(defmulti-path exists?
+  "Returns true if the path exists."
+  [path]
+  (.exists ^File (to-file path)))
 
 ;; TODO: Delete if not used.
 #_(defn canonical

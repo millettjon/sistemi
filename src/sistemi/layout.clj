@@ -73,14 +73,15 @@
                                         [(nth-child 3) :a] (content (translate :contact)))
 
       ;; MENU
-      ;; top level items
+      ;; top menu
       [:div#p7PMM_1 :> :ul :> :li :> :a] (menu-item)
 
       ;; boutique sub menu
       [:div#p7PMM_1 :> :ul :> (nth-child 3) :ul :a] (menu-item :boutique)
 
       ;; COPYRIGHT
-      [:div#copyright] (content (interpose {:tag :br} (translate :copyright)))))
+      [:div#copyright] (content (interpose {:tag :br} (translate :copyright)))
+      ))
 
 (defn standard-page
   "Loads a page's template, applies the standard layout transformation, applies the

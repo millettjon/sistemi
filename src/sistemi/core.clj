@@ -2,7 +2,7 @@
 ;; TODO: Consider disabling this for production.
 (clojure.core/require 'util.reflection)
 (util.reflection/warn-on-reflection
-  "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging")
+  "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "net.cgrand.xml" "net.cgrand.enlive-html")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
@@ -13,7 +13,8 @@
         (app config run-level)
         app.config.core
         locale.core
-        sistemi.routes))
+;        sistemi.routes
+        ))
 
 ;; ===== LOGGING =====
 ;; See: https://github.com/malcolmsparks/clj-logging-config
@@ -28,6 +29,8 @@
 ;; "www" {:level :debug}
  )
 
+;; ===== BOOT ID =====
+(require 'www.id)
 (log/info (<< "Using boot-id '~{www.id/boot-id}'."))
 
 ;; ===== RUN LEVEL =====
@@ -52,8 +55,16 @@
   (set-default-locale! (m :default-locale))
   (set-default-territories! (m :default-territories)))
 
+;; ===== HANDLERS =====
+;; Register request handlers and build routes after localization
+;; settings are initialized.
+(log/info "Registering request handlers.")
+(require '[sistemi.registry :as registry])
+(registry/load-files "src/sistemi/site")
+
 ;; ===== ROUTES =====
-;; Build routes after localization settings are initialized.
+(use 'sistemi.routes)
+(log/info "Bulding routes.")
 (def routes (build-routes))
 
 ;; ===== SWANK =====

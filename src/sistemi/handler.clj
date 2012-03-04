@@ -1,5 +1,6 @@
-(ns sistemi.handlers
-  (:require [clojure.string :as str])
+(ns sistemi.handler
+  (:require [clojure.string :as str]
+            [clojure.tools.logging :as log])
   (:use ring.util.response
         [slingshot.slingshot :only [throw+]]))
 

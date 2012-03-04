@@ -22,6 +22,7 @@
 
 (deftest test-join
   (are [a b] (= (str (apply join a)) b)
+       []          ""
        [""]        ""
        ["a"]       "a"
        ["a" "b"]   "a/b"
@@ -30,6 +31,14 @@
        ["/"]       "/"
        ["a/"]      "a"
        ["a/b/"]    "a/b"))
+
+(deftest extension-test
+  (are [a b] (= (extension a) b)
+       "" nil
+       "foo" nil
+       "foo.clj" "clj"
+       "a/b" nil
+       "a/b.c" "c"))
 
 (deftest test-parent
   (are [a b] (= (str (parent a)) b)

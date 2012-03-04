@@ -3,7 +3,7 @@
 
 (defn starts-with?
   "Returns true if string starts with substring."
-  [string substring]
+  [^String string ^String substring]
   (.startsWith string substring))
 
 (defn triml-lines

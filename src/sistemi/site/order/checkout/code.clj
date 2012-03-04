@@ -43,7 +43,7 @@
 
 (defn handle
   [req]
-  (let [amount (Double. (get-in req [:params :amount]))
+  (let [amount (Double. ^String (get-in req [:params :amount]))
         order (make-paypal-order req amount)]
     (log/info "XC ORDER" order)
     (redirect (redirect-to-express-checkout order))))

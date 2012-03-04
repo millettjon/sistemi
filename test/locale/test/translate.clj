@@ -5,79 +5,93 @@
 
 (def lm
   "Localization path map for testing."
-  {"es"
-   {:name "es"
-    "order" {:name "orden"
-             "pay" {:name "pagar"}}}})
+  {"order" {:en "order"
+            :es "orden"
+            "create.htm" {:en "create.htm"
+                          :es "crear.htm"}}
+   "vision.htm" {:en "vision.htm",
+                 :es "vis%C3%ADon.htm"}})
+
 (def cm
-  "Canonicalization paht map for testing."
-  {"es"
-   {"orden"
-    {:name "order"
-     "pagar"
-     {:name "pay"}}}})
+  "Canonicalization path map for testing."
+  {:es {"orden" {"crear.htm" {:name "create.htm"}
+                 :name "order"}
+        "vis%C3%ADon.htm" {:name "vision.htm"}}
+   :en {"order" {"create.htm" {:name "create.htm"}
+                 :name "order"}
+        "vision.htm" {:name "vision.htm"}}})
 
 (def req
-  {:locale "es" :localized-paths lm :canonical-paths cm :uri "/order/foo"})
-
-(deftest translate-path-test
-  (are [a b] (= (translate-path lm (path/new-path a)) (if b (path/new-path b)))
-       "/es" "/es"
-       "/es/order" "/es/orden"
-       "/es/order/pay" "/es/orden/pagar"
-       "/es/foo" nil
-       "/es/foo/bar" nil))
+  {:locale "es" :uri "/order/foo"})
 
 (deftest localize-path-test
-  (are [a b] (= (localize-path lm "es" (path/new-path a)) (if b (path/new-path b)))
-       "/" "/es"
-       "/order" "/es/orden"
-       "/order/pay" "/es/orden/pagar"
-       "/foo" nil
-       "/foo/bar" nil))
+  (are [a b c] (= (localize-path a lm b) (if c (path/new-path c)))
+       "/" :es "/es"
+       "/order" :es "/es/orden"
+       "/order" :en "/en/order"
+       "/order/create.htm" :en "/en/order/create.htm"
+       "/order/create.htm" :es "/es/orden/crear.htm"
+       "/foo" :es nil
+       "/foo/bar" :es nil
+       "/vision.htm" :en "/en/vision.htm"
+       "/vision.htm" :es "/es/vis%C3%ADon.htm"))
 
 (deftest canonicalize-path-test
-  (are [a b] (= (canonicalize-path cm "es" (path/new-path a)) (if b (path/new-path b)))
-       "/" "/"
-       "/orden" "/order" 
-       "/orden/pagar" "/order/pay"
-       "/foo" nil
-       "/foo/bar" nil))
+  (are [a b c] (= (canonicalize-path a cm b) (if c (path/new-path c)))
+       "/" :en "/"
+       "/" :es "/"
+       "/" :foo nil
+       "/order" :foo nil
+       "/orden" :es "/order" 
+       "/order" :en "/order" 
+       "/foo" :en nil
+       "/foo/bar" :es nil
+       "/vision.htm" :en "/vision.htm"
+       "/vis%C3%ADon.htm" :es "/vision.htm"
+       "/orden/crear.htm" :es "/order/create.htm"))
 
 (deftest localize-test
-  (are [a b] (= (localize a req) b)
+  (are [a b] (= (localize a lm req) b)
        "/foo" "/foo"
        "/order" "/es/orden"
-       "/order/pay" "/es/orden/pagar"
-       "pay" "pagar"
-       "pay?foo=bar" "pagar?foo=bar"
+       "/order/create.htm" "/es/orden/crear.htm"
+       "/order/create.htm" "/es/orden/crear.htm"
+       "create.htm" "crear.htm"
+       "create.htm?foo=bar" "crear.htm?foo=bar"
        "/" "/es"
        "" ""
        "#" "#"
-       "bad" "bad"
-       )
-  (are [a b c] (= (apply localize a req b) c)
+       "bad" "bad")
+ (are [a b c] (= (apply localize a lm req b) c)
        "/foo" [] "/foo"
        "/order" [:query {:foo "bar"}] "/es/orden?foo=bar"))
 
 (deftest canonicalize-test
-  (are [a b] (= (canonicalize a req) b)
+  (are [a b] (= (canonicalize a cm req) b)
        "/foo" nil
+       "/es/foo" nil
        "/es/orden" "/order"
-       "/es/orden/pagar" "/order/pay"))
+       "/es/orden/crear.htm" "/order/create.htm"))
 
+;; path keys are strings
+;; under each key is a map
+;; each map has a keyword key for each locale
 (def strings
   {:en
    {:foo "FOO"
-    :this "/"}})
+    :this "/"}
+  "bar"
+   {:en
+    {:bar "BAR"
+     :this "/bar"
+     :baz {:qux "QUX"}}}})
 
-(require 'locale.test.translate.bar :reload)
 (deftest translate-test
-  (are [a b] (= (apply translate "locale.test.translate" :en a) b)
+  (are [a b] (= (apply translate strings :en a) b)
        ["/" :foo]         "FOO"
        ["" :foo]          "FOO"
        ["/" :bad]         "(bad)"     ; not found
-       ["/bad" :bad]      "(bad)"     ; not found (no ns)
+       ["/bad" :bad]      "(bad)"     ; not found
        ["/bar" :bar]      "BAR"       ; path
        ["bar" :bar]       "BAR"       ; relative path
        ["/bar" :foo]      "FOO"       ; inheritance
@@ -87,7 +101,3 @@
        ["/bar" :baz :bad] "(baz-bad)" ; nested not found
        ))
 
-(deftest mangle-path-to-ns-test
-  (are [a b] (= (mangle-path-to-ns a) b)
-       "foo" "foo"
-       "foo.htm" "foo-htm"))
