@@ -40,6 +40,13 @@
        "a/b" nil
        "a/b.c" "c"))
 
+(deftest basename-test
+  (are [a b] (= (basename a) b)
+       "" nil
+       "foo" "foo"
+       "foo.htm" "foo"
+       "foo.bar.htm" "foo.bar"))
+
 (deftest test-parent
   (are [a b] (= (str (parent a)) b)
        ""         ""

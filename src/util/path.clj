@@ -84,6 +84,12 @@
   (if-let [name (last path)]
     (second (re-find #"\.([^\.]+)$" name))))
 
+(defmulti-path basename
+  "Returns the basename of a path without the extension (if any)."
+  [path]
+  (if-let [name (last path)]
+    (second (re-find #"^(.*?)(\.[^\.]+)?+$" name))))
+
 (defmulti-path parent
   "Returns the parent path of a path. The parent of \"/\" is \"/\" and the parent of \"\" is \"\"."
   [path]
