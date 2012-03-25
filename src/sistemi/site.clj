@@ -18,7 +18,6 @@
         :version "alpha version"
         :my-account "My Account"
         :cart "Cart"
-        :sales "Trade & Contract Sales"
         :signup "Sign Up For Emails"
         :contact "Contact Us"
         :menu {:home-page "home page"
@@ -45,7 +44,6 @@
         :version "versión alpha"
         :my-account "Mi Cuenta"
         :cart "Carro"
-        :sales "Ventas de comercio y contrato"
         :signup "Recibir Correos"
         :contact "Contáctenos"
         :menu {:home-page "hogar"
@@ -70,7 +68,6 @@
         ; layout
         :my-account "Mon Compte"
         :cart "Panier"
-        :sales "Vente Professionnels"
         :signup "S’abonner aux emails"
         :contact "Contactez Nous"
         :menu {

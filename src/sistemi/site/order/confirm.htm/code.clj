@@ -9,6 +9,7 @@
         [ring.util.response :only (response)]
         [hiccup core form-helpers]))
 
+
 ;; confirm.htm
 ;; - gets order details from paypal
 ;; - calculates final shipping, tax, and total
