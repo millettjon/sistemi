@@ -24,15 +24,14 @@
    :es {}
    :fr {}})
 
-(defn page
-  "Applies page transformations."
-  [node]
-  (at node
-      [:div#col3b :div.title] (content (translate :system :title))
-      [:div#col3b :> (nth-child 3)] (content (translate :system :text))))
+(defn body
+  []
+  [:div.text_content
+   [:p.title (translate :system :title)]
+   [:p (translate :system :text)]])
 
 (defn handle
   [req]
-  (response (standard-page page)))
+  (response (standard-page "" (body) 544)))
 
 (sistemi.registry/register)

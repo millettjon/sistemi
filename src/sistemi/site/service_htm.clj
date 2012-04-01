@@ -31,6 +31,12 @@
 
 (defn handle
   [req]
-  (response (standard-page page)))
+  (response (standard-page "" page 544)))
 
 (sistemi.registry/register)
+
+
+
+
+
+

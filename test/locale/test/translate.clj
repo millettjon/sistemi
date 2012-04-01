@@ -84,7 +84,7 @@
    {:en
     {:bar "BAR"
      :this "/bar"
-     :baz {:qux "QUX"}}}})
+     :baz {:_ "BAZ" :qux "QUX"}}}})
 
 (deftest translate-test
   (are [a b] (= (apply translate strings :en a) b)
@@ -97,6 +97,7 @@
        ["/bar" :foo]      "FOO"       ; inheritance
        ["/" :this]        "/"         ; overide
        ["/bar" :this]     "/bar"      ; overide
+       ["/bar" :baz]      "BAZ"       ; nested, self
        ["/bar" :baz :qux] "QUX"       ; nested
        ["/bar" :baz :bad] "(baz-bad)" ; nested not found
        ))

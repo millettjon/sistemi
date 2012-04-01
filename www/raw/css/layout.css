@@ -1,91 +1,118 @@
-body {
-	color: #ccc;
-	font-family: "Trebuchet MS", "Lucida Grande", Arial, Helvetica, sans-serif;
-	margin: 0 auto;
-	padding: 0;
-	font-size: 0.6em;
-	background: #111 url('../images/bg/gradient1.gif') top left repeat-x;
+/* ----- GREY BOXES AND BORDERS ----- */
+.greybox {
+    background-color: #262626;
 }
 
-h1
-{
-	color: #fff;
-	font-size: 47px;
-	font-weight: bolder;
-	margin: 0 40px;
-	padding: 0.08em 0;
+.greyborder_r {
+    border-right: 1px solid #3B3B3B;
 }
 
-h1 sup
-{
-	color: #ddd;
+.greyborder_b {
+    border-bottom: 1px solid #3B3B3B;
 }
 
-h1 a
-{
-	color: #fff;
-	text-decoration: none;
+.greyborder_br {
+    border-bottom: 1px solid #3B3B3B;
+    border-right: 1px solid #3B3B3B;
 }
 
-h1 .company, h1 a .company
-{
-	color: #d01a71;
+.white {
+    color: #FFFFFF;
 }
 
-h2
-{
-	color: #ddd;
-	font-size: 2.5em;
+/* ----- LANGUAGE SELECTION ----- */
+#lang {
+    font-family: Ubuntu,Arial,sans-serif;
+    text-align: left;
+    padding-bottom: 11px;
 }
 
-h3
-{
-	color: #fff;
-	font-size: 1.5em;
+#lang a, #lang a:link, #lang a:active, #lang a:visited {
+    color: #8C8C8C;
+    font-size: 10px;
+    padding-right: 4px;
+    padding-left: 4px;
+    text-decoration: none;
+    text-transform: uppercase;
 }
 
-h4
-{
-	font-size: 1.3em;
+#lang .line {
+    color: #000000;
+    font-size: 8px;
 }
 
-.content
-{
-	margin: 0 20px;
-}
-
-.content a
-{
-	color: #fff;
+#lang a.select, #lang a:hover {
+    color: #FFFFFF;
 }
 
 
-.content p.linkage
-{
-	margin-top: 2em;
-	text-align: right;
-	font-size: 1.7em;
-	color: #ddd;
+/* ----- SHORTCUTS ----- */
+#shortcuts li {
+    font-family: Crimson,"Times New Roman",serif;
+    font-size: 13px;
+    line-height: 15px;
+    list-style-type: none;
+    text-transform: capitalize;
 }
 
-.content p.linkage a { color: #fff; }
-
-/*.content p.linkage a
-{
-	color: #fff;
-	background: url('../images/bg/biglink_off.gif') center right no-repeat;
-	padding: 10px 20px;
-	text-decoration: none;
+#shortcuts li a, #shortcuts li a:link, #shortcuts li a:visited, #shortcuts li a:active {
+    color: #FFFFFF;
+    text-decoration: none;
 }
 
-.content p.linkage a:hover
-{
-	background: url('../images/bg/biglink_on.gif') center right no-repeat;
-	font-style: italic;
-}*/
+#shortcuts li a:hover {
+    color: #AB003B;
+}
 
-#myGallery
-{
-	text-align: left;
-	margin: 0 auto;
+/* ----- FOOTER ----- */
+#redbar {
+	background-color: #AB003A;
+	height: 14px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+#redbar img {
+	/* display: inline; */
+	float: left;
+        margin-right: 10px;
+}
+.first {
+	/* display: inline; */
+	float: left;
+	margin-left: 30px;
+}
+
+
+#footer {
+    color: #545454;
+    font-family: Ubuntu,Arial,sans-serif;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30px;
+    text-transform: uppercase;
+}
+
+#address {
+    font-size: 10px;
+    line-height: 12px;
+}
+
+#copyright {
+    font-size: 8px;
+    line-height: 10px;
+    padding-top: 10px;
+}
+
+div.text_content {
+    margin-top: 45px;
+    margin-left: 25px;
+}
+
+.title {
+    color: #AD0039;
+    text-transform: uppercase;
+}
+
+.company_name {
+    color: #AD0039;
 }

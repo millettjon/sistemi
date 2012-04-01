@@ -71,7 +71,9 @@
   [strings locale path & keys]
   (let [s (loop [path path]
             (let [s (get-in strings (concat (path/split path) [locale] keys))]
-              (or s
+              (or (and s (if (map? s)
+                           (get s :_ s)
+                           s))
                   (if-not (path/blank? path)
                     (recur (path/parent path))))))]
     (or s

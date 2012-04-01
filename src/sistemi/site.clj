@@ -16,20 +16,20 @@
 
         ; layout
         :version "alpha version"
-        :my-account "My Account"
+        :account "My Account"
         :cart "Cart"
         :signup "Sign Up For Emails"
         :contact "Contact Us"
-        :menu {:home-page "home page"
-               :our-vision "our vision"
-               :on-line-boutique "on-line boutique"
-               :boutique {:shelving "shelving"
-                          :tables "tables"
-                          :lamps "lamps"
-                          :chairs "chairs"
-                          :paint "paint"}
-               :at-your-service "at your service"
-               :the-system "the system"
+        :menu {:home "home"
+               :vision "our vision"
+               :boutique  {:_ "on-line boutique"
+                                   :shelving "shelving"
+                                   :tables "tables"
+                                   :lamps "lamps"
+                                   :chairs "chairs"
+                                   :paint "paint"}
+               :service "at your service"
+               :system "the system"
                :gallery "gallery"
                :blog "blog"
                :feedback "feedback"}
@@ -42,20 +42,20 @@
 
         ; layout
         :version "versión alpha"
-        :my-account "Mi Cuenta"
+        :account "Mi Cuenta"
         :cart "Carro"
         :signup "Recibir Correos"
         :contact "Contáctenos"
-        :menu {:home-page "hogar"
-               :our-vision "nuestro visión"
-               :on-line-boutique "boutique en línea"
-               :boutique {:shelving "estantaría"
+        :menu {:home "hogar"
+               :vision "nuestro visión"
+               :boutique {:_ "boutique en línea"
+                          :shelving "estantaría"
                           :tables "mesas"
                           :lamps "lámparas"
                           :chairs "sillas"
                           :paint "pintura"}
-               :at-your-service "a su servicio"
-               :the-system "el sistema"
+               :service "a su servicio"
+               :system "el sistema"
                :gallery "galería"
                :blog "blog"
                :feedback "sugerencias"}
@@ -66,21 +66,21 @@
         :select-a-language "Choisissez une Langue"
 
         ; layout
-        :my-account "Mon Compte"
+        :account "Mon Compte"
         :cart "Panier"
         :signup "S’abonner aux emails"
         :contact "Contactez Nous"
         :menu {
-               :home-page "Accueil"
-               :our-vision "Notre Vision"
-               :on-line-boutique "Boutique En Ligne"
-               :boutique {:shelving "Etagères"
+               :home "Accueil"
+               :vision "Notre Vision"
+               :boutique {:_ "Boutique En Ligne"
+                          :shelving "Etagères"
                           :tables "Tables"
                           :lamps "Eclairage"
                           :chairs "Chaises"
                           :paint  "Peinture"}
-               :at-your-service "A Votre Service"
-               :the-system "Le Système"
+               :service "A Votre Service"
+               :system "Le Système"
                :gallery "Gallérie"
                :blog "blog"
                :feedback "Vos Impressions"}
