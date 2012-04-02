@@ -70,7 +70,9 @@
 #_(do (in-ns 'sistemi.core)
       (def routes (build-routes)))
 
+;; TODO: Move this somewhere else.
+;; TODO: Tag soup should only be loaded in dev mode.
 (ns user
-  (:require [pl.danieljanus.tagsoup :as tagsoup])
+  #_(:require [pl.danieljanus.tagsoup :as tagsoup])
   (:use clojure.repl
         clojure.pprint))
