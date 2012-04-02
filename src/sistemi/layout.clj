@@ -17,8 +17,8 @@
     :chairs
     :paint]
    :system
-   :service
    :feedback
+#_   :service
 #_   :gallery
 #_   :blog
 ])
