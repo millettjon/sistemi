@@ -10,7 +10,7 @@
 (def strings
   {:en {:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
         :system {:title "HOW IT IS MADE"
-                 :text (stru/join-lines "\"Your product begins with you. The moment your choice is
+                 :text (stru/join-lines "Your product begins with you. The moment your choice is
                           submitted, the commands to run the machines at the factory are created.
                           The factory produces the sheets of top grade \"multiplex\" plywood at the
                           core of your shelves. Then they cut the sheets according to your requests with
@@ -20,7 +20,7 @@
                           coated with an automotive grade lacquer in your choice of color. Your shelves
                           are then carefully wrapped and boxed in a custom designed heavy duty cardboard
                           package in preparation for rapid delivery to your doorstep. You are going to
-                          love opening your gift when it arrives.\"")}}
+                          love opening your gift when it arrives.")}}
    :es {}
    :fr {}})
 
