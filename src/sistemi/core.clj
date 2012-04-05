@@ -107,3 +107,10 @@
       (browse-url  (<< "file://~(System/getProperty \"user.dir\")/docs/uberdoc.html"))
       (browse-url  (<< "http://localhost:~{port}")))
     (run-jetty #'routes {:port port})))
+
+;; ===== DEVELOPMENT =====
+(when (development?)
+  (ns user
+    (:require [pl.danieljanus.tagsoup :as tagsoup])
+    (:use clojure.repl
+          clojure.pprint)))

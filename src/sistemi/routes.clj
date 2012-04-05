@@ -69,10 +69,3 @@
 ;; Run this to reload the routes.
 #_(do (in-ns 'sistemi.core)
       (def routes (build-routes)))
-
-;; TODO: Move this somewhere else.
-;; TODO: Tag soup should only be loaded in dev mode.
-(ns user
-  #_(:require [pl.danieljanus.tagsoup :as tagsoup])
-  (:use clojure.repl
-        clojure.pprint))

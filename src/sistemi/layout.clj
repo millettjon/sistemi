@@ -61,6 +61,7 @@
       [:link {:href "bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "css/layout.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "menu/menu.css", :rel "stylesheet", :type "text/css"}]
+      [:script {:src "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" :type "text/javascript"}]
       [:script {:type "text/javascript", :src "bootstrap/js/bootstrap.js"}]
       [:link {:href "fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
