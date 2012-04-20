@@ -17,11 +17,7 @@
     :chairs
     :paint]
    :system
-   :feedback
-#_   :service
-#_   :gallery
-#_   :blog
-])
+   :feedback])
 
 (defn menu
   []
@@ -34,17 +30,17 @@
           [:li.menui [:a.menui {:href "#"} [:span label]]
            [:ul.menum.submenu
             (for [item (rest item)]
-              (let [page (str (name item) ".htm")
+              (let [page (str "/" (name item) ".htm")
                     label (translate :menu key item)]
                 [:li.menui
                  [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (localize page)} label]]
                 ))]])
         ;; regular item
-        (let [page (str (name item) ".htm")
+        (let [page (str "/" (name item) ".htm")
               label (translate :menu item)]
-        [:li.menui
-         [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (localize page)} label]]
-        )))))
+          [:li.menui
+           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (localize page)} label]]
+          )))))
 
 (defn doctype-html5
  [html]
@@ -58,12 +54,12 @@
      [:head
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:title  (translate :title)]
-      [:link {:href "bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
-      [:link {:href "css/layout.css", :rel "stylesheet", :type "text/css"}]
-      [:link {:href "menu/menu.css", :rel "stylesheet", :type "text/css"}]
+      [:link {:href "/bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
+      [:link {:href "/css/layout.css", :rel "stylesheet", :type "text/css"}]
+      [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
       [:script {:src "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" :type "text/javascript"}]
-      [:script {:type "text/javascript", :src "bootstrap/js/bootstrap.js"}]
-      [:link {:href "fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
+      [:script {:src "/bootstrap/js/bootstrap.js", :type "text/javascript"}]
+      [:link {:href "/fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
       [:meta {:name "description", :content "Modern shelving in Europe."}]
 
@@ -103,7 +99,7 @@
                       [:a {:href (localize "/profile/locale" :query {:lang locale})} locale])))
              (interpose [:span.line "|"]))]
 
-           [:img {:src "img/block-logo.gif" :alt "logo" :style "margin-bottom: 7px;"}]]]]
+           [:img {:src "/img/block-logo.gif" :alt "logo" :style "margin-bottom: 7px;"}]]]]
 
         [:div.span6
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
@@ -116,7 +112,7 @@
         [:div.span3
          [:div.greyborder_b {:style "height: 135px"}
           [:a {:href (localize "home.htm")}
-           [:img {:src "graphics/sistemi-moderni-systems.jpg", :width "206", :height "119" :alt "logo" :style "margin-left: 19px;"}]]]]]
+           [:img {:src "/img/sistemi-moderni-systems.jpg", :width "206", :height "119" :alt "logo" :style "margin-left: 19px;"}]]]]]
 
        ;; ----- MENU AND CONTENT ROW -----
        ;; TODO: Find a way to not have to pass the height.
@@ -137,9 +133,9 @@
        [:div.row
         [:div#redbar.span12
          [:a.first {:href "#"}
-          [:img {:src "graphics/facebook.jpg", :border "0" :alt "facebook"}]]
+          [:img {:src "/img/facebook.jpg", :border "0" :alt "facebook"}]]
          [:a { :href "#"}
-          [:img {:src "graphics/twitter.jpg", :border "0" :alt "twitter"}]]
+          [:img {:src "/img/twitter.jpg", :border "0" :alt "twitter"}]]
          ;; TODO: Why is google +1 not working?
          [:g:plusone {:size "small" :annotation "none"}]
          ]]
