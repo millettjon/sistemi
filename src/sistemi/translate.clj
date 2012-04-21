@@ -2,6 +2,8 @@
   (require [clojure.string :as str]
            [locale.translate :as tr]
            [www.request :as req]
+           [util.path :as path]
+           [www.url :as url]
            [sistemi.handler :as handler]
            [sistemi.registry :as registry]))
 
@@ -29,3 +31,17 @@
   "Translates a localized path to a canonical one."
   [path]
   (tr/canonicalize path registry/canonicalized-paths req/*req*))
+
+(defn qualifys
+  "Localizes and qualifies a url as a sibling of the uri of the current request."
+  [url]
+  (let [url (url/new-URL url)
+        path (:path url)
+        lurl (localize url)]
+    (if (path/absolute? path)
+      (url/qualify lurl req/*req*)
+      (let [locale (:locale req/*req*)
+            req-url (url/new-URL req/*req*)
+            parent-path (path/parent (:path req-url))
+            parent-url (assoc req-url :path (path/join locale parent-path))]
+        (url/qualify lurl parent-url)))))
