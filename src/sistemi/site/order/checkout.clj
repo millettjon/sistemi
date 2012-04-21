@@ -26,7 +26,7 @@
   "Makes a one line description of the shelving specifications."
   [req]
   (let [m (:params req)]
-    (str "Shelving: " (:width m) "x" (:height m) "x" (:depth m) "; " (:cutout m) "; " (str/upper-case (:color m)))))
+    (str "Shelving: " (:width m) "x" (:height m) "x" (:depth m) "cm; " (:cutout m) "; " (str/upper-case (:color m)))))
 
 (defn make-paypal-order
   [req amount]
@@ -38,8 +38,8 @@
                    :l_paymentrequest_0_desc0 (make-description req)
                    :l_paymentrequest_0_amt0 amount
                    :l_paymentrequest_0_qty0 "1"
-                   :returnurl (url/qualify (tr/localize "confirm.htm") req)
-                   :cancelurl (url/qualify (tr/localize "cancel.htm") req)
+                   :returnurl (tr/qualifys "confirm.htm")
+                   :cancelurl (tr/qualifys "cancel.htm")
                    :localecode (full-locale (:locale req))}]
     (with-conf (conf :paypal)
       (xc-setup sale-data))))

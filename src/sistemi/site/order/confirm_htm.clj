@@ -10,6 +10,9 @@
         [hiccup core form-helpers]
         [sistemi translate layout]))
 
+(def names
+  {}
+  #_{:es "revisar"})
 
 ;; confirm.htm
 ;; - gets order details from paypal

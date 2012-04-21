@@ -1,5 +1,7 @@
 (ns sistemi.site.order.review-htm
-  (:require [clojure.tools.logging :as log])
+  (:require [clojure.tools.logging :as log]
+            [sistemi.translate :as tr]
+            [www.url :as url])
   (:use
    [ring.util.response :only (response)]
    [sistemi translate layout]))
@@ -28,7 +30,7 @@
                         "&nbsp;&nbsp" [:span.label {:style (str "background-color: " (:color params) ";")} "&nbsp;&nbsp"]]]]
 
    [:br]
-   [:p "The price for your shelves is " [:span.white "$250"] " before taxes and shipping."]
+   [:p "The price of your custom shelving is " [:span.white "&euro;250"] " before taxes and shipping."]
 
    [:form {:action "checkout" :method "POST"}
     (hidden params)
