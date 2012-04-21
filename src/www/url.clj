@@ -110,12 +110,30 @@
 
 (defn- normalize-port
   "Normalizes the port field by setting it to nil if the port is a standard value for the given scheme."
-  [port scheme]
-  (if (= -1 port)
-    nil
-    (if (= port (standard-ports scheme))
-      nil
-      port)))
+  [url]
+  (let [port (:port url)
+        scheme (:scheme url)
+        port (if (= -1 port)
+               nil
+               (if (= port (standard-ports scheme))
+                 nil
+                 port))]
+    (assoc url :port port)))
+
+(defn- normalize-path
+  "Normalizes the path by forcing it to be absolute if a server name is defined."
+  [url]
+  (let [path (path/new-path (:path url))]
+    (assoc url :path
+           (if (and (path/relative? path) (:host url))
+             (path/qualify path)
+             path))))
+
+(defn- normalize
+  [url]
+  (-> url
+      normalize-port
+      normalize-path))
 
 (defn parse-params
   "Parses a query string into a map. Keys are coerced to keywords. UTF-8 encoding is assumed."
@@ -133,17 +151,17 @@
   (let [uri (URI. uri)
         scheme (keyword (.getScheme uri))
         host (.getHost uri)
-        port (normalize-port (.getPort uri) scheme)
-        path (path/new-path (.getRawPath uri))
+        port (.getPort uri)
+        path (.getRawPath uri)
         query (if-let [qs (.getQuery uri)] (parse-params qs))
         fragment (.getFragment uri)]
-    (URL. scheme host port path query fragment)))
+    (normalize (URL. scheme host port path query fragment))))
 
 (defmethod new-URL IPersistentMap
   [m]
   (let [m (if (:server-name m)
             ;; Coerce from a ring request map.
-            (URL. (:scheme m) (:server-name m) (normalize-port (:server-port m) (:scheme m)) (path/new-path (or (:uri m) "")) (:query-params m) (:fragment m))
+            (normalize (URL. (:scheme m) (:server-name m) (:server-port m) (or (:uri m) "") (:query-params m) (:fragment m)))
             ;; Create directly from a map.
             (merge (URL. nil nil nil nil nil nil) m))]
     m))
@@ -157,6 +175,11 @@
   url)
 
 ;; ========== MISC =======================================
+(defn parent
+  "Returns the parent of a url."
+  [url]
+  (let [url (new-URL url)]
+    (assoc url :path (path/parent (:path url)))))
 
 (defn qualify
   "Qualifies a relative url using an absolute one. Arguments are coerced to URL."
@@ -170,3 +193,4 @@
       :host (some :host urls)
       :port (some :port urls)
       :path (path/qualify (:path rurl) (:path aurl)))))
+

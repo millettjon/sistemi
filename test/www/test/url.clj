@@ -37,6 +37,7 @@
        "/" {:path (path/new-path "/")}
        "abc" {:path (path/new-path "abc")}
        "/foo" {:path (path/new-path "/foo")}
+       "http://foo" {:scheme :http :host "foo" :path (path/new-path "/")}
        "http://foo:8080/bar" {:scheme :http :host "foo" :port 8080 :path (path/new-path "/bar")}
        "http://foo/bar" {:scheme :http :host "foo" :path (path/new-path "/bar")}
        "https://foo/bar/baz" {:scheme :https :host "foo" :path (path/new-path "/bar/baz")}
@@ -77,6 +78,12 @@
        "" ""
        "http://foo:80/bar" "http://foo/bar"
        "http://fubar.com/a/b/estantería?target=/estantería-moderna.htm" "http://fubar.com/a/b/estanter%C3%ADa?target=/estanter%C3%ADa-moderna.htm"))
+
+(deftest parent-test
+  (are [a b] (= (url/parent a) (url/new-URL b))
+       "foo" ""
+       "/foo" "/"
+       "http://foo/bar" "http://foo"))
 
 (deftest qualify-test
   (are [a b c] (= (str (url/qualify a b)) c)
