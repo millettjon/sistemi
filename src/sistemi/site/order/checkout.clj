@@ -38,8 +38,8 @@
                    :l_paymentrequest_0_desc0 (make-description req)
                    :l_paymentrequest_0_amt0 amount
                    :l_paymentrequest_0_qty0 "1"
-                   :returnurl (tr/qualifys "confirm.htm")
-                   :cancelurl (tr/qualifys "cancel.htm")
+                   :returnurl (str (tr/qualifys "confirm.htm"))
+                   :cancelurl (str (tr/qualifys "cancel.htm"))
                    :localecode (full-locale (:locale req))}]
     (with-conf (conf :paypal)
       (xc-setup sale-data))))

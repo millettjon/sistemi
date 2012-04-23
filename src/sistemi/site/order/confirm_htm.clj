@@ -7,32 +7,15 @@
         app.config
         [locale.core :only (full-locale)]
         [ring.util.response :only (response)]
-        [hiccup core form-helpers]
+        [hiccup core form]
         [sistemi translate layout]))
 
 (def names
   {}
   #_{:es "confirmar"})
 
-;; confirm.htm
-;; - gets order details from paypal
-;; - calculates final shipping, tax, and total
-;; - displays final order preview to user
-;; - includes "confirm" button
-;; - submits POST to "pay"
-
-;; pay
-;; - captures payment w/ paypal
-;; - sends email summary of order
-;; - redirects to view order page
-
-;; view.htm?id=xyz
-;; The .htm extension is superflous...
-;;   - dynamic responses include a content-type...
-;;   - slightly useful for editing template files?
-;;   - distinguishes between urls w/ views and actions only
-;; ? Should restful urls be used?
-;;   - /order/1
+(def strings
+  {:en {:title "Sistemi Moderni: Complete Purchase"}})
 
 ;; TODO: Do we need javascript to disable the confirm button to
 ;;       prevent a double press? Paypal prevents double processing...
@@ -42,16 +25,26 @@
   [:div.text_content
    [:p.title "COMPLETE PURCHASE"]
    [:p "Please review your final order and complete the purchase."]
-   [:p.title "Order Details"]
-   [:table (map (fn [k] [:tr [:td k] [:td (k details)]])
-                (sort (keys details)))]
+
+   [:table
+    [:caption.white {:style "text-align: left;"} "Order Total"]
+    [:tr [:td (:l_desc0 details)] [:td {:style "text-align:right; padding-left: 20px;"} "&euro;" (:itemamt details)]]
+    [:tr [:td "Shipping"] [:td {:style "text-align:right; padding-left: 20px;"} "&euro;" (:shippingamt details)]]
+    [:tr [:td "Tax"] [:td {:style "text-align:right; padding-left: 20px;"} "&euro;" (:taxamt details)]]
+    [:tr.white {:style "border-top: 1px solid white;"} [:td "Total"] [:td.white {:style "text-align:right; padding-left: 20px;"} "&euro;" (:itemamt details)]]]
+
+   [:table {:style "margin-top: 15px; margin-bottom: 15px; width: 100%;" }
+    [:caption.white {:style "text-align:left;"} "Shipping Address"
+     [:tr [:td (:shiptoname details)]]
+     [:tr [:td (:shiptostreet details)]]
+     [:tr [:td (:shiptocity details) ", " (:shiptostate details) " " (:shiptozip details)]]]]
+
    [:form {:action (tr/localize "pay") :method "post"}
     ;; TODO: Store these in the session.
     (map #(apply hidden-field %) (select-keys details [:token :payerid :paymentrequest_0_amt :paymentrequest_0_currencycode]))
     ;;           (hidden-field :paymentrequest_0_paymentaction "Sale") 
     (submit-button "Complete Purchase")]])
 
-;; http://localhost:5000/en/order/confirm.htm?token=EC-95235306K2096024R&PayerID=YGZNZL2T74SPS
 (defn handle
   [req]
   (log/info req)
@@ -113,7 +106,3 @@
 ;; shiptocountrycode	US
 
 ;; email	buyer_1301327961_per@sistemimoderni.com
-
-;; save all paypal data to database?
-;; - how to archive?
-;; - what about datomic?
