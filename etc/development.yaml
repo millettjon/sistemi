@@ -3,6 +3,3 @@ swank: true
 
 # Launch the website in a browser.
 launch-browser: true
-
-# Use the local postgres database.
-database-url: postgres://localhost/sistemi

@@ -67,5 +67,5 @@
      [&] [(wrap-file "www/raw") [&] make-404])))
 
 ;; Run this to reload the routes.
-#_(do (in-ns 'sistemi.core)
-      (def routes (build-routes)))
+#_ (do (in-ns 'sistemi.core)
+       (def routes (build-routes)))

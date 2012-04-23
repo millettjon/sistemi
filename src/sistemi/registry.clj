@@ -13,10 +13,14 @@
 (defn- load-file-safely
   "Loads a clj file catching and logging any exceptions."
   [file]
-  (try
-    (load-file (str file))
-    (catch Exception x
-      (log/error x (str "Exception loading file " file)))))
+  (let [file (str file)]
+    (try
+      (log/info "Loading file" file)
+      (load-file file)
+      (catch Exception x
+        (log/error x (str "Exception loading file " file)))
+      (catch LinkageError x
+        (log/error x (str "LinkageError loading file " file))))))
 
 (defn load-files
   "Loads all clj files in a directory in a breadth first manner."

@@ -2,8 +2,7 @@
   (:require [hiccup.core :as hcp]
             [clojure.string :as str]
             [util.path :as path])
-  (:use net.cgrand.enlive-html
-        locale.core
+  (:use locale.core
         sistemi.translate
         www.request))
 

@@ -12,7 +12,7 @@
 
 (def names
   {}
-  #_{:es "revisar"})
+  #_{:es "confirmar"})
 
 ;; confirm.htm
 ;; - gets order details from paypal
@@ -42,7 +42,7 @@
   [:div.text_content
    [:p.title "COMPLETE PURCHASE"]
    [:p "Please review your final order and complete the purchase."]
-   [:h2 "Order Details"]
+   [:p.title "Order Details"]
    [:table (map (fn [k] [:tr [:td k] [:td (k details)]])
                 (sort (keys details)))]
    [:form {:action (tr/localize "pay") :method "post"}
@@ -62,3 +62,58 @@
       (response (standard-page "" (body req details) 544)))))
 
 (sistemi.registry/register)
+
+;; ? Should we pass custom data through paypal? e.g., internal order number?
+;; ? Is there any way to go back to paypal and re-edit e.g., the shipping address?
+;; - or, should we just collect that ourselves?
+
+;; ? What if there is a currency conversion?
+;;   ? does paypal send the price in dollars or the conversion rate? (wtf?)
+;;     - nope
+;;     - note: this shouldn't be an issue for france
+;;     ? can we look it up somewhere?
+;; ? should we allow location to be switched?
+;;   ? should we just check the country code paypal sends back?
+
+;; ORDER DETAILS
+;; --------------------------------------------------------
+;; Custom Shelving: 63x61x21cm; rectangle; #38BD14   250.00
+;; Shipping                                           20.00
+;; Tax                                                25.00
+;; --------------------------------------------------------
+;; Total                                             295.00
+
+;; SHIPPING ADDRESS
+;; --------------------------------------------------------
+;; JONATHAN MILLETT
+;; 23950 butternut
+;; sturgis, MI 49091
+;; United States
+
+;; [CONFIRM ORDER]
+
+;; currencycode	EUR
+;; itemamt	250.00
+;; shippingamt	0.00
+;; handlingamt	0.00
+;; taxamt	0.00
+;; amt	250.00
+
+;; l_name0	Custom Shelving
+;; l_desc0	Shelving: 63x61x21cm; rectangle; #38BD14
+
+;; firstname	JONATHAN
+;; lastname	MILLETT
+
+;; shiptoname	JONATHAN MILLETT
+;; shiptostreet	23950 butternut
+;; shiptocity	sturgis
+;; shiptostate	MI
+;; shiptozip	49091
+;; shiptocountrycode	US
+
+;; email	buyer_1301327961_per@sistemimoderni.com
+
+;; save all paypal data to database?
+;; - how to archive?
+;; - what about datomic?

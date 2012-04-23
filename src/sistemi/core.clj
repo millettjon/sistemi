@@ -2,7 +2,7 @@
 ;; TODO: Consider disabling this for production.
 (clojure.core/require 'util.reflection)
 (util.reflection/warn-on-reflection
-  "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "net.cgrand.xml" "net.cgrand.enlive-html")
+  "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "cheshire.generate")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])
@@ -12,9 +12,7 @@
         clojure.contrib.strint
         (app config run-level)
         app.config.core
-        locale.core
-;        sistemi.routes
-        ))
+        locale.core))
 
 ;; ===== LOGGING =====
 ;; See: https://github.com/malcolmsparks/clj-logging-config
@@ -63,6 +61,7 @@
 (registry/load-files "src/sistemi/site")
 
 ;; ===== ROUTES =====
+(log/info "About to build routes.")
 (use 'sistemi.routes)
 (log/info "Bulding routes.")
 (def routes (build-routes))

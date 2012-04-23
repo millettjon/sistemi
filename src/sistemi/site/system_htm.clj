@@ -1,7 +1,6 @@
 (ns sistemi.site.system-htm
   (:require [util.string :as stru])
-  (:use net.cgrand.enlive-html
-        [ring.util.response :only (response)]
+  (:use [ring.util.response :only (response)]
         [sistemi translate layout]))
 
 (def names
