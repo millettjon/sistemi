@@ -8,7 +8,6 @@
 
 ;; References:
 ;; - Getting Started: https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECGettingStarted
-;; - Release Notes: https://www.x.com/community/ppx/release_notes/blog
 ;; - Sample Code:
 ;;   - https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/library_code
 ;;   - https://www.paypal-labs.com/integrationwizard/ecpaypal/cart.php

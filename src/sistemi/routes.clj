@@ -63,7 +63,7 @@
      [""] [wrap-detect-locale
            [&] locale-redirect]
 
-     ;; For naked URLs, serve static resources out of the web root.
+     ;; For naked URLs, serve static resources out of the raw root.
      [&] [(wrap-file "www/raw") [&] make-404])))
 
 ;; Run this to reload the routes.
