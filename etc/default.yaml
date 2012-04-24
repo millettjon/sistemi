@@ -9,4 +9,4 @@ internationalization:
     it: IT
 paypal:
   site: "sandbox"
-  version: "84.0"
+  version: "88.0"

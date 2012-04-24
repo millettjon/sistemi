@@ -11,12 +11,12 @@
   "Configuration for sandox and production sites."
   {:sandbox
    {:url "https://api-3t.sandbox.paypal.com/nvp"
-    :version "84.0"
+    :version "88.0"
     :version-url "https://www.sandbox.paypal.com"
     :xc-url "https://www.sandbox.paypal.com/webscr"}
 
    :production
    {:url "https://api-3t.paypal.com/nvp"
-    :version "84.0"
+    :version "88.0"
     :version-url "https://www.paypal.com"
     :xc-url "https://www.paypal.com/webscr"}})
