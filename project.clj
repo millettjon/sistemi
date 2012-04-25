@@ -40,6 +40,6 @@
                      ;; swank
                      [swank-clojure "1.4.2"]]
 
-      :dev-dependencies [[ring-mock "0.1.2" :exclusions [org.clojure/clojure]]
-                         [lein-marginalia "0.7.0"]
-                         ]))
+      :dev-dependencies [[ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]
+      :plugins [[codox "0.6.1"]]
+      ))
