@@ -38,7 +38,10 @@
                      [clj-yaml "0.3.1"]
 
                      ;; swank
-                     [swank-clojure "1.4.2"]]
+                     [swank-clojure "1.4.2"]
+
+                     ;; misc
+                     [ordered "1.2.0"]]
 
       :dev-dependencies [[ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]
       :plugins [[codox "0.6.1"]]

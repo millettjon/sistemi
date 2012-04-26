@@ -1,6 +1,7 @@
 (ns locale.core
   "Core definitions for the locale library."
-  (:use [util.except :only (check)]))
+  (:use ordered.set
+        [util.except :only (check)]))
 
 ;; ===== VARS =====
 (def locales
@@ -20,7 +21,7 @@
   "Sets the root binding for locales."
   [locales_]
   (alter-var-root #'locales
-                  (constantly (set locales_))))
+                  (constantly (into (ordered-set) locales_))))
 
 (defn set-default-locale!
   "Sets the root binding for default-locale."
