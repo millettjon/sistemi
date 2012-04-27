@@ -53,7 +53,9 @@
               url)
         url (if (empty? opts)
               url
-              (merge url (apply hash-map opts)))]
+              (if (= 1 (count opts))
+                (merge url (first opts))
+                (merge url (apply hash-map opts))))]
     (str url)))
 
 (defn canonicalize

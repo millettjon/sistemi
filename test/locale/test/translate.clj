@@ -64,7 +64,9 @@
        "bad" "bad")
  (are [a b c] (= (apply localize a lm req b) c)
        "/foo" [] "/foo"
-       "/order" [:query {:foo "bar"}] "/es/orden?foo=bar"))
+       "/order" [:query {:foo "bar"}] "/es/orden?foo=bar"
+       "/order" {:query {:foo "bar"}} "/es/orden?foo=bar"
+       ))
 
 (deftest canonicalize-test
   (are [a b] (= (canonicalize a cm req) b)
