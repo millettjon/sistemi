@@ -34,10 +34,10 @@
 
 (defn qualifys
   "Localizes and qualifies a url as a sibling of the uri of the current request."
-  [url]
+  [url & opts]
   (let [url (url/new-URL url)
         path (:path url)
-        lurl (localize url)]
+        lurl (apply localize url opts)]
     (if (path/absolute? path)
       (url/qualify lurl req/*req*)
       (let [locale (:locale req/*req*)
