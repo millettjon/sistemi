@@ -7,6 +7,9 @@
         [locale.core :only (full-locale)]
         [ring.util.response :only (redirect)]))
 
+(def names
+  {})
+
 (defn pay-paypal-order
   [amount req]
   (let [pay-data {:paymentrequest_0_paymentaction "Sale"
@@ -27,7 +30,7 @@
         token (params :token)
         result (pay-paypal-order amount req)]
     (log/info "XC PAY" result)
-    (redirect (str (url/qualify (tr/localize "view.htm" {:query {:id token}}) req)))))
+    (redirect (str (tr/qualifys "view.htm" {:query {:id token}})))))
 
 ;; TODO: Can something else other than the token be used?
 ;; TODO: Are there any other related nvp api calls?
@@ -42,3 +45,5 @@
 ;; 4095k total bytes per domain
 ;; 20 cookies max per domain
 ;; 300 total cookies
+
+(sistemi.registry/register)
