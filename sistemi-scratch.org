@@ -1,0 +1,479 @@
+- check status of leiningen google group comment
+- check status of slingshot pull request
+
+Setup staging site.
+  + add dns cname for staging.sistemimoderni.com
+  + add custom domains addon for heroku app
+  + exercise
+  - add copeland's latest changes
+  - does the raw view work?
+  - pre-render language translations?
+    - to memory?
+  - review paypal
+  - get back to george
+  - get back to chris
+Setup dev environment for Copeland.
+  - heroku?
+  - linode? (dev.sistemimoderni.com)
+    - add account for her
+    - ADV: simple to use (ftp access)
+    - ADV: simple to debug (swank)
+    - DIS: less secure
+  - virtual host?
+
+Cloud management: https://juju.ubuntu.com/
+
+Compile emacs from source.
+  - http://chrisperkins.blogspot.com/2011/07/building-emacs-24.html
+  ./autogen.sh
+  ./configure --prefix=/opt/emacs
+  make
+  sudo make install
+  sudo update-alternatives --install /usr/bin/emacs emacs /opt/emacs/bin/emacs 27
+  sudo update-alternatives --config emacs
+
+Setup conky: http://conky.sourceforge.net/
+Setup bitlbee: http://www.bitlbee.org/main.php/news.r.html
+Setup erc: to read #clojure.
+Setup erc: to read YahooIM.
+Setup erc: to read google chat.
+Setup conkeror: http://conkeror.org/
+Use magit: http://alexvollmer.com/posts/2009/01/18/meet-magit/
+Technomancy's setup: http://technomancy.us/137
+Setup tmux on linode: http://tmux.sourceforge.net/
+Setup ability to remote pair: how?
+  pair on linode
+  VPN
+Read: The Man Who Was Thursday http://www.feedbooks.com/book/3680
+MPD: http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki
+Run each dev setup in its own VM?
+  http://technomancy.us/150
+  https://www.virtualbox.org/ (Oracle)
+  http://vagrantup.com/ (Uses virtuabox and chef or puppet or other)
+  - good for sharing the dev env with the group; runs on windows/mac/linux hosts
+  - good for isolating environments for different companies
+    ? how can user settings be stored/merged with the virtual box setup?
+      git?
+    resources: a) git repo for source b) virtual box c) git repo for home directory
+Setup a private maven repo:
+  http://technomancy.us/147
+  archiva
+Learn: M-x erevision
+
+? is the opt directory there?
+? what leiningen version is being used? 1.5.2
+    - a1fa43400295d57a9acfed10735c1235904a9407
+? what is the classpath being set to?
+  ? what if i manually set the classpath?
+    ? CLASSPATH environment var?
+    ? -Xbootclasspath?
+    ? -cp option?
+
+useradd \
+  --comment "unprivileged user for sistemi web apps" \
+  --home /dev/null \
+  -M \
+  --user-group \
+  --shell /bin/false \
+  sistemi
+
+foreman export upstart tmp -a sistemi -p=5001
+
+---------- Mensaje reenviado ----------
+Luis A Mansilla Cardenas <tonomansilla@yahoo.es>
+Alejandro Bonnault <abonnault@gmail.com>
+
+Asunto: cotizacion
+
+  Note: :extra-classpath-dirs is not supported in leiningen 1.5.2.
+? what jvm version is being used?
+? what clojure version is being used?
+? how can this error be fixed? Warning: *classpath* not declared dynamic and thus is not dynamically rebindable, but its name suggests otherwise. Please either indicate ^:dynamic *classpath* or change the name.
+Note: Heroku log lines are soft-wrapped at > 1000 chars.
+
+file:/app/src/
+file:/app/test/
+file:/app/classes
+file:/app/lib/ring-jetty-adapter-0.3.11.jar
+file:/app/lib/clj-stacktrace-0.2.2.jar
+file:/app/lib/jetty-6.1.26.jar
+file:/app/lib/joda-time-1.6.jar
+file:/app/lib/slf4j-api-1.6.1.jar
+file:/app/lib/commons-codec-1.4.jar
+file:/app/lib/moustache-1.0.0.jar
+file:/app/lib/ring-persistent-cookies-0.1.0.jar
+file:/app/lib/log4j-1.2.16.jar
+file:/app/lib/jetty-util-6.1.26.jar
+file:/app/lib/tagsoup-1.2.jar
+file:/app/lib/ring-core-0.3.11.jar
+file:/app/lib/commons-io-1.4.jar
+file:/app/lib/tools.logging-0.1.2.jar
+file:/app/lib/commons-fileupload-1.2.1.jar
+file:/app/lib/enlive-1.0.0.jar
+file:/app/lib/java.jdbc-0.0.5.jar
+file:/app/lib/servlet-api-2.5.jar
+file:/app/lib/clojure-contrib-1.2.0.jar
+file:/app/lib/postgresql-8.4-702.jdbc4.jar
+file:/app/lib/slf4j-log4j12-1.6.1.jar
+file:/app/lib/ring-servlet-0.3.11.jar
+file:/app/lib/hiccup-0.3.6.jar
+file:/app/lib/servlet-api-2.5-20081211.jar
+file:/app/lib/clj-time-0.3.0.jar
+file:/app/lib/snakeyaml-1.5.jar
+file:/app/lib/clojure-1.3.0.jar
+file:/app/lib/ring-devel-0.3.11.jar
+file:/app/lib/clj-yaml-0.3.0-20101010.033133-1.jar
+
+
+# How to set the RUN_LEVEL on heroku.
+heroku config:add RUN_LEVEL=:staging
+
+- both jam and jam.sm use the same ssh agent (i.e., the gui one)
+  - setup jam.sm account to use its own agent since github auth works via key
+  - keychain?
+- e alias is not defined in the root account
+- .bash.d directory is not setup
+- setup HIDS?
+- setup VPN?
+- setup firewall?
+- fix emacs infrastructure
+- jetty should run as a protected user
+  - how to enforce this using foreman?
+    ? what dirs if any does jetty need write access to?
+    http://ddollar.github.com/foreman/
+
+- get running as limited user on linode
+  - useradd -b
+  - will need access to web root and log file directory
+  - how to protect home directory?
+
+- fix emacs infrastructure locally
+  - emacs should work the same from either GUI, jam, or jam.sm
+    - same leiningen, emacs packages etc
+  - emacs 24?
+  - manage emacs packages and code snippers
+  - remove setup from sistemi source?
+
+How to print a stacktrace at the repl:
+(use 'clojure.stacktrace)
+(print-stack-trace *e 5)
+(require 'net.cgrand.enlive-html)
+
+? will jack-in connect to an already running swank server if one exists?
+  src/leiningen/jack_in.clj
+    swank_elisp_payloads.clj
+? can i eval an sexp when a slime clojure repl is opened?
+  (e.g., to use clojure.repl in user namespace)
+  (wtf)
+
+(use 'clojure.repl)
+(use 'clojure.java.javadoc)
+
+(intern 'clojure.core 'javadoc clojure.java.javadoc/javadoc)
+(let [orig-ns *ns*]
+  (in-ns 'clojure.core)
+  (def #^{:macro true} doc #'clojure.repl/doc)
+  (in-ns orig-ns))
+
+javadoc helper:
+http://richhickey.github.com/clojure/clojure.java.javadoc-api.html
+
+TODO: Continuous Deployment.
+
+Mom Trip:
+ - Halloween costumes
+ - Birthday presents
+ - Birthday gifts for other kids
+
+House Fixing:
+  Maria here: 10/4 -> 10/11
+  - living room:
+    - fix door
+    - paint ceiling
+    - re-finish floor
+    - fix lights
+  - kitchen:
+    - install air extractor
+    - install sink
+    - clean paint off walls
+    - paint wall
+  - dispensa:
+    - seal window (remove window?)
+    - widen door?
+  - bedroom:
+    - fix curtain rods
+    - paint
+  - office/closet:
+    - remove/seal large door window
+    - fix drywall
+    - paint large shelves
+    - install more shelves?
+    - make small closet
+      - remove small window (seal it instead?)
+      - install light
+      - install shelves and hangars
+  - galpon:
+    - fix roof? (enlarge to cover whole area?)
+    - fix siding?
+    - fix door?
+  - windows
+    - seal all
+    - silicone all
+    - add latches to small windows (4)
+    - add latches to large windows (how?)
+  - fix gutters
+  - cut down large trees
+  - make parking space for quincho
+
+Santiago Trip:
+around 10/24
+
+US Trip Planning:
+Dec 10th
+Maria leave to fly back on 27th.
+  dave
+  brian
+
+TODO: clojure benchmarking: http://www.bestinclass.dk/index.clj/2010/02/benchmarking-jvm-languages.html
+TODO: clojure dev site: http://dev.clojure.org/display/design/Where+Did+Clojure.Contrib+Go
+
+TODO: clojure.contrib.mock: http://notesonclojure.blogspot.com/2010/06/mocking-with-clojurecontribmock.html
+
+TODO: clojure contrib research:
+- clojure.contrib.gen-html-docs: is this different than autodoc?
+
+TODO: Basic performance testing of web stack.
+  ? Is it worth it to cache translated templates?
+
+splash page:
+  ? does it work on ipad/iphone?
+  ? does it work on android?
+  - doesn't fit on a netbook screen
+  - doesn't work if js is disabled
+  ? does it need translation?
+    - possibly the title
+    - the question to select language
+  - the languages should be in their native spelling
+  - the nivo stuff is referencing a file /images/loading.gif that doesn't exist
+    $ grep -r "loading" .
+    ./nivo-slider.css:    background:url(images/loading.gif) no-repeat 50% 50%;
+    ./themes/pascal/pascal.css:    background:url(loading.gif) no-repeat 50% 50%;
+    ./themes/default/default.css:	background:#fff url(loading.gif) no-repeat 50% 50%;
+    ./themes/orman/orman.css:    background:url(loading.gif) no-repeat 50% 50%;
+
+Ability to skip intro?
+  store status in a cookie (intro=id) (intro id)
+
+TODO: Learn more about SEO keywords (meta keywords and description).
+  ? Can this be factored out?
+  ? Do these need translated?
+
+TODO: What should the doctype be?
+TODO: International chars are not working in index.html.
+ - is it the charset or the font?
+
+TODO: ? What are heroku's support options for production outages?
+
+good email signup page: http://42floors.com/
+
+Convert from dos to unix.
+  find . -name "*.css" -o -name "*.txt" -o -name "*.htm" -o -name "*.js" -exec fromdos \{} \;
+  .css
+  .txt
+  .htm
+  .js
+Qualify links (src and href)
+  - move links in to default locale?
+  - serve files out of the root if not found in the locale?
+    - won't work for viewing things in raw
+  - make symlinks? YUCK
+  - transform them using enlive?
+
+? how many staging sites can i create?
+
+http://sharp-river-7467.herokuapp.com/
+
+heroku login                    # upload your ssh key
+heroku create --stack cedar     # create a cedar stack app based on the current git repo
+git push heroku master          # deploy
+
+TODO: Heroku Release Management Addon: http://blog.heroku.com/archives/2010/11/17/releases/
+
+;; TODO:
+;; - setup heroku staging site
+;; - get running on heroku
+;; - port home page to live infrastructure
+
+shirky: http://www.shirky.com/writings/group_enemy.html
+  - flirting, paranoia towards outsiders, religious closed mindedness
+group structure:
+  - robert's rules of order
+  - hacker news posting guidelines
+  - constitutions
+
+;; DIRECTORY LAYOUT
+;; - static files
+;;   - common /
+;;   - localized /en
+;;      fallback to /en if no localized version
+;; - templates and snippets
+;;   - common      /raw
+;;   - localized   /raw/en
+;;     ? fallback to common if no localized version?
+;;
+;; FILESYSTEM LAYOUT
+;; src/
+;;   sistemi/
+;;     site/          ;; web root
+;;       profile/
+;;         locale/
+;;         select-language-html/
+;; www/
+;;   raw/
+;;     profile/
+;;       select-language.html
+;;
+
+TODO: Review heroku security
+ - vm security
+ - data security
+ - source code security
+ - backups
+ - insider access
+ - firewall
+   - can firewall be updated dynamically?
+ - intrusion detection
+
+TODO: Privacy policy.
+TODO: Analyze weblogs to find files that are never used.
+
+TODO: Setup list of "periodic" tasks.
+- audits (code, security, backups)
+- updating dependencies to latest versions
+
+TODO: Clean up emacs configuration.
+      - Install el-get: https://github.com/dimitri/el-get
+      - Remove stuff from sm/opt where possible.
+      - Get working from jam (and gnome icon).
+      - Move emacs source that has no git repo...
+TODO: Install Deft mode: http://jblevins.org/projects/deft/
+TODO: Install emacs24?
+
+http://alexhenning.github.com/blog/2010/11/05/emacs24-on-ubuntu/
+sudo aptitude install libdbus-1-dev libgconf2-dev libgif-dev libgpm-dev libgtk2.0-dev libjpeg62-dev libm17n-dev libncurses5-dev libotf-dev librsvg2-dev libtiff4-dev libXpm-dev
+cd emacs
+make configure  # this step was left out of the instructions
+./configure
+
+TODO: Learn emacs/git integration.
+TODO: translate meta tags in head: keywords, description
+TODO: Get irc working on linode?
+TODO: Run convergence node on linode?
+TODO: Blackhat?
+TODO: Clojure Conj?
+TODO: clojurescript on node: http://mmcgrana.github.com/2011/09/clojurescript-nodejs.html
+
+;; ======
+;; Create a checkout page with the paypal express checkout button.
+;; ? do symlinks work on heroku?
+;; - make a call to the paypal NVP API
+;;   - get paypal credentials (signature)
+
+;; setup production app on heroku
+;; setup staging app on heroku
+;; setup ssl on heroku (production and staging)
+;; ? move redirect for bare domain to heroku?
+;; setup monitoring for all sites
+;; - http://newrelic.com/
+
+* scratch
+;; TODO: facebook privacy countermeasures: http://jwz.livejournal.com/1511528.html
+;;       http://news.ycombinator.com/item?id=2957119
+;; TODO: use tracing when debugging http://richhickey.github.com/clojure-contrib/trace-api.html
+
+;; PRIVACY
+;; http://news.ycombinator.com/item?id=2957165
+;;   https://easylist-downloads.adblockplus.org/easyprivacy.txt
+
+;; TODO: setup staging site
+;; - http://stackoverflow.com/questions/1489393/good-git-deployment-using-branches-strategy-with-heroku
+;; - http://stackoverflow.com/questions/1279787/staging-instance-on-heroku
+;; - store run level in database and make sure the database run level matches the app run level when connecting
+;; - https://github.com/fastestforward/heroku_san
+
+;; TODO: Move this some where else.
+;; If the database is down:
+;; - the website should downgrade gracefully
+;; - new instances of the website should be able to start
+;; If paypal is down:
+;; - the website should downgrade gracefully
+
+;; Prelaunch checklist
+;; http://news.ycombinator.com/item?id=2883651
+;; sql injection audit - http://sqlmap.sourceforge.net/
+;; securitry - https://www.owasp.org/index.php/Category:OWASP_Top_Ten_Project
+
+;; Task Items
+;; Get paypal checkout express working in the sandbox.
+;; Setup a windows dev box for CAD work.
+;; Setup a staging server.
+;; Pages 1-N
+;; ? Is a shopping cart necessary?
+;; Internationalization
+;; Backup
+;; - Define policy.
+;; - github; hosted on rackspace
+;; - heroku; hosted on AWS
+;; - tarsnap; hosted on AWS
+;  - local?
+;; Recovery
+;; - github outage
+;; - heroku outage
+;; - AWS outage (lose heroku and tarsnap)
+;; Monitoring
+;; Support meeting
+;; Analyitics
+;; Security
+;; - Define policy.
+;; - Firewall
+;; - IDS
+;; - VPN
+
+
+Getting started with express checkout.
+https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_ECGettingStarted
+
+paypal express checkout
+There are two buttons:
+- Pay with Express Checkout - initiates the paypal checkout flow
+- Express Checkout "mark" - The mark enables the buyer to choose Express Checkout from the page that
+  specifies the payment method, called the payment page, in case the buyer did not start with Pay with
+  Express Checkout.
+
+Programming experience. When the buyer clicks a button, you must provide code that requests a PayPal
+server to set up or process the transaction and code to handle the response. PalPal provides an
+easy-to-user interface built on the HTTP request-response model, as well as a more complicated SOAP
+web services interface. PayPal also provides Software Development Kits (SDKs) that provide an
+interface in various programming languages, such as PHP, Ruby, Java, and .NET languages like
+C#. Although you need not know a specific language, you will need to understand programming logic,
+especially the request-response model, error handling, and the nuances of writing application-level
+code.
+
+Implementing the Simplest Express Checkout Integration
+
+The simplest Express Checkout integration requires you to set up a PayPal button and call the
+following PayPal API operations when your buyer clicks the button: SetExpressCheckout,
+DoExpressCheckoutPayment, and typically, GetExpressCheckoutDetails. You must also enable the buyer
+to select PayPal as the payment method after the buyer starts to check out. Thus, you must call
+these API operations from two places. You must perform these API operations on your checkout page
+and on your payment method page.
+
+
+Paypal NVP (name/value pair) SDK
+https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/library_download_sdks
+
+* authentication
+http://stackoverflow.com/questions/549/the-definitive-guide-to-website-authentication/
+http://stackoverflow.com/questions/549/the-definitive-guide-to-forms-based-website-authentication
+** 2 factor auth
+- http://www.duosecurity.com/pricing: in A2; 2 factor for server, vpn, website
