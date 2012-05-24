@@ -27,26 +27,6 @@ The paypal configuration is constructed as follows:
 ;; ? Should restful urls be used?
 ;;   - /order/1
 
-TESTING
-;; - the browser used to test the client in the sandbox must be
-;;   logged in using a real paypal sandbox account
-
-- Design shelving and click "submit".
-- Review specifications and click "checkout with paypal".
-- Click the "don't have a paypal account" link.
-- Select a country.
-- Enter credit card info, name, and address.
-- Click Review and Continue.
-- Select continue with papal as guest and click continue.
-- Click continue
-- Click confirm.
-
-;; buyer_1301327961_per@sistemimoderni.com
-;; visa/delta/electron
-;;   4342506098458263
-;;   03/16
-;;   000
-;; Note: a valid address and phone number are required
 ;; Fake phone numbers:
 ;; - http://en.wikipedia.org/wiki/555_%28telephone_number%29
 ;; - 269 555 0100
