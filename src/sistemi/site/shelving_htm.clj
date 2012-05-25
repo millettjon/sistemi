@@ -23,16 +23,27 @@
   (apply str (interpose "," (map #(str "'" % "'") (range min (inc max))))))
 
 (defn dimension-options
-  [min max]
-  (map
-   (fn [i] [:option {:value i} (str i " cm")])
-   (range min (inc max))))
+  ([min max] (dimension-options min max nil))
+  ([min max selected]
+     (map
+      (fn [i]
+        (let [attrs {:value i}
+              attrs (if (= selected i)
+                     (assoc attrs :selected "true")
+                     attrs)]
+          [:option attrs (str i " cm")]))
+      (range min (inc max)))))
 
 (defn head
   []
-  (seq [;; combo boxes
-        [:script {:type "text/javascript" :src "bootstrap/js/bootstrap-combobox.js"}]
-        [:link {:rel "stylesheet" :href "bootstrap/css/bootstrap-combobox.css" :type "text/css"}]
+  (seq [;; chosen
+        [:link {:rel "stylesheet" :href "chosen/chosen.css" :type "text/css"}]
+        [:script {:type "text/javascript" :src "chosen/chosen.jquery.js"}]
+
+        ;; customSelect
+        [:script {:type "text/javascript" :src "jquery.customSelect/customSelect.jquery.js"}]
+        [:style "span.customStyleSelectBox {height: 23px; line-height: 24px; width: 87px; background-color: #fff; color:#555; padding:0px 3px 0px 7px; border:1px solid #e7dab0; -moz-border-radius: 5px; -webkit-border-radius: 5px;border-radius: 5px 5px; }"]
+        [:style ".customStyleSelectBoxInner {background:url(jquery.customSelect/arrow.png) no-repeat center right; }"]
 
         ;; color picker
         [:script {:type "text/javascript" :src "farbtastic/farbtastic.js"}]
@@ -41,17 +52,17 @@
         ;; styles
         [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
 
-        #_[:style "#shelf-form .control-label {width: 60px; color: #FFF;}"]
-        #_[:style "#shelf-form .controls {margin-left: 70px;}"]
-        [:style "#shelf-form .control-label {width: 100px; color: #FFF;}"]
+        [:style "#shelf-form .control-group {margin-bottom: 12px}"]
+        [:style "#shelf-form .control-label {width: 100px; color: #FFF; padding-top: 4px}"]
         [:style "#shelf-form .controls {margin-left: 115px;}"]
 
-        [:style "#shelf-form input, #shelf-form select {width: 60px;}"]
-        [:style "#shelf-form #color {width: 87px;}"]
-        [:style ".dropdown-menu {min-width: 95px;}"]
+        [:style "#shelf-form .chzn-select {width: 100px;}"]
+        [:style "#shelf-form input {border-radius: 5px;}"]
+        [:style "#shelf-form select {height: 23px; line-height: 24px;}"]
+
+        [:style "#shelf-form #color {width: 90px;}"]
         [:style "#shelf-form #submit {margin-top: 20px;}"]
-        #_[:style ".combobox-container:after {clear: none;}"]
-]))
+        ]))
 
 (defn body
   []
@@ -67,87 +78,51 @@
       [:div.control-group
        [:label.control-label {:for "width"} "Width"]
        [:div.controls
-        [:select#width.combobox {:name "width"}
-         [:option {:value ""} ""]
-         (dimension-options 60 240)]]]
+        [:select#width.chzn-select {:name "width" :tabindex 1}
+         (dimension-options 60 240 120)]]]
 
       [:div.control-group
        [:label.control-label {:for "height"} "Height"]
        [:div.controls
-        [:select#height.combobox {:name "height"}
-         [:option {:value ""} ""]
-         (dimension-options 60 240)]]]
+        [:select#height.chzn-select {:name "height" :tabindex 1}
+         (dimension-options 60 240 120)]]]
 
       [:div.control-group
        [:label.control-label {:for "depth"} "Depth"]
        [:div.controls
-        [:select#depth.combobox {:name "depth"}
-         [:option {:value ""} ""]
-         (dimension-options 20 39)]]]
+        [:select#depth.chzn-select {:name "depth" :tabindex 1}
+         (dimension-options 20 39 30)]]]
 
       [:div.control-group
        [:label.control-label {:for "cutout"} "Cutout"]
        [:div.controls
-        [:select#cutout.combobox {:name "cutout"}
-         [:option ""]
-         #_[:option "none"]
-         [:option "oval"]
-         [:option "rectangle"]
-         [:option "heart"]]]]
+        [:select#cutout.customStyleSelectBox {:name "cutout" :style "width: 100px" :tabindex 1}
+         [:option {:selected "true"} "semplice"]
+         [:option "ovale"]
+         [:option "quadro"]]]]
+
+      [:div.control-group
+       [:label.control-label {:for "finish"} "Finish"]
+       [:div.controls
+        [:select#finish.customStyleSelectBox {:name "finish" :style "width: 100px" :tabindex 1}
+         [:option {:selected true} "matte"]
+         [:option {:disabled true} "satin"]
+         [:option {:disabled true} "glossy"]]]]
 
       [:div.control-group
        [:label.control-label {:for "color"} "Color"]
        [:div.controls
-        [:input#color {:type "text" :value "#AB003B" :name "color"}]]]
+        [:input#color {:type "text" :value "#AB003B" :name "color" :tabindex 1}]]]
       [:div#colorpicker {:style "margin-left: 20px;"}]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit"} "Submit"]]]]
-
-    #_[:form {:style "margin-left: 10px; margin-top: 10px;"}
-     [:label {:style "color: #FFF;"} "Height"]
-     [:div.input-append
-      [:input#height {:type "text" :data-provide "typeahead" :placeholder "(60-240)" :style "width: 50px;"}]
-      [:span.add-on {:style "vertical-align: top;"} "cm"]]
-
-     ;; [:label {:style "color: #FFF;"} "Width"]
-     ;; [:div.input-append
-     ;;  [:input#width {:type "text" :data-provide "typeahead" :placeholder "(60-240)" :style "width: 50px;"}]
-     ;;  [:span.add-on {:style "vertical-align: top;"} "cm"]]
-
-     [:style "input {width: 75px;}"]
-     [:label {:style "color: #FFF;"} "Width"]
-     [:select.combobox {:style "width: 75px;"}
-      [:option {:value "60" :style "width: 75px;"} "60 cm"]
-      ]
-
-     [:label {:style "color: #FFF;"} "Depth"]
-     [:div.input-append
-      [:input#depth {:type "text" :data-provide "typeahead" :placeholder "(20-39)" :style "width: 50px;"}]
-      [:span.add-on {:style "vertical-align: top;"} "cm"]]
-
-     [:label {:style "color: #FFF;"} "Cutout"]
-     [:select {:style "width: 100px;"}
-      [:option "none"]
-      [:option "oval"]
-      [:option "rectangle"]
-      [:option "heart"]]
-
-     [:label {:style "color: #FFF;"} "Color"]
-     [:input#color {:type "text" :style "width: 100px;" :value "#ffffff"}]
-     [:div#colorpicker]
-
-     ]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
 
     [:script {:type "text/javascript"}
      "jQuery(document).ready(function() {
-         //var heightList = [" (shelf-range 60 240) "];
-         //var depthList = [" (shelf-range 20 39) "];
-         //$('#height').typeahead({source: heightList, items:5});
-         //$('#width').typeahead({source: heightList, items:5});
-         //$('#depth').typeahead({source: depthList, items:5});
          $('#colorpicker').farbtastic('#color');
-         $('.combobox').combobox();         
+         $('.chzn-select').chosen();
+         $('.customStyleSelectBox').customSelect();
      });"
      ]]
    ])

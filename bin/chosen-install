@@ -1,0 +1,26 @@
+#!/usr/bin/ruby
+# -*- coding: utf-8 -*-
+
+# Install chosen from a local repo.
+# See: http://harvesthq.github.com/chosen/
+
+NAME = File.basename($0)
+PROJECT_HOME = File.expand_path(File.dirname($0) + "/..")
+
+# Prints usage with an optional error message.
+def usage(message = nil)
+  STDERR.puts "Error: #{message}\n\n" if message
+  STDOUT.puts <<EOM
+NAME: #{NAME} - Installs files from chosen to the current project.
+USAGE: #{NAME} [CHOSEN_HOME]
+EOM
+  exit 1
+end
+
+ARGV.length < 2 or usage
+CHOSEN_HOME = ARGV[0]
+CHOSEN_HOME ||= File.expand_path("~/src/chosen")
+
+File.exists?(CHOSEN_HOME) or usage("Directory '#{CHOSEN_HOME}' doesn't exist.")
+
+system "rsync -av --delete '#{CHOSEN_HOME}/chosen' '#{PROJECT_HOME}/www/raw'"
