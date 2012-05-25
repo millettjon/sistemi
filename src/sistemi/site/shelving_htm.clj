@@ -42,7 +42,7 @@
 
         ;; customSelect
         [:script {:type "text/javascript" :src "jquery.customSelect/customSelect.jquery.js"}]
-        [:style "span.customStyleSelectBox {height: 23px; line-height: 24px; width: 87px; background-color: #fff; color:#555; padding:0px 3px 0px 7px; border:1px solid #e7dab0; -moz-border-radius: 5px; -webkit-border-radius: 5px;border-radius: 5px 5px; }"]
+        [:style "span.customStyleSelectBox {height: 23px; line-height: 24px; width: 88px; background-color: #fff; color:#555; padding:0px 3px 0px 7px; border:1px solid #e7dab0; -moz-border-radius: 5px; -webkit-border-radius: 5px;border-radius: 5px 5px; }"]
         [:style ".customStyleSelectBoxInner {background:url(jquery.customSelect/arrow.png) no-repeat center right; }"]
 
         ;; color picker

@@ -15,6 +15,12 @@
 	  selectBoxSpan.css({display:'inline-block'});
 	  selectBoxSpanInner.css({width:selectBoxWidth, display:'inline-block'});
 	  var selectBoxHeight = parseInt(selectBoxSpan.height()) + parseInt(selectBoxSpan.css('padding-top')) + parseInt(selectBoxSpan.css('padding-bottom'));
+          $(this).focus(function(){
+            selectBoxSpan.css({'border-color':'#52A8EC'});
+          });
+          $(this).blur(function(){
+            selectBoxSpan.css({'border-color':'#E7DAB0'});
+          });
 	  $(this).height(selectBoxHeight).change(function(){
 	    // selectBoxSpanInner.text($(this).val()).parent().addClass('changed');   This was not ideal
 	    selectBoxSpanInner.text($(this).find(':selected').text()).parent().addClass('changed');
