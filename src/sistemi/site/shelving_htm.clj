@@ -1,5 +1,7 @@
 (ns sistemi.site.shelving-htm
-  (:require [util.string :as stru])
+  (:require [util.string :as stru]
+            [www.request :as r]
+            [www.form :as f])
   (:use [ring.util.response :only (response)]
         [sistemi translate layout]))
 
@@ -17,22 +19,6 @@
                        personalize all of our offerings.")}}
    :es {}
    :fr {}})
-
-(defn shelf-range
-  [min max]
-  (apply str (interpose "," (map #(str "'" % "'") (range min (inc max))))))
-
-(defn dimension-options
-  ([min max] (dimension-options min max nil))
-  ([min max selected]
-     (map
-      (fn [i]
-        (let [attrs {:value i}
-              attrs (if (= selected i)
-                     (assoc attrs :selected "true")
-                     attrs)]
-          [:option attrs (str i " cm")]))
-      (range min (inc max)))))
 
 (defn head
   []
@@ -78,41 +64,32 @@
       [:div.control-group
        [:label.control-label {:for "width"} "Width"]
        [:div.controls
-        [:select#width.chzn-select {:name "width" :tabindex 1}
-         (dimension-options 60 240 120)]]]
+        (f/select :width {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "height"} "Height"]
        [:div.controls
-        [:select#height.chzn-select {:name "height" :tabindex 1}
-         (dimension-options 60 240 120)]]]
+        (f/select :height {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "depth"} "Depth"]
        [:div.controls
-        [:select#depth.chzn-select {:name "depth" :tabindex 1}
-         (dimension-options 20 39 30)]]]
+        (f/select :depth {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "cutout"} "Cutout"]
        [:div.controls
-        [:select#cutout.customStyleSelectBox {:name "cutout" :style "width: 100px" :tabindex 1}
-         [:option {:selected "true"} "semplice"]
-         [:option "ovale"]
-         [:option "quadro"]]]]
+        (f/select :cutout {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "finish"} "Finish"]
        [:div.controls
-        [:select#finish.customStyleSelectBox {:name "finish" :style "width: 100px" :tabindex 1}
-         [:option {:selected true} "matte"]
-         [:option {:disabled true} "satin"]
-         [:option {:disabled true} "glossy"]]]]
+        (f/select :finish {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "color"} "Color"]
        [:div.controls
-        [:input#color {:type "text" :value "#AB003B" :name "color" :tabindex 1}]]]
+        (f/text :color {:tabindex 1})]]
       [:div#colorpicker {:style "margin-left: 20px;"}]
 
       [:div {:style "text-align: right"}
@@ -127,8 +104,18 @@
      ]]
    ])
 
+(def fields
+  {:width {:type :bounded-number :units "cm" :min 60 :max 240 :default 120}
+   :height {:type :bounded-number :units "cm" :min 60 :max 240 :default 120}
+   :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30}
+   :cutout {:type :set :options ["semplice" "ovale" "quadro"] :default "semplice"}
+   :finish {:type :set :options ["matte" "satin" {:disabled true} "glossy" {:disabled true}] :default "matte"}
+   :color {:type :rgb :default "#AB003B"}
+   })
+
 (defn handle
   [req]
-  (response (standard-page (head) (body) 544)))
+  (response (standard-page (head) (f/with-form fields (:params req) (body)) 544)))
 
+#_ (remove-ns 'sistemi.site.shelving-htm)
 (sistemi.registry/register)
