@@ -1,10 +1,10 @@
 (ns sistemi.layout
   (:require [hiccup.core :as hcp]
             [clojure.string :as str]
-            [util.path :as path])
-  (:use locale.core
-        sistemi.translate
-        www.request))
+            [locale.core :as l]
+            [util.path :as path]
+            [sistemi.translate :as tr]
+            [www.request :as req]))
 
 (def menu-data
   [:home
@@ -20,25 +20,25 @@
 
 (defn menu
   []
-  (let [cur-page (path/first (:uri *req*))]
+  (let [cur-page (path/first (:uri req/*req*))]
     (for [item menu-data]
       (if (vector? item)
         ;; submenu
         (let [key (first item)
-              label (translate :menu key)]
+              label (tr/translate :menu key)]
           [:li.menui [:a.menui {:href "#"} [:span label]]
            [:ul.menum.submenu
             (for [item (rest item)]
               (let [page (str "/" (name item) ".htm")
-                    label (translate :menu key item)]
+                    label (tr/translate :menu key item)]
                 [:li.menui
-                 [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (localize page)} label]]
+                 [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page)} label]]
                 ))]])
         ;; regular item
         (let [page (str "/" (name item) ".htm")
-              label (translate :menu item)]
+              label (tr/translate :menu item)]
           [:li.menui
-           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (localize page)} label]]
+           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page)} label]]
           )))))
 
 (defn doctype-html5
@@ -49,10 +49,10 @@
   [head body height]
   (doctype-html5
    (hcp/html
-    [:html {:lang (*req* :locale)}
+    [:html {:lang (req/*req* :locale)}
      [:head
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
-      [:title  (translate :title)]
+      [:title  (tr/translate :title)]
       [:link {:href "/bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/css/layout.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
@@ -81,7 +81,7 @@
         [:div.span6
          [:div.greyborder_br
           ;; Note: oversized line-height is used to acheive vertical centering
-          {:style "line-height: 39px; text-align: center;"} (translate :version)]]]
+          {:style "line-height: 39px; text-align: center;"} (tr/translate :version)]]]
 
        ;; ----- HEADER ROW -----
        [:div.row {:style "height: 136px"}
@@ -91,11 +91,11 @@
           [:div {:style "padding-left: 30px; padding-top: 25px;"}
            [:div#lang 
             (->>
-             locales
+             l/locales
              (map (fn [locale]
-                    (if (= locale (*req* :locale))
+                    (if (= locale (req/*req* :locale))
                       [:a.select {:href "#"} locale]
-                      [:a {:href (localize "/profile/locale" :query {:lang locale})} locale])))
+                      [:a {:href (tr/localize "/profile/locale" :query {:lang locale})} locale])))
              (interpose [:span.line "|"]))]
 
            [:img {:src "/img/block-logo.gif" :alt "logo" :style "margin-bottom: 7px;"}]]]]
@@ -104,13 +104,13 @@
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
           [:ul {:style "padding-top: 28px;"}
            [:li 
-            [:a { :href "#"} (translate :signup)]]
+            [:a { :href "#"} (tr/translate :signup)]]
            [:li 
-            [:a { :href "#"} (translate :contact)]]]]]
+            [:a { :href "#"} (tr/translate :contact)]]]]]
 
         [:div.span3
          [:div.greyborder_b {:style "height: 135px"}
-          [:a {:href (localize "home.htm")}
+          [:a {:href (tr/localize "home.htm")}
            [:img {:src "/img/sistemi-moderni-systems.jpg", :width "206", :height "119" :alt "logo" :style "margin-left: 19px;"}]]]]]
 
        ;; ----- MENU AND CONTENT ROW -----
@@ -146,6 +146,6 @@
           [:div#address "SISTEMI MODERNI"
            [:br] "St. Martin d&rsquo;Uriage, France"
            [:br] "M. +33 06 09 46 92 00"]
-          [:div#copyright (interpose [:br] (translate :copyright))]]]
+          [:div#copyright (interpose [:br] (tr/translate :copyright))]]]
         [:div.span6 {:style "font-size: 30px; margin-left: 25px; margin-top: 35px; text-transform: uppercase;"} "Under Construction"]]]
       ]])))

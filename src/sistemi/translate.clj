@@ -1,11 +1,16 @@
 (ns sistemi.translate
   (require [clojure.string :as str]
+           [locale.core :as l]
            [locale.translate :as tr]
            [www.request :as req]
            [util.path :as path]
            [www.url :as url]
            [sistemi.handler :as handler]
            [sistemi.registry :as registry]))
+
+(defn full-locale
+  []
+  (l/full-locale (:locale req/*req*)))
 
 (defn translate
   [& keys]

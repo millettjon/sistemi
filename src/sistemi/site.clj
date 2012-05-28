@@ -1,11 +1,11 @@
 (ns sistemi.site
-  (:require [locale.translate :as tr]
-            [sistemi.registry :as registry])
+  (:require [locale.core :as l]
+            [locale.translate :as ltr]
+            [sistemi.registry :as registry]
+            [sistemi.translate :as tr]
+            [www.request :as req])
   (:use [ring.util.response :only (response content-type)]
-        [hiccup page]
-        locale.core
-        sistemi.translate
-        www.request)
+        [hiccup page])
   (:import java.io.File))
 
 (def strings
@@ -96,10 +96,10 @@
 
 (defn page
   []
-  (html5 {:lang (*req* :locale)}
+  (html5 {:lang (req/*req* :locale)}
    [:head
     [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
-    [:title (translate :title)]
+    [:title (tr/translate :title)]
     
     ;; TODO: Include bootstrap?
     ;; TODO: Move this to layout, or inline.
@@ -136,15 +136,15 @@
      ]
     [:meta {:name "keywords" :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
     [:meta {:name "description" :content "Modern shelves and shelving systems by Sistemi Moderni in France, serving modern furniture design addicts throughout Europe."}]
-    [:meta {:http-equiv "refresh" :content (str "16;URL=" (localize "/home.htm"))}]]
+    [:meta {:http-equiv "refresh" :content (str "16;URL=" (tr/localize "/home.htm"))}]]
    
    [:body
     [:div#wrapper
      [:div#rotate1
       [:div#slider
-       [:a {:href (localize "home.htm")} [:img {:src "graphics/modern-shelf.jpg" :alt "Modern Shelf" :width "541" :height "722" :border "0"}]]
-       [:a {:href (localize "home.htm")} [:img {:src "graphics/modern-bookcase.jpg" :alt "Modern Bookcase" :width "541" :height "722" :border "0"}]]
-       [:a {:href (localize "home.htm")} [:img {:src "graphics/modern-shelving.jpg" :alt "Modern Shelving" :width "541" :height "722" :border "0"}]]]]
+       [:a {:href (tr/localize "home.htm")} [:img {:src "graphics/modern-shelf.jpg" :alt "Modern Shelf" :width "541" :height "722" :border "0"}]]
+       [:a {:href (tr/localize "home.htm")} [:img {:src "graphics/modern-bookcase.jpg" :alt "Modern Bookcase" :width "541" :height "722" :border "0"}]]
+       [:a {:href (tr/localize "home.htm")} [:img {:src "graphics/modern-shelving.jpg" :alt "Modern Shelving" :width "541" :height "722" :border "0"}]]]]
      [:div#rightcol1
       [:img.logo1 {:src "graphics/sistemi-moderni.jpg" :alt "Modern Furniture" :width "318" :height "183"}]
       [:img.thing1 {:src "graphics/nav-graphic.jpg" :width "146" :height "89"}]
@@ -152,17 +152,17 @@
        [:div#num "I" [:span.white "."]]
        [:ul#nav1
         [:li
-         [:a.white2 {:href "#"} (translate :select-a-language)]
+         [:a.white2 {:href "#"} (tr/translate :select-a-language)]
          [:ul
           (map (fn [lang]
-                 (let [active (= (locales lang) (*req* :locale))
+                 (let [active (= (l/locales lang) (req/*req* :locale))
                        clss (if active "live" "notyet")
-                       href  (localize "/profile/locale"
+                       href  (tr/localize "/profile/locale"
                                        :query
                                        {:lang lang
-                                        :target (str (tr/localize-path "/home.htm" registry/localized-paths (keyword lang)))})]
+                                        :target (str (ltr/localize-path "/home.htm" registry/localized-paths (keyword lang)))})]
                    [:li [:a {:href href :class clss} (language-names lang)]]))
-               locales)
+               l/locales)
 
           ;; <li><a href="modern-shelving.htm" class="live">english</a></li>
           ;;   <li><a href="#"  class="notyet">franÇais</a></li>
@@ -178,4 +178,4 @@
       ;; Set the content type explicitly since this is served from / and has no .htm extension.
       (content-type "text/html; charset=utf-8")))
 
-(sistemi.registry/register)
+(registry/register)

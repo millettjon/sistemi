@@ -1,11 +1,11 @@
 (ns sistemi.site.order.confirm-htm
   (:require [clojure.tools.logging :as log]
             [clojure.string :as str]
+            [locale.core :as l]
             [sistemi.translate :as tr]
             [www.url :as url])
   (:use paypal
         app.config
-        [locale.core :only (full-locale)]
         [ring.util.response :only (response)]
         [hiccup core form]
         [sistemi translate layout]))

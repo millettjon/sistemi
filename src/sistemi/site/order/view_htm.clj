@@ -15,13 +15,10 @@
 
 (defn body
   [details]
-  (html [:html
-         [:head
-          [:title "Order Details"]]
-         [:body
-          [:h2 "Order Details"]
-          [:table (map (fn [k] [:tr [:td k] [:td (k details)]])
-                       (sort (keys details)))]]]))
+  [:div.text_content
+   [:p.title "Order Details"]
+   [:table.table (map (fn [k] [:tr [:td k] [:td (k details)]])
+                      (sort (keys details)))]])
 
 (defn handle
   [req]

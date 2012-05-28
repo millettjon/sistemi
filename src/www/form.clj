@@ -153,12 +153,21 @@
      ~@body))
 
 (defn errors?
-  [k]
-  (_errors? (k *fields*)))
+  ([] (some #(errors? %) (keys *fields*)))
+  ([k] (_errors? (k *fields*))))
 
 (defn default
   [k]
   (_default (k *fields*)))
+
+(defn values
+  []
+  (reduce
+   (fn [m [k v]] (if (contains? v :value)
+                  (assoc m k (:value v))
+                  m))
+   {}
+   *fields*))
 
 (defn select
   [k opts]
@@ -180,6 +189,14 @@
   [k opts]
   (let [n (name k)]
     [:input (merge {:type "text" :name n  :id n :value (default k)} opts)]))
+
+(defn hidden
+  "Converts a map into a seq of hidden fields."
+  [m]
+  (map
+   (fn [[k v]] [:input {:type "hidden" :name (name k) :value v}])
+   m))
+
 
 ;; [:input#color {:type "text" :value "#AB003B" :name "color" :tabindex 1}]
 
