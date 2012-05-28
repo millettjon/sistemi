@@ -21,19 +21,6 @@
 (defmulti options
   :type)
 
-;; ===== internal helpers =====
-;; TODO: remove if possible
-(defn- _errors?
-  [m]
-  (contains? m :errors))
-
-;; TODO: remove if possible
-(defn- _default
-  [m]
-  (get m (if (_errors? m)
-           :default
-           :value)))
-
 ;; ===== bounded-number =====
 
 (defmethod parse :bounded-number
@@ -51,7 +38,6 @@
 
 (defn units
   [field option]
-  (prn "units: " field option)
   (if-let [u (:units field)]
     {:label (str option " " u)}
     {}))
@@ -152,9 +138,17 @@
   `(binding [*fields* (validate ~fields ~values)]
      ~@body))
 
+;; ===== internal helpers =====
+;; TODO: remove if possible
+(defn- _default
+  [m]
+  (get m (if (_errors? m)
+           :default
+           :value)))
+
 (defn errors?
   ([] (some #(errors? %) (keys *fields*)))
-  ([k] (_errors? (k *fields*))))
+  ([k] (contains? (k *fields*) :errors)))
 
 (defn default
   [k]
@@ -169,6 +163,7 @@
    {}
    *fields*))
 
+;; ===== rendering =====
 (defn select
   [k opts]
   (let [field (k *fields*)]
@@ -196,9 +191,6 @@
   (map
    (fn [[k v]] [:input {:type "hidden" :name (name k) :value v}])
    m))
-
-
-;; [:input#color {:type "text" :value "#AB003B" :name "color" :tabindex 1}]
 
 #_ (def fields
   {:width {:type :bounded-number :min 60 :max 240 :default 120}})
