@@ -42,7 +42,7 @@
      ;; Locale is the first path segment.
      [[locale locales] &]
      (app
-      (spy :prefix "before wrap-locale")
+      ;; (spy :prefix "before wrap-locale")
       (wrap-locale locale)
       ;; (wrap-file (str "www/" locale))                  ; Serve locale specific files first.
       ;; (wrap-file (str "www/" default-locale))          ; Fallback to the default locale.
@@ -51,7 +51,7 @@
       wrap-translate-uri          ; Translate the uri.
       wrap-request                ; Binds *req* to the current request.
       wrap-render                 ; Force realization of response seq while *req* is in scope.
-      (spy :prefix "before wrap-handler")
+      ;; (spy :prefix "before wrap-handler")
       wrap-handler                ; Call a handler if one is defined for the uri.
       (wrap-file "www/raw")       ; Serve static files.
       [&] pass)
