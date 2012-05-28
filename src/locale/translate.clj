@@ -51,11 +51,17 @@
         url (if path
               (assoc url :path path)
               url)
+        ;; Merge in url options if present.
         url (if (empty? opts)
               url
-              (if (= 1 (count opts))
-                (merge url (first opts))
-                (merge url (apply hash-map opts))))]
+              (let [opts (if (= 1 (count opts))
+                           (first opts)           ; map
+                           (apply hash-map opts)) ; vector of keys and values
+                    ;; Encode the query string if present.
+                    opts (if-let [qs (:query opts)]
+                           (assoc opts :query (url/encode-query qs))
+                           opts)]
+                (merge url opts)))]
     (str url)))
 
 (defn canonicalize
