@@ -109,9 +109,9 @@
     ;; TODO: Factor this out.
     ;; TODO: See if there is a small slider (e.g., bootstrap).
     ;; NIVO Slider
-    [:link {:rel "stylesheet" :href "nivo-slider.css" :type "text/css" :media "screen"}]
+    [:link {:rel "stylesheet" :href "/nivo/nivo-slider.css" :type "text/css" :media "screen"}]
     [:script {:src "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" :type "text/javascript"}]
-    [:script {:src "jquery.nivo.slider.pack.js" :type "text/javascript"}]
+    [:script {:src "/nivo/jquery.nivo.slider.pack.js" :type "text/javascript"}]
     [:script {:type "text/javascript"}
      "$(window).load(function() {
 	$('#slider').nivoSlider({
