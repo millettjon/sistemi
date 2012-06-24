@@ -140,7 +140,7 @@
 
 ;; ===== internal helpers =====
 ;; TODO: remove if possible
-(defn- _default
+#_(defn- _default
   [m]
   (get m (if (_errors? m)
            :default
@@ -150,9 +150,17 @@
   ([] (some #(errors? %) (keys *fields*)))
   ([k] (contains? (k *fields*) :errors)))
 
-(defn default
+#_(defn default
   [k]
   (_default (k *fields*)))
+
+(defn default
+  "Returns the value for a field or the default if their is a validation error."
+  [k]
+  (if-let [fm (k *fields*)]
+    (get fm (if (errors? k)
+              :default
+              :value))))
 
 (defn values
   []
