@@ -30,7 +30,7 @@
         token (params :token)
         result (pay-paypal-order amount req)]
     (log/info "XC PAY" result)
-    (redirect (str (tr/qualifys "view.htm" {:query {:id token}})))))
+    (redirect (str (tr/qualifys "status.htm" {:query {:id token}})))))
 
 ;; TODO: Can something else other than the token be used?
 ;; TODO: Are there any other related nvp api calls?

@@ -3,6 +3,7 @@
             [clojure.string :as str]
             [locale.core :as l]
             [sistemi.translate :as tr]
+            [paypal.address :as address]
             [www.url :as url])
   (:use paypal
         app.config
@@ -35,9 +36,7 @@
 
    [:table {:style "margin-top: 15px; margin-bottom: 15px; width: 100%;" }
     [:caption.white {:style "text-align:left;"} "Shipping Address"
-     [:tr [:td (:shiptoname details)]]
-     [:tr [:td (:shiptostreet details)]]
-     [:tr [:td (:shiptocity details) ", " (:shiptostate details) " " (:shiptozip details)]]]]
+     (map (fn [line] [:tr [:td line]]) (address/format details :shipto))]]
 
    [:form {:action (tr/localize "pay") :method "post"}
     ;; TODO: Store these in the session.
