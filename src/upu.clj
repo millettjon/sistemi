@@ -5,6 +5,12 @@
    Country Codes: http://www.nationsonline.org/oneworld/country_code_list.htm"
   (require [clojure.string :as str]))
 
+(defn format
+  "Formats an address by its country."
+  [m]
+  ((ns-resolve 'upu
+               (symbol (name (:country m)))) m))
+
 (defn FR
   "Formats an address for France.
 See: http://bitboost.com/ref/international-address-formats/france/
@@ -19,24 +25,20 @@ See: http://www.laposte.fr/courrierinternational/index.php?id=407"
   "Formats an address for the United Kingdom.
 See: http://bitboost.com/ref/international-address-formats/united-kingdom/"
   [m]
-  [(:name m)
-   (:street m)
-   (str/upper-case (:city m))
-   ;;(str/upper-case (:county m)) ;; optional
-   (str/upper-case (:code m))
-   "UNITED KINGDOM"])
-
-(defn format
-  "Formats an address by its country."
-  [m]
-  ((ns-resolve 'upu
-               (symbol (name (:country m)))) m))
+  (filter identity
+          [(:name m)
+           (:street m)
+           (str/upper-case (:city m))
+           (if-let [s (:county m)] (str/upper-case s))  ;; optional
+           (str/upper-case (:code m))
+           "UNITED KINGDOM"]))
 
 #_ (format {:name "Jonathan Millett"
-          :street "1 Main Terrace"
-          :city "Wolverhampton, West Midlands"
-          :code "W12 4LQ"
-          :country "GB"})
+            :street "1 Main Terrace"
+            :city "Wolverhampton"
+            :county "West Midlands"
+            :code "W12 4LQ"
+            :country "GB"})
 
 #_(GB {:name "Jonathan Millett"
        :street "1 Main Terrace"
