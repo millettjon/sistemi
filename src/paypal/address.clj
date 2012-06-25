@@ -26,14 +26,3 @@
   "Converts an address to upu format and then calls upu/format."
   [m prefix]
   (upu/format (to-upu m prefix)))
-
-#_(let [m {:shiptoname "Jonathan Millett",
-         :shiptostreet "1 Main Terrace",
-         :shiptocity "Wolverhampton",
-         :shiptostate "West Midlands", ; is a county
-         :shiptozip "W12 4LQ",
-         :shiptocountryname "United Kingdom",
-         :shiptocountrycode "GB"}]
-  #_(to-upu m :shipto)
-  (format m :shipto)
-  )
