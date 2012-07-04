@@ -53,6 +53,10 @@
   (set-default-locale! (m :default-locale))
   (set-default-territories! (m :default-territories)))
 
+;; ===== UNIT CALCULATIONS =====
+(require 'frinj.calc)
+(frinj.calc/frinj-init!)
+
 ;; ===== HANDLERS =====
 ;; Register request handlers and build routes after localization
 ;; settings are initialized.

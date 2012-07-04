@@ -41,7 +41,8 @@
                      [swank-clojure "1.4.2"]
 
                      ;; misc
-                     [ordered "1.2.0"]]
+                     [ordered "1.2.0"]
+                     [frinj "0.1.3"]]
 
       :dev-dependencies [[ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]
       :plugins [[codox "0.6.1"]]
