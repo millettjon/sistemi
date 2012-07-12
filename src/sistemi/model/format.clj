@@ -19,13 +19,19 @@
        (name unit)))
 #_ (format-dimensions :cm (fj 120 :cm) (fj 34 :cm))
 
+(defn fj-round
+  [number places]
+  (let [v (:v number)]
+    (assoc number :v (.setScale (bigdec v) places BigDecimal/ROUND_HALF_EVEN))))
+#_ (fj-round (fj 50.1234 :EUR) 2)
+
 (defn format-eur
   [v]
   (format "%.2f€"
           (-> v
               (to :EUR)
               :v
-              double)))
+              bigdec)))
 #_ (format-eur (fj 50 :EUR))
 #_ (str (fj 50 :EUR))
 #_ (to (fj 30 :EUR) :EUR)

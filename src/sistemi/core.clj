@@ -2,7 +2,7 @@
 ;; TODO: Consider disabling this for production.
 (clojure.core/require 'util.reflection)
 (util.reflection/warn-on-reflection
-  "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "cheshire.generate")
+  "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-yaml" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "cheshire.generate" "frinj")
 
 (ns sistemi.core
   (:require [clojure.tools.logging :as log])

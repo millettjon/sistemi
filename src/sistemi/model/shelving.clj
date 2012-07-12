@@ -1,20 +1,28 @@
-(ns sistemi.shelving
+(ns sistemi.model.shelving
   "Modulare shelving model."
+  (:require clojure.walk
+            [clojure.tools.logging :as log])
   (:use sistemi.model
         sistemi.model.format
-        [frinj core calc]))
+        frinj.calc))
+
+;; Keep this here to prevent a weird interaction between frinj and clojure-test-mode.
+(frinj-init!)
 
 ;; --------- CONSTANTS ---------------
 
 (def ^:private prices
   "Pricing data."
   {:material
-   {:mdf-ecological (fj 16.00 :EUR :per :meter :per :meter)
-    :plywood-fsc    (fj 37.25 :EUR :per :meter :per :meter)}
+   {:mdf-ecological (fj 16.00 :EUR :per :m :per :m)
+    :plywood-fsc    (fj 37.25 :EUR :per :m :per :m)}
    :cut {:slot      (fj  3.60 :EUR)
          :cutout    (fj  3.60 :EUR)
-         :perimeter (fj  6.80 :EUR :per :meter :per :meter)}
-   :finish {:matte  (fj 50.00 :EUR :per :meter :per :meter)}})
+         :perimeter (fj  6.80 :EUR :per :m :per :m)}
+   :finish {:matte  (fj 50.00 :EUR :per :m :per :m)}})
+
+(def ^:private margin
+  0.2)
 
 (def ^:private num-laterals
   "Number of lateral members in a shelving unit."
@@ -107,7 +115,6 @@
                             (add-slot (num-verticals length))))))
 
 ;; ----------- SHELVING ---------------------
-
 (defn explode-shelving
   [cmp]
   (-> (make ::shelving cmp)
@@ -180,36 +187,81 @@
   (-> shelving
       explode-shelving
       (walk total)
-      :price))
+      :price
+      (fj-round 2)))
 
-;; ----------- TESTS ---------------------
+;; ----------- FORM HELPERS ---------------------
 
-(def shelving
-  {:height (fj 120 :cm)
-   :width  (fj 120 :cm)
-   :depth  (fj 39 :cm)
-   :cutout :ovale
+;; TODO: Add margin calculation.
+;; TODO: Round to customer friendly amounts (nearest euro? nearest 5 euro?).
+;; TODO: Display price report as easter egg.
+
+;; TODO: Integrate frinj units with forms and form validation.
+;; TODO: Find an idomatic representation for color.
+;; TODO: Handle prices w/ currencies (frinj units).
+(defn from-params
+  [params]
+  {:height (fj (:height params) :cm)
+   :width (fj (:width params) :cm)
+   :depth (fj (:depth params) :cm)
+   :cutout (keyword (:cutout params))
+   :color (:color params)
    :finish :matte
-   :material :mdf-ecological
-   :color 0xAB003B})
+   :material :mdf-ecological})
 
-#_ (fj+ (fj 2 :EUR) 0) ;; should this work as a special case?
+;; ----------- PRICE BREAKDOWN REPORT ---------------------
 
-(require 'clojure.walk)
+(defn unqualify-keys
+  "Recursively transforms all map keys from qualified keywords to unqualified ones."
+  {:added "1.1"}
+  [m]
+  (let [f (fn [[k v]] (if (keyword? k) [(keyword (name k)) v] [k v]))]
+    ;; only apply to maps
+    (clojure.walk/postwalk (fn [x] (if (map? x) (into {} (map f x)) x)) m)))
+
+(defn price-report
+  [shelving]
+  (-> shelving
+      explode-shelving
+      (walk total)
+      (walk rollup)
+      (walk rollup-total)
+      :rollup
+      ;;clojure.walk/stringify-keys
+      unqualify-keys
+      ))
+
+(defn html-table
+  "header - selects keys to display for each item
+   row-keys - selects ordering of rows   
+   "
+  [header row-keys data]
+  [:table.table.table-condensed.table-striped
+   [:thead
+    [:tr
+     (map (fn [k] [:th (name k)]) header)]]
+   [:tbody
+    (map (fn [rk]
+           (let [row (rk data)]
+             [:tr
+              [:td (name rk)] ;; 1st column
+              (map (fn [k] [:td (k row)]) (rest header))
+              ]))
+         row-keys)]])
+
+(defn html-price-report
+  [shelving]
+  (->> shelving
+      price-report
+      (html-table [:item :dimensions :area :material :perimeter :finish :cutout :slot :price]
+                  [:horizontal :lateral :vertical :total]
+                  )))
 
 (use 'clojure.pprint)
-#_ (-> shelving
-       explode-shelving
-       (walk total)
-       (walk rollup)
-       (walk rollup-total)
-       :rollup
-       clojure.walk/stringify-keys
-       ;; insert item key and convert to array
-       (->> (reduce (fn [a [k v]] (conj a (assoc v "item" k))) []))
-       (->> (print-table ["item"  "dimensions" "area" "material" "perimeter" "finish" "cutout" "slot" "price"]))
-       )
-
-#_ (price shelving)
-
-;; 479.34
+(defn pprint-price-report
+  [shelving]
+  (-> shelving
+      price-report
+      ;; insert item key and convert to array
+      (->> (reduce (fn [a [k v]] (conj a (assoc v :item k))) []))
+      (->> (print-table [:item  :dimensions :area :material :perimeter :finish :cutout :slot :price]))))
