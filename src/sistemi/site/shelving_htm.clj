@@ -155,7 +155,7 @@
            }
            // Rate limit model updates since color changes spews events rapidly
            // and can cause slowness and/or webgl crashes.
-           setTimeout(function() {requestAnimationFrame(checkColor);}, 1000);
+           setTimeout(function() {requestAnimFrame(checkColor);}, 1000);
          }
          checkColor();
      });"

@@ -3,13 +3,6 @@
 // TODO: Get it working with window resize.
 // TODO: Improve horizontal spacing using well defined layout algorithm.
 //
-// TODO: Embed in shelving design page.
-// TODO: Scale to size.
-// TODO: Update when controls change.
-// TODO: Update background color to maintain constrast w/ shelving color.
-//
-// TODO: Color members differently for debugging (easter egg?).
-//
 // TODO: Test for webgl and fallback to canvas if not available.
 //       - http://stackoverflow.com/questions/9899807/three-js-detect-webgl-support-and-fallback-to-regular-canvas
 //       - http://weblogs.asp.net/dwahlin/archive/2012/06/22/detecting-html5-css3-features-using-modernizr.aspx
@@ -26,6 +19,7 @@
 //       See: http://stackoverflow.com/questions/8900498/exporting-html-canvas-as-an-image-sequence
 //       WebDriver https://gist.github.com/1666559
 //
+// TODO: Color members differently for debugging (easter egg?).
 // TODO: Explode for instructions?
 // TODO: Add slots?
 //
@@ -316,6 +310,11 @@ function addHorizontalMembers(shelving, addGeometry) {
   }
 }
 
+Detector = {
+  canvas: !! window.CanvasRenderingContext2D,
+  webgl: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()
+}
+
 function drawShelving(shelving, container) {
 
   // Create the scene and camera.
@@ -335,8 +334,10 @@ function drawShelving(shelving, container) {
   scene.add( camera );
 
   // Set rendering mode.
-  var useWebGL = true;
+  var useWebGL = Detector.webgl;
   //useWebGL = false;
+  console.log("canvas: " + Detector.canvas);
+  console.log("webgl: " + Detector.webgl);
 
   // Add subtle ambient lighting.
   if (useWebGL) {
@@ -457,6 +458,18 @@ function luminence(color) {
   return l;
 }
 
+// shim layer with setTimeout fallback
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+    window.webkitRequestAnimationFrame || 
+    window.mozRequestAnimationFrame    || 
+    window.oRequestAnimationFrame      || 
+    window.msRequestAnimationFrame     || 
+    function( callback ){
+      window.setTimeout(callback, 1000 / 60);
+    };
+})();
+
 var animationRunning = false;
 
 function startAnimation() {
@@ -471,7 +484,7 @@ function stopAnimation() {
 
 function animate() {
   if (animationRunning) {
-    requestAnimationFrame(animate);
+    requestAnimFrame(animate);
     render();
   }
 }
