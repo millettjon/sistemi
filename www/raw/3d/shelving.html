@@ -12,11 +12,59 @@
         overflow: hidden;
       }
     </style>
-  </head>
-  <body>
-
+    <script src="jquery.min.js"></script>
     <script src="Three.js"></script>
     <script src="shelving.js"></script>
+  </head>
+  <body>
+    <p>Some text before div</p>
+    <div id="model" style="border: 1px solid black; width: 300px;
+    height: 300px; background-color: black;"></div>
+    <p id="someText">Some text after div</p>
+    <form>
+        <input type="text"/>
+        <br/>
+        <select id="color">
+          <option value="0x00ff00">green</option>
+          <option value="0x000000">black</option>
+          <option value="0xff0000">red</option>
+          <option value="0x0000ff">blue</option>
+          <option value="0xffffff">white</option>
+        </select>
+    </form>
 
+    <script type='text/javascript'>
+      // Define the shelving unit.
+      var shelving = {height: 200, width: 150, depth: 50, color: 0xab003b, cutout: 'quaddro'};
+      shelving.color = 0x00FF00;
+      //shelving.cutout = 'none';
+      //shelving.cutout = 'ovale';
+      //shelving.width = 240;
+      //shelving.height = 70;
+      //shelving.depth = 25;
+
+      //drawShelving(shelving, $("#model")[0]);
+      drawShelving(shelving, document.getElementById("model"));
+      startAnimation();
+
+      $('#color').change(function() {
+        // Stop the animation and clear the model.
+        stopAnimation();
+        $("#model").empty();
+
+        // Get the color to change to.
+        var value = $(this).val();
+        shelving.color = parseInt(value);
+
+        // Set the background color to maintain contrast.
+        var bg = luminence(value.substring(1)) > 0.2 ? '#000' : '#fff';
+        $("#model").css({'background-color': bg});
+
+        // Redraw the model and start animating.
+        drawShelving(shelving, document.getElementById("model"));
+        startAnimation();
+      });
+
+    </script>
   </body>
 </html>

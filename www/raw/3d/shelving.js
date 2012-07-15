@@ -1,3 +1,4 @@
+// TODO: Get it working with window resize.
 // TODO: Fix triangulation error in oval cutout.
 // TODO: Improve horizontal spacing using well defined layout algorithm.
 //
@@ -28,12 +29,11 @@
 // TODO: Add slots?
 //
 
-
 var dummy;
 
 var camera, scene, renderer;
 
-var text, plane;
+var g_container;
 
 var targetRotation = 0;
 var targetRotationOnMouseDown = 0;
@@ -44,7 +44,7 @@ var mouseXOnMouseDown = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-// Namespaces
+// Namespace
 var sm = sm || {};
 sm.shelving = sm.shelving || {};
 
@@ -85,32 +85,10 @@ sm.shelving.numHorizontals = function(shelving) {
   return n;
 }
 
-// Define the shelving unit.
-var shelving = {height: 200, width: 150, depth: 50, color: 0xab003b, cutout: 'quaddro'};
-shelving.color = 0x00FF00;
-//shelving.cutout = 'none';
-//shelving.cutout = 'ovale';
-//shelving.width = 70;
-//shelving.height = 70;
-//shelving.depth = 25;
-
-drawShelving(shelving);
-animate();
-
 function makeContainer() {
   container = document.createElement( 'div' );
   document.body.appendChild( container );
   return container;
-}
-
-function addInfo(container) {
-  var info = document.createElement('div');
-  info.style.position = 'absolute';
-  info.style.top = '10px';
-  info.style.width = '100%';
-  info.style.textAlign = 'center';
-  info.innerHTML = 'Shelving Unit<br/>Drag to spin';
-  container.appendChild( info );
 }
 
 // Returns an inner bounding box by subtracting a margin from an outer box.
@@ -308,7 +286,7 @@ function layoutHorizontal(shelving) {
   var positions = [];
   for (i=0; i < num; i++) {
     y = offset + step * i;
-    console.log("layout y: " + y);
+    //console.log("layout y: " + y);
     positions.push(y);
   }
   return positions;
@@ -331,20 +309,28 @@ function addHorizontalMembers(shelving, addGeometry) {
   positions = layoutHorizontal(s);
   for (i in positions) {
     y = positions[i] + ns.thickness;
-    console.log("rendering y at: " + y)
+    // console.log("rendering y at: " + y)
     addGeometry(shape3d, s.color,  0, y, 0,
                                    Math.PI/2, 0, 0,  1);
   }
 }
 
-function drawShelving(shelving) {
-  var container = makeContainer();
-  addInfo(container);
+function drawShelving(shelving, container) {
 
   // Create the scene and camera.
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
-  camera.position.set( 0, 0, 500 );
+  var rWidth = container.offsetWidth;
+  var rHeight = container.offsetHeight;
+  var fov = 50;
+  camera = new THREE.PerspectiveCamera( fov, rWidth / rHeight, 1, 1000 );
+
+  // Set the camera at the point where the shelving just fits in the container.
+  // TODO: handle not square aspect ratio.
+  var dist = (Math.max(shelving.height, shelving.width) / 2) /
+             Math.tan(fov/2*2*Math.PI/360) +
+             shelving.depth / 2;
+  dist *= 1.2;
+  camera.position.set( 0, 0, dist);
   scene.add( camera );
 
   // Add subtle ambient lighting.
@@ -389,22 +375,26 @@ function drawShelving(shelving) {
   dummy.add( parent );
 
   // Setup renderer.
-  renderer = new THREE.WebGLRenderer( { antialias: true } );
-  //renderer = new THREE.CanvasRenderer( { antialias: true } );
-  renderer.setSize( window.innerWidth, window.innerHeight );
+  renderer = useWebGL ?
+    new THREE.WebGLRenderer( { antialias: true } ) :
+    new THREE.CanvasRenderer( { antialias: true } );
+  renderer.setSize( rWidth, rHeight );
   container.appendChild( renderer.domElement );
 
   // Setup event handlers.
-  document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-  document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-  document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+  g_container = container;
+  g_container.addEventListener( 'mousedown', onDocumentMouseDown, false );
+  g_container.addEventListener( 'touchstart', onDocumentTouchStart, false );
+  g_container.addEventListener( 'touchmove', onDocumentTouchMove, false );
 }
+
+// TODO: Don't use global variables for event handling.
 
 function onDocumentMouseDown( event ) {
   event.preventDefault();
-  document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-  document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-  document.addEventListener( 'mouseout', onDocumentMouseOut, false );
+  g_container.addEventListener( 'mousemove', onDocumentMouseMove, false );
+  g_container.addEventListener( 'mouseup', onDocumentMouseUp, false );
+  g_container.addEventListener( 'mouseout', onDocumentMouseOut, false );
   mouseXOnMouseDown = event.clientX - windowHalfX;
   targetRotationOnMouseDown = targetRotation;
 }
@@ -415,15 +405,15 @@ function onDocumentMouseMove( event ) {
 }
 
 function onDocumentMouseUp( event ) {
-  document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-  document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-  document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+  g_container.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+  g_container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+  g_container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 }
 
 function onDocumentMouseOut( event ) {
-  document.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-  document.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-  document.removeEventListener( 'mouseout', onDocumentMouseOut, false );
+  g_container.removeEventListener( 'mousemove', onDocumentMouseMove, false );
+  g_container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
+  g_container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
 }
 
 function onDocumentTouchStart( event ) {
@@ -442,13 +432,39 @@ function onDocumentTouchMove( event ) {
   }
 }
 
+// Returns the luminence of an rgb color string.
+function luminence(color) {
+  console.log(color);
+  var r = parseInt('0x' + color.substring(1, 3)) / 255;
+  console.log("r: " + r);
+  var g = parseInt('0x' + color.substring(3, 5)) / 255;
+  var b = parseInt('0x' + color.substring(5, 7)) / 255;
+  var min = Math.min(r, Math.min(g, b));
+  var max = Math.max(r, Math.max(g, b));
+  var l = (min + max) / 2;
+  console.log(l);
+  return l;
+}
+
+var animationRunning = false;
+
+function startAnimation() {
+  animationRunning = true;
+  animate();
+}
+
+function stopAnimation() {
+  animationRunning = false;
+}
+
 function animate() {
-  requestAnimationFrame( animate );
-  render();
+  if (animationRunning) {
+    requestAnimationFrame( animate );
+    render();
+  }
 }
 
 function render() {
-  //parent.rotation.y += ( targetRotation - parent.rotation.y ) * 0.05;
   dummy.rotation.y += ( targetRotation - dummy.rotation.y ) * 0.05;
   renderer.render( scene, camera );
 };
