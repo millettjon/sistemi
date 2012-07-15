@@ -48,21 +48,15 @@
       startAnimation();
 
       $('#color').change(function() {
-        // Stop the animation and clear the model.
-        stopAnimation();
-        $("#model").empty();
-
         // Get the color to change to.
         var value = $(this).val();
         shelving.color = parseInt(value);
 
         // Set the background color to maintain contrast.
-        var bg = luminence(value.substring(1)) > 0.2 ? '#000' : '#fff';
+        var bg = luminence(shelving.color) > 0.2 ? '#000' : '#fff';
         $("#model").css({'background-color': bg});
 
-        // Redraw the model and start animating.
-        drawShelving(shelving, document.getElementById("model"));
-        startAnimation();
+        updateAnimation(shelving);
       });
 
     </script>

@@ -1,5 +1,6 @@
-// TODO: Get it working with window resize.
 // TODO: Fix triangulation error in oval cutout.
+// TODO: Add sliders for dimensions? How to work on phones?
+// TODO: Get it working with window resize.
 // TODO: Improve horizontal spacing using well defined layout algorithm.
 //
 // TODO: Embed in shelving design page.
@@ -234,7 +235,7 @@ function addVerticalMembers(shelving, addGeometry) {
     var bbox = {bottom : positions[i] + ns.thickness, left : 0,
                 top: positions[i+1], right: s.depth};
     switch (s.cutout) {
-      case 'quaddro': cutoutRRect(shape, bbox);
+      case 'quadro': cutoutRRect(shape, bbox);
                       break;
       case 'ovale': cutoutOval(shape, bbox);
                     break;
@@ -333,18 +334,22 @@ function drawShelving(shelving, container) {
   camera.position.set( 0, 0, dist);
   scene.add( camera );
 
-  // Add subtle ambient lighting.
-  var ambientLight = new THREE.AmbientLight(0x333333);
-  scene.add(ambientLight);
-
-  // Add directional light.
-  var light = new THREE.DirectionalLight(0xffffff);
-  light.position.set( 1, 1, 1 ).normalize();
-  scene.add( light );
-
   // Set rendering mode.
   var useWebGL = true;
   //useWebGL = false;
+
+  // Add subtle ambient lighting.
+  if (useWebGL) {
+    var ambientLight = new THREE.AmbientLight(0x222222);
+    scene.add(ambientLight);
+  }
+
+  // Add directional light.
+  if (useWebGL) {
+    var light = new THREE.DirectionalLight(0xffffff);
+    light.position.set( 1, 1, 1 ).normalize();
+    scene.add(light);
+  }
 
   // Create a parent container object and a helper function to add all
   // components to it.
@@ -378,6 +383,7 @@ function drawShelving(shelving, container) {
   renderer = useWebGL ?
     new THREE.WebGLRenderer( { antialias: true } ) :
     new THREE.CanvasRenderer( { antialias: true } );
+    //new THREE.SVGRenderer( { antialias: true } ); // very slow
   renderer.setSize( rWidth, rHeight );
   container.appendChild( renderer.domElement );
 
@@ -432,17 +438,22 @@ function onDocumentTouchMove( event ) {
   }
 }
 
+// Converts a jquery rgb color string to a hex integer.
+function rgb2hex(rgb) {
+  var rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+  return (rgb[1] << 16) | (rgb[2] << 8) | rgb[3];
+}
+
 // Returns the luminence of an rgb color string.
 function luminence(color) {
-  console.log(color);
-  var r = parseInt('0x' + color.substring(1, 3)) / 255;
+  var r = (color >> 16) / 255;
+  var g = (color >> 8 & 0xFF) / 255;
+  var b = (color & 0xFF) / 255;
   console.log("r: " + r);
-  var g = parseInt('0x' + color.substring(3, 5)) / 255;
-  var b = parseInt('0x' + color.substring(5, 7)) / 255;
   var min = Math.min(r, Math.min(g, b));
   var max = Math.max(r, Math.max(g, b));
   var l = (min + max) / 2;
-  console.log(l);
+  console.log("luminence: " + l);
   return l;
 }
 
@@ -450,6 +461,7 @@ var animationRunning = false;
 
 function startAnimation() {
   animationRunning = true;
+  dummy.rotation.y += targetRotation;
   animate();
 }
 
@@ -459,7 +471,7 @@ function stopAnimation() {
 
 function animate() {
   if (animationRunning) {
-    requestAnimationFrame( animate );
+    requestAnimationFrame(animate);
     render();
   }
 }
@@ -468,3 +480,13 @@ function render() {
   dummy.rotation.y += ( targetRotation - dummy.rotation.y ) * 0.05;
   renderer.render( scene, camera );
 };
+
+function updateAnimation(shelving) {
+  // Stop the animation and clear the model.
+  stopAnimation();
+  $(g_container).empty();
+
+  // Redraw the model and start animating.
+  drawShelving(shelving, g_container);
+  startAnimation();
+}

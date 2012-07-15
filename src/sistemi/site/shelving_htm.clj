@@ -36,6 +36,10 @@
         [:script {:type "text/javascript" :src "farbtastic/farbtastic.js"}]
         [:link {:rel "stylesheet" :href "farbtastic/farbtastic.css" :type "text/css"}]
 
+        ;; 3d model
+        [:script {:type "text/javascript" :src "/3d/Three.js"}]
+        [:script {:type "text/javascript" :src "/3d/shelving.js"}]
+
         ;; styles
         [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
 
@@ -55,7 +59,8 @@
   []
   [:div.row
    [:div.span6
-    [:img {:src "/img/0600.0600.0200.0018.S.427.png"}]]
+    [:div#model]
+    #_[:img {:src "/img/0600.0600.0200.0018.S.427.png"}]]
 
    [:div.span3
     
@@ -97,10 +102,62 @@
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
 
     [:script {:type "text/javascript"}
+     "\n"
+     "var shelving = {};\n"
+     "shelving.height=" (f/default :height) ";\n"
+     "shelving.width=" (f/default :width) ";\n"
+     "shelving.depth=" (f/default :depth) ";\n"
+     "shelving.cutout='" (f/default :cutout) "';\n"
+     "shelving.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
+
      "jQuery(document).ready(function() {
+         // Hookup the form controls.
          $('#colorpicker').farbtastic('#color');
          $('.chzn-select').chosen();
          $('.customStyleSelectBox').customSelect();
+
+         // Hookup on change events to update the model.
+         $('#width').chosen().change(function() {
+           shelving.width = $(this).val();
+           updateAnimation(shelving);
+         });
+         $('#height').chosen().change(function() {
+           shelving.height = $(this).val();
+           updateAnimation(shelving);
+         });
+         $('#depth').chosen().change(function() {
+           shelving.depth = $(this).val();
+           updateAnimation(shelving);
+         });
+         $('#cutout').change(function() {
+           shelving.cutout = $(this).val();
+           updateAnimation(shelving);
+         });
+
+         // Set the container div height to match the width.
+         var model = $('#model');
+         var height = model.width();
+         model.css({height: height.toString() + 'px'});
+
+         // Define the shelving unit.
+         // var shelving = {height: 200, width: 150, depth: 50, color: 0xab003b, cutout: 'quaddro'};
+         drawShelving(shelving, model[0]);
+         startAnimation();
+
+         function checkColor() {
+           var color = $('#color').css('background-color');
+           color = rgb2hex(color);
+           if (shelving.color != color) {
+             shelving.color = color;
+             var bg = luminence(color) > 0.1 ? '#000' : '#666';
+             $('#model').css({'background-color': bg});
+             updateAnimation(shelving);
+           }
+           // Rate limit model updates since color changes spews events rapidly
+           // and can cause slowness and/or webgl crashes.
+           setTimeout(function() {requestAnimationFrame(checkColor);}, 1000);
+         }
+         checkColor();
      });"
      ]]
    ])

@@ -155,7 +155,7 @@
   (_default (k *fields*)))
 
 (defn default
-  "Returns the value for a field or the default if their is a validation error."
+  "Returns the value for a field or the default if there is a validation error."
   [k]
   (if-let [fm (k *fields*)]
     (get fm (if (errors? k)
