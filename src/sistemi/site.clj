@@ -37,7 +37,7 @@
 
    :es {; splash page
         :title "Muebles de Estantería Moderna : Sistemi Moderni"
-        :select-a-language "Eligir Idioma"
+        :select-a-language "Elegir Idioma"
 
         ; layout
         :version "versión alpha"
