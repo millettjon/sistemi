@@ -1,18 +1,39 @@
+// TODO: Add svg support as fallback?
+// TODO: Add stop frame animation mode
+//       - disable animation
+//       - redraw on change only
+//       - factor mouse spin control into separate file
+//       - add spin buttons
+//       - auto switch to stop frame animation if frame rate is too slow
+// TODO: IE support
+//       - https://code.google.com/p/explorercanvas/
+//         - https://code.google.com/p/explorercanvas/wiki/Instructions
+//         - uses VML
+//         - needs work to be compatible with three.js
+//       - http://code.google.com/p/svgweb/
+//         - uses flash to render SVG
+//       - http://raphaeljs.com/
+//         - uses SVG and VML on IE
+//       - https://github.com/learnboost/node-canvas
+//         - renders as image over websocket
+//         - https://github.com/mrdoob/three.js/issues/2182
+//         - https://github.com/mrdoob/three.js/pull/2084
+//       - http://iewebgl.com/Faq.aspx
+//         - freeware plugin
+//       - unity3d?
+//         - requires plugin
+// TODO: Improve horizontal spacing using well defined layout algorithm.
 // TODO: Fix triangulation error in oval cutout.
 // TODO: Add sliders for dimensions? How to work on phones?
+//       - http://jqueryfordesigners.com/demo/slider-gallery.html (apple like)
+//       - http://papermashup.com/demos/jquery-slider-bar/ (another style)
+//       - http://www.ryancoughlin.com/demos/interactive-slider/ (basic)
+//       - http://d2o0t5hpnwv4c1.cloudfront.net/377_slider/slider_sourcefiles/slider.html
 // TODO: Get it working with window resize.
-// TODO: Improve horizontal spacing using well defined layout algorithm.
 //
-// TODO: Test for webgl and fallback to canvas if not available.
-//       - http://stackoverflow.com/questions/9899807/three-js-detect-webgl-support-and-fallback-to-regular-canvas
-//       - http://weblogs.asp.net/dwahlin/archive/2012/06/22/detecting-html5-css3-features-using-modernizr.aspx
 // TODO: Review compatability: http://caniuse.com/webgl
 // TODO: Test on IE9.
 // TODO: Test on iPad.
-// TODO: Test on android.
-//       - works w/ canvas in wk and ff
-// TODO: See if requestAnimationFrame shim is needed.
-//       - http://www.html5canvastutorials.com/webgl/html5-canvas-webgl-ambient-lighting-with-three-js/
 // TODO: Add a fallback for browsers that don't support canvas?
 //       node.js render to png on server?/
 //       See: toDataURL
@@ -384,7 +405,7 @@ function drawShelving(shelving, container) {
   renderer = useWebGL ?
     new THREE.WebGLRenderer( { antialias: true } ) :
     new THREE.CanvasRenderer( { antialias: true } );
-    //new THREE.SVGRenderer( { antialias: true } ); // very slow
+    //new THREE.SVGRenderer( { antialias: true } );
   renderer.setSize( rWidth, rHeight );
   container.appendChild( renderer.domElement );
 
@@ -471,6 +492,7 @@ window.requestAnimFrame = (function(){
 })();
 
 var animationRunning = false;
+var stopFrameAnim = false;
 
 function startAnimation() {
   animationRunning = true;
@@ -484,7 +506,9 @@ function stopAnimation() {
 
 function animate() {
   if (animationRunning) {
-    requestAnimFrame(animate);
+    if (!stopFrameAnim) {
+      requestAnimFrame(animate);
+    }
     render();
   }
 }
