@@ -1,7 +1,11 @@
 (ns www.form
   "Functions for validating and rendering forms."
-  (:require [clojure.string :as s])
+  (:require [clojure.string :as s]
+            [clojure.tools.logging :as log])
   (:use ordered.map))
+
+;; Parse errors derive from this symbol.
+::parse-error
 
 ;; ===== multi methods =====
 
@@ -22,13 +26,14 @@
   :type)
 
 ;; ===== bounded-number =====
+(derive ::invalid-number ::parse-error)
 
 (defmethod parse :bounded-number
   [field value]
   (try
     (Long/parseLong value)
     (catch Exception e
-      :invalid-number-format)))
+      ::invalid-number)))
 
 (defmethod invalid? :bounded-number
   [field value]
@@ -49,6 +54,20 @@
        (range (:min field) (inc (:max field)))))
 
 ;; ===== set =====
+(derive ::unknown-keyword ::parse-error)
+
+(defn parse-keyword
+  "Reads a keyword from a string. Splits the keyword into namespace and name parts and calls find-keyword."
+  [s]
+  (if-let [m (re-matches #":(([^/]+)/)?([^/]+)" s)]
+    (apply find-keyword (rest (rest m)))))
+
+(defmethod parse :set
+  [field value]
+  (if (string? value)
+    (or (parse-keyword value)
+        ::unknown-keyword)
+    value))
 
 (defn options-to-ordered-map
   "Coerces an options list to an ordered map."
@@ -80,11 +99,12 @@
   (options-to-ordered-map (:options field)))
 
 ;; ===== rgb color =====
+(derive ::invalid-rgb ::parse-error)
 (defmethod parse :rgb
   [field value]
   (if-let [rgb (second (re-matches #"#?([\dA-Fa-f]{6})" value))]
     (str "#" (s/upper-case rgb))
-    :invalid-rgb-format))
+    ::invalid-rgb))
 
 ;; ===== validation pipeline =====
 
@@ -105,7 +125,7 @@
   (if (nil? v)
     m
     (let [result (parse (k m) v)]
-      (if (keyword? result)
+      (if (and (keyword? result) (isa? result ::parse-error))
         (add-error m k result)
         (assoc-in m [k :parsed-value] result)))))
 
@@ -139,20 +159,9 @@
      ~@body))
 
 ;; ===== internal helpers =====
-;; TODO: remove if possible
-#_(defn- _default
-  [m]
-  (get m (if (_errors? m)
-           :default
-           :value)))
-
 (defn errors?
   ([] (some #(errors? %) (keys *fields*)))
   ([k] (contains? (k *fields*) :errors)))
-
-#_(defn default
-  [k]
-  (_default (k *fields*)))
 
 (defn default
   "Returns the value for a field or the default if there is a validation error."
@@ -186,18 +195,41 @@
             ;; If there is a label, put the key in the value and the label in the text.
             (if-let [label (:label m)]
               [:option (-> m (assoc :value k) (dissoc :label)) label]
-              [:option m k]))))])))
+              ;; If it is a keyword, put the keyword in the value and its name in the text.
+              (if (keyword? k)
+                [:option (assoc m :value (str k)) (name k)]
+                [:option m k])))))])))
 
 (defn text
   [k opts]
   (let [n (name k)]
     [:input (merge {:type "text" :name n  :id n :value (default k)} opts)]))
 
+(defmulti render
+  "Renders a value to html."
+  class
+  )
+
+(defmethod render :default
+  [v]
+  v)
+
+(defn render-keyword
+  "Converts a keyword to a string. Calls name for unqualified keywords and str for qualified ones. Useful to persist keywords as readable strings."
+  [kw]
+  (if (namespace kw)
+    (str kw)
+    (name kw)))
+
+(defmethod render clojure.lang.Keyword
+  [v]
+  (render-keyword v))
+
 (defn hidden
   "Converts a map into a seq of hidden fields."
   [m]
   (map
-   (fn [[k v]] [:input {:type "hidden" :name (name k) :value v}])
+   (fn [[k v]] [:input {:type "hidden" :name (name k) :value (render v)}])
    m))
 
 #_ (def fields
