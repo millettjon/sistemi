@@ -99,7 +99,7 @@
                    :quantity (num-verticals (:width shelving)))
                 init-rect
                 (add-slot (fj+ num-horizontals num-laterals)))
-        cmp (if (:cutout shelving)
+        cmp (if (not= (:cutout shelving) :sistemi.form/semplice)
               (add-cutout cmp (dec num-horizontals))
               cmp)]
     (add-child shelving cmp)))
