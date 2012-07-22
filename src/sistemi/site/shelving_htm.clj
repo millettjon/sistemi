@@ -102,6 +102,7 @@
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
 
     [:script {:type "text/javascript"}
+     ;; Initialize shelving from defaults.
      "\n"
      "var shelving = {};\n"
      "shelving.height=" (f/default :height) ";\n"
@@ -139,21 +140,24 @@
          var height = model.width();
          model.css({height: height.toString() + 'px'});
 
-         // Define the shelving unit.
-         // var shelving = {height: 200, width: 150, depth: 50, color: 0xab003b, cutout: 'quaddro'};
+         // Start animating.
          drawShelving(shelving, model[0]);
          startAnimation();
 
+         // The color picker doesn't have a way to supply a callback in addition
+         // to the synched form field. So, periodically check the background color
+         // of the synched form field and re-render when it changes.
          function checkColor() {
            var color = $('#color').css('background-color');
            color = rgb2hex(color);
            if (shelving.color != color) {
              shelving.color = color;
+             // For dark colors, use a gray background.
              var bg = luminence(color) > 0.1 ? '#000' : '#666';
              $('#model').css({'background-color': bg});
              updateAnimation(shelving);
            }
-           // Rate limit model updates since color changes spews events rapidly
+           // Rate limit model updates since the color picker spews events rapidly
            // and can cause slowness and/or webgl crashes.
            setTimeout(function() {requestAnimFrame(checkColor);}, 1000);
          }
