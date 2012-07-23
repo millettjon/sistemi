@@ -106,7 +106,9 @@
            [:li 
             [:a { :href "#"} (tr/translate :signup)]]
            [:li 
-            [:a { :href "#"} (tr/translate :contact)]]]]]
+            [:a { :href "#"} (tr/translate :contact)]]
+           [:li 
+            [:a { :href (tr/localize "/careers.htm")} (tr/translate :careers)]]]]]
 
         [:div.span3
          [:div.greyborder_b {:style "height: 135px"}

@@ -19,6 +19,7 @@
         :cart "Cart"
         :signup "Sign Up For Emails"
         :contact "Contact Us"
+        :careers "Careers"
         :menu {:home "home"
                :vision "our vision"
                :boutique  {:_ "on-line boutique"
