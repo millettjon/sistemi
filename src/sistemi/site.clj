@@ -34,7 +34,7 @@
                :gallery "gallery"
                :blog "blog"
                :feedback "feedback"}
-        :copyright ["Copyright 2011 SISTEMI MODERNI."
+        :copyright ["Copyright 2012 SISTEMI MODERNI."
                     "All rights reserved."]}
 
    :es {; splash page
@@ -60,7 +60,7 @@
                :gallery "galería"
                :blog "blog"
                :feedback "sugerencias"}
-        :copyright ["© 2011 SISTEMI MODERNI."
+        :copyright ["© 2012 SISTEMI MODERNI."
                     "Todos los derechos reservados."]}
 
    :fr {; splash page
@@ -85,7 +85,7 @@
                :gallery "Gallérie"
                :blog "blog"
                :feedback "Vos Impressions"}
-        :copyright ["© 2011 SISTEMI MODERNI."
+        :copyright ["© 2012 SISTEMI MODERNI."
                     "(all rights reserved)"]}})
 
 (def language-names
