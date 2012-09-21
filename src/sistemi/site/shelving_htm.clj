@@ -60,6 +60,7 @@
   [:div.row
    [:div.span6
     [:div#model]
+    ;; ? what should display if canvas is not available?
     #_[:img {:src "/img/0600.0600.0200.0018.S.427.png"}]]
 
    [:div.span3
@@ -108,7 +109,7 @@
      "shelving.height=" (f/default :height) ";\n"
      "shelving.width=" (f/default :width) ";\n"
      "shelving.depth=" (f/default :depth) ";\n"
-     "shelving.cutout='" (f/default :cutout) "';\n"
+     "shelving.cutout='" (str (f/default :cutout)) "';\n"
      "shelving.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
 
      "jQuery(document).ready(function() {

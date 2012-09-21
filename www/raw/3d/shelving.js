@@ -250,11 +250,12 @@ function addVerticalMembers(shelving, addGeometry) {
     var bbox = {bottom : positions[i] + ns.thickness, left : 0,
                 top: positions[i+1], right: s.depth};
     switch (s.cutout) {
-      case 'quadro': cutoutRRect(shape, bbox);
-                      break;
-      case 'ovale': cutoutOval(shape, bbox);
-                    break;
+      case ':sistemi.form/quadro': cutoutRRect(shape, bbox);
+        break;
+      case ':sistemi.form/ovale': cutoutOval(shape, bbox);
+        break;
       default:
+        console.warn('Ignoring invalid cutout: "' + s.cutout + '"');
     }
   }
 
@@ -355,6 +356,7 @@ function drawShelving(shelving, container) {
   scene.add( camera );
 
   // Set rendering mode.
+  // TODO: Set mode WebGL -> Canvas -> Image
   var useWebGL = Detector.webgl;
   //useWebGL = false;
   console.log("canvas: " + Detector.canvas);
