@@ -2,7 +2,8 @@
   (:require [util.string :as stru]
             [sistemi.form :as sf]
             [www.request :as r]
-            [www.form :as f])
+            [www.form :as f]
+            [sistemi.translate :as tr])
   (:use [ring.util.response :only (response)]
         [sistemi translate layout]))
 
@@ -17,7 +18,8 @@
                        bring you high design and high quality for a reasonable price. We believe that
                        the world must stop creating low quality disposable goods. We also believe that
                        you can and should have things your way. That is why we empower you to
-                       personalize all of our offerings.")}}
+                       personalize all of our offerings.")}
+        :spin "drag to spin"}
    :es {}
    :fr {}})
 
@@ -61,7 +63,9 @@
    [:div.span6
     [:div#model]
     ;; ? what should display if canvas is not available?
-    #_[:img {:src "/img/0600.0600.0200.0018.S.427.png"}]]
+    #_[:img {:src "/img/0600.0600.0200.0018.S.427.png"}]
+    ;; TODO: Remove this for static rendering. Use rotation icons?
+    [:div {:style "text-align: center;"} (tr/translate :spin)]]
 
    [:div.span3
     
