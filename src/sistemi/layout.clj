@@ -81,7 +81,11 @@
         [:div.span6
          [:div.greyborder_br
           ;; Note: oversized line-height is used to acheive vertical centering
-          {:style "line-height: 39px; text-align: center;"} (tr/translate :version)]]]
+          ;;{:style "line-height: 39px; text-align: center;"}
+          ;;(tr/translate :version)
+          {:style "line-height: 39px; text-align: center; font-size: 20px; text-transform: uppercase;"}
+          (tr/translate :construction)
+          ]]]
 
        ;; ----- HEADER ROW -----
        [:div.row {:style "height: 136px"}
@@ -148,6 +152,4 @@
           [:div#address "SISTEMI MODERNI"
            [:br] "St. Martin d&rsquo;Uriage, France"
            [:br] "M. +33 06 09 46 92 00"]
-          [:div#copyright (interpose [:br] (tr/translate :copyright))]]]
-        [:div.span6 {:style "font-size: 30px; margin-left: 25px; margin-top: 35px; text-transform: uppercase;"} "Under Construction"]]]
-      ]])))
+          [:div#copyright (interpose [:br] (tr/translate :copyright))]]]]]]])))

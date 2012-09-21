@@ -14,6 +14,7 @@
         :select-a-language "Select A Language"
 
         ; layout
+        :construction "Under Construction"
         :version "alpha version"
         :account "My Account"
         :cart "Cart"
