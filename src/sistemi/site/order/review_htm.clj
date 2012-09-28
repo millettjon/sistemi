@@ -3,10 +3,9 @@
             [ring.util.response :as resp]
             [sistemi.model.shelving :as shelving]
             [sistemi.translate :as tr]
-            [sistemi.form :as sf]
             [sistemi.layout :as layout]
-            [www.form :as f]
-            [www.url :as url])
+            [sistemi.form :as sf]
+            [www.form :as f])
   (:use [ring.util.response :only (response)]))
 
 (def names
