@@ -33,6 +33,9 @@
                      ;; web client
                      [clj-http "0.4.0"]
 
+                     ;; email
+                     [com.draines/postal "1.8.0"]
+
                      ;; configuration
                      [fidjet "0.0.1"]
                      [clj-yaml "0.3.1"]
@@ -42,7 +45,9 @@
 
                      ;; misc
                      [ordered "1.2.0"]
-                     [frinj "0.1.3"]]
+                     [frinj "0.1.3"]
+                     [com.google.guava/guava "13.0.1"]
+                     ]
 
       :dev-dependencies [[org.clojure/tools.trace "0.7.3"]
                          [ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]

@@ -1,4 +1,6 @@
 (ns sistemi.site.feedback-htm
+  (:require [sistemi.form :as sf]
+            [www.form :as f])
   (:use [ring.util.response :only (response)]
         [sistemi translate layout]))
 
@@ -46,13 +48,17 @@
   [:div.text_content
    [:p.title (translate :feedback :title)]
    (translate :feedback :text)
-   [:form#feedback {:method "post", :action "", :name "feedback"}
-     [:textarea.greytextarea {:name "service"}]
-     [:br]
-     [:input#submitbtn.submitbtn {:type "image", :name "submitbtn", :src "graphics/submitbtn.gif"}]]])
+   ;; TODO: collect name, email, and subject
+   [:form#feedback {:method "post", :action "feedback", :name "feedback"}
+    (f/textarea :message {:class "greytextarea" :tabindex 1})
+    [:br]
+    [:div {:style "text-align: right"}
+     [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]
+    ]])
 
 (defn handle
   [req]
-  (response (standard-page "" (body) 544)))
+  (response (standard-page "" (f/with-form sf/feedback nil (body)) 544))
+  )
 
 (sistemi.registry/register)
