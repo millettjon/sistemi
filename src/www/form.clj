@@ -106,6 +106,12 @@
     (str "#" (s/upper-case rgb))
     ::invalid-rgb))
 
+;; ===== string =====
+(defmethod invalid? :string
+  [field value]
+  (cond
+   (> (count value) (:max field)) :too-large))
+
 ;; ===== validation pipeline =====
 
 (defn add-error
@@ -204,6 +210,18 @@
   [k opts]
   (let [n (name k)]
     [:input (merge {:type "text" :name n  :id n :value (default k)} opts)]))
+
+(defn textarea
+  [k opts]
+  (let [field (k *fields*)
+        n (name k)]
+    [:textarea (merge {:name n, :id n, :maxlength (:max field)} opts) (default k)]))
+
+;;    [:textarea.greytextarea {:name "service" :tabindex 1}]
+;; todo: insert greytextarea via opts (class)
+;; how to set max size?
+
+
 
 (defmulti render
   "Renders a value to html."
