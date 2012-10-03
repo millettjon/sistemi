@@ -6,6 +6,11 @@
   [^String string ^String substring]
   (.startsWith string substring))
 
+(defn ends-with?
+  "Returns true if string ends with substring."
+  [^String string ^String substring]
+  (.endsWith string substring))
+
 (defn triml-lines
   "Deletes leading whitespace from a multi-line string."
   [s]
