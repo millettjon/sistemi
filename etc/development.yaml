@@ -1,5 +1,0 @@
-# Start a swank server.
-swank: true
-
-# Launch the website in a browser.
-launch-browser: true

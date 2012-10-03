@@ -59,12 +59,12 @@
         args ["gpg"
               (if-let [home (:home opts)] ["--home" home])
               "--decrypt"
-              (and passphrase "--passphrase-fd=0")
+              (if passphrase "--passphrase-fd=0" "--use-agent")
               "--quiet"
               "--no-tty"
-              file
+              (str file)
               (and passphrase [:in passphrase])]
         result (apply sh (filter identity (flatten args)))]
     (if (= 0 (:exit result))
-      (-> result :out read-string classify)
+      (-> result :out read-string eval classify)
       (throw (RuntimeException. (:error result))))))

@@ -38,7 +38,6 @@
 
                      ;; configuration
                      [fidjet "0.0.1"]
-                     [clj-yaml "0.3.1"]
 
                      ;; swank
                      [swank-clojure "1.4.2"]

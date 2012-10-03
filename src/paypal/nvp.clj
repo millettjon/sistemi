@@ -13,6 +13,10 @@
 ;; - allow request to return immediately to client (or after a timeout)
 ;; TODO: add tests
 
+;; TODO: Factor this out.
+;;    - recursively walk a data structure
+;;    - redact values that have a specific metadata tag
+;;    ? is there a better word that sanitize? redact?
 (defn sanitize
   "Remove sensitive information from a map."
   [m]

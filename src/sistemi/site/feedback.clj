@@ -15,32 +15,15 @@
          :error-handler (fn [a x]
                           (log/error "Exception while forwarding feedback email: " x))))
 
-
-;; TODO: Store Heroku system properties for staging in encrypted gpg.
-;;       ? what gpg keys are needed?
-;;           - production sysadmin key
-;;           - staging sysadmin key
-;;           - test shared key for developers
-;;             - to where? test sink address?
-
-;; ? what should go in the conf?
-;;   - password
-;; redacted/harpocrates
-;; ? how can the passwords be redacted when configuration gets logged at startup?
-;;   metadata :private? :secure
-;; ? switch conf back to clojure literals and drop yaml?
-
-
-
 (defn mail-feedback
   "Forwards a feedback email."
   [a message]
-  (let [result (postal/send-message ^{:host "smtp.gmail.com"
-                                      :user "jarvis@sistemimoderni.com"
+  (let [result (postal/send-message ^{:host (conf :jarvis :host)
+                                      :user (conf :jarvis :user)
                                       :pass (conf :jarvis :password)
                                       :ssl true}
-                                    {:from "jarvis@sistemimoderni.com"
-                                     :to "jon@sistemimoderni.com"
+                                    {:from (conf :jarvis :user)
+                                     :to (conf :feedback :email)
                                      :subject "Feedback submission from website"
                                      :body message})]
     (case (:error result)

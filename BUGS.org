@@ -1,3 +1,235 @@
+- careers page
+
+Site Search.
+FAQ content.
+Add a page for the installation manual.
+TODO: Get a pixel dimension for the website version of the instructions.
+  - Create the image in white.
+TODO: Build 3D instructions based on order.
+
+- server side image rendering?
+- changing jpg image colors?
+
+TODO: Introductory page?
+  Shows the standard options of the shelves.
+  Customization page.
+
+* TASKS
+** TODO should :sistemi.form/{ovale,semplice,quadro} be in a different namespace?
+  ? how would this work with datomic?
+  ? how would this work with clojurescript?
+    - avoid converting enum values with javascript
+** TODO Get a local copy of jquery for offline development.
+** TODO Cutouts are not displaying when the select box is changed.
+** TODO Jobs page
+** TODO Persist orders in datomic
+- shelving
+- embed transactor in dev mode
+  ? how much RAM is needed?
+
+- generate an order id
+  ? does data support primary keys?
+  ? are entity id's safe to expose? i.e., immutable etc?
+
+- persist design parameters
+- persist paypal response data
+
+** TODO instructions in pdf format
+** TODO on review page when clicking edit specifications, on return to design page, cutout selection is lost
+** TODO Fix pricing bug.
+- hash uses :cutout nil for semplice (no cutout)
+- select box uses "semplice"
+- what should datomic use?
+  enum versus nil value?
+  has?
+- value may be better if there is additional meta data attached
+  - e.g., display name "semplice"
+- form should convert to namespaced keyword?
+  :sistemi.model.shelving/semplice
+  ? how does the form render select?
+    - translate from keyword to string
+      name ; kw -> str
+      read-string ; str -> kw
+  sistemi.form - contains validation info
+  ? where is the code that renders the form?
+    www.form
+  ? how to print a value in a readable form?
+
+** TODO Graphic model with Three.js
+? What does he use the debug canvas for?
+- factor out the rotation and rendering
+
+** TODO Use [[https://github.com/pyr/jenkins-leiningen][jenkins-leiningen]] for automated testing
+** TODO Move to amazon infrastructure.
+http://www.cloudorado.com/
+
+? what does the free service level include?
+  - micro instance specs
+  - dynamoc db usage
+? could a test instance run on linode?
+
+** TODO Get SSL working.
+** TODO Add margin to calculated price.
+** TODO improve support for units
+- frinj: http://martinsprogrammingblog.blogspot.com/2012/03/announcing-frinj.html
+- frinj w/ currency feeds: http://martinsprogrammingblog.blogspot.com/2012/03/adding-live-unit-feeds-to-frinj.html
+- frinj w/ datomic: https://gist.github.com/1980351
+
+** DONE Display price calculation breakdown in html
+- log?
+- email to us?
+- hidden in html?
+- popup for admin user?
+** DONE Add correct price to checkout flow.
+? calculate on the fly?
+** DONE shelving.htm - change minimum width from 60 to 64
+** TODO frinj suggestions
+#_ (fj+ 1 nil) ;; TODO: evaluation aborted - should give a stacktrace at least
+#_ (apply fj+ '(nil)) ;; TODO: should give a straight nil
+;; frinj - it should be possible to add 0 to any unit
+#_ (fj+ 0 (fj 1 :meter))
+
+** TODO fix formatting of currencies french locale e.g.,: "1 234,56€"
+Note: Bux formats based on currency, but not locale.
+** TODO calculate shipping price
+** TODO calculate tax? can paypal do it?
+** TODO contact us page
+** TODO review french translations
+** TODO Incorporate Company
+** TODO Setup bank account
+** TODO Go live with PayPal
+
+** TODO social network integration
+  - facebook
+  - gplus
+  - tumbler
+  - blog
+  - pinterest
+  - loveit
+
+** TODO Email signup page
+
+** TODO Graphic model for iOS?
+** TODO use core.logic to build constrained models
+** TODO move wiki to base site so it is editable by all
+** TODO order tracking
+- order status page
+- email status
+** DONE order view - format fields for user consumption
+   CLOCK: [2012-06-24 Sun 14:30]--[2012-06-24 Sun 18:45] =>  4:15
+** DONE update confirm order page to use upu to format shipping address
+** DONE add tests for upu namespace
+** DONE add tests for paypal.address namespace
+** TODO Upgrade to leiningen 2.0
+** TODO opensource internalized url library
+** TODO opensouce paypal library
+** TODO opensource upu library
+** TODO datastore - store orders
+** TODO datastore - store paypal requests and responses
+** TODO order/status - display shipment tracking summary
+** TODO admin interface to view orders
+** TODO order/confirm.htm should have a back button (e.g., return to design)
+** TODO check formatting for french addresses
+** TODO document order flow pages
+order/
+order/review.htm    ;; review design before paying
+order/checkout      ;; start checkout with paypal process
+order/confirm.htm   ;; confirm paypal items to purchase
+order/pay           ;; finalize payment with paypal
+order/status.htm    ;; display order status
+** TODO order view - add line items
+** TODO add way to retrieve order status
+  - either
+    1) account login (future)
+    2) shortcut link from email
+    3) combo of email address and zipcode
+** TODO order confirmation email
+  - with shortcut link to order status
+* MISC
+6/20
+  einats friends leslie will find 2 potential people to work with us
+
+
+The website needs to be functioning...
+- me and copeland
+- if we can't do it right now
+- what we need to do
+- do database work
+- todo list
+- I will commit to polishing the workflow
+  - final order summary page
+  - back button
+  - list of possible work items
+  - datomic
+  - figure out how many hours per week to commit
+  - evaluate team meeting software
+    - teamviewer
+    - go to meeting
+    - skype
+    - google hangouts
+    - mumble/murmur
+    - features
+      - group screen viewing
+      - remote control
+      - voice
+   - price calculation
+   - shipping cost calculation
+   - social network integration
+   - do we send email
+   - followup campaigns
+   - a/b testing
+   - monitoring
+   - review other europe payment options
+   - make a github milestone
+- Einat will look at the 3D rendering
+Incorporation
+- Paypal production
+Team Weaver
+- can go directly on to somebodies computer
+
+6/11/2012
+- 30kg of meat: calf/cow, lamb
+  - butchered the lamb
+
+1/?   yves
+1     lisa
+1     copeland
+1     einat
+5-10  jon fundamental
+
+
+6/5/2012
+international payments: https://www.braintreepayments.com/tour/international
+
+5/31/2012
+
+first time flow
+  online boutique:
+    shelving:
+      ordering:
+
+  have a standard
+    3 ready-made models
+      with a customize button
+  designer viewpoint:
+    - needs to understand what is being designed?
+  ? is it possible to choose the number of shelves?
+
+jt format
+
+
+5/30/2012
+thingverse
+
+
+add cutout symbols in dropdown
+
+eric put in a design for an eyeglass store
+
+ipad app for solidworks can explode
+
+uk based payment api: https://gocardless.com/
+
 5/12/2012
 
 1) plain high quality panel cut a dimension and with a color
@@ -13,6 +245,30 @@
 - menu to download cad drawings
   requires email and other info collection
 
+-----
+github
+  - have it send emails to jon instead of info
+shelving.htm
+  - add client side validation for color (e.g., if they manually type it)
+  - display validation errors if receiving redirect from a failed submission
+    - in this case, should the bad values be rendered?
+      - may not be possible for some things
+    - :show-errors
+review.htm
+  - calculate price
+misc
+  - see if general.css can be removed
+  - twiiter language selection: http://twitter.com/
+
+  create easter egg to auto login to paypal for development
+  add sessions
+    https://github.com/mmcgrana/ring/wiki/Sessions
+  support for inches
+  support for pantone colors
+    http://www.pantone.com/pages/paint/paintselector.aspx
+    http://www.ginifab.com/feeds/pms/
+    http://www.ginifab.com/feeds/pms/pms_color_in_image.php
+    http://www.netfront.fr/Services/rgb2pantone/pantone.htm?r=&g=&b=&rgb=ffffff
 -----
 
 Einat Grinbaum <egrinbaum@mpfp.com>
@@ -476,8 +732,6 @@ sprint: finish french translations
 sprint: hookup autocad, work on autocad
 sprint: see if hiccup can be used instead of enlive
 
-
-
 * Autocad
 How to load clojure via a single assembly from a .NET app: http://lispetc.posterous.com/consolidating-clojureclr-assemblies
 
@@ -688,7 +942,6 @@ dog day afternoon
 - simmachines: http://www.simmachines.com/
   - clojure job; costa rica; big data
 
-* FIGURE OUT HOW TO TRANSITION CODE FROM COPELAND
 * DEPLOYMENT
   staging: http://sharp-river-7467.herokuapp.com
   production: http://deep-fire-3064.herokuapp.com
