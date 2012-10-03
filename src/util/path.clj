@@ -7,7 +7,9 @@
   (:import (java.io File)
            (clojure.lang IPersistentMap
                          IPersistentVector))
-  (:refer-clojure :exclude [first last rest]))
+  (:refer-clojure :exclude [first last rest name]))
+
+;; TODO: Is it useful to merge this with the fs lib?
 
 (defn- to-str
   "Coerces a path to a string."
@@ -84,11 +86,22 @@
   (if-let [name (last path)]
     (second (re-find #"\.([^\.]+)$" name))))
 
+(defmulti-path name
+  "Returns the name of a path including the extension."
+  [path]
+  (last path))
+
 (defmulti-path basename
   "Returns the basename of a path without the extension (if any)."
   [path]
   (if-let [name (last path)]
     (second (re-find #"^(.*?)(\.[^\.]+)?+$" name))))
+
+(defmulti-path shortname
+  "Returns the basename of a path with all extensions removed."
+  [path]
+  (if-let [name (last path)]
+    (second (re-find #"^([^\.]*)" name))))
 
 (defmulti-path parent
   "Returns the parent path of a path. The parent of \"/\" is \"/\" and the parent of \"\" is \"\"."
@@ -163,8 +176,22 @@
   [path]
   (.getPath (.getCanonicalFile (File. ^String path))))
 
-(defn file-seq-bf [dir]
+(defn children
+  "Returns a seq of children of a directory."
+  [dir]
+  (.listFiles (io/file dir)))
+
+;; TODO: implement protocol #'clojure.java.io/Coercions (e.g., as-file)
+(defn files
+  "Returns a seq of children of a directory that are files."
+  [dir]
+  (let [dir (io/file (str dir))
+        children (.listFiles dir)]
+    (filter #(.isFile ^File %) children)))
+
+(defn file-seq-bf
   "Returns a seq of all files and subdirectories of a directory in breadth first order."
+  [dir]
   (let [dir (io/file dir)
         children (.listFiles dir)
         subdirs (filter #(.isDirectory ^File %) children)
