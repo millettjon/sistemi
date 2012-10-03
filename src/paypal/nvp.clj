@@ -5,6 +5,7 @@
             [clojure.string :as str]
             [clojure.tools.logging :as log]
             [log.readably :as logr]
+            [harpocrates.core :as harpo]
             [www.url :as url]))
 
 ;; TODO: ? Is the circuit breaker pattern useful (http://blog.higher-order.net/2010/05/05/circuitbreaker-clojure-1-2/)?
@@ -12,17 +13,6 @@
 ;; - limit concurrency to paypal
 ;; - allow request to return immediately to client (or after a timeout)
 ;; TODO: add tests
-
-;; TODO: Factor this out.
-;;    - recursively walk a data structure
-;;    - redact values that have a specific metadata tag
-;;    ? is there a better word that sanitize? redact?
-(defn sanitize
-  "Remove sensitive information from a map."
-  [m]
-  (let [redacted-map (select-keys m [:user :pwd :signature])
-        redacted-map (zipmap (keys redacted-map) (repeat (count redacted-map) "-redacted-"))]
-    (merge m redacted-map)))
 
 (defn- call
   "Calls a paypal NVP (name-value-pair) method and returns the result."
@@ -34,7 +24,7 @@
                      params
                      {:method method})
         request-params (hash-map :form-params form-params)]
-    (logr/info "request" (sanitize form-params))
+    (logr/info "request" (harpo/redact form-params))
     (let [resp (client/post (:url site-conf) request-params)]
       (logr/info "response" resp)
       resp)))
