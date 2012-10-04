@@ -6,3 +6,5 @@ pom.xml
 .lein-deps-sum
 log
 .lein-plugins
+.idea
+*.iml
