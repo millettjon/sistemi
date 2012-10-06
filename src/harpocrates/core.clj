@@ -43,4 +43,4 @@
         result (apply sh (filter identity (flatten args)))]
     (if (= 0 (:exit result))
       (-> result :out read-string eval classify)
-      (throw (RuntimeException. ^String (:error result))))))
+      (throw (RuntimeException. ^String (:err result))))))
