@@ -12,7 +12,7 @@
         clojure.java.browse
         clojure.contrib.strint
         (app config run-level)
-        app.config.core
+        [app.config.core :as cfg]
         locale.core))
 
 ;; ===== LOGGING =====
@@ -106,11 +106,12 @@
   []
   (if (conf :swank)
     (start-swank))
-  (let [port (conf :port)]
-    (when (conf :launch-browser)
-      (browse-url  (<< "file://~(System/getProperty \"user.dir\")/docs/uberdoc.html"))
-      (browse-url  (<< "http://localhost:~{port}")))
-    (run-jetty #'routes {:port port})))
+  (when (conf :launch-browser)
+    (browse-url  (<< "file://~(System/getProperty \"user.dir\")/docs/uberdoc.html"))
+    (browse-url  (<< "http://localhost:~{(conf :port)}")))
+  (run-jetty #'routes (select-keys cfg/config [:port :host])))
+
+;; can i say conf select-keys?
 
 ;; ===== DEVELOPMENT =====
 (when (development?)

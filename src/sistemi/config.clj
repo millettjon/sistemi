@@ -18,4 +18,4 @@
 (conf/set-config!
    (dir-map "etc/default")
    (dir-map (path/join "etc" (name run-level)))
-   (conf/environment-map "PORT" "LAUNCH_BROWSER"))
+   (conf/environment-map "PORT" "LAUNCH_BROWSER" "HOST"))
