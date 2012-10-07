@@ -2,7 +2,7 @@
   (:use util.path
         clojure.test)
   (:import (java.io File))
-  (:refer-clojure :exclude [first last rest]))
+  (:refer-clojure :exclude [first last rest name]))
 
 (deftest test-new-path
   (are [a] (= a (str (new-path a)) (str (new-path (File. a))))
