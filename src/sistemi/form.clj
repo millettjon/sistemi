@@ -11,6 +11,13 @@
    :finish {:type :set :options [::matte ::satin {:disabled true} ::glossy {:disabled true}] :default ::matte}
    :color {:type :rgb :default "#AB003B"}})
 
+(def shelf
+  "The design parameters for a single shelf."
+  {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120}
+   :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30}
+   :finish {:type :set :options [::matte ::satin {:disabled true} ::glossy {:disabled true}] :default ::matte}
+   :color {:type :rgb :default "#AB003B"}})
+
 (def feedback
   "A customer feedback message."
   {:message {:type :string :max 4096 :default ""}}
