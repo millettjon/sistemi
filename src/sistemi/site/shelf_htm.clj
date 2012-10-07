@@ -1,4 +1,4 @@
-(ns sistemi.site.shelving-htm
+(ns sistemi.site.shelf-htm
   (:require [util.string :as stru]
             [sistemi.form :as sf]
             [www.request :as r]
@@ -8,8 +8,7 @@
         [sistemi translate layout]))
 
 (def names
-  {:es "estantaría"
-   :fr "etagères"})
+  {})
 
 (def strings
   {:en {:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
@@ -34,7 +33,7 @@
 
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
-        [:script {:type "text/javascript" :src "/3d/shelving.js"}]
+        [:script {:type "text/javascript" :src "/3d/shelf.js"}]
 
         ;; styles
         [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
@@ -72,19 +71,9 @@
         (f/select :width {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
-       [:label.control-label {:for "height"} "Height"]
-       [:div.controls
-        (f/select :height {:class "chzn-select" :tabindex 1})]]
-
-      [:div.control-group
        [:label.control-label {:for "depth"} "Depth"]
        [:div.controls
         (f/select :depth {:class "chzn-select" :tabindex 1})]]
-
-      [:div.control-group
-       [:label.control-label {:for "cutout"} "Cutout"]
-       [:div.controls
-        (f/select :cutout {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "finish"} "Finish"]
@@ -101,14 +90,12 @@
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
 
     [:script {:type "text/javascript"}
-     ;; Initialize shelving from defaults.
+     ;; Initialize shelf from defaults.
      "\n"
-     "var shelving = {};\n"
-     "shelving.height=" (f/default :height) ";\n"
-     "shelving.width=" (f/default :width) ";\n"
-     "shelving.depth=" (f/default :depth) ";\n"
-     "shelving.cutout='" (str (f/default :cutout)) "';\n"
-     "shelving.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
+     "var shelf = {};\n"
+     "shelf.width=" (f/default :width) ";\n"
+     "shelf.depth=" (f/default :depth) ";\n"
+     "shelf.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.
@@ -118,20 +105,12 @@
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {
-           shelving.width = $(this).val();
-           updateAnimation(shelving);
-         });
-         $('#height').chosen().change(function() {
-           shelving.height = $(this).val();
-           updateAnimation(shelving);
+           shelf.width = $(this).val();
+           updateAnimation(shelf);
          });
          $('#depth').chosen().change(function() {
-           shelving.depth = $(this).val();
-           updateAnimation(shelving);
-         });
-         $('#cutout').change(function() {
-           shelving.cutout = $(this).val();
-           updateAnimation(shelving);
+           shelf.depth = $(this).val();
+           updateAnimation(shelf);
          });
 
          // Set the container div height to match the width.
@@ -140,7 +119,7 @@
          model.css({height: height.toString() + 'px'});
 
          // Start animating.
-         drawShelving(shelving, model[0]);
+         drawShelf(shelf, model[0]);
          startAnimation();
 
          // The color picker doesn't have a way to supply a callback in addition
@@ -149,12 +128,12 @@
          function checkColor() {
            var color = $('#color').css('background-color');
            color = rgb2hex(color);
-           if (shelving.color != color) {
-             shelving.color = color;
+           if (shelf.color != color) {
+             shelf.color = color;
              // For dark colors, use a gray background.
              var bg = luminence(color) > 0.1 ? '#000' : '#666';
              $('#model').css({'background-color': bg});
-             updateAnimation(shelving);
+             updateAnimation(shelf);
            }
            // Rate limit model updates since the color picker spews events rapidly
            // and can cause slowness and/or webgl crashes.
@@ -167,7 +146,7 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form sf/shelving (:params req) (body)) 544)))
+  (response (standard-page (head) (f/with-form sf/shelf (:params req) (body)) 544)))
 
-#_ (remove-ns 'sistemi.site.shelving-htm)
+#_ (remove-ns 'sistemi.site.shelf-htm)
 (sistemi.registry/register)

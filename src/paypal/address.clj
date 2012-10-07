@@ -1,6 +1,7 @@
 (ns paypal.address
   "Convert paypal addresses to UPU addresses."
-  (:require upu))
+  (:require upu)
+  (:refer-clojure :exclude [format]))
 
 (defn- concat-keyword
   "Concats arguments into a single keyword."

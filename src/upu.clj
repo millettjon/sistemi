@@ -3,7 +3,8 @@
    International Address Formats: http://bitboost.com/ref/international-address-formats.html
    UPU Home: http://www.upu.int/
    Country Codes: http://www.nationsonline.org/oneworld/country_code_list.htm"
-  (require [clojure.string :as str]))
+  (:require [clojure.string :as str])
+  (:refer-clojure :exclude [format]))
 
 (defn format
   "Formats an address by its country."

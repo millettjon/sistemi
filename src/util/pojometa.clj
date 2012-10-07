@@ -6,7 +6,8 @@ Here's an approach that may be of use: store the metadata in a
 Map instead of decorating the Object with it. This map should use
 object identity, not equality and should hold its keys weakly so that
 it prevent collection of objects that otherwise would be garbage."
-    (:import [com.google.common.collect MapMaker]))
+    (:import [com.google.common.collect MapMaker]
+             [java.util.concurrent ConcurrentMap]))
 
 
 ;; Caveats
@@ -21,7 +22,7 @@ it prevent collection of objects that otherwise would be garbage."
 ;; Doesn't really support Clojure's concept of metadata if it's shared
 ;; global mutable state.
 
-(def meta-map
+(def ^ConcurrentMap meta-map
     (-> (MapMaker.) .weakKeys .makeMap))
 
 (defn meta* [o]
