@@ -6,14 +6,27 @@ var camera, scene, renderer;
 
 var g_container;
 
-var targetRotation = 0;
-var targetRotationOnMouseDown = 0;
+// target rotation
+// note: Start with a slight downward rotation to see more than just the edge of the shelf.
+var rotation = {
+  x: 0, y: 0, //Math.PI/12,    // current
+  start: { x: 0, y: 0}    // on mouse down or touch start
+};
 
-var mouseX = 0;
-var mouseXOnMouseDown = 0;
+// best starting rotation
+// 1   PI/10
+// 4   PI/?
 
-var windowHalfX = window.innerWidth / 2;
-var windowHalfY = window.innerHeight / 2;
+// mouse position
+var mouse = {
+  x: 0, y: 0,             // current
+  start: { x: 0, y: 0}    // on mouse down or touch start
+};
+
+var windowHalf = {
+  x: window.innerWidth / 2,
+  y: window.innerHeight / 2
+};
 
 // Namespace
 var sm = sm || {};
@@ -21,11 +34,7 @@ sm.shelf = sm.shelf || {};
 
 // Configuration
 sm.shelf = {
-  // Model Parameters.
-  vertical: {inset: 15},          // distance vertical member is inset from each end
-  lateral: {width: 9,
-            inset: 5},            // distance lateral's are inset from rear
-  thickness:  3                   // MDF thickness
+  thickness:  3    // MDF thickness
 };
 
 // Extrusion settings.
@@ -41,6 +50,42 @@ function makeContainer() {
   return container;
 }
 
+// Calculate how many shelves display cleanly in the window.
+// Assumes spacing of 1 shelf depth.
+function numShelvesToDisplay(shelf) {
+  var s = shelf;
+  var max = Math.floor(s.width / s.depth);
+  return Math.min(s.quantity, max);
+}
+
+function updateNumDisplayed(shelf) {
+  var s = shelf;
+  var d = $('#numDisplayed');
+  var n = numShelvesToDisplay(s);
+  var vis = (s.quantity == n) ? 'hidden' : 'visible';
+  d.css('visibility', vis);
+  d.text('(' + n + ' displayed)');
+}
+
+function shelvesHeight(shelf) {
+  var s = shelf;
+  // TOOD: include shelf thickess
+  return (numShelvesToDisplay(s) - 1) * s.depth;
+}
+
+function layoutHorizontal(shelf) {
+  var s = shelf;
+  num = numShelvesToDisplay(s);
+  var step = s.depth;
+  var positions = [];
+  for (i=0; i < num; i++) {
+    y = step * i;
+    //console.log("layout y: " + y);
+    positions.push(y);
+  }
+  return positions;
+}
+
 function addShelf(shelf, addGeometry) {
   var s = shelf;
   var ns = sm.shelf;
@@ -53,8 +98,15 @@ function addShelf(shelf, addGeometry) {
   shape.lineTo(0, s.depth);
   shape.lineTo(0, 0);
   var shape3d = shape.extrude( ns.extrusion );
-  //addGeometry(shape3d, s.color,  0,0,0,  Math.PI/2,0,0,  1);
-  addGeometry(shape3d, s.color,  0,-30,0,  Math.PI/2,0,0,  1);
+  // addGeometry(shape3d, s.color,  0,0,0,  Math.PI/2,0,0,  1);
+
+  // Add horizontals at the correct positions.
+  positions = layoutHorizontal(s);
+  for (i in positions) {
+    y = positions[i] + ns.thickness;
+    // console.log("rendering y at: " + y)
+    addGeometry(shape3d, s.color,  0,y,0,  Math.PI/2,0,0,  1);
+  }
 }
 
 Detector = {
@@ -122,7 +174,7 @@ function drawShelf(shelf, container) {
   // instead of the shelf unit's origin. See: https://github.com/mrdoob/three.js/issues/1593
   dummy = new THREE.Object3D();
   scene.add( dummy );
-  parent.position.set( - shelf.width/2, 0, -shelf.depth/2 );  // half width, height, depth
+  parent.position.set( - shelf.width/2, - shelvesHeight(shelf)/2, - shelf.depth/2 );  // width, height, depth
   dummy.add( parent );
 
   // Setup renderer.
@@ -147,13 +199,24 @@ function onDocumentMouseDown( event ) {
   g_container.addEventListener( 'mousemove', onDocumentMouseMove, false );
   g_container.addEventListener( 'mouseup', onDocumentMouseUp, false );
   g_container.addEventListener( 'mouseout', onDocumentMouseOut, false );
-  mouseXOnMouseDown = event.clientX - windowHalfX;
-  targetRotationOnMouseDown = targetRotation;
+  mouse.start.x = event.clientX - windowHalf.x;
+  mouse.start.y = event.clientY - windowHalf.y;
+  rotation.start.x = rotation.x;
+  rotation.start.y = rotation.y;
+}
+
+// Limits the y rotation between.
+function limitRotation(rotation) {
+  if (rotation.y > Math.PI/6) { rotation.y = Math.PI/6; }
+  if (rotation.y < - Math.PI/6) { rotation.y = - Math.PI/6; }
 }
 
 function onDocumentMouseMove( event ) {
-  mouseX = event.clientX - windowHalfX;
-  targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
+  mouse.x = event.clientX - windowHalf.x;
+  rotation.x = rotation.start.x + (mouse.x - mouse.start.x) * 0.02;
+  mouse.y = event.clientY - windowHalf.y;
+  rotation.y = rotation.start.y + (mouse.y - mouse.start.y) * 0.02;
+  limitRotation(rotation);
 }
 
 function onDocumentMouseUp( event ) {
@@ -171,16 +234,21 @@ function onDocumentMouseOut( event ) {
 function onDocumentTouchStart( event ) {
   if ( event.touches.length == 1 ) {
     event.preventDefault();
-    mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
-    targetRotationOnMouseDown = targetRotation;
+    mouse.start.x = event.touches[ 0 ].pageX - windowHalf.x;
+    rotation.start.x = rotation.x;
+    mouse.start.y = event.touches[ 0 ].pageY - windowHalf.y;
+    rotation.start.y = rotation.y;
+    limitRotation(rotation);
   }
 }
 
 function onDocumentTouchMove( event ) {
   if ( event.touches.length == 1 ) {
     event.preventDefault();
-    mouseX = event.touches[ 0 ].pageX - windowHalfX;
-    targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.05;
+    mouse.x = event.touches[ 0 ].pageX - windowHalf.x;
+    rotation.x = rotation.start.x + (mouse.x - mouse.start.x) * 0.05;
+    mouse.y = event.touches[ 0 ].pageY - windowHalf.y;
+    rotation.y = rotation.start.y + (mouse.y - mouse.start.y) * 0.05;
   }
 }
 
@@ -205,7 +273,7 @@ function luminence(color) {
 
 // shim layer with setTimeout fallback
 window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       || 
+  return  window.requestAnimationFrame || 
     window.webkitRequestAnimationFrame || 
     window.mozRequestAnimationFrame    || 
     window.oRequestAnimationFrame      || 
@@ -220,7 +288,8 @@ var stopFrameAnim = false;
 
 function startAnimation() {
   animationRunning = true;
-  dummy.rotation.y += targetRotation;
+  dummy.rotation.y += rotation.x;
+  dummy.rotation.x += rotation.y;
   animate();
 }
 
@@ -238,7 +307,8 @@ function animate() {
 }
 
 function render() {
-  dummy.rotation.y += ( targetRotation - dummy.rotation.y ) * 0.05;
+  dummy.rotation.y += ( rotation.x - dummy.rotation.y ) * 0.05;
+  dummy.rotation.x += ( rotation.y - dummy.rotation.x ) * 0.05;
   renderer.render( scene, camera );
 };
 
@@ -246,6 +316,9 @@ function updateAnimation(shelf) {
   // Stop the animation and clear the model.
   stopAnimation();
   $(g_container).empty();
+
+  // Update the indicator for number of shelves displayed.
+  updateNumDisplayed(shelf);
 
   // Redraw the model and start animating.
   drawShelf(shelf, g_container);

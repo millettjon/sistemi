@@ -10,7 +10,8 @@
   [:home
    :vision
    [:boutique
-    :shelving
+    {:label :shelves :page "/shelf.htm"}
+    {:label :shelving-units :page "/shelving.htm"}
     :tables
     :lamps
     :chairs
@@ -29,8 +30,8 @@
           [:li.menui [:a.menui {:href "#"} [:span label]]
            [:ul.menum.submenu
             (for [item (rest item)]
-              (let [page (str "/" (name item) ".htm")
-                    label (tr/translate :menu key item)]
+              (let [page (if (map? item) (:page item)  (str "/" (name item) ".htm"))
+                    label (tr/translate :menu key (if (map? item) (:label item) item))]
                 [:li.menui
                  [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page)} label]]
                 ))]])

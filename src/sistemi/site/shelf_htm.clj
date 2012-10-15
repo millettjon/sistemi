@@ -86,6 +86,13 @@
         (f/text :color {:tabindex 1})]]
       [:div#colorpicker {:style "margin-left: 20px;"}]
 
+      [:div.control-group {:style "margin-top: 20px;"}
+       [:label.control-label {:for "quantity"} "Quantity"]
+       [:div.controls
+        (f/select :quantity {:class "chzn-select" :tabindex 1})
+        [:div#numDisplayed {:style "text-align: center; visibility: hidden"} "(4 displayed)"]
+        ]]
+
       [:div {:style "text-align: right"}
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
 
@@ -96,6 +103,7 @@
      "shelf.width=" (f/default :width) ";\n"
      "shelf.depth=" (f/default :depth) ";\n"
      "shelf.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
+     "shelf.quantity=" (f/default :quantity) ";\n"
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.
@@ -110,6 +118,10 @@
          });
          $('#depth').chosen().change(function() {
            shelf.depth = $(this).val();
+           updateAnimation(shelf);
+         });
+         $('#quantity').chosen().change(function() {
+           shelf.quantity = $(this).val();
            updateAnimation(shelf);
          });
 

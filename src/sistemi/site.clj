@@ -24,11 +24,12 @@
         :menu {:home "home"
                :vision "our vision"
                :boutique  {:_ "on-line boutique"
-                                   :shelving "shelving"
-                                   :tables "tables"
-                                   :lamps "lamps"
-                                   :chairs "chairs"
-                                   :paint "paint"}
+                           :shelves "shelves"
+                           :shelving-units "shelving units"
+                           :tables "tables"
+                           :lamps "lamps"
+                           :chairs "chairs"
+                           :paint "paint"}
                :service "at your service"
                :system "the system"
                :gallery "gallery"

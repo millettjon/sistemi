@@ -332,9 +332,11 @@ function addHorizontalMembers(shelving, addGeometry) {
   }
 }
 
+// TODO: factor out.
 Detector = {
   canvas: !! window.CanvasRenderingContext2D,
-  webgl: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()
+  webgl: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )(),
+  webgl2: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'webgl' ); } catch( e ) { return false; } } )()
 }
 
 function drawShelving(shelving, container) {
@@ -361,6 +363,7 @@ function drawShelving(shelving, container) {
   //useWebGL = false;
   console.log("canvas: " + Detector.canvas);
   console.log("webgl: " + Detector.webgl);
+  console.log("webgl2: " + Detector.webgl2);
 
   // Add subtle ambient lighting.
   if (useWebGL) {
