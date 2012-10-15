@@ -238,7 +238,6 @@ function onDocumentTouchStart( event ) {
     rotation.start.x = rotation.x;
     mouse.start.y = event.touches[ 0 ].pageY - windowHalf.y;
     rotation.start.y = rotation.y;
-    limitRotation(rotation);
   }
 }
 
@@ -246,9 +245,10 @@ function onDocumentTouchMove( event ) {
   if ( event.touches.length == 1 ) {
     event.preventDefault();
     mouse.x = event.touches[ 0 ].pageX - windowHalf.x;
-    rotation.x = rotation.start.x + (mouse.x - mouse.start.x) * 0.05;
+    rotation.x = rotation.start.x + (mouse.x - mouse.start.x) * 0.02;
     mouse.y = event.touches[ 0 ].pageY - windowHalf.y;
-    rotation.y = rotation.start.y + (mouse.y - mouse.start.y) * 0.05;
+    rotation.y = rotation.start.y + (mouse.y - mouse.start.y) * 0.02;
+    limitRotation(rotation);
   }
 }
 
