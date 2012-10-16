@@ -7,15 +7,11 @@ var camera, scene, renderer;
 var g_container;
 
 // target rotation
-// note: Start with a slight downward rotation to see more than just the edge of the shelf.
+// Note: Start with a slight downward rotation to see more than just the edge of the shelf.
 var rotation = {
-  x: 0, y: 0, //Math.PI/12,    // current
+  x: 0, y: Math.PI/14,    // current
   start: { x: 0, y: 0}    // on mouse down or touch start
 };
-
-// best starting rotation
-// 1   PI/10
-// 4   PI/?
 
 // mouse position
 var mouse = {
@@ -69,7 +65,7 @@ function updateNumDisplayed(shelf) {
 
 function shelvesHeight(shelf) {
   var s = shelf;
-  // TOOD: include shelf thickess
+  // TODO: include shelf thickness
   return (numShelvesToDisplay(s) - 1) * s.depth;
 }
 

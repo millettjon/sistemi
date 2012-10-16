@@ -461,7 +461,7 @@ function onDocumentTouchMove( event ) {
   if ( event.touches.length == 1 ) {
     event.preventDefault();
     mouseX = event.touches[ 0 ].pageX - windowHalfX;
-    targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.05;
+    targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
   }
 }
 

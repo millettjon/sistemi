@@ -17,7 +17,7 @@
    :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30}
    :finish {:type :set :options [::matte ::satin {:disabled true} ::glossy {:disabled true}] :default ::matte}
    :color {:type :rgb :default "#AB003B"}
-   :quantity {:type :bounded-number :min 1 :max 100 :default 4}})
+   :quantity {:type :bounded-number :min 1 :max 100 :default 1}})
 
 (def feedback
   "A customer feedback message."

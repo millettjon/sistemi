@@ -62,7 +62,7 @@
 
    [:div.span3
     
-    [:form#shelf-form.form-horizontal {:method "get" :action "order/review.htm"}
+    [:form#shelf-form.form-horizontal {:method "get" :action "shelf.htm"}
      [:fieldset
 
       [:div.control-group
