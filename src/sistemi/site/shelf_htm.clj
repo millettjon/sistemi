@@ -33,6 +33,7 @@
 
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
+        [:script {:type "text/javascript" :src "/3d/frame.js"}]
         [:script {:type "text/javascript" :src "/3d/shelf.js"}]
 
         ;; styles

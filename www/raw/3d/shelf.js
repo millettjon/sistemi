@@ -1,29 +1,5 @@
 // Animates a single shelf.
 
-var dummy;
-
-var camera, scene, renderer;
-
-var g_container;
-
-// target rotation
-// Note: Start with a slight downward rotation to see more than just the edge of the shelf.
-var rotation = {
-  x: 0, y: Math.PI/14,    // current
-  start: { x: 0, y: 0}    // on mouse down or touch start
-};
-
-// mouse position
-var mouse = {
-  x: 0, y: 0,             // current
-  start: { x: 0, y: 0}    // on mouse down or touch start
-};
-
-var windowHalf = {
-  x: window.innerWidth / 2,
-  y: window.innerHeight / 2
-};
-
 // Namespace
 var sm = sm || {};
 sm.shelf = sm.shelf || {};
@@ -40,11 +16,9 @@ sm.shelf.extrusion = {
   bevelEnabled: false,
   curveSegments: 1};
 
-function makeContainer() {
-  container = document.createElement( 'div' );
-  document.body.appendChild( container );
-  return container;
-}
+// target rotation
+// Note: Start with a slight downward rotation to see more than just the edge of the shelf.
+rotation.y = Math.PI/14;
 
 // Calculate how many shelves display cleanly in the window.
 // Assumes spacing of 1 shelf depth.
@@ -103,11 +77,6 @@ function addShelf(shelf, addGeometry) {
     // console.log("rendering y at: " + y)
     addGeometry(shape3d, s.color,  0,y,0,  Math.PI/2,0,0,  1);
   }
-}
-
-Detector = {
-  canvas: !! window.CanvasRenderingContext2D,
-  webgl: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()
 }
 
 function drawShelf(shelf, container) {
@@ -187,126 +156,6 @@ function drawShelf(shelf, container) {
   g_container.addEventListener( 'touchstart', onDocumentTouchStart, false );
   g_container.addEventListener( 'touchmove', onDocumentTouchMove, false );
 }
-
-// TODO: Don't use global variables for event handling.
-
-function onDocumentMouseDown( event ) {
-  event.preventDefault();
-  g_container.addEventListener( 'mousemove', onDocumentMouseMove, false );
-  g_container.addEventListener( 'mouseup', onDocumentMouseUp, false );
-  g_container.addEventListener( 'mouseout', onDocumentMouseOut, false );
-  mouse.start.x = event.clientX - windowHalf.x;
-  mouse.start.y = event.clientY - windowHalf.y;
-  rotation.start.x = rotation.x;
-  rotation.start.y = rotation.y;
-}
-
-// Limits the y rotation between.
-function limitRotation(rotation) {
-  if (rotation.y > Math.PI/6) { rotation.y = Math.PI/6; }
-  if (rotation.y < - Math.PI/6) { rotation.y = - Math.PI/6; }
-}
-
-function onDocumentMouseMove( event ) {
-  mouse.x = event.clientX - windowHalf.x;
-  rotation.x = rotation.start.x + (mouse.x - mouse.start.x) * 0.02;
-  mouse.y = event.clientY - windowHalf.y;
-  rotation.y = rotation.start.y + (mouse.y - mouse.start.y) * 0.02;
-  limitRotation(rotation);
-}
-
-function onDocumentMouseUp( event ) {
-  g_container.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-  g_container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-  g_container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-}
-
-function onDocumentMouseOut( event ) {
-  g_container.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-  g_container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-  g_container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-}
-
-function onDocumentTouchStart( event ) {
-  if ( event.touches.length == 1 ) {
-    event.preventDefault();
-    mouse.start.x = event.touches[ 0 ].pageX - windowHalf.x;
-    rotation.start.x = rotation.x;
-    mouse.start.y = event.touches[ 0 ].pageY - windowHalf.y;
-    rotation.start.y = rotation.y;
-  }
-}
-
-function onDocumentTouchMove( event ) {
-  if ( event.touches.length == 1 ) {
-    event.preventDefault();
-    mouse.x = event.touches[ 0 ].pageX - windowHalf.x;
-    rotation.x = rotation.start.x + (mouse.x - mouse.start.x) * 0.02;
-    mouse.y = event.touches[ 0 ].pageY - windowHalf.y;
-    rotation.y = rotation.start.y + (mouse.y - mouse.start.y) * 0.02;
-    limitRotation(rotation);
-  }
-}
-
-// Converts a jquery rgb color string to a hex integer.
-function rgb2hex(rgb) {
-  var rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-  return (rgb[1] << 16) | (rgb[2] << 8) | rgb[3];
-}
-
-// Returns the luminence of an rgb color string.
-function luminence(color) {
-  var r = (color >> 16) / 255;
-  var g = (color >> 8 & 0xFF) / 255;
-  var b = (color & 0xFF) / 255;
-  console.log("r: " + r);
-  var min = Math.min(r, Math.min(g, b));
-  var max = Math.max(r, Math.max(g, b));
-  var l = (min + max) / 2;
-  console.log("luminence: " + l);
-  return l;
-}
-
-// shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame || 
-    window.webkitRequestAnimationFrame || 
-    window.mozRequestAnimationFrame    || 
-    window.oRequestAnimationFrame      || 
-    window.msRequestAnimationFrame     || 
-    function( callback ){
-      window.setTimeout(callback, 1000 / 60);
-    };
-})();
-
-var animationRunning = false;
-var stopFrameAnim = false;
-
-function startAnimation() {
-  animationRunning = true;
-  dummy.rotation.y += rotation.x;
-  dummy.rotation.x += rotation.y;
-  animate();
-}
-
-function stopAnimation() {
-  animationRunning = false;
-}
-
-function animate() {
-  if (animationRunning) {
-    if (!stopFrameAnim) {
-      requestAnimFrame(animate);
-    }
-    render();
-  }
-}
-
-function render() {
-  dummy.rotation.y += ( rotation.x - dummy.rotation.y ) * 0.05;
-  dummy.rotation.x += ( rotation.y - dummy.rotation.x ) * 0.05;
-  renderer.render( scene, camera );
-};
 
 function updateAnimation(shelf) {
   // Stop the animation and clear the model.
