@@ -91,7 +91,7 @@
 
 (def language-names
   {"en" "english"
-   "fr" "française"
+   "fr" "français"
    "de" "deutsch"
    "it" "italiano"
    "es" "español"
