@@ -15,7 +15,7 @@
   {:en {:title "SistemiModerni: Feedback"
         :feedback {:title "WITH YOU FOR YOU"
                    :call-head "Call"
-                   :call-body "us at: +33 06 09 46 92 00"
+                   :call-body "us at: +33 6 09 46 92 00"
                    :write-head "Write"
                    :write-body "us a note at: "
                    :questionaire-head "Questionaire"
@@ -36,7 +36,7 @@
                           [:p "We really want your comments good and bad so we can provide you with the best"
                            " service and products. If there is anything you would like to see "company " make"
                            " or change, do not hesitate to contact us. We are always here for you."]
-                          [:p "Call us at: +33 06 09 46 92 00" [:br]
+                          [:p "Call us at: +33 6 09 46 92 00" [:br]
                            "Write us a note at: " [:a {:href "mailto:feedback@sistemimoderni.com"} "feedback@sistemimoderni.com"]]
                           [:p "Or"]
                           [:p "Write something cool in the window below:"]]}}
