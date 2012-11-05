@@ -109,11 +109,13 @@
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
           [:ul {:style "padding-top: 28px;"}
            [:li 
-            [:a { :href "#"} (tr/translate :signup)]]
+            [:a { :href "#"} (tr/translate :header :signup)]]
            [:li 
-            [:a { :href "#"} (tr/translate :contact)]]
+            [:a { :href "#"} (tr/translate :header :contact)]]
            [:li 
-            [:a { :href (tr/localize "/careers.htm")} (tr/translate :careers)]]]]]
+            [:a { :href (tr/localize "/team.htm")} (tr/translate :header :team)]]
+           [:li 
+            [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
 
         [:div.span3
          [:div.greyborder_b {:style "height: 135px"}

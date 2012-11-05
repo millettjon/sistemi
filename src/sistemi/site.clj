@@ -18,9 +18,10 @@
         :version "alpha version"
         :account "My Account"
         :cart "Cart"
-        :signup "Sign Up For Emails"
-        :contact "Contact Us"
-        :careers "Careers"
+        :header {:signup "Sign Up For Emails"
+                 :contact "Contact Us"
+                 :careers "Careers"
+                 :team "Team"}
         :menu {:home "home"
                :vision "our vision"
                :boutique  {:_ "on-line boutique"
