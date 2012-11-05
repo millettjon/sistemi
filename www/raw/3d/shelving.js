@@ -45,21 +45,6 @@
 // TODO: Add slots?
 //
 
-var dummy;
-
-var camera, scene, renderer;
-
-var g_container;
-
-var targetRotation = 0;
-var targetRotationOnMouseDown = 0;
-
-var mouseX = 0;
-var mouseXOnMouseDown = 0;
-
-var windowHalfX = window.innerWidth / 2;
-var windowHalfY = window.innerHeight / 2;
-
 // Namespace
 var sm = sm || {};
 sm.shelving = sm.shelving || {};
@@ -99,12 +84,6 @@ sm.shelving.numHorizontals = function(shelving) {
   if (d > 167) n++;
   if (d > 203) n++;
   return n;
-}
-
-function makeContainer() {
-  container = document.createElement( 'div' );
-  document.body.appendChild( container );
-  return container;
 }
 
 // Returns an inner bounding box by subtracting a margin from an outer box.
@@ -231,7 +210,6 @@ function cutoutOval(shape, bbox) {
   shape.holes.push( path );
 }
 
-
 function addVerticalMembers(shelving, addGeometry) {
   var s = shelving;
   var ns = sm.shelving;
@@ -332,13 +310,6 @@ function addHorizontalMembers(shelving, addGeometry) {
   }
 }
 
-// TODO: factor out.
-Detector = {
-  canvas: !! window.CanvasRenderingContext2D,
-  webgl: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )(),
-  webgl2: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'webgl' ); } catch( e ) { return false; } } )()
-}
-
 function drawShelving(shelving, container) {
 
   // Create the scene and camera.
@@ -420,108 +391,6 @@ function drawShelving(shelving, container) {
   g_container.addEventListener( 'touchstart', onDocumentTouchStart, false );
   g_container.addEventListener( 'touchmove', onDocumentTouchMove, false );
 }
-
-// TODO: Don't use global variables for event handling.
-
-function onDocumentMouseDown( event ) {
-  event.preventDefault();
-  g_container.addEventListener( 'mousemove', onDocumentMouseMove, false );
-  g_container.addEventListener( 'mouseup', onDocumentMouseUp, false );
-  g_container.addEventListener( 'mouseout', onDocumentMouseOut, false );
-  mouseXOnMouseDown = event.clientX - windowHalfX;
-  targetRotationOnMouseDown = targetRotation;
-}
-
-function onDocumentMouseMove( event ) {
-  mouseX = event.clientX - windowHalfX;
-  targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
-}
-
-function onDocumentMouseUp( event ) {
-  g_container.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-  g_container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-  g_container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-}
-
-function onDocumentMouseOut( event ) {
-  g_container.removeEventListener( 'mousemove', onDocumentMouseMove, false );
-  g_container.removeEventListener( 'mouseup', onDocumentMouseUp, false );
-  g_container.removeEventListener( 'mouseout', onDocumentMouseOut, false );
-}
-
-function onDocumentTouchStart( event ) {
-  if ( event.touches.length == 1 ) {
-    event.preventDefault();
-    mouseXOnMouseDown = event.touches[ 0 ].pageX - windowHalfX;
-    targetRotationOnMouseDown = targetRotation;
-  }
-}
-
-function onDocumentTouchMove( event ) {
-  if ( event.touches.length == 1 ) {
-    event.preventDefault();
-    mouseX = event.touches[ 0 ].pageX - windowHalfX;
-    targetRotation = targetRotationOnMouseDown + ( mouseX - mouseXOnMouseDown ) * 0.02;
-  }
-}
-
-// Converts a jquery rgb color string to a hex integer.
-function rgb2hex(rgb) {
-  var rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-  return (rgb[1] << 16) | (rgb[2] << 8) | rgb[3];
-}
-
-// Returns the luminence of an rgb color string.
-function luminence(color) {
-  var r = (color >> 16) / 255;
-  var g = (color >> 8 & 0xFF) / 255;
-  var b = (color & 0xFF) / 255;
-  console.log("r: " + r);
-  var min = Math.min(r, Math.min(g, b));
-  var max = Math.max(r, Math.max(g, b));
-  var l = (min + max) / 2;
-  console.log("luminence: " + l);
-  return l;
-}
-
-// shim layer with setTimeout fallback
-window.requestAnimFrame = (function(){
-  return  window.requestAnimationFrame       || 
-    window.webkitRequestAnimationFrame || 
-    window.mozRequestAnimationFrame    || 
-    window.oRequestAnimationFrame      || 
-    window.msRequestAnimationFrame     || 
-    function( callback ){
-      window.setTimeout(callback, 1000 / 60);
-    };
-})();
-
-var animationRunning = false;
-var stopFrameAnim = false;
-
-function startAnimation() {
-  animationRunning = true;
-  dummy.rotation.y += targetRotation;
-  animate();
-}
-
-function stopAnimation() {
-  animationRunning = false;
-}
-
-function animate() {
-  if (animationRunning) {
-    if (!stopFrameAnim) {
-      requestAnimFrame(animate);
-    }
-    render();
-  }
-}
-
-function render() {
-  dummy.rotation.y += ( targetRotation - dummy.rotation.y ) * 0.05;
-  renderer.render( scene, camera );
-};
 
 function updateAnimation(shelving) {
   // Stop the animation and clear the model.

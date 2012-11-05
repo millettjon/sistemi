@@ -154,5 +154,5 @@
          [:div#footer.greyborder_r
           [:div#address "SISTEMI MODERNI"
            [:br] "St. Martin d&rsquo;Uriage, France"
-           [:br] "M. +33 06 09 46 92 00"]
+           [:br] "M. +33 6 09 46 92 00"]
           [:div#copyright (interpose [:br] (tr/translate :copyright))]]]]]]])))
