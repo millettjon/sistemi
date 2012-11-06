@@ -9,7 +9,7 @@
 
 ;; Puts this, with locale, on tab tittle
 (def strings
-  {:en {:title "SistemiModerni: Team (We Rock!)"
+  {:en {:title "SistemiModerni: Team"
         :team {:eric {:name "E.M. Romeo" :position "CEO and Creative Director"
                       :description (stru/join-lines
                                     "He has been designing and
