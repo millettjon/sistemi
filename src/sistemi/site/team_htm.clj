@@ -27,7 +27,12 @@
                                      "Einat has been creating public and private environments combining
                                      social needs with artistic expression for over 15 years. Consideration
                                      of every detail is key in bringing to you a unique sculptural piece.
-                                     Share with her your inspiration. Just click here.")}}
+                                     Share with her your inspiration. Just click here.")}
+               :david {:name "David Millett" :position "Developer"
+                       :description (stru/join-lines
+                                     "David is an Aerospace engineer turned software developer with more
+                                     more than ten years creating custom solutions, libraries, and
+                                     optimization of enterprise code.")}}
         
         }
    :es {}
@@ -37,7 +42,7 @@
   []
   [:div.text_content
    ;; Ordered loop that wraps fn in html block
-   (for [person [:eric :jon :einat]]
+   (for [person [:eric :jon :einat :david]]
      (let [f #(translate :team person %)]
        (h/html
         [:p.title (f :name) " - " (f :position)]
