@@ -31,12 +31,29 @@
                :david {:name "David Millett" :position "Developer"
                        :description (stru/join-lines
                                      "David is an Aerospace engineer turned software developer with more
-                                     more than ten years creating custom solutions, libraries, and
-                                     optimization of enterprise code.")}}
+                                     than ten years creating custom solutions, libraries, and optimization
+                                     of enterprise code.")}}
         
         }
    :es {}
-   :fr {}})
+   :fr {:title "Sistemi Moderni: cadres d'entreprise"
+        :team {:eric {:name "E.M. Romeo" :position "chef de la direction et directeur de la création"
+                      :description (stru/join-lines "todo")}
+               :jon {:name "Jon Millett" :position "Chef de la direction technique"
+                     :description (stru/join-lines "todo")}
+
+               :einat {:name "Einat Grinbaum" :position "officier concepteur en chef"
+                       :description (stru/join-lines "todo: notice how Einat's google translate is different")}
+
+               :david {:name "David Millett" :position "Ingénieur Logiciel"
+                       :description (stru/join-lines
+                                      " todo: google translate seems to be missing something ...
+                                      David est un ingénieur aéronautique s'est développeur de logiciels avec
+                                      plus de plus de dix ans la création de solutions personnalisées, les
+                                      bibliothèques et d'optimisation de code de l'entreprise.")}
+               }
+        }
+   })
 
 (defn body
   []
