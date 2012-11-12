@@ -65,6 +65,13 @@
 (require '[sistemi.registry :as registry])
 (registry/load-files "src/sistemi/site")
 
+;; ===== MODELS =====
+;; Make sure model namespaces are loaded. This is needed for generic
+;; pages e.g., cart.htm that work with any item type.
+(require 'sistemi.model)
+(require 'sistemi.model.shelf)
+;;(require 'sistemi.model.shelving)
+
 ;; ===== ROUTES =====
 (log/info "About to build routes.")
 (use 'sistemi.routes)

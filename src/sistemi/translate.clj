@@ -16,8 +16,19 @@
   [& keys]
   (let [req req/*req*
         locale (keyword (:locale req))
-        path (:uri req)]
+        arg1 (first keys)
+        custom_path (and (string? arg1) (= \/ (first arg1)))
+        path (if custom_path arg1 (:uri req))
+        keys (if custom_path (rest keys) keys)]
     (apply tr/translate registry/strings locale path keys)))
+
+;; TODO: change this to allow passing a custom path
+;; check if first argument starts with a /
+;; ? or just leave things in the top level?
+;; (tr/translate /product :shelf :name)
+;; (tr/translate /product :shelf :description)
+;; (tr/translate /product :params :width)
+;; (tr/translate :product :shelf :name)
 
 (defn mangle-text-to-kw
   "Converts a text string to a mangled keyword to use to lookup a string translation."

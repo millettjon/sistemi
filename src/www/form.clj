@@ -31,7 +31,9 @@
 (defmethod parse :bounded-number
   [field value]
   (try
-    (Long/parseLong value)
+    (if (string? value)
+      (Long/parseLong value)
+      (long value))
     (catch Exception e
       ::invalid-number)))
 
@@ -158,6 +160,18 @@
 ;; ===== public functions =====
 (declare ^:dynamic *fields*)
 
+;; - need a way to nest a sub form under a key
+;;   ? what if a field was a sub form?
+;;     ? how to pass the type?
+;;       - use :type :form
+;;       - make validate recursive
+;;     ? how to make other fns work?
+;;       - make recursive to work on form tree
+;;       - take multiple keys to lookup fields
+;; - need a way to support sibling forms under the top level (or sub key)
+;;   ? would a straightforward merge work?
+;;     (with-form (merge f1 f2) values)
+
 ;; TODO: Does this need a render like enlive has to realize all seqs in the context of the form?
 (defmacro with-form
   [fields values & body]
@@ -217,12 +231,6 @@
         n (name k)]
     [:textarea (merge {:name n, :id n, :maxlength (:max field)} opts) (default k)]))
 
-;;    [:textarea.greytextarea {:name "service" :tabindex 1}]
-;; todo: insert greytextarea via opts (class)
-;; how to set max size?
-
-
-
 (defmulti render
   "Renders a value to html."
   class
@@ -232,23 +240,18 @@
   [v]
   v)
 
-(defn render-keyword
-  "Converts a keyword to a string. Calls name for unqualified keywords and str for qualified ones. Useful to persist keywords as readable strings."
-  [kw]
-  (if (namespace kw)
-    (str kw)
-    (name kw)))
-
 (defmethod render clojure.lang.Keyword
   [v]
-  (render-keyword v))
+  (str v))
 
 (defn hidden
   "Converts a map into a seq of hidden fields."
-  [m]
-  (map
-   (fn [[k v]] [:input {:type "hidden" :name (name k) :value (render v)}])
-   m))
+  [m-or-kw]
+  (if (map? m-or-kw)
+    (map
+     (fn [[k v]] [:input {:type "hidden" :name (name k) :value (render v)}])
+     m-or-kw)
+    [:input {:type "hidden" :name (name m-or-kw) :value (render (default m-or-kw))}]))
 
 #_ (def fields
   {:width {:type :bounded-number :min 60 :max 240 :default 120}})

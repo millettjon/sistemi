@@ -35,6 +35,7 @@
 #_ (format-eur (fj 50 :EUR))
 #_ (str (fj 50 :EUR))
 #_ (to (fj 30 :EUR) :EUR)
+#_ (format-eur #frinj.core.fjv{:v 57600.0, :u {"EUR" 1, "m" -2}})
 
 (defn format-quantity
   ([price]
@@ -54,4 +55,21 @@
 #_ "16.00E/m2"
 #_ (str (fj 16 :EUR :per :meter :per :meter))
 #_ (format-cost-per-area (fj 16 :EUR :per :meter :per :meter))
+
+(defn html-table
+  "header - selects keys to display for each item
+   row-keys - selects ordering of rows"
+  [header row-keys data]
+  [:table.table.table-condensed.table-striped
+   [:thead
+    [:tr
+     (map (fn [k] [:th (name k)]) header)]]
+   [:tbody
+    (map (fn [rk]
+           (let [row (rk data)]
+             [:tr
+              [:td (name rk)] ;; 1st column
+              (map (fn [k] [:td (k row)]) (rest header))
+              ]))
+         row-keys)]])
 

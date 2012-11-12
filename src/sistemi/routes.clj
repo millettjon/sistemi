@@ -1,6 +1,6 @@
 (ns sistemi.routes
   (:use net.cgrand.moustache
-        (ring.middleware file file-info params keyword-params content-type)
+        (ring.middleware file file-info params keyword-params content-type session)
         (ring.middleware stacktrace lint cookies reload) ; dev items
         www.middleware
         [locale.core :only (default-locale locales)]
@@ -20,7 +20,7 @@
      wrap-reload              ; reload changed namespaces
      wrap-lint
      wrap-request-id          ; add a unique request id for logging
-     spy
+     ;; spy
      wrap-request-log         ; log a 1 line request summary
      wrap-stacktrace          ; catch exceptions and 
      wrap-exception-response  ; handle responses thrown as exceptions (e.g., 4xx errors)
@@ -29,7 +29,9 @@
      ;; TODO: cache control (http://groups.google.com/group/ring-clojure/browse_thread/thread/cc8f72a15ae7fbc3)
      wrap-params              ; parse form and query string params
      wrap-keyword-params      ; keywordize the params map
-     wrap-cookies             ; convert cookies to/from a map
+     wrap-session             ; reads/writes session data from/to session store
+     ;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
+     spy
 
      wrap-file-info
      ;; TODO: make an easier way to set the charset

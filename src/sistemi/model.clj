@@ -1,8 +1,13 @@
 (ns sistemi.model
   "Functions for working with models of nested components."
+  (:require [sistemi.model.format :as format])
   (:use frinj.calc))
 
 ;; ---------- COMPONENT AND TREE RELATED ----------
+(defmulti from-params
+  "Creates a component from form parameters."
+  :type)
+
 (defn make
   "Makes a new component of type type."
   ([type] {:type type})
@@ -54,3 +59,52 @@
       (assoc cmp :unit-price unit-price
                  :price (fj* quantity unit-price))
       cmp)))
+
+;; ----------- PRICE ---------------------
+(defmulti explode
+  "Explodes an item into a tree of constituent parts."
+  :type)
+
+(defn calc-price
+  "Calculates the total price of an item and inserts it under the item's :price key."
+  [item]
+  (or (:price item)
+      (-> item
+          explode
+          (walk total))))
+
+(defn price
+  "Returns the total price of an item."
+  [item]
+  (-> item
+      calc-price
+      :price
+      (format/fj-round 2)))
+
+(defn unqualify-keys
+  "Recursively transforms all map keys from qualified keywords to unqualified ones."
+  {:added "1.1"}
+  [m]
+  (let [f (fn [[k v]] (if (keyword? k) [(keyword (name k)) v] [k v]))]
+    ;; only apply to maps
+    (clojure.walk/postwalk (fn [x] (if (map? x) (into {} (map f x)) x)) m)))
+
+(defmulti rollup :type)
+(defmethod rollup :default [cmp] cmp)
+
+(defmulti rollup-total :type)
+(defmethod rollup-total :default [cmp] cmp)
+
+(defn price-report
+  [shelf]
+  (-> shelf
+      calc-price
+      (walk rollup)
+      (walk rollup-total)
+      :rollup
+      ;;clojure.walk/stringify-keys
+      unqualify-keys
+      ))
+
+(defmulti html-price-report :type)
+

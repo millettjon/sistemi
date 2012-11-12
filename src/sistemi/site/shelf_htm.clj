@@ -63,7 +63,10 @@
 
    [:div.span3
     
-    [:form#shelf-form.form-horizontal {:method "get" :action "shelf.htm"}
+    [:form#shelf-form.form-horizontal {:method "post" :action "cart/add"}
+     (f/hidden :id)
+     (f/hidden :type)
+
      [:fieldset
 
       [:div.control-group
@@ -95,7 +98,7 @@
         ]]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) "Add to cart" "Update cart")]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelf from defaults.
@@ -159,7 +162,7 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form sf/shelf (:params req) (body)) 544)))
+  (response (standard-page (head) (f/with-form (:shelf sf/cart-items) (:params req) (body)) 544)))
 
 #_ (remove-ns 'sistemi.site.shelf-htm)
 (sistemi.registry/register)

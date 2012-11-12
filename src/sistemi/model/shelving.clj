@@ -1,5 +1,5 @@
 (ns sistemi.model.shelving
-  "Modulare shelving model."
+  "Modular shelving model."
   (:require clojure.walk
             [clojure.tools.logging :as log])
   (:use sistemi.model
