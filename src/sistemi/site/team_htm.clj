@@ -20,8 +20,9 @@
                                      Do not hesitate to call or write to him. Just click here.")}
                :jon {:name "Jon Millett" :position "Chief Technical Officer"
                      :description (stru/join-lines
-                                   "Jon has been creating technical frameworks for 15 years (?) enabling
-                                   websites to offer you everything you ever wanted.")}
+                                   "Jon has been creating technical frameworks for 15 years (?) enabling websites
+                                    to offer you everything you ever wanted. Jon has a lot of great ideas. Why
+                                     don't you reach out to him with yours?  Just click here.")}
                :einat {:name "Einat Grinbaum" :position "Chief Design Officer"
                        :description (stru/join-lines
                                      "Einat has been creating public and private environments combining
@@ -32,25 +33,40 @@
                        :description (stru/join-lines
                                      "David is an Aerospace engineer turned software developer with more
                                      than ten years creating custom solutions, libraries, and optimization
-                                     of enterprise code.")}}
+                                     of enterprise code. What sort of cool stuff do you think David should
+                                     be working on?  Let him know by clicking here.")}}
         
         }
    :es {}
    :fr {:title "Sistemi Moderni: cadres d'entreprise"
-        :team {:eric {:name "E.M. Romeo" :position "chef de la direction et directeur de la création"
-                      :description (stru/join-lines "todo")}
-               :jon {:name "Jon Millett" :position "Chef de la direction technique"
-                     :description (stru/join-lines "todo")}
+        :team {:eric {:name "E.M. Romeo" :position "PDG et Directeur Créatif"
+                      :description (stru/join-lines
+                                     "E.M. dessine et construit des solutions pour espaces intérieurs depuis
+                                      12 ans. Sa passion de l’innovation l’a inexorablement mené vers sa dernière
+                                       création, Sistemi Moderni. L’élégance, la facilite d’utilisation et
+                                       pardessus tout, la personnalisation marquent tous les modèles que vous
+                                        trouverez ici. N’hésitez pas à le contacter. Cliquez simplement ici.")}
+               :jon {:name "Jon Millett" :position "Directeur Technique"
+                     :description (stru/join-lines
+                                    "Jon crée des structures techniques depuis 15 ans permettant aux sites
+                                     internet de vous offrir tous ce dont vous rêvez. Jon a des tas de bonnes
+                                      idées. Pourquoi ne pas lui faire parvenir les vôtres ? Cliquez simplement
+                                       ici.")}
 
-               :einat {:name "Einat Grinbaum" :position "officier concepteur en chef"
-                       :description (stru/join-lines "todo: notice how Einat's google translate is different")}
+               :einat {:name "Einat Grinbaum" :position "Chef Design"
+                       :description (stru/join-lines
+                                      "Einat crée des environnements publics et prives qui marient besoins sociaux
+                                       avec expression artistique depuis plus de 15 ans. La considération des moindres
+                                        détails est essentielle à chaque objet sculptural qui vous est offert.
+                                        Partagez votre inspiration avec Einat. Cliquez simplement ici.")}
 
                :david {:name "David Millett" :position "Ingénieur Logiciel"
                        :description (stru/join-lines
-                                      " todo: google translate seems to be missing something ...
-                                      David est un ingénieur aéronautique s'est développeur de logiciels avec
-                                      plus de plus de dix ans la création de solutions personnalisées, les
-                                      bibliothèques et d'optimisation de code de l'entreprise.")}
+                                      "David est un ingénieur en astronautique reconverti en développeur de
+                                      logiciels avec une expérience de plus de dix ans a créer des solutions
+                                       sur mesure, bibliothèques et optimisation de code d’entreprises. Selon vous,
+                                       sur quels trucs cool David pourrait travailler? Faites lui savoir en
+                                       cliquant ici.")}
                }
         }
    })
