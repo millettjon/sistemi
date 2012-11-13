@@ -31,10 +31,9 @@
                                      Share with her your inspiration. Just click here.")}
                :david {:name "David Millett" :position "Developer"
                        :description (stru/join-lines
-                                     "David is an Aerospace engineer turned software developer with more
-                                     than ten years creating custom solutions, libraries, and optimization
-                                     of enterprise code. What sort of cool stuff do you think David should
-                                     be working on?  Let him know by clicking here.")}}
+                                     "David, with an aerospace and software background, is helping adapt custom
+                                     fabrication across multiple platforms to provide high quality products
+                                     with precision and affordability.")}}
         
         }
    :es {}

@@ -39,6 +39,36 @@
         :copyright ["Copyright 2012 SISTEMI MODERNI."
                     "All rights reserved."]}
 
+   :fr {; splash page
+        :title "Meubles Étagères Moderne : Sistemi Moderni"
+        :select-a-language "Choisissez une Langue"
+
+        ; layout
+        :construction "Page En Construction"
+        :account "Mon Compte"
+        :cart "Panier"
+        :header {:signup "S’abonner aux emails"
+                 :contact "Contactez Nous"
+                 :careers "Carrières"
+                 :team "todo" }
+        :menu {
+               :home "Accueil"
+               :vision "Notre Vision"
+               :boutique {:_ "Boutique En Ligne"
+                          :shelving "Etagères"
+                          :tables "Tables"
+                          :lamps "Eclairage"
+                          :chairs "Chaises"
+                          :paint  "Peinture"}
+               :service "A Votre Service"
+               :system "Le Système"
+               :gallery "Gallérie"
+               :blog "blog"
+               :feedback "Vos Impressions"}
+        :copyright ["© 2012 SISTEMI MODERNI."
+                    "(all rights reserved)"]}
+
+
    :es {; splash page
         :title "Muebles de Estantería Moderna : Sistemi Moderni"
         :select-a-language "Elegir Idioma"
@@ -64,31 +94,7 @@
                :feedback "sugerencias"}
         :copyright ["© 2012 SISTEMI MODERNI."
                     "Todos los derechos reservados."]}
-
-   :fr {; splash page
-        :select-a-language "Choisissez une Langue"
-
-        ; layout
-        :account "Mon Compte"
-        :cart "Panier"
-        :signup "S’abonner aux emails"
-        :contact "Contactez Nous"
-        :menu {
-               :home "Accueil"
-               :vision "Notre Vision"
-               :boutique {:_ "Boutique En Ligne"
-                          :shelving "Etagères"
-                          :tables "Tables"
-                          :lamps "Eclairage"
-                          :chairs "Chaises"
-                          :paint  "Peinture"}
-               :service "A Votre Service"
-               :system "Le Système"
-               :gallery "Gallérie"
-               :blog "blog"
-               :feedback "Vos Impressions"}
-        :copyright ["© 2012 SISTEMI MODERNI."
-                    "(all rights reserved)"]}})
+   })
 
 (def language-names
   {"en" "english"
