@@ -61,10 +61,8 @@
 
                :david {:name "David Millett" :position "Ingénieur Logiciel"
                        :description (stru/join-lines
-                                      "David est un ingénieur en astronautique reconverti en développeur de
-                                      logiciels avec une expérience de plus de dix ans a créer des solutions
-                                       sur mesure, bibliothèques et optimisation de code d’entreprises. Selon vous,
-                                       sur quels trucs cool David pourrait travailler? Faites lui savoir en
+                                      "TODO: Finish revised english description...
+                                       Faites lui savoir en
                                        cliquant ici.")}
                }
         }

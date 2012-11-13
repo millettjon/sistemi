@@ -27,6 +27,7 @@
                :boutique  {:_ "on-line boutique"
                            :shelves "shelves"
                            :shelving-units "shelving units"
+                           ;; TODO: How to indicate forthcoming products??
                            :tables "tables"
                            :lamps "lamps"
                            :chairs "chairs"
@@ -50,12 +51,13 @@
         :header {:signup "S’abonner aux emails"
                  :contact "Contactez Nous"
                  :careers "Carrières"
-                 :team "todo" }
+                 :team "TODO: French translation for executive team" }
         :menu {
                :home "Accueil"
                :vision "Notre Vision"
                :boutique {:_ "Boutique En Ligne"
-                          :shelving "Etagères"
+                          :shelves "Etagères"
+                          :shelving-units "TODO: Unit D'Etagères or Structure Etagères"
                           :tables "Tables"
                           :lamps "Eclairage"
                           :chairs "Chaises"

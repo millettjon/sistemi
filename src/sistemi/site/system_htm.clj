@@ -21,7 +21,20 @@
                           package in preparation for rapid delivery to your doorstep. You are going to
                           love opening your gift when it arrives.")}}
    :es {}
-   :fr {}})
+   :fr {:title "TODO: Requires French required"
+        :system {:title "TODO: French required"
+                 :text (stru/join-lines
+                         "Votre produit commence avec vous. Vos choix envoyés, les ordres sont donnés aux
+                         machines en usine. Les machines coupent le bois (contreplaqué certifié PEFC) selon
+                          vos besoins avec vitesse et précision (voir une vidéo). Une fois votre étagère
+                          coupée, elle est contrôlée et lissée à la main pour être prête à peindre.
+                          Dans la cabine de peinture votre étagère est couverte par une couche de laque
+                          que vous avez choisie (laque de très grande qualité utilisée dans l’industrie
+                          automobile). Ensuite, vos étagères sont soigneusement emballées et encartonnées
+                          dans une boîte idéalement conçue pour la livraison à domicile. Vous apprécierez
+                          d’ouvrir votre colis quand il arrivera.")}
+
+         }})
 
 (defn body
   []
