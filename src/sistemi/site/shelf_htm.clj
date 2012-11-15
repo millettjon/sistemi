@@ -22,7 +22,7 @@
         :cart_add "Add to cart"}
    :es {}
    :fr {:title "TODO: French"
-        :spin "cliquez our tourner"
+        :spin "cliquez pour tourner"
         :width "Longeur"
         :depth "Profondeur"
         :height "Hauteur"

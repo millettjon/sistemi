@@ -2,6 +2,7 @@
 
 ;; TODO: Merge this with datomic model?
 ;; TODO: In what namespace should the select keywords be qualified? sistemi.model?
+;; TODO: Other languages for 'matte', 'satin', etc
 (def shelving
   "The design parameters for a shelving unit."
   {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120}
