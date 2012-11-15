@@ -115,9 +115,9 @@
                             (add-slot (num-verticals length))))))
 
 ;; ----------- SHELVING ---------------------
-(defn explode-shelving
+(defmethod explode :shelving
   [cmp]
-  (-> (make ::shelving cmp)
+  (-> cmp
       add-horizontal
       add-vertical
       add-lateral))
@@ -130,11 +130,6 @@
 (doseq [type [::slot ::cutout]] (derive type ::cost))
 
 ;; ----------- ROLLUP ---------------------
-
-(defmulti rollup :type)
-(defmethod rollup :default [cmp] cmp)
-
-
 (defmethod rollup ::area-cost
   [cmp]
   (assoc cmp :rollup {:price (str (format-eur (:price cmp))
@@ -162,9 +157,6 @@
 
 ;; ----------- ROLLUP COLUMNS TO GET TOTAL ---------------------
 
-(defmulti rollup-total :type)
-(defmethod rollup-total :default [cmp] cmp)
-
 (defmethod rollup-total ::rect
   [cmp]
   (assoc cmp :totals (reduce #(assoc % (:type %2) (fj* (:quantity cmp) (:price %2))) {} (:components cmp))))
@@ -181,81 +173,61 @@
                  ;; format prices
                  (reduce (fn [m [k v]] (assoc m k (format-eur v))) {}))))
 
-(defn price
-  "Calcuates the total price of a shelving unit."
-  [shelving]
-  (-> shelving
-      explode-shelving
-      (walk total)
-      :price
-      (fj-round 2)))
-
 ;; ----------- FORM HELPERS ---------------------
 
-;; TODO: Add margin calculation.
-;; TODO: Round to customer friendly amounts (nearest euro? nearest 5 euro?).
-;; TODO: Display price report as easter egg.
-
-;; TODO: Integrate frinj units with forms and form validation.
-;; TODO: Find an idomatic representation for color.
-;; TODO: Handle prices w/ currencies (frinj units).
-(defn from-params
+(defmethod from-params :shelving
   [params]
-  {:height (fj (:height params) :cm)
-   :width (fj (:width params) :cm)
-   :depth (fj (:depth params) :cm)
-   :cutout (keyword (:cutout params))
-   :color (:color params)
-   :finish :matte
-   :material :mdf-ecological})
+  (merge params {:height (fj (:height params) :cm)
+                 :width (fj (:width params) :cm)
+                 :depth (fj (:depth params) :cm)
+                 :cutout (keyword (:cutout params))
+                 :finish :matte
+                 :material :mdf-ecological}))
+
+;; TODO refactor this as it is common with shelf
+(defmethod to-params :shelving
+  [shelving]
+  (reduce (fn [m [k v]]
+            (let [v (if (instance? frinj.core.fjv v)
+                      (-> (to v :cm) :v str)
+                      v)]
+              (assoc m k v)))
+          {}
+          (select-keys shelving [:id :height :width :depth :cutout :color :finish])))
 
 ;; ----------- PRICE BREAKDOWN REPORT ---------------------
 
-(defn unqualify-keys
-  "Recursively transforms all map keys from qualified keywords to unqualified ones."
-  {:added "1.1"}
-  [m]
-  (let [f (fn [[k v]] (if (keyword? k) [(keyword (name k)) v] [k v]))]
-    ;; only apply to maps
-    (clojure.walk/postwalk (fn [x] (if (map? x) (into {} (map f x)) x)) m)))
+#_ (let [shelving (from-params {:type :shelving :width 120, :height 120, :depth 30, :color "#00FF00", :cutout :ovale})]
+     #_ (price shelving)
+     #_ (calc-price shelving)
+     #_(price-report shelving)
+     (-> shelving
+         calc-price #_ explode #_ (walk total)
+         (walk rollup)
+         (walk rollup-total)
+         :rollup
+         ;; clojure.walk/stringify-keys
+       clojure.pprint/pprint
+    ))
 
-(defn price-report
-  [shelving]
-  (-> shelving
-      explode-shelving
-      (walk total)
+#_ (defn price-report
+  [item]
+  (-> item
+      calc-price
       (walk rollup)
       (walk rollup-total)
       :rollup
       ;;clojure.walk/stringify-keys
-      unqualify-keys
-      ))
+      unqualify-keys))
 
-(defn html-table
-  "header - selects keys to display for each item
-   row-keys - selects ordering of rows   
-   "
-  [header row-keys data]
-  [:table.table.table-condensed.table-striped
-   [:thead
-    [:tr
-     (map (fn [k] [:th (name k)]) header)]]
-   [:tbody
-    (map (fn [rk]
-           (let [row (rk data)]
-             [:tr
-              [:td (name rk)] ;; 1st column
-              (map (fn [k] [:td (k row)]) (rest header))
-              ]))
-         row-keys)]])
 
-(defn html-price-report
+
+(defmethod html-price-report :shelving
   [shelving]
   (->> shelving
       price-report
       (html-table [:item :dimensions :area :material :perimeter :finish :cutout :slot :price]
-                  [:horizontal :lateral :vertical :total]
-                  )))
+                  [:horizontal :lateral :vertical :total])))
 
 (use 'clojure.pprint)
 (defn pprint-price-report

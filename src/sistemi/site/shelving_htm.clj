@@ -64,7 +64,11 @@
 
    [:div.span3
     
-    [:form#shelf-form.form-horizontal {:method "get" :action "order/review.htm"}
+    [:form#shelf-form.form-horizontal {:method "get" :action "cart/add"}
+     (f/hidden :id)
+     (f/hidden :quantity)
+     (f/hidden {:type :shelving})
+
      [:fieldset
 
       [:div.control-group
@@ -99,7 +103,7 @@
       [:div#colorpicker {:style "margin-left: 20px;"}]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) "Add to cart" "Update cart")]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelving from defaults.
@@ -168,7 +172,7 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form sf/shelving (:params req) (body)) 544)))
+  (response (standard-page (head) (f/with-form (:shelving sf/cart-items) (:params req) (body)) 544)))
 
 #_ (remove-ns 'sistemi.site.shelving-htm)
 (sistemi.registry/register)

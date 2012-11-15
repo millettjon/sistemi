@@ -174,15 +174,37 @@
 
 ;; TODO: Does this need a render like enlive has to realize all seqs in the context of the form?
 (defmacro with-form
+  "Evaluates body in the context of the given form fields and values."
   [fields values & body]
   `(binding [*fields* (validate ~fields ~values)]
      ~@body))
 
-;; ===== internal helpers =====
+(defmacro with-valid-form
+  "Same as with-form, but throws an exception if there are validation errors."
+  [fields values & body]
+  `(with-form ~fields ~values
+     (when (errors?)
+       (log/error *fields*)
+       (throw (Exception. (str "Form validation error: " (errors)))))
+     ~@body))
+
+;; ===== errors =====
 (defn errors?
+  "Returns true if there was a validation error."
   ([] (some #(errors? %) (keys *fields*)))
   ([k] (contains? (k *fields*) :errors)))
 
+(defn errors
+  "Returns a map of errors by field name."
+  []
+  (reduce (fn [m [k v]]
+            (if-let [errors (:errors v)]
+              (assoc m k errors)
+              m))
+          {} *fields*))
+;; {:quantity {:default 1, :max 100, :errors [:nil], :type :bounded-number, :min 0}, :type {:errors [:nil], :type :set, :options [:shelf :shelving]}, :id {:default -1, :parsed-value -1, :max 100, :type :bounded-number, :min -1, :value -1}}
+
+;; ===== values =====
 (defn default
   "Returns the value for a field or the default if there is a validation error."
   [k]
@@ -244,7 +266,23 @@
   [v]
   (str v))
 
-(defn hidden
+(defmulti hidden
+  "Inserts hidden paramters."
+  #(type %))
+
+(defmethod hidden clojure.lang.Keyword
+  [& args]
+  (doall
+   (map (fn [kw]
+          [:input {:type "hidden" :name (name kw) :value (render (default kw))}])
+        args)))
+
+(defmethod hidden clojure.lang.PersistentArrayMap
+  [m]
+  (map (fn [[k v]] [:input {:type "hidden" :name (name k) :value (render v)}])
+       m))
+
+#_(defn hidden
   "Converts a map into a seq of hidden fields."
   [m-or-kw]
   (if (map? m-or-kw)

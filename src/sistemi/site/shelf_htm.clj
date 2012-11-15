@@ -72,16 +72,14 @@
   [:div.row
    [:div.span6
     [:div#model]
-    ;; ? what should display if canvas is not available?
-    #_[:img {:src "/img/0600.0600.0200.0018.S.427.png"}]
-    ;; TODO: Remove this for static rendering. Use rotation icons?
+
     [:div {:style "text-align: center;"} (tr/translate :spin)]]
 
    [:div.span3
     
     [:form#shelf-form.form-horizontal {:method "post" :action "cart/add"}
      (f/hidden :id)
-     (f/hidden :type)
+     (f/hidden {:type :shelf})
 
      [:fieldset
 

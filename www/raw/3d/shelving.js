@@ -228,9 +228,9 @@ function addVerticalMembers(shelving, addGeometry) {
     var bbox = {bottom : positions[i] + ns.thickness, left : 0,
                 top: positions[i+1], right: s.depth};
     switch (s.cutout) {
-      case ':sistemi.form/quadro': cutoutRRect(shape, bbox);
+      case ':quadro': cutoutRRect(shape, bbox);
         break;
-      case ':sistemi.form/ovale': cutoutOval(shape, bbox);
+      case ':ovale': cutoutOval(shape, bbox);
         break;
       default:
         console.warn('Ignoring invalid cutout: "' + s.cutout + '"');

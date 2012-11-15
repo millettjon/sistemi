@@ -2,7 +2,7 @@
   (:require [sistemi.site.product :as p]
             [sistemi.form :as sf]
             [sistemi.model :as model]
-            [sistemi.model.format :as format]
+            [sistemi.model.format :as fmt]
             [www.form :as f]
             [www.cart :as cart]
             [sistemi.translate :as tr]
@@ -20,46 +20,15 @@
    :es {}
    :fr {}})
 
-(defmulti format-value
-  "Formats a line item design parameter for viewing in the cart."
-  (fn [k v] k))
-
-(defmethod format-value :default
-  [k v]
-  v)
-
-(defn cm
-  [v]
-  (let [v (if (isa? (class v) frinj.core.fjv)
-            (:v (frinj.calc/to v :cm))
-            v)]
-    (str v " cm")))
-
-(defmethod format-value :width
-  [k v]
-  (cm v))
-
-(defmethod format-value :depth
-  [k v]
-  (cm v))
-
-(defmethod format-value :color
-  [k v]
-  [:span v "&nbsp;&nbsp" [:span.label {:style (str "background-color: " v ";")} "&nbsp;&nbsp"]])
-
 (defn format-param
+  ""
   [k v]
-  [:tr [:td {:style "text-transform: capitalize;"} k] [:td.white {:style "padding-left: 10px;"} (format-value k v)]])
+  [:tr [:td {:style "text-transform: capitalize;"} k] [:td.white {:style "padding-left: 10px;"} (fmt/format-value k v)]])
 
 (defn total
   "Calculates the total price of all cart items."
   [items]
   (apply frinj.calc/fj+ (map :price items)))
-
-(defn total-items
-  "Calculates the total number of all cart items."
-  [items]
-  (apply + (map :quantity items)))
 
 (defn head
   []
@@ -86,7 +55,7 @@
   [cart]
   ;; Calculate item prices.
   (let [items (map #(-> % model/from-params model/calc-price) (vals (:items cart)))
-        total (format/format-eur (total items))]
+        total (fmt/format-eur (total items))]
     [:div.text_content
 
      [:p "Your shopping cart contains the following items."]
@@ -97,17 +66,26 @@
        [:th {:style "text-align:right"} "Unit Price"]
        [:th {:style "text-align:right"} "Quantity"]
        [:th {:style "text-align:right"} "Price"]]
-      (for [{:keys [type id quantity] :as item} items]
+      (for [{:keys [type id quantity] :as item} (sort #(compare (:id %2) (:id %1)) items)]
         [:tr.item
          [:td
           ;; product name
-          [:span {:style "font-size: 16px; color: white;"} (tr/translate "/product" type :name)] ;" (" id ")"
+          [:span {:style "font-size: 16px; color: white;"} (tr/translate "/product" type :name)]
 
           ;; edit button
+          ;; - quantity should be included, but not type
           [:form {:method "get" :action (tr/localize (p/urls type)) :style "display:inline;"}
-           (f/hidden (dissoc item :type))
+           (f/hidden (assoc (model/to-params item) :quantity quantity))
            [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 20px;"} "Edit"]]
           
+          ;; copy button (should this only be for customizable items?)
+          ;; - clear the id
+          ;; - add cart params back in
+          ;; where does finish come from? :matte instead of ::matte
+          [:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
+           (f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
+           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} "Copy"]]
+
           ;; delete button
           [:form {:method "post" :action (tr/localize "/cart/delete") :style "display: inline;"}
            (f/hidden (select-keys item [:id]))
@@ -120,7 +98,7 @@
 
           ;; unit price
           [:td {:style "text-align: right;"}
-           [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :unit-price format/format-eur)]]
+           [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :unit-price fmt/format-eur)]]
 
           ;; quantity
           [:td 
@@ -134,7 +112,7 @@
 
           ;; price
           [:td {:style "text-align: right;"}
-           [:span.white {:style "font-size: 16px;" } (-> item :price format/format-eur)]]]])
+           [:span.white {:style "font-size: 16px;" } (-> item :price fmt/format-eur)]]]])
 
       [:tr.total
        [:td {:style "padding-top: 10px;" :colspan "3"} "Subtotal"] [:td {:style "text-align:right; padding-top:10px;"} total]]]

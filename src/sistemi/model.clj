@@ -8,6 +8,10 @@
   "Creates a component from form parameters."
   :type)
 
+(defmulti to-params
+  "Coerce a component into a map of form parameters."
+  :type)
+
 (defn make
   "Makes a new component of type type."
   ([type] {:type type})
@@ -96,15 +100,14 @@
 (defmethod rollup-total :default [cmp] cmp)
 
 (defn price-report
-  [shelf]
-  (-> shelf
+  [item]
+  (-> item
       calc-price
       (walk rollup)
       (walk rollup-total)
       :rollup
       ;;clojure.walk/stringify-keys
-      unqualify-keys
-      ))
+      unqualify-keys))
 
 (defmulti html-price-report :type)
 

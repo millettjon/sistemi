@@ -117,12 +117,6 @@
 
 ;; ----------- FORM HELPERS ---------------------
 
-;; TODO: Add margin calculation.
-;; TODO: Round to customer friendly amounts (nearest euro? nearest 5 euro?).
-;; TODO: Integrate frinj units with forms and form validation.
-;; TODO: Find an idomatic representation for color.
-;; TODO: Handle prices w/ currencies (frinj units).
-
 (defmethod from-params :shelf
   [params]
   (merge params {:width (fj (:width params) :cm)
@@ -141,6 +135,16 @@
 ;;       clojure.walk/stringify-keys
        clojure.pprint/pprint
     )
+
+(defmethod to-params :shelf
+  [shelf]
+  (reduce (fn [m [k v]]
+            (let [v (if (isa? (class v) frinj.core.fjv)
+                      (-> (to v :cm) :v str)
+                      v)]
+              (assoc m k v)))
+          {}
+          (select-keys shelf [:id :width :depth :color :finish])))
 
 ;; ----------- PRICE BREAKDOWN REPORT ---------------------
 

@@ -3,17 +3,20 @@
 
 (def strings
   "translation strings"
-  {:en {:shelf {:name "Custom shelf"}
+  {:en {:shelf {:name "Custom Shelf"}
+        :shelving {:name "Custom Shelving Unit"}
         :params {:depth "depth"}}
    :es {}
    :fr {}})
 
 (def urls
   "design urls"
-  {:shelf "/shelf.htm"})
+  {:shelf "/shelf.htm"
+   :shelving "/shelving.htm"})
 
 (def parameter-orders
-  "Display order of design paramters."
-  {:shelf [:width :depth :finish :color]})
+  "display order of design paramters"
+  {:shelf [:width :depth :finish :color]
+   :shelving [:width :height :depth :cutout :finish :color]})
 
 (sistemi.registry/register)
