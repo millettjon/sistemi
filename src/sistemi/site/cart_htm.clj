@@ -97,7 +97,7 @@
              (format-param param (item param)))]
 
           ;; unit price
-          [:td {:style "text-align: right;"}
+          [:td {:style "text-align: right; padding-top: 13px;"}
            [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :unit-price fmt/format-eur)]]
 
           ;; quantity
@@ -105,13 +105,13 @@
            {:style "text-align:right;"}
            (f/with-form sf/cart-item-quantity item
              [:form {:method "post" :action (tr/localize "/cart/update")}
-              (f/text :quantity {:id (str "quantity" id) :autocomplete "off" :tabindex 1 :style "width: 25px; font-size: 14px; border-color:#383838; border-width:2px; background-color:black; color:#999999; text-align:right; height: 12px;margin:0px;"})
+              (f/text :quantity {:id (str "quantity" id) :autocomplete "off" :tabindex 1 :style "width: 25px; font-size: 14px; border-color:#383838; border-width:2px; background-color:black; color:#999999; text-align:right; height: 14px; margin:0px;"})
               (f/hidden (select-keys item [:id]))
               [:div
                [:button.link_button {:id (str "quantity_action" id) :type "submit" :tabindex 1 :style "display:none;"} "Delete"]]])]
 
           ;; price
-          [:td {:style "text-align: right;"}
+          [:td {:style "text-align: right; padding-top: 13px;"}
            [:span.white {:style "font-size: 16px;" } (-> item :price fmt/format-eur)]]]])
 
       [:tr.total
