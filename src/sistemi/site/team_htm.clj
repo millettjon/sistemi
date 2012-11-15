@@ -62,8 +62,7 @@
                :david {:name "David Millett" :position "Ingénieur Logiciel"
                        :description (stru/join-lines
                                       "TODO: Finish revised english description...
-                                       Faites lui savoir en
-                                       cliquant ici.")}
+                                       Faites lui savoir en cliquant ici.")}
                }
         }
    })

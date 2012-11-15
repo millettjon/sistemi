@@ -51,7 +51,7 @@
         :header {:signup "S’abonner aux emails"
                  :contact "Contactez Nous"
                  :careers "Carrières"
-                 :team "TODO: French translation for executive team" }
+                 :team "TODO: French translation for executive team"}
         :menu {
                :home "Accueil"
                :vision "Notre Vision"
