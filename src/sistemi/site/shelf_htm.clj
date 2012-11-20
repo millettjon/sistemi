@@ -19,9 +19,10 @@
         :finish "Finish"
         :color "Color"
         :quantity "Quantity"
-        :cart_add "Add to cart"}
+        :cart_add "Add to cart"
+        :cart_update "Update cart"}
    :es {}
-   :fr {:title "TODO: French"
+   :fr {;:title "TODO: French"
         :spin "cliquez pour tourner"
         :width "Longeur"
         :depth "Profondeur"
@@ -112,7 +113,8 @@
         ]]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart_add) "Update cart")]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart_add)
+                                                                      (tr/translate :cart_update) )]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelf from defaults.

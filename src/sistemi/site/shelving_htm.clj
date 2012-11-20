@@ -13,9 +13,28 @@
 
 (def strings
   {:en {:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
-        :spin "drag to spin"}
+        :spin "drag to spin"
+        :cutout "Cutout"
+        :width "Length"
+        :depth "Depth"
+        :height "Height"
+        :finish "Finish"
+        :color "Color"
+        :quantity "Quantity"
+        :cart_add "Add to cart"}
    :es {}
-   :fr {}})
+   :fr {;:title ""
+        :spin "cliquez pour tourner"
+        :width "Longeur"
+        :depth "Profondeur"
+        :height "Hauteur"
+        :finish "Finition"
+        :color "Couleur"
+        :quantity "Quantité"
+        :cart_add "Ajouter au panier"
+        }
+
+   })
 
 (defn head
   []
@@ -72,38 +91,39 @@
      [:fieldset
 
       [:div.control-group
-       [:label.control-label {:for "width"} "Width"]
+       [:label.control-label {:for "width"} (tr/translate :width)]
        [:div.controls
         (f/select :width {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
-       [:label.control-label {:for "height"} "Height"]
+       [:label.control-label {:for "height"} (tr/translate :height)]
        [:div.controls
         (f/select :height {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
-       [:label.control-label {:for "depth"} "Depth"]
+       [:label.control-label {:for "depth"} (tr/translate :depth)]
        [:div.controls
         (f/select :depth {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
-       [:label.control-label {:for "cutout"} "Cutout"]
+       [:label.control-label {:for "cutout"} (tr/translate :cutout)]
        [:div.controls
         (f/select :cutout {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
 
       [:div.control-group
-       [:label.control-label {:for "finish"} "Finish"]
+       [:label.control-label {:for "finish"} (tr/translate :finish)]
        [:div.controls
         (f/select :finish {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
 
       [:div.control-group
-       [:label.control-label {:for "color"} "Color"]
+       [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
         (f/text :color {:tabindex 1})]]
       [:div#colorpicker {:style "margin-left: 20px;"}]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) "Add to cart" "Update cart")]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart_add)
+                                                                      (tr/translate :cart_update))]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelving from defaults.

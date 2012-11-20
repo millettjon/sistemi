@@ -26,7 +26,7 @@
                :vision "our vision"
                :boutique  {:_ "on-line boutique"
                            :shelves "shelves"
-                           :shelving-units "Bookshelves"
+                           :shelving-units "Bookcases"
                            ;; TODO: How to indicate forthcoming products??
                            :tables "tables"
                            :lamps "lamps"

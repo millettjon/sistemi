@@ -87,5 +87,4 @@
     (or s
         (do
           (log/warn (str "No translation for key " keys " (locale=" locale ", path=" path ")."))
-          (str "(TODO Translation For " locale (str/join (map name keys)) ")")))))
-          ;(str "(" (str/join "-" (map name keys)) ")")))))
+          (str "(TODO Translation For (" locale ") " (str/join (map name keys)) ")")))))

@@ -10,9 +10,12 @@
    :fr "impressions"})
 
 (def strings
-  {:en {:title "SistemiModerni: Careers"}
+  {:en {:title "SistemiModerni: Careers"
+        :body ""
+
+        }
    :es {}
-   :fr {}})
+   :fr {:title "SistemiModerni:Opportunités de Carrier"}})
 
 (defn body
   []
