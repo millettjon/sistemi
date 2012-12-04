@@ -12,57 +12,60 @@
   {:en {:title "SistemiModerni: Team"
         :team {:eric {:name "E.M. Romeo" :position "CEO and Creative Director"
                       :description (stru/join-lines
-                                    "He has been designing and
-                                     building home interior solutions for the last 12 years. E.M.'s
-                                     passion for innovation has led him inexhorably towards the latest of
-                                     his creations, Sistemi Moderni. Elegance, ease of use and above all
-                                     personalization mark all the designs that you will find here.
-                                     Do not hesitate to call or write to him. Just click here.")}
+                                    "EE.M.’s 12 Years of designing and directing are the foundation for Sistemi
+                                    Moderni.  Elegance, ease of use and above all personalization are the core
+                                    of every product you find here. If you want to find out more or you just
+                                    want to ask some questions, you can get a direct line by just clicking here." )}
                :jon {:name "Jon Millett" :position "Chief Technical Officer"
                      :description (stru/join-lines
-                                   "Jon has been creating technical frameworks for 15 years (?) enabling websites
-                                    to offer you everything you ever wanted. Jon has a lot of great ideas. Why
-                                     don't you reach out to him with yours?  Just click here.")}
+                                   "Jon is the man behind our website.  His programming knowledge spanning 15 years
+                                   makes it possible for you to have everything you want, the way you want it with
+                                   the greatest of ease.  He has a lot of great ideas.  Why don't you reach out to
+                                   Jon with yours?  Just click here.")}
                :einat {:name "Einat Grinbaum" :position "Chief Design Officer"
                        :description (stru/join-lines
-                                     "Einat has been creating public and private environments combining
-                                     social needs with artistic expression for over 15 years. Consideration
-                                     of every detail is key in bringing to you a unique sculptural piece.
-                                     Share with her your inspiration. Just click here.")}
+                                      "Einat has spent the last 15 years artistically combining desires and needs
+                                      to create stunning private and public environments. Consideration of every
+                                      detail is key in bringing unique design to you! Why not reach out to her
+                                      with your wishes by clicking here.")}
                :david {:name "David Millett" :position "Developer"
                        :description (stru/join-lines
-                                     "David, with an aerospace and software background, is helping adapt custom
-                                     fabrication across multiple platforms to provide high quality products
-                                     with precision and affordability.")}}
+                                     "David is our rocket scientist turned software guru. For over 10 years his
+                                     been customizing solutions to delicate problems with precision and ingenuity.
+                                     David is now applying his genius to developing software solutions for the
+                                     design world.  What sort of cool problems do you think David should solve
+                                     for you?  Let him know by clicking here.")}}
         
         }
    :es {}
    :fr {:title "Sistemi Moderni: cadres d'entreprise"
         :team {:eric {:name "E.M. Romeo" :position "PDG et Directeur Créatif"
                       :description (stru/join-lines
-                                     "E.M. dessine et construit des solutions pour espaces intérieurs depuis
-                                      12 ans. Sa passion de l’innovation l’a inexorablement mené vers sa dernière
-                                       création, Sistemi Moderni. L’élégance, la facilite d’utilisation et
-                                       pardessus tout, la personnalisation marquent tous les modèles que vous
-                                        trouverez ici. N’hésitez pas à le contacter. Cliquez simplement ici.")}
+                                     "E.M. dessine et construit des solutions pour espaces intérieurs depuis 12 ans.
+                                     Sa passion de l’innovation l’a inexorablement mené vers sa dernière création,
+                                     Sistemi Moderni. L’élégance, la facilite d’utilisation et pardessus tout, la
+                                     personnalisation marquent tous les modèles que vous trouverez ici. N’hésitez
+                                     pas à le contacter. Cliquez simplement ici.")}
                :jon {:name "Jon Millett" :position "Directeur Technique"
                      :description (stru/join-lines
-                                    "Jon crée des structures techniques depuis 15 ans permettant aux sites
-                                     internet de vous offrir tous ce dont vous rêvez. Jon a des tas de bonnes
-                                      idées. Pourquoi ne pas lui faire parvenir les vôtres ? Cliquez simplement
-                                       ici.")}
+                                    "Jon crée des structures techniques depuis 15 ans permettant aux sites internet
+                                    de vous offrir facilement touts ce dont vous rêvez. Jon a des tas de bonnes idées.
+                                    Pourquoi ne pas lui faire parvenir les vôtres? Cliquez simplement ici.")}
 
                :einat {:name "Einat Grinbaum" :position "Chef Design"
                        :description (stru/join-lines
-                                      "Einat crée des environnements publics et prives qui marient besoins sociaux
-                                       avec expression artistique depuis plus de 15 ans. La considération des moindres
-                                        détails est essentielle à chaque objet sculptural qui vous est offert.
-                                        Partagez votre inspiration avec Einat. Cliquez simplement ici.")}
+                                      "Einat crée des environnements publics et prives qui marient besoins avec
+                                      expression artistique depuis plus de 15 ans. La considération des moindres
+                                      détails apporte à chaque objet un design unique. Partagez votre inspiration
+                                      avec Einat. Cliquez simplement ici.")}
 
-               :david {:name "David Millett" :position "Ingénieur Logiciel"
+               :david {:name "David Millett" :position "Developpeur Logiciel"
                        :description (stru/join-lines
-                                      "TODO: Finish revised english description...
-                                       Faites lui savoir en cliquant ici.")}
+                                      "David est un ingénieur en astronautique reconverti en développeur de
+                                      logiciels avec une expérience de plus de dix ans a créer des solutions sur
+                                      mesure, bibliothèques et optimisation de code d’entreprises. Selon vous, 
+                                      sur quels trucs cool David pourrait travailler? Faites lui savoir en cliquant
+                                      ici.")}
                }
         }
    })
