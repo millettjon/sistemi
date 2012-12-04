@@ -41,13 +41,37 @@
                           [:p "Or"]
                           [:p "Write something cool in the window below:"]]}}
    :es {}
-   :fr {}})
+   :fr {:title "SistemiModerni: Vos Impressions"
+        :feedback {:title "Vos Impressions – Dites-nous tout!"
+                   :call-head "Appelez-nous au:"
+                   :call-body "+33 6 09 46 92 00"
+                   :write-head "Écrivez-nous à :"
+                   :write-body "feedback@sistemimoderni.com"
+                   :questionaire-head "Questionnaire :"
+                   :questionaire-body "Vous offrir des « feedback codes » qui vous permettront de profiter de remises."
+                   :text [:div
+                          [:p "Merci d’avoir ouvert cette page et de prendre un moment pour remplir notre"
+                           " formulaire."]
+                          [:p "Lorsque vous l’aurez envoyé, nous vous adresserons en retour un “feedback code“"
+                           " qui permettra de bénéficier d’une remise de 10 € lors de votre prochain achat."
+                           " Si vous appréciez ce que nous faisons et que vous recommandez SistemiModerni à des"
+                           " amis,  vous pouvez leur communiquer votre feedback code. Ainsi, à chaque fois qu’un"
+                           " de vos amis commandera vous bénéficierez de 10€ de remise supplémentaire. Votre remise"
+                           " peut devenir très importante et vous permettre d’obtenir des produits SistemiModerni"
+                            " gratuits!"]
+                          [:p "Pour améliorer nos produits, nous sommes aussi curieux de ce que vous avez apprécié"
+                           " que de ce qui vous a déplu. Si vous avez des suggestions à nous faire, nous sommes"
+                           " aussi à votre écoute. Alors, n’hésitez pas à nous contacter! Nous sommes toujours à"
+                           " votre écoute."]]}}
+
+   })
 
 (defn body
   []
   [:div.text_content
    [:p.title (translate :feedback :title)]
    (translate :feedback :text)
+    ;; TODO: handle phone and email here
    ;; TODO: collect name, email, and subject
    [:form#feedback {:method "post", :action "feedback", :name "feedback"}
     (f/textarea :message {:class "greytextarea" :tabindex 1})
