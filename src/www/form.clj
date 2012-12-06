@@ -237,10 +237,15 @@
             ;; If there is a label, put the key in the value and the label in the text.
             (if-let [label (:label m)]
               [:option (-> m (assoc :value k) (dissoc :label)) label]
-              ;; If it is a keyword, put the keyword in the value and its name in the text.
-              (if (keyword? k)
-                [:option (assoc m :value (str k)) (name k)]
-                [:option m k])))))])))
+
+              ;; If there is a translate function, apply it and use that as the text.
+              (if-let [f (:translate field)]
+                [:option (assoc m :value (str k)) (f k)]
+                
+                ;; If it is a keyword, put the keyword in the value and its name in the text.
+                (if (keyword? k)
+                  [:option (assoc m :value (str k)) (name k)]
+                  [:option m k]))))))])))
 
 (defn text
   [k opts]
