@@ -62,7 +62,8 @@
                           [:p "Pour améliorer nos produits, nous sommes aussi curieux de ce que vous avez apprécié"
                            " que de ce qui vous a déplu. Si vous avez des suggestions à nous faire, nous sommes"
                            " aussi à votre écoute. Alors, n’hésitez pas à nous contacter! Nous sommes toujours à"
-                           " votre écoute."]]}}
+                           " votre écoute."]
+                          [:p "Ecris un truc cool dans la fenêtre ci-dessous."]]}}
 
    })
 
