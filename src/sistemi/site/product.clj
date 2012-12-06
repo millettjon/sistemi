@@ -4,10 +4,11 @@
 (def strings
   "translation strings"
   {:en {:shelf {:name "Custom Shelf"}
-        :shelving {:name "Custom Shelving Unit"}
+        :shelving {:name "Custom Shelving Unit"
+                   :cutout {:semplice "none" :ovale "oval" :quadro "rectangle"}}
         :params {:depth "depth"}}
    :es {}
-   :fr {}})
+   :fr {:shelving {:cutout {:semplice "semplice" :ovale "ovale" :quadro "quadro"}}}})
 
 (def urls
   "design urls"
