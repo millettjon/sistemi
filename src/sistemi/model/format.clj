@@ -73,13 +73,6 @@
               ]))
          row-keys)]])
 
-(defmulti format-value
-  "Formats a design parameter value as text."
-  (fn [k v] k))
-
-(defmethod format-value :default
-  [k v]
-  v)
 
 (defn cm
   [v]
@@ -88,18 +81,6 @@
             v)]
     (str v " cm")))
 
-(defmethod format-value :width
-  [k v]
-  (cm v))
-
-(defmethod format-value :height
-  [k v]
-  (cm v))
-
-(defmethod format-value :depth
-  [k v]
-  (cm v))
-
-(defmethod format-value :color
-  [k v]
+(defn color
+  [v]
   [:span v "&nbsp;&nbsp" [:span.label {:style (str "background-color: " v ";")} "&nbsp;&nbsp"]])

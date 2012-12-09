@@ -14,9 +14,9 @@
 (def label-form
   {:foo {:type :set :options [:a {:label "A"} :b] :default :b}})
 
-(def translate-form
+(def format-form
   {:foo {:type :set :options [:a :b] :default :b
-         :translate #(clojure.string/upper-case (name %))}})
+         :format #(clojure.string/upper-case (name %))}})
 
 (deftest test-set
   (are [cutout]
@@ -40,14 +40,8 @@
        ))
 
 (deftest render-select
-  ;; If a label is passed, use it for the text and put the key in the value.
-  (f/with-form label-form {:foo :a}
-    (let [[_ _ [[_ {value :value} text]]] (f/select :foo {})]
-      (is (= value :a))
-      (is (= text "A"))))
-
-  ;; else if a translate fn is passed, translate the text and put the key in the value.
-  (f/with-form translate-form {:foo :a}
+  ;; if a format fn is passed, format the text and put the key in the value.
+  (f/with-form format-form {:foo :a}
     (let [[_ _ [[_ {value :value} text]]] (f/select :foo {})]
       (is (= value ":a"))
       (is (= text "A"))))

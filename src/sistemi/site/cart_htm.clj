@@ -22,8 +22,10 @@
 
 (defn format-param
   ""
-  [k v]
-  [:tr [:td {:style "text-transform: capitalize;"} k] [:td.white {:style "padding-left: 10px;"} (fmt/format-value k v)]])
+  [item param]
+  [:tr
+   [:td {:style "text-transform: capitalize;"} (p/translate-param item param)]
+   [:td.white {:style "padding-left: 10px;"} (p/format-value item param)]])
 
 (defn total
   "Calculates the total price of all cart items."
@@ -92,9 +94,12 @@
            [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} "Delete"]]
 
           ;; product specs
+          ;; ? macro with-type?
+          ;; loop through parameters
+          ;; translate labels and values
           [:table
            (for [param (type p/parameter-orders)]
-             (format-param param (item param)))]
+             (format-param item param))]
 
           ;; unit price
           [:td {:style "text-align: right; padding-top: 13px;"}

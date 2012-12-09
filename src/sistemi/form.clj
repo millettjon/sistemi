@@ -1,5 +1,6 @@
 (ns sistemi.form
-  (:require [sistemi.translate :as tr]))
+  (:require [sistemi.site.product :as p]
+            [sistemi.model.format :as fmt]))
 
 (def feedback
   "A customer feedback message."
@@ -15,8 +16,8 @@
          {:quantity {:type :bounded-number :min 0 :max 100 :default 1}}))
 
 (def shelf-params
-  {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120}
-   :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30}
+  {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120 :format fmt/cm}
+   :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30 :format fmt/cm}
    :finish {:type :set :options [:matte :satin {:disabled true} :glossy {:disabled true}] :default :matte}
    :color {:type :rgb :default "#AB003B"}})
 
@@ -24,10 +25,9 @@
   "Map of all items and their design paramters."
   {:shelf shelf-params
    :shelving (merge shelf-params
-                    {:height {:type :bounded-number :units "cm" :min 60 :max 240 :default 120}
+                    {:height {:type :bounded-number :units "cm" :min 60 :max 240 :default 120 :format fmt/cm}
                      :cutout {:type :set :options [:semplice :ovale :quadro] :default :semplice
-                              :translate #(tr/translate "/product" :shelving :cutout %)}})
-   })
+                              :format (get-in p/parameter-formats [:shelving :cutout])}})})
 
 (def cart-item
   "Generic item, type, and quantity in a shopping cart."

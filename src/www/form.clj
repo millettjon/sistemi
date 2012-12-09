@@ -43,15 +43,9 @@
    (< value (:min field)) :too-small
    (> value (:max field)) :too-large))
 
-(defn units
-  [field option]
-  (if-let [u (:units field)]
-    {:label (str option " " u)}
-    {}))
-
 (defmethod options :bounded-number
   [field]
-  (reduce #(assoc % %2 (units field %2))
+  (reduce #(assoc % %2 {})
        (ordered-map)
        (range (:min field) (inc (:max field)))))
 
@@ -234,18 +228,15 @@
           (let [m (if (= k selected)
                     (assoc m :selected true)
                     m)]
-            ;; If there is a label, put the key in the value and the label in the text.
-            (if-let [label (:label m)]
-              [:option (-> m (assoc :value k) (dissoc :label)) label]
 
-              ;; If there is a translate function, apply it and use that as the text.
-              (if-let [f (:translate field)]
-                [:option (assoc m :value (str k)) (f k)]
-                
-                ;; If it is a keyword, put the keyword in the value and its name in the text.
-                (if (keyword? k)
-                  [:option (assoc m :value (str k)) (name k)]
-                  [:option m k]))))))])))
+            ;; If there is a format function, apply it and use that as the text.
+            (if-let [f (:format field)]
+              [:option (assoc m :value (str k)) (f k)]
+              
+              ;; If it is a keyword, put the keyword in the value and its name in the text.
+              (if (keyword? k)
+                [:option (assoc m :value (str k)) (name k)]
+                [:option m k])))))])))
 
 (defn text
   [k opts]
