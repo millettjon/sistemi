@@ -3,6 +3,7 @@
   (:require [sistemi.translate :as tr]
             [sistemi.model.format :as fmt]))
 
+;; TODO: Can some of these be bumped up to the top level as general terms?
 (def strings
   "translation strings"
   {:en {:shelf {:name "Custom Shelf"
@@ -16,11 +17,20 @@
                    :height "height"
                    :finish "finish"
                    :color "color"
-                   :cutout "cutout"
-                   :cutout-values {:semplice "none" :ovale "oval" :quadro "rectangle"}}
+                   :cutout {:_ "cutout"
+                            :semplice "none" :ovale "oval" :quadro "rectangle"}}
         :params {:depth "depth"}}
    :es {}
-   :fr {:shelving {:cutout {:semplice "semplice" :ovale "ovale" :quadro "quadro"}}}})
+   :fr {:shelf {:width "Longeur"
+                :depth "Profondeur"
+                :finish "Finition"
+                :color "Couleur"}
+        :shelving {:width "Longeur"
+                   :depth "Profondeur"
+                   :height "Hauteur"
+                   :finish "Finition"
+                   :color "Couleur"
+                   :cutout {:_ nil :semplice "semplice" :ovale "ovale" :quadro "quadro"}}}})
 
 (def urls
   "design urls"
@@ -37,7 +47,7 @@
   {:shelving {:height #(fmt/cm %)
               :width #(fmt/cm %)
               :depth #(fmt/cm %)
-              :cutout #(tr/translate "/product" :shelving :cutout-values %)
+              :cutout #(tr/translate "/product" :shelving :cutout %)
               :color #(fmt/color %)}
    :shelf {:width #(fmt/cm %)
            :depth #(fmt/cm %)
