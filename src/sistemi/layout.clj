@@ -14,11 +14,7 @@
    :vision
    [:boutique
     {:label :shelves :page "/shelf.htm"}
-    {:label :shelving-units :page "/shelving.htm"}
-    :tables
-    :lamps
-    :chairs
-    :paint]
+    {:label :shelving-units :page "/shelving.htm"}]
    :system
    :feedback])
 
