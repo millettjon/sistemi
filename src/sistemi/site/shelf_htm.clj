@@ -18,9 +18,7 @@
         :height "Height"
         :finish "Finish"
         :color "Color"
-        :quantity "Quantity"
-        :cart_add "Add to cart"
-        :cart_update "Update cart"}
+        :quantity "Quantity"}
    :es {}
    :fr {;:title "TODO: French"
         :spin "cliquez pour tourner"
@@ -29,8 +27,7 @@
         :height "Hauteur"
         :finish "Finition"
         :color "Couleur"
-        :quantity "Quantité"
-        :cart_add "Ajouter au panier"}
+        :quantity "Quantité"}
    })
 
 (defn head
@@ -113,8 +110,8 @@
         ]]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart_add)
-                                                                      (tr/translate :cart_update) )]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
+                                                                      (tr/translate :cart :update) )]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelf from defaults.

@@ -20,8 +20,7 @@
         :height "Height"
         :finish "Finish"
         :color "Color"
-        :quantity "Quantity"
-        :cart_add "Add to cart"}
+        :quantity "Quantity"}
    :es {}
    :fr {;:title ""
         :spin "cliquez pour tourner"
@@ -30,9 +29,7 @@
         :height "Hauteur"
         :finish "Finition"
         :color "Couleur"
-        :quantity "Quantité"
-        :cart_add "Ajouter au panier"
-        }
+        :quantity "Quantité"}
 
    })
 
@@ -122,8 +119,8 @@
       [:div#colorpicker {:style "margin-left: 20px;"}]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart_add)
-                                                                      (tr/translate :cart_update))]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
+                                                                      (tr/translate :cart :update))]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelving from defaults.

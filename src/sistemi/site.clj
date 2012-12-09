@@ -17,7 +17,9 @@
         :construction "Under Construction"
         :version "alpha version"
         :account "My Account"
-        :cart "Cart"
+        :cart {:_ "Cart"
+               :add "Add to cart"
+               :update "Update cart"}
         :header {:signup "Sign Up For Emails"
                  :contact "Contact Us"
                  :careers "Careers"
@@ -47,7 +49,9 @@
         ; layout
         :construction "Page En Construction"
         :account "Mon Compte"
-        :cart "Panier"
+        :cart {:_ "Panier"
+               :add "Ajouter au panier"}
+
         :header {:signup "S’abonner aux emails"
                  :contact "Contactez Nous"
                  :careers "Carrières"
