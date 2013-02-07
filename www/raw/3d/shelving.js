@@ -54,8 +54,8 @@ sm.shelving = {
   // Model Parameters.
   vertical: {inset: 15},          // distance vertical member is inset from each end
   lateral: {width: 9,
-            inset: 3},            // distance lateral's are inset from rear (Eric's Edit)
-  thickness:  1.9                   // MDF thickness(Eric's Edit)
+            inset: 3},            // distance lateral's are inset from rear
+  thickness:  1.9                   // MDF thickness
 };
 
 // Extrusion settings.
@@ -102,8 +102,8 @@ function innerBox(bbox, margin) {
 
 // Cuts a rounded rectangle hole centered in the given bounding box.
 function cutoutRRect(shape, bbox) {
-  var margin = 3.8;                 //Eric's Edit
-  var radius = 0.3;                 //Eric's Edit
+  var margin = 3.8;
+  var radius = 0.3;
   var box = innerBox(bbox, margin);
 
   var path = new THREE.Path();
@@ -128,7 +128,7 @@ function cutoutRRect(shape, bbox) {
 // Cuts a rectangle hole centered in the given bounding box.
 // WTF: This only works when there is one hole.
 function cutoutRectAC(shape, bbox) {
-  var margin = 3.8;               //Eric's Edit
+  var margin = 3.8;
   var box = innerBox(bbox, margin);
 
   var path = new THREE.Path();
@@ -142,7 +142,7 @@ function cutoutRectAC(shape, bbox) {
 
 // Cuts a oval hole centered in the given bounding box.
 function cutoutOval(shape, bbox) {
-  var margin = 3.8;               //Eric's Edit
+  var margin = 3.8;
   var box = innerBox(bbox, margin);
 
   var path = new THREE.Path();
