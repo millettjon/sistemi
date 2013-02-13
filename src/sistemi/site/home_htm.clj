@@ -6,7 +6,8 @@
 (def strings
   {:en {:title "Modern Shelving Furniture : Sistemi Moderni"}
    :es {:title "Muebles de Estantería Moderna : Sistemi Moderni"}
-   :fr {}})
+   :fr {:title ""}
+   :it {:title ""}})
 
 (def names
   {:es "hogar"

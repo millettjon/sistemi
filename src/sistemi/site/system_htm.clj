@@ -35,7 +35,20 @@
                          Vous apprécierez d’ouvrir votre colis quand il arrivera chez vous. Montez-le
                          vous-même très facilement sans vis ni clous.")}}
 
-         })
+
+   :it {:title "IL SISTEMA"
+        :system {:title "Il Sistema"
+                 :text (stru/join-lines
+                        "Il suo prodotto comincia con Lei.  Appena terminata la sua scelta e piazzato l'ordine,
+                        i comandi di robotica sono automaticamente inviati alle macchine in fabbrica, per creare
+                        i vari componenti su misura.  Con velocità e precisione all’apice della tecnologia moderna,
+                        i robot sagomano secondo il vostri requisiti i pannelli di Valchromat®, costituiti di fibre
+                        di legno certificate FSC. Dei coloranti organici sono mescolati con una resina prodotta
+                        appositamente per far penetrare il colore nella massa del legno. Valchromat® è resistente
+                        all'umidità, non contiene sostanze tossiche, è ecologico, e possiede una solidità strutturale
+                        superiore a quella di materiali simili." )}}
+
+   })
 
 (defn body
   []

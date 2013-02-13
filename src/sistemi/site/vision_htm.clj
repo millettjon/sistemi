@@ -22,7 +22,17 @@
                        arrêter de fabriquer des produits jetables de qualité médiocre. Nous
                        pensons aussi que vous  devriez pouvoir disposer des  produits tels 
                        que vous les imaginez.  C’est pour cela que nous tenons à vous donner
-                       les moyens de personnaliser toute les gammes de nos produits.")}}})
+                       les moyens de personnaliser toute les gammes de nos produits.")}}
+
+   :it {:vision {:title "LA NOSTRA VISIONE"
+                 :text (stru/join-lines "<span class=\"company_name\">SistemiModerni</span> è stata fondata per
+                 offrirvi la più alta qualità ed un design prestigioso, a dei  prezzi ragionevoli.  Noi siamo
+                 convinti che il commercio basato su merci usa-e-getta di bassa qualità non sia positivo per il
+                 nostro pianeta, ed è inoltre nostra convinzione che il Cliente possa e debba esigere prodotti di
+                 qualità, rifiniti secondo le sue aspettative.  Per questa ragione, a Sistemi Moderni vi offriamo
+                 la possibilità di personalizzare ognuno dei nostri prodotti a seconda delle vostre preferenze.")}}
+
+   })
 
 (defn body
   []

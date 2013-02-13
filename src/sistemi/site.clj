@@ -74,6 +74,29 @@
         :copyright ["© 2012 SISTEMI MODERNI."
                     "(all rights reserved)"]}
 
+   :it {; splash page
+        :title ""
+        :select-a-language "Scegliere una lingua"
+        :construction "In Construzione"
+        :account ""
+        :cart {:_ ""
+               :add ""}
+        :header {:signup "Iscriversi per ricevere emails"
+                 :contact "Contatti"
+                 :careers "Opportunità di carriera"
+                 :team "Il Gruppo"}
+        :menu {:home "Home"
+               :vision "La nostra visione"
+               :boutique {:_ "Boutique online"
+                          :shelves "Scaffali"
+                          :shelving-units "Libreria"}
+               :service ""
+               :system "Il Sistema"
+               :gallery ""
+               :blog "blog"
+               :feedback "Feedback"}
+        :copyright ["@ 2012 SISTEMI MODERNI."
+                    "(all rights reserved)"]}
 
    :es {; splash page
         :title "Muebles de Estantería Moderna : Sistemi Moderni"
