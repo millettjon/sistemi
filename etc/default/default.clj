@@ -1,5 +1,5 @@
 {:internationalization
- {:locales ["en" "fr" "es"]
+ {:locales ["en" "fr" "es" "it"]
   :default-locale "en"
   :default-territories {:en "GB", :fr "FR", :de "DE", :es "ES", :it "IT"}}
 
