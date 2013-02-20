@@ -21,6 +21,17 @@
                             :semplice "none" :ovale "oval" :quadro "rectangle"}}
         :params {:depth "depth"}}
    :es {}
+   :it {:shelf {:width "Lunghezza"
+                :depth "Profondità"
+                :finish "Finitura"
+                :color "Colore"}
+        :shelving {:width "Lunghezza"
+                   :depth "Profondità"
+                   :height "Altezza"
+                   :finish "Finitura"
+                   :color "Colore"
+                   :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}}}
+
    :fr {:shelf {:width "Largeur"
                 :depth "Profondeur"
                 :finish "Finition"

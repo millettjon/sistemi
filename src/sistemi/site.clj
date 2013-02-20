@@ -80,7 +80,7 @@
         :construction "In Construzione"
         :account ""
         :cart {:_ ""
-               :add ""}
+               :add "Aggiungere al carrello"}
         :header {:signup "Iscriversi per ricevere emails"
                  :contact "Contatti"
                  :careers "Opportunità di carriera"

@@ -22,6 +22,16 @@
         :color "Color"
         :quantity "Quantity"}
    :es {}
+   :it {;:title ""
+        :spin "Clic e Tira"
+        :cutout "Ritaglio"
+        :width "Lunghezza"
+        :depth "Profondità"
+        :height "Altezza"
+        :finish "Finitura"
+        :color "Colore"
+        :quantity "Quantità"}
+
    :fr {;:title ""
         :spin "cliquez pour tourner"
         :width "Largeur"

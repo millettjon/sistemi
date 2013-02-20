@@ -20,6 +20,16 @@
         :color "Color"
         :quantity "Quantity"}
    :es {}
+
+   :it {;:title "TODO: Italian"
+        :spin "Clic e Tira"
+        :width "Lunghezza"
+        :depth "Profondità"
+        :height "Altezza"
+        :finish "Finitura"
+        :color "Colore"
+        :quantity "Quantità"}
+
    :fr {;:title "TODO: French"
         :spin "cliquez pour tourner"
         :width "Largeur"
