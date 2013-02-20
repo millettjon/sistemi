@@ -22,7 +22,7 @@
    :es {}
    :fr {;:title "TODO: French"
         :spin "cliquez pour tourner"
-        :width "Longeur"
+        :width "Largeur"
         :depth "Profondeur"
         :height "Hauteur"
         :finish "Finition"

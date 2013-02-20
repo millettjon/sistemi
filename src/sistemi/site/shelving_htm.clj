@@ -24,7 +24,7 @@
    :es {}
    :fr {;:title ""
         :spin "cliquez pour tourner"
-        :width "Longeur"
+        :width "Largeur"
         :depth "Profondeur"
         :height "Hauteur"
         :finish "Finition"

@@ -21,7 +21,7 @@
                             :semplice "none" :ovale "oval" :quadro "rectangle"}}
         :params {:depth "depth"}}
    :es {}
-   :fr {:shelf {:width "Longeur"
+   :fr {:shelf {:width "Largeur"
                 :depth "Profondeur"
                 :finish "Finition"
                 :color "Couleur"}
