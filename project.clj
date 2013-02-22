@@ -8,6 +8,9 @@
                               :snapshots false
                               :releases {:checksum :ignore :update :always}}}
 
+      :target-path "var/target"
+      :compile-path "target/classes" 
+
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.4.0"]
