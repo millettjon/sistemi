@@ -49,7 +49,10 @@
                      [com.google.guava/guava "13.0.1"]
                      ]
 
-      :dev-dependencies [[org.clojure/tools.trace "0.7.3"]
-                         [ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]
-      :plugins [[codox "0.6.1"]]
+      :plugins [[codox "0.6.1"]
+                ;; [lein-outdated "1.0.0"] ; tried this but it hangs
+                [lein-cloverage "1.0.2"]]
+
+      :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.3"]
+                         [ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]}}
       ))
