@@ -8,6 +8,8 @@
                               :snapshots false
                               :releases {:checksum :ignore :update :always}}}
 
+      :min-lein-version "2.0.0" ; needed for heroku
+
       :target-path "var/target"
       :compile-path "target/classes" 
 
