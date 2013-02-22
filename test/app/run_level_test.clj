@@ -1,7 +1,7 @@
-(ns app.test.run-level
+(ns app.run-level-test
+  (:require [util.environment :as env])
   (:use clojure.test
-        app.run-level
-        util.environment))
+        app.run-level))
 
 (defn- resolve-predicate
   "Takes a level keyword and returns the var for its predicate function."
@@ -10,7 +10,7 @@
 
 (deftest test-init-run-level!
   (testing "environment"
-    (with-redefs [environment {"RUN_LEVEL" "staging"}]
+    (with-redefs [env/environment {"RUN_LEVEL" "staging"}]
       (init-run-level!)
       (is (= run-level :staging))))
   (testing "no args"

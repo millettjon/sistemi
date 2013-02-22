@@ -1,14 +1,13 @@
 (ns util.environment
-  "Utilities for working with environment variables."
-  (:refer-clojure :exclude [map eval]))
+  "Utilities for working with environment variables.")
 
-(def map
+(def environment
   "Coerce the environment map into a clojure map for easier use and to
    support rebinding in unit tests."
   (into {} (System/getenv)))
 
-(defn eval
-  "Gets the value of the environment variable key and reads and evals it."
+(defn get-eval
+  "Gets and evals an environment variable."
   [key]
-  (if-let [val (get map key)]
+  (if-let [val (get environment key)]
     (clojure.core/eval (read-string val))))

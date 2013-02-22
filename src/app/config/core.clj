@@ -29,7 +29,7 @@ Useful for converting environment variable names to clojure map keys."
   (-> k (str/replace "_" "-") str/lower-case keyword))
 
 ;; ===== PUBLIC =====
-(defn environment-map
+(defn environment
   "Returns the environment as a map. Keys are normalized by converting underscore to dash,
    lowercasing, and keywordizing. Clojure parseable values are coerced to clojure.  The argument
    keys specifies the list of environment variables to include."
@@ -38,7 +38,7 @@ Useful for converting environment variable names to clojure map keys."
             (let [[k v] kv]
               (assoc m (normalize-key k) (read-string-safely v))))
           {}
-          (select-keys env/map keys)))
+          (select-keys env/environment keys)))
 
 (defn merge-configs
   "Deeply merges the list of configuration maps. Values from rightmost maps take precedence."

@@ -24,8 +24,8 @@
   ""
   [item param]
   [:tr
-   [:td {:style "text-transform: capitalize;"} (p/translate-param item param)]
-   [:td.white {:style "padding-left: 10px;"} (p/format-value item param)]])
+   [:td {:style "text-transform: capitalize;"} (fmt/translate-param item param)]
+   [:td.white {:style "padding-left: 10px;"} (fmt/format-value item param)]])
 
 (defn total
   "Calculates the total price of all cart items."
@@ -98,7 +98,7 @@
           ;; loop through parameters
           ;; translate labels and values
           [:table
-           (for [param (type p/parameter-orders)]
+           (for [param (type fmt/parameter-orders)]
              (format-param item param))]
 
           ;; unit price

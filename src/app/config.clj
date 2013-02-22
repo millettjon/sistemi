@@ -22,19 +22,19 @@
 ;; ;; To initialize.
 ;; (use 'app.config.core)
 ;;
-;; (environment-map)
-;; (environment-map "USERNAME" "HOME")
+;; (environment)
+;; (environment "USERNAME" "HOME")
 ;; (file-map "etc/development.yaml")
 ;;
 ;; (set-config!
 ;;  (file-map "etc/default.yaml")
 ;;  (file-map  (str "etc/" (name (get-run-level)) ".yaml"))
-;;  (environment-map "DATABASE_URL" "paypal"))
+;;  (environment "DATABASE_URL" "paypal"))
 ;;
 ;; (merge-configs
 ;;  (file-map "etc/default.yaml")
 ;;  (file-map  (str "etc/" (name (get-run-level)) ".yaml"))
-;;  (environment-map "DATABASE_URL" "paypal"))
+;;  (environment "DATABASE_URL" "paypal"))
 ;;
 ;; To read config values.
 ;; (use 'app.config)

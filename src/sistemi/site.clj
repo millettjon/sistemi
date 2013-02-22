@@ -1,4 +1,5 @@
 (ns sistemi.site
+  "Root of all urls in the site."
   (:require [locale.core :as l]
             [locale.translate :as ltr]
             [sistemi.registry :as registry]

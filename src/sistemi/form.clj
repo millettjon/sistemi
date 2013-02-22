@@ -1,6 +1,5 @@
 (ns sistemi.form
-  (:require [sistemi.site.product :as p]
-            [sistemi.model.format :as fmt]))
+  (:require [sistemi.model.format :as fmt]))
 
 (def feedback
   "A customer feedback message."
@@ -27,7 +26,7 @@
    :shelving (merge shelf-params
                     {:height {:type :bounded-number :units "cm" :min 60 :max 240 :default 120 :format fmt/cm}
                      :cutout {:type :set :options [:semplice :ovale :quadro] :default :semplice
-                              :format (get-in p/parameter-formats [:shelving :cutout])}})})
+                              :format (get-in fmt/parameter-formats [:shelving :cutout])}})})
 
 (def cart-item
   "Generic item, type, and quantity in a shopping cart."

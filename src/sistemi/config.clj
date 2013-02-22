@@ -8,7 +8,7 @@
   "Loads a directory of conf files using the approprate gpg configuration if one exists."
   [dir]
   (let [name (path/name dir)
-        passmap (env/eval "GPG_PASSPHRASE")
+        passmap (env/get-eval "GPG_PASSPHRASE")
         passphrase ((keyword name) passmap)
         home (str (path/join dir ".gnupg"))]
     (if (or passphrase (path/exists? home))
@@ -18,4 +18,4 @@
 (conf/set-config!
    (dir-map "etc/default")
    (dir-map (path/join "etc" (name run-level)))
-   (conf/environment-map "PORT" "LAUNCH_BROWSER" "HOST" "OFFLINE_ENABLED"))
+   (conf/environment "PORT" "LAUNCH_BROWSER" "HOST" "OFFLINE_ENABLED"))

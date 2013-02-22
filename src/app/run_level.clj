@@ -65,7 +65,7 @@
            (init-run-level! nil arg)))
   ([level levels]
      (let [levels (or levels #{:development :staging :production})
-           level (or level (keyword (env/map "RUN_LEVEL")) :development)]
+           level (or level (keyword (env/environment "RUN_LEVEL")) :development)]
        (alter-var-root #'run-levels (constantly (set (check levels set?))))
        (alter-var-root #'run-level (constantly (check level levels))))
      (make-predicates)))

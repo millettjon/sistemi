@@ -2,13 +2,13 @@
   (:use clojure.test
         app.config.core))
 
-(deftest environment-map-test
-  (is (map? (environment-map)))
-  (is (= (environment-map "USERNAME") {:username (get (System/getenv) "USERNAME")})))
+(deftest environment-test
+  (is (map? (environment)))
+  (is (= (environment "USER") {:user (get (System/getenv) "USER")})))
 
 ;; TODO: lookup the location of this file...
 (deftest file-map-test
-  (is (= (file-map "test/app/config/test/config.yaml") {:foo "bar"})))
+  (is (= (file-map "test/app/config/test/config.clj") {:foo "bar"})))
 
 ;; (defn foo
 ;;   []

@@ -3,7 +3,8 @@
   (:require [clojure.contrib.core :as contrib]
             [clojure.tools.logging :as log]
             [www.session :as sess])
-  (:use ordered.map))
+  (:use ordered.map)
+  (:refer-clojure :exclude [get empty?]))
 
 ;; What does the data look like?
 ;; - should preserve order of addtion (for sorting on cart page)

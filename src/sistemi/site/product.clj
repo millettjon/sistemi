@@ -48,31 +48,4 @@
   {:shelf "/shelf.htm"
    :shelving "/shelving.htm"})
 
-(def parameter-orders
-  "display order of design paramters"
-  {:shelf [:width :depth :finish :color]
-   :shelving [:width :height :depth :cutout :finish :color]})
-
-(def parameter-formats
-  "Formatting functions for parameters."
-  {:shelving {:height #(fmt/cm %)
-              :width #(fmt/cm %)
-              :depth #(fmt/cm %)
-              :cutout #(tr/translate "/product" :shelving :cutout %)
-              :color #(fmt/color %)}
-   :shelf {:width #(fmt/cm %)
-           :depth #(fmt/cm %)
-           :color #(fmt/color %)}})
-
-(defn translate-param
-  [item param]
-  (tr/translate "/product" (:type item) param))
-
-(defn format-value
-  [item param]
-  (let [value (param item)]
-    (if-let [format-fn (get-in parameter-formats [(:type item) param])]
-      (format-fn value)
-      value)))
-
 (sistemi.registry/register)

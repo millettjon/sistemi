@@ -1,4 +1,5 @@
 (ns sistemi.model.format
+  (:require [sistemi.translate :as tr])
   (:use [frinj core calc]))
 
 (defn format-area
@@ -84,3 +85,30 @@
 (defn color
   [v]
   [:span v "&nbsp;&nbsp" [:span.label {:style (str "background-color: " v ";")} "&nbsp;&nbsp"]])
+
+(def parameter-orders
+  "display order of design paramters"
+  {:shelf [:width :depth :finish :color]
+   :shelving [:width :height :depth :cutout :finish :color]})
+
+(def parameter-formats
+  "Formatting functions for parameters."
+  {:shelving {:height #(cm %)
+              :width #(cm %)
+              :depth #(cm %)
+              :cutout #(tr/translate "/product" :shelving :cutout %)
+              :color #(color %)}
+   :shelf {:width #(cm %)
+           :depth #(cm %)
+           :color #(color %)}})
+
+(defn translate-param
+  [item param]
+  (tr/translate "/product" (:type item) param))
+
+(defn format-value
+  [item param]
+  (let [value (param item)]
+    (if-let [format-fn (get-in parameter-formats [(:type item) param])]
+      (format-fn value)
+      value)))
