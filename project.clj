@@ -13,8 +13,6 @@
       :target-path "var/target"
       :compile-path "var/target/classes" 
 
-      :aot [] ;; disable aot for heroku
-
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.4.0"]
@@ -52,7 +50,7 @@
                      ;; misc
                      [org.clojure/core.cache "0.6.2"]
                      [ordered "1.2.0"]
-                     [frinj "0.1.3"]
+                     [frinj "0.1.4"]
                      [com.google.guava/guava "13.0.1"]
                      ]
 
