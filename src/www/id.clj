@@ -21,8 +21,12 @@
 ;; - Generate a request id of the form bbbb.rrr where bbbb is the boot
 ;;   identifier and rrr is the request sequence in base62.
 
-;; Generate a unique boot identifier when jvm starts.
-(def boot-id (b62/rand 4))
+(def boot-id nil)
+
+(defn init!
+  "Generate a unique boot identifier."
+  []
+  (alter-var-root #'boot-id (constantly (b62/rand 4))))
 
 ;; Count requests from zero.
 (def request-count (atom 0))

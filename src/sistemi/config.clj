@@ -15,7 +15,9 @@
       (conf/dir-map dir :gpg {:passphrase passphrase :home home})
       (conf/dir-map dir))))
 
-(conf/set-config!
+(defn init!
+  []
+  (conf/set-config!
    (dir-map "etc/default")
    (dir-map (path/join "etc" (name run-level)))
-   (conf/environment "PORT" "LAUNCH_BROWSER" "HOST" "OFFLINE_ENABLED"))
+   (conf/environment "PORT" "LAUNCH_BROWSER" "HOST" "OFFLINE_ENABLED")))

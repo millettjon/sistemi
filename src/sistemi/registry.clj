@@ -17,6 +17,10 @@
     (try
       (log/info "Loading file" file)
       (load-file file)
+
+      ;; - un-mangle the file to get the namespace
+      ;; - register the namespace
+
       (catch Exception x
         (log/error x (str "Exception loading file " file)))
       (catch LinkageError x
