@@ -11,7 +11,7 @@
       :min-lein-version "2.0.0" ; needed for heroku
 
       :target-path "var/target"
-      :compile-path "target/classes" 
+      :compile-path "var/target/classes" 
 
       :dependencies [
                      ;; clojure
