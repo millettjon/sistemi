@@ -2,3 +2,4 @@ pom.xml
 .lein-failures
 .idea
 *.iml
+.lein-repl-history
