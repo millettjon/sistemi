@@ -12,6 +12,10 @@
   "The default locale."
   nil)
 
+(def default-locale-kw
+  "Keyword representing the default locale."
+  nil)
+
 (def default-territories
   ""
   {})
@@ -28,7 +32,8 @@
   [key]
   (alter-var-root
    #'default-locale
-   (constantly (check (locales key) "Invalid locale '~A'."))))
+   (constantly (check (locales key) "Invalid locale '~A'.")))
+  (alter-var-root #'default-locale-kw (constantly (keyword key))))
 
 (defn set-default-territories!
   "Sets the root binding for default-territories."

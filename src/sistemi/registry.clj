@@ -4,8 +4,9 @@
             [clojure.tools.logging :as log]
             [locale.translate :as tr]
             [util.path :as path]
-            [www.url :as url])
-  (:use [locale.core :only (locales default-locale)]))
+            [www.url :as url]
+            [locale.core :as locale])
+  (:use app.config))
 
 ;;; --------------------------------------------------
 ;;; FUNCTIONS
@@ -61,7 +62,7 @@
 (defn- check-canonical
   "Make sure the default-locale uses the canonical name."
   [m cname ns]
-  (let [dl (keyword default-locale)]
+  (let [dl locale/default-locale-kw]
     (if (contains? m dl)
       (log/warn (str "Ignoring extraneous entry for default locale " dl " in namespace " ns ".")))
     (assoc m dl cname)))
@@ -69,7 +70,7 @@
 (defn- check-extensions
   "Updates a path translation map to add file extensions if ommitted."
   [m]
-  (if-let [ext (re-find #"\.[^.]+$" (m (keyword default-locale)))]
+  (if-let [ext (re-find #"\.[^.]+$" (m locale/default-locale-kw))]
     (reduce (fn [m [locale name]]
               (if (re-find (re-pattern (str ext "$")) name)
                 m
@@ -81,13 +82,15 @@
 (defn- check-locales
   "Adds path entries for missing locales and removes unknown locale entries."
   [m ns]
-  (let [locales (into #{} (map keyword locales))
-        cname (m (keyword default-locale))]
+  (let [locales (into #{} (map keyword locale/locales))
+        cname (m locale/default-locale-kw)]
     (reduce
      (fn [m locale]
        (cond
         (and (contains? m locale) (locales locale)) m
-        (locales locale) (do (log/error (str "No entry for locale " locale " in namespace " ns "."))
+        (locales locale) (do
+                           (if (conf :internationalization :require-url-translations)
+                             (log/warn (str "No entry for locale " locale " in namespace " ns ".")))
                              (assoc m locale cname))
         :default (do (log/error (str "Ignoring entry for unknown locale " locale " in namespace " ns "."))
                      (dissoc m locale))))
@@ -97,7 +100,7 @@
 (defn- check-names
   "Checks that all name values are strings and encodes any unsafe characters."
   [m ns]
-  (let [cname (m (keyword default-locale))]
+  (let [cname (m locale/default-locale-kw)]
     (reduce
      (fn [m [locale lname]]
        (let [is-string (string? lname)]
