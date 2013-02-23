@@ -1,5 +1,5 @@
-{;; Start a swank server.
- :swank true
+{;; Start an nrepl server.
+ :nrepl true
  
  ;; Launch the website in a browser.
  :launch-browser true

@@ -20,35 +20,6 @@
         [app.config.core :as cfg]
         locale.core))
 
-(defn start-swank
-  "Starts a swank server. Useful when running locally from foreman.
-   Note: Uses eval since swank-clojure may not be available in production
-   (e.g., heroku)."
-   []
-  (log/info "Starting swank.")
-  (eval '(do (require 'swank.swank)
-             (swank.swank/start-server :host "localhost" :port 4005)))
-
-  ;; Inject doc and javadocc into clojure core so they are there for the repl.
-  ;; ? Why does this only work inside an require eval?
-  ;;   ? Do symbols get evaluated at macro expansion time?
-  ;; When compiling, the namespace is set by the ns in the file.
-  ;; Later, it is set to "user".
-  ;; See Gilardi Scenario: http://technomancy.us/143
-
-  #_ (require 'clojure.java.javadoc) ; unable to resolve symbol ort. WTF?
-  #_ (eval (intern 'clojure.core 'javadoc clojure.java.javadoc/javadoc))  ; fails
-  #_(eval '(do
-           #_(require 'clojure.repl)
-           #_(let [orig-ns *ns*]
-             (in-ns 'clojure.core)
-             (def #^{:macro true} doc #'clojure.repl/doc)
-             (in-ns orig-ns))
-           ;; Note: This works, but only injects it into namespaces started after this...
-           ;; Note: Why is the eval needed?
-           (require 'clojure.java.javadoc)
-           (intern 'clojure.core 'javadoc clojure.java.javadoc/javadoc))))
-
 (defn -main
   "Main entry point. Runs all startup initialization code. Note: The
    Heroku buildpack aot compiles everything so keep all side-effect code
@@ -114,16 +85,11 @@
   (log/info "Bulding routes.")
   (def routes (routes/build-routes))
 
-  ;; ===== DEVELOPMENT =====
-  (when (development?)
-    (ns user
-      (:require [pl.danieljanus.tagsoup :as tagsoup])
-      (:use clojure.repl
-            clojure.pprint)))
-
-  ;; Start swank if enabled.
-  (if (conf :swank)
-    (start-swank))
+  ;; Start nrepl if enabled.
+  (when (conf :nrepl)
+    (log/info "Starting nrepl server on 127.0.0.1:7888.")
+    (require 'clojure.tools.nrepl.server)
+    (eval '(clojure.tools.nrepl.server/start-server :port 7888 :bind "127.0.0.1")))
 
   ;; Launch a browser if configured.
   (when (conf :launch-browser)

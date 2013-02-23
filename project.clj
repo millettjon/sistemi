@@ -44,9 +44,6 @@
                      ;; configuration
                      [fidjet "0.0.1"]
 
-                     ;; swank
-                     [swank-clojure "1.4.2"]
-
                      ;; misc
                      [org.clojure/core.cache "0.6.2"]
                      [ordered "1.2.0"]
@@ -59,5 +56,5 @@
                 [lein-cloverage "1.0.2"]]
 
       :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.3"]
-                         [ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]}}
-      ))
+                                      [org.clojure/tools.nrepl "0.2.1"]
+                                      [ring-mock "0.1.2" :exclusions [org.clojure/clojure]]]}}))
