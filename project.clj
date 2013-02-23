@@ -13,6 +13,8 @@
       :target-path "var/target"
       :compile-path "var/target/classes" 
 
+      :aot [] ;; disable aot for heroku
+
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.4.0"]
