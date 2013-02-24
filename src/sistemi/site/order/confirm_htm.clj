@@ -53,8 +53,6 @@
       (log/info "XC DETAILS" details)
       (response (standard-page "" (body req details) 544)))))
 
-(sistemi.registry/register)
-
 ;; ? Should we pass custom data through paypal? e.g., internal order number?
 ;; ? Is there any way to go back to paypal and re-edit e.g., the shipping address?
 ;; - or, should we just collect that ourselves?

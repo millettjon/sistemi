@@ -117,5 +117,3 @@
   [req]
   (response (standard-page "" (f/with-form sf/feedback nil (body)) 544))
   )
-
-(sistemi.registry/register)

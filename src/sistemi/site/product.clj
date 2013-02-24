@@ -47,5 +47,3 @@
   "design urls"
   {:shelf "/shelf.htm"
    :shelving "/shelving.htm"})
-
-(sistemi.registry/register)

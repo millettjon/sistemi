@@ -2,5 +2,3 @@
 
 (def names
   {:es "orden"})
-
-(sistemi.registry/register)

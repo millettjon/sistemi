@@ -200,6 +200,3 @@
 (defn handle
   [req]
   (response (standard-page (head) (f/with-form (:shelving sf/cart-items) (:params req) (body)) 544)))
-
-#_ (remove-ns 'sistemi.site.shelving-htm)
-(sistemi.registry/register)

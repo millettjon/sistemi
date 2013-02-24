@@ -217,5 +217,3 @@
       response
       ;; Set the content type explicitly since this is served from / and has no .htm extension.
       (content-type "text/html; charset=utf-8")))
-
-(registry/register)

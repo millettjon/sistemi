@@ -42,4 +42,3 @@
           details (xc-details {:token (qp :id)})]
       (response (standard-page "" (body details) 544)))))
 
-(sistemi.registry/register)

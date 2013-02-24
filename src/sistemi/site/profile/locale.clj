@@ -50,5 +50,3 @@
 ;; TODO: (time/in 10 :years)
 ;; TODO: function to set a cookie for 1 month, quarter, year, decade out
 ;; TODO: add tests
-
-(sistemi.registry/register)

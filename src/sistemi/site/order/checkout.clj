@@ -55,5 +55,3 @@
         order (make-paypal-order req amount)]
     (log/info "XC ORDER" order)
     (redirect (redirect-to-express-checkout order))))
-
-(sistemi.registry/register)

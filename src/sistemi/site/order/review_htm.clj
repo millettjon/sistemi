@@ -21,9 +21,9 @@
 
 (defn body
   [params]
-  (let [shelving (shelving/from-params params)
-        price (shelving/price shelving)
-        detail (shelving/html-price-report shelving)]
+  (let [shelving nil #_ (shelving/from-params params) ; FIXME
+        price nil #_ (shelving/price shelving) ; FIXME
+        detail nil #_ (shelving/html-price-report shelving)] ; FIXME
     [:div.text_content
      [:p.title "REVIEW DESIGN"]
      [:p "Please review your shelving specifications."]
@@ -68,9 +68,7 @@
 
 (defn handle
   [req]
-  (f/with-form sf/shelving (:params req)
+  (f/with-form nil #_ sf/shelving (:params req) ; FIXME
     (if (f/errors?)
       (resp/redirect (tr/localize "/shelving.htm" {:query (:params req)}))
       (response (layout/standard-page (head) (body (f/values)) 544)))))
-
-(sistemi.registry/register)

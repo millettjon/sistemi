@@ -189,5 +189,3 @@
                   (body-empty) 
                   (body cart))]
     (response (standard-page (head) body 544))))
-
-(sistemi.registry/register)

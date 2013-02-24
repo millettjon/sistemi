@@ -2,5 +2,3 @@
 
 (def names
   {:es "perfil"})
-
-(sistemi.registry/register)

@@ -186,6 +186,3 @@
 (defn handle
   [req]
   (response (standard-page (head) (f/with-form (:shelf sf/cart-items) (:params req) (body)) 544)))
-
-#_ (remove-ns 'sistemi.site.shelf-htm)
-(sistemi.registry/register)

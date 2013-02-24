@@ -51,5 +51,3 @@
 (defn handle
   [req]
   (response (layout/standard-page head body 544)))
-
-(sistemi.registry/register)

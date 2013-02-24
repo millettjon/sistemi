@@ -22,5 +22,3 @@
       (-> (tr/localize "/cart.htm")
           resp/redirect
           (cart/swap req cart/add (f/values))))))
-
-(sistemi.registry/register)

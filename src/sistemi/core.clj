@@ -71,8 +71,8 @@
   ;; ===== HANDLERS =====
   ;; Register request handlers and build routes after localization
   ;; settings are initialized.
-  (log/info "Registering request handlers.")
-  (registry/load-files "src/sistemi/site")
+  (log/info "Loading request handlers.")
+  (registry/load-handlers 'sistemi.site "src")
 
   ;; ===== MODELS =====
   ;; Make sure model namespaces are loaded. This is needed for generic

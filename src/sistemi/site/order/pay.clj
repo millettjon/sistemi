@@ -45,5 +45,3 @@
 ;; 4095k total bytes per domain
 ;; 20 cookies max per domain
 ;; 300 total cookies
-
-(sistemi.registry/register)

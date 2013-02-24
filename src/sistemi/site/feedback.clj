@@ -43,5 +43,3 @@
         (send-off feedback-mailer mail-feedback message))
       (log/warn "Ignored feedback message (too long)."))
     (resp/redirect (tr/localize "feedback/thanks.htm"))))
-
-(sistemi.registry/register)

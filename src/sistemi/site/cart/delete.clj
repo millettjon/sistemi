@@ -16,5 +16,3 @@
     (-> (tr/localize "/cart.htm")
         resp/redirect
         (cart/swap req cart/delete (:id (f/values))))))
-
-(sistemi.registry/register)

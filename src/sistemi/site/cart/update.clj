@@ -18,4 +18,3 @@
         resp
         (cart/swap resp req cart/update id quantity)))))
 
-(sistemi.registry/register)

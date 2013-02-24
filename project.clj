@@ -49,7 +49,7 @@
                      [ordered "1.2.0"]
                      [frinj "0.1.4"]
                      [com.google.guava/guava "13.0.1"]
-                     ]
+                     [org.clojure/tools.namespace "0.2.2"]]
 
       :plugins [[codox "0.6.1"]
                 ;; [lein-outdated "1.0.0"] ; tried this but it hangs

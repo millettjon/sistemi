@@ -1,49 +1,24 @@
 (ns sistemi.registry
   (:require [clojure.string :as str]
+            [util.string :as str2]
             [clojure.set :as set]
             [clojure.tools.logging :as log]
             [locale.translate :as tr]
             [util.path :as path]
             [www.url :as url]
-            [locale.core :as locale])
+            [locale.core :as locale]
+            [clojure.java.io :as io]
+            [clojure.tools.namespace.find :as ns-find])
   (:use app.config))
 
 ;;; --------------------------------------------------
-;;; FUNCTIONS
-
-(defn- load-file-safely
-  "Loads a clj file catching and logging any exceptions."
-  [file]
-  (let [file (str file)]
-    (try
-      (log/info "Loading file" file)
-      (load-file file)
-
-      ;; - un-mangle the file to get the namespace
-      ;; - register the namespace
-
-      (catch Exception x
-        (log/error x (str "Exception loading file " file)))
-      (catch LinkageError x
-        (log/error x (str "LinkageError loading file " file))))))
-
-(defn load-files
-  "Loads all clj files in a directory in a breadth first manner."
-  [root]
-  ;; Load the namespace for the root if there is one.
-  (let [file (str root ".clj")]
-    (if (path/exists? (str root ".clj"))
-      (load-file-safely file)))
-
-  ;; Load all sub namespaces in breadth first order.
-  (doseq [file (filter #(= (path/extension %) "clj") (path/file-seq-bf root))]
-    (load-file-safely (str file))))
+;;; PURE FUNCTIONS
 
 (defn ns-to-uri-path
   "Converts namespace ns to a uri path under the web root namespace."
   [ns root-ns]
-  (let [s (name (ns-name ns))
-        s (str/replace s (re-pattern (str "^" (ns-name root-ns) "\\.?")) "")
+  (let [s (str ns)
+        s (str/replace s (re-pattern (str "^" root-ns "\\.?")) "")
         s (str/replace s \. \/)
         s (str/replace s #"\-htm$" ".htm")]
     s))
@@ -163,11 +138,19 @@
 ;;; --------------------------------------------------
 ;;; FUNCTIONS DEPENDENT ON VARS
 
-(defn register
-  "Allows a handler to register itself when loaded."
-  []
-  (let [root-ns (find-ns 'sistemi.site)]
-    (log/info "Registering handler" *ns*)
-    (register-strings #'strings *ns* root-ns)
-    (register-names #'localized-paths #'canonicalized-paths *ns* root-ns)
-    (register-handler #'handlers *ns* root-ns)))
+(defn register-namespace
+  "Registers string translations, path translations and the handler for a namespace."
+  [ns root-ns]
+  (log/info "Registering handler" ns)
+  (register-strings #'strings ns root-ns)
+  (register-names #'localized-paths #'canonicalized-paths ns root-ns)
+  (register-handler #'handlers ns root-ns))
+
+(defn load-handlers
+  "Loads and registers url handler namespaces with prefix root-ns by searching in directory src."
+  [root-ns dir]
+
+  (doseq [ns (ns-find/find-namespaces-in-dir (io/as-file dir))]
+    (when (str2/starts-with? (str ns) (str root-ns))
+      (require ns)
+      (register-namespace ns root-ns))))
