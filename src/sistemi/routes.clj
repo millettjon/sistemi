@@ -1,13 +1,22 @@
 (ns sistemi.routes
+  (:require [sistemi.registry :as registry]
+            [util.string :as str])
   (:use net.cgrand.moustache
         (ring.middleware file file-info params keyword-params content-type session)
-        (ring.middleware stacktrace lint cookies reload) ; dev items
+        (ring.middleware stacktrace lint cookies) ; dev items
         www.middleware
         [locale.core :only (default-locale locales)]
         locale.middleware.locale
         locale.handler.redirect
         (sistemi [handler :only (make-404)]
                  [middleware :only (wrap-handler wrap-translate-uri)])))
+
+(defn re-register
+  "Callback function for wrap-reload that re registers namespaces under sistemi.site."
+  [ns]
+  (let [root-ns 'sistemi.site]
+    (when (str/starts-with? (str ns) (str root-ns))
+      (registry/register-namespace ns root-ns))))
 
 (defn build-routes
   []
@@ -17,7 +26,8 @@
      ;; TODO: Log POST params?
      ;; TODO: Log request maps for easy replay?
      wrap-ping                ; handles /ping requests to check connectivity and base response time
-     wrap-reload              ; reload changed namespaces
+     (wrap-reload {:callback re-register})  ; reload and re-register namespaces
+
      wrap-lint
      wrap-request-id          ; add a unique request id for logging
      ;; spy

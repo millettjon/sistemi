@@ -6,7 +6,8 @@
             [www.request :as req])
   (:use [clojure.contrib.def :only (defnk)] 
         [clj-logging-config.log4j :only (with-logging-context)]
-        [slingshot.slingshot :only [try+]]))
+        [slingshot.slingshot :only [try+]]
+        [ns-tracker.core :only (ns-tracker)]))
 
 (defn wrap-request-id
   "Generates a unique request id and saves it in the logging context."
@@ -79,4 +80,15 @@
                    (str "(" elapsed ")")]))
       response)))
 
-
+(defn wrap-reload
+  "Like ring's wrap-reload but with an additional option :callback
+   which specifies a function to call when a namespace is reloaded."
+  [handler & [options]]
+  (let [source-dirs (:dirs options ["src"])
+        callback-fn (:callback options identity)
+        modified-namespaces (ns-tracker source-dirs)]
+    (fn [request]
+      (doseq [ns-sym (modified-namespaces)]
+        (require ns-sym :reload)
+        (callback-fn ns-sym))
+      (handler request))))
