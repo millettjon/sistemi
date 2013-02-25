@@ -1,4 +1,4 @@
-(ns util.test.string
+(ns util.string-test
   (:use clojure.test
         util.string))
 

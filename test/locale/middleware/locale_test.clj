@@ -1,4 +1,4 @@
-(ns locale.middleware.test.locale
+(ns locale.middleware.locale-test
   (:use [clojure.test]
         locale.core
         locale.middleware.locale))

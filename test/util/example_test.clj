@@ -1,18 +1,18 @@
-(ns util.test.example
+(ns util.example-test
   (:use clojure.test))
 
 (deftest test-defexample
-  (remove-ns 'util.test.example.plus)
-  (require 'util.test.example.plus :reload)
+  (remove-ns 'util.example-test.plus)
+  (require 'util.example-test.plus :reload)
 
   (testing "add an example to a function"
     (is (= '{example1 ["Add 2 and 3." 5 (plus 2 3)]}
-           ((meta (find-ns 'util.test.example.plus)) :examples))))
+           ((meta (find-ns 'util.example-test.plus)) :examples))))
 
-  (remove-ns 'util.test.example.test-plus)
-  (require 'util.test.example.test-plus :reload)
+  (remove-ns 'util.example-test.plus-test)
+  (require 'util.example-test.plus-test :reload)
 
-  (is (contains? (meta (ns-resolve 'util.test.example.test-plus 'example1)) :test)))
+  (is (contains? (meta (ns-resolve 'util.example-test.plus-test 'example1)) :test)))
 
 ;; test adding an example to a function
 ;; test adding an example to a macro

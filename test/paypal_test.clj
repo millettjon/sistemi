@@ -1,4 +1,4 @@
-(ns test.paypal
+(ns paypal-test
   (:use clojure.test
         paypal
         app.config))

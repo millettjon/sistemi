@@ -1,4 +1,4 @@
-(ns util.test.path
+(ns util.path-test
   (:use util.path
         clojure.test)
   (:import (java.io File))

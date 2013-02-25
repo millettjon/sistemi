@@ -1,4 +1,4 @@
-(ns util.test.except
+(ns util.except-test
   (:use util.except
         clojure.test))
 

@@ -1,4 +1,4 @@
-(ns www.test.cart
+(ns www.cart-test
   (:require [www.cart :as cart])
   (:use [clojure.test]))
 

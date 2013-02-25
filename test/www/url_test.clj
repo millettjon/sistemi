@@ -1,4 +1,4 @@
-(ns www.test.url
+(ns www.url-test
   (:require [util.path :as path]
             [www.url :as url])
   (:use [clojure.test]))

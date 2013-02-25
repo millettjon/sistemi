@@ -1,4 +1,4 @@
-(ns www.test.request
+(ns www.request-test
   (:require [www.request :as request])
   (:use [clojure.test]))
 

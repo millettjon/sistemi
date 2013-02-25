@@ -1,4 +1,4 @@
-(ns util.test.core
+(ns util.core-test
   (:use clojure.test
         util.core))
 

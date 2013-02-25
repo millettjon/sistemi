@@ -1,4 +1,4 @@
-(ns test.upu
+(ns upu-test
   (:require [upu :as upu])
   (:use clojure.test))
 

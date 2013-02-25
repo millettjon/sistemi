@@ -1,4 +1,4 @@
-(ns locale.test.translate
+(ns locale.translate-test
   (:require [util.path :as path])
   (:use [clojure.test]
         [locale.translate :except (strings)]))
@@ -92,8 +92,8 @@
   (are [a b] (= (apply translate strings :en a) b)
        ["/" :foo]         "FOO"
        ["" :foo]          "FOO"
-       ["/" :bad]         "(bad)"     ; not found
-       ["/bad" :bad]      "(bad)"     ; not found
+       ["/" :bad]         "(TODO translate / (:bad))"     ; not found
+       ["/bad" :bad]      "(TODO translate /bad (:bad))"  ; not found
        ["/bar" :bar]      "BAR"       ; path
        ["bar" :bar]       "BAR"       ; relative path
        ["/bar" :foo]      "FOO"       ; inheritance
@@ -101,6 +101,6 @@
        ["/bar" :this]     "/bar"      ; overide
        ["/bar" :baz]      "BAZ"       ; nested, self
        ["/bar" :baz :qux] "QUX"       ; nested
-       ["/bar" :baz :bad] "(baz-bad)" ; nested not found
+       ["/bar" :baz :bad] "(TODO translate /bar (:baz :bad))" ; nested not found
        ))
 

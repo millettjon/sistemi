@@ -1,4 +1,4 @@
-(ns util.test.environment
+(ns util.environment-test
   (:use util.environment
         clojure.test))
 

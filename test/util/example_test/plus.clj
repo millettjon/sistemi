@@ -1,4 +1,4 @@
-(ns util.test.example.plus
+(ns util.example-test.plus
   (:use util.example))
 
 (defn plus
