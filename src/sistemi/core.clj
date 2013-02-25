@@ -1,7 +1,9 @@
 ;; Enable reflection warnings.
 ;; TODO: Consider disabling this for production.
-(clojure.core/require 'util.reflection)
-(util.reflection/warn-on-reflection
+;; TODO: Create a leiningen plugin that supresses reflection warnings
+;; for all but a selected list of namespaces?
+#_ (clojure.core/require 'util.reflection)
+#_ (util.reflection/warn-on-reflection
   "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "cheshire.generate" "frinj" "postal")
 
 (ns sistemi.core
