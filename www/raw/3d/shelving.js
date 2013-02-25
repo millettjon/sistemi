@@ -316,7 +316,7 @@ function drawShelving(shelving, container) {
   scene = new THREE.Scene();
   var rWidth = container.offsetWidth;
   var rHeight = container.offsetHeight;
-  var fov = 50;
+  var fov = 30;
   camera = new THREE.PerspectiveCamera( fov, rWidth / rHeight, 1, 1000 );
 
   // Set the camera at the point where the shelving just fits in the container.
@@ -355,6 +355,8 @@ function drawShelving(shelving, container) {
   function addGeometry( geometry, color, x, y, z, rx, ry, rz, s ) {
     var material = useWebGL ?
       new THREE.MeshLambertMaterial({color: color}) :
+      //new THREE.MeshLambertMaterial({color: color, map: THREE.ImageUtils.loadTexture("textures/plywood.jpg")}) :
+      //new THREE.MeshPhongMaterial({color: color}) :
       new THREE.MeshBasicMaterial({color: color});
     
     var mesh = THREE.SceneUtils.createMultiMaterialObject( geometry, [material] );

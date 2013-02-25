@@ -84,7 +84,7 @@ function drawShelf(shelf, container) {
   scene = new THREE.Scene();
   var rWidth = container.offsetWidth;
   var rHeight = container.offsetHeight;
-  var fov = 50;
+  var fov = 30;
   camera = new THREE.PerspectiveCamera( fov, rWidth / rHeight, 1, 1000 );
 
   // Set the camera at the point where the shelf just fits in the container.
