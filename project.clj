@@ -57,8 +57,9 @@
                      [org.clojure/tools.namespace "0.2.2"]]
 
       :plugins [[codox "0.6.1"]
-                ;; [lein-outdated "1.0.0"] ; tried this but it hangs
-                [lein-cloverage "1.0.2"]]
+                ;; [lein-outdated "1.0.0"]  ; hangs
+                ;; [lein-cloverage "1.0.2"] ; runs but no output is produced
+                ]
 
       :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.3"]
                                       [org.clojure/tools.nrepl "0.2.1"]
