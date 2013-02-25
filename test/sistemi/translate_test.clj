@@ -1,4 +1,4 @@
-(ns sistemi.test.translate
+(ns sistemi.translate-test
   (:use clojure.test
         sistemi.translate))
 

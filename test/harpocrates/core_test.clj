@@ -1,4 +1,4 @@
-(ns harpocrates.test.core
+(ns harpocrates.core-test
   (:use [clojure.test]
         harpocrates.core
         [util.pojometa :only [meta* with-meta*]]))

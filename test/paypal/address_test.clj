@@ -1,4 +1,4 @@
-(ns paypal.test.address
+(ns paypal.address-test
   (:require [paypal.address :as address])
   (:use clojure.test))
 

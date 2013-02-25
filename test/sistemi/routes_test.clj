@@ -1,4 +1,4 @@
-(ns sistemi.test.routes
+(ns sistemi.routes-test
   (:use clojure.test
         sistemi.routes
         locale.core

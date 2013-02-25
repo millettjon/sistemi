@@ -1,4 +1,4 @@
-(ns sistemi.model.test.shelving
+(ns sistemi.model.shelving-test
   (:use clojure.test
         sistemi.model
         sistemi.model.shelving

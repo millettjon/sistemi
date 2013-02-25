@@ -1,4 +1,4 @@
-(ns app.config.test.core
+(ns app.config.core-test
   (:use clojure.test
         app.config.core))
 
