@@ -2,6 +2,7 @@
     ;; Hack to support a local file based maven repository on heroku.
     [local-repo (str "file://" (System/getProperty "user.dir") "/repo")]
 
+
     (defproject sistemi "0.1"
       :description "Sistemi Moderni Website"
       :repositories {"local" {:url ~local-repo
@@ -10,8 +11,12 @@
 
       :min-lein-version "2.0.0" ; needed for heroku
 
+      ;; Use var/ for generated files.
       :target-path "var/target"
       :compile-path "var/target/classes" 
+      :resource-paths ["etc/resources"]
+
+      ;:jvm-opts ["-Dlog4j.debug=true"]
 
       :dependencies [
                      ;; clojure
