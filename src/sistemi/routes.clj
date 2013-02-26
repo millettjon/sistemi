@@ -30,7 +30,6 @@
 
      wrap-lint
      wrap-request-id          ; add a unique request id for logging
-     ;; spy
      wrap-request-log         ; log a 1 line request summary
      wrap-stacktrace          ; catch exceptions and 
      wrap-exception-response  ; handle responses thrown as exceptions (e.g., 4xx errors)
@@ -40,8 +39,8 @@
      wrap-params              ; parse form and query string params
      wrap-keyword-params      ; keywordize the params map
      wrap-session             ; reads/writes session data from/to session store
-     ;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
-     spy
+     ;;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
+     ;;spy
 
      wrap-file-info
      ;; TODO: make an easier way to set the charset
