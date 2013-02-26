@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec lein run -m paypal.check-for-updates
