@@ -37,7 +37,7 @@
                      [net.cgrand/moustache "1.1.0"]
 
                      ;; html
-                     [hiccup "1.0.0"]
+                     [hiccup "1.0.2"]
                      [sistemi/gdata-core-minimal "1.0"] ; CUSTOM: stripped down gdata client
 
                      ;; web client
