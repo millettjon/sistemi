@@ -44,7 +44,7 @@
                      [clj-http "0.6.4"]
 
                      ;; email
-                     [com.draines/postal "1.8.0"]
+                     [com.draines/postal "1.9.2"]
 
                      ;; configuration
                      [fidjet "0.0.1"]
