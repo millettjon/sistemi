@@ -29,12 +29,14 @@
                      [org.slf4j/slf4j-log4j12 "1.7.2"]
                      [log4j "1.2.17"]
 
-                     ;; web server
-                     [ring/ring-core "1.1.0"]
-                     [ring/ring-devel "1.1.0"]
-                     [ring/ring-jetty-adapter "1.1.0"]
-                     [ring-persistent-cookies "0.1.0"]
+                     ;; ring core
+                     [ring/ring-core "1.1.8"]
+                     [ring/ring-devel "1.1.8"]
+                     [ring/ring-jetty-adapter "1.1.8"]
+
+                     ;; ring handlers and middleware
                      [net.cgrand/moustache "1.1.0"]
+                     [ring-persistent-cookies "0.1.0"]
 
                      ;; html
                      [hiccup "1.0.2"]
