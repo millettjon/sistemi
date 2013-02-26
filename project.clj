@@ -51,7 +51,7 @@
 
                      ;; misc
                      [org.clojure/core.cache "0.6.2"]
-                     [ordered "1.2.0"]
+                     [ordered "1.3.2"]
                      [frinj "0.1.4"]
                      [com.google.guava/guava "13.0.1"]
                      [org.clojure/tools.namespace "0.2.2"]]
