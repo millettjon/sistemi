@@ -21,7 +21,7 @@
       :dependencies [
                      ;; clojure
                      [org.clojure/clojure "1.4.0"]
-                     [slingshot "0.10.2"]
+                     [slingshot "0.10.3"]
 
                      ;; logging
                      [clj-logging-config "1.9.6"]
