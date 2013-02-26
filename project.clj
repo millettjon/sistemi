@@ -41,7 +41,7 @@
                      [sistemi/gdata-core-minimal "1.0"] ; CUSTOM: stripped down gdata client
 
                      ;; web client
-                     [clj-http "0.4.0"]
+                     [clj-http "0.6.4"]
 
                      ;; email
                      [com.draines/postal "1.8.0"]
