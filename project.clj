@@ -24,10 +24,10 @@
                      [slingshot "0.10.3"]
 
                      ;; logging
-                     [clj-logging-config "1.9.6"]
-                     [org.slf4j/slf4j-api "1.6.4"]
-                     [org.slf4j/slf4j-log4j12 "1.6.4"]
-                     [log4j "1.2.16"]
+                     [clj-logging-config "1.9.10"]
+                     [org.slf4j/slf4j-api "1.7.2"]
+                     [org.slf4j/slf4j-log4j12 "1.7.2"]
+                     [log4j "1.2.17"]
 
                      ;; web server
                      [ring/ring-core "1.1.0"]
