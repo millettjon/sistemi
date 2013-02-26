@@ -4,10 +4,8 @@
             [util.path :as path]
             [util.string :as str2]
             [harpocrates.core :as gpg]
-            [util.environment :as env]
-            )
+            [util.environment :as env])
   (:use [clojure.contrib.map-utils :only (deep-merge-with)]
-        app.config.core
         (util except)))
 
 ;; ===== VARS =====
