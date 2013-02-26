@@ -24,15 +24,15 @@
    :material :mdf-ecological
    :color 0xAB003B})
 
-(deftest test-price
+#_ (deftest test-price
   (is (price shelving)
       (fj 479.35M :EUR)))
 
-(deftest test-price-report
+#_ (deftest test-price-report
   (price-report shelving))
 
-(deftest test-html-price-report
+#_ (deftest test-html-price-report
   (html-price-report shelving))
 
-(deftest test-pprint-price-report
+#_ (deftest test-pprint-price-report
   (pprint-price-report shelving))
