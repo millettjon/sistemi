@@ -85,7 +85,7 @@
         :header {:signup "Iscriversi per ricevere emails"
                  :contact "Contatti"
                  :careers "Opportunità di carriera"
-                 :team "Il Gruppo"}
+                 :team "La squadra"}
         :menu {:home "Home"
                :vision "La nostra visione"
                :boutique {:_ "Boutique online"

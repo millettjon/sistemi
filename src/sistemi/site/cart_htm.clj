@@ -17,8 +17,10 @@
 
 (def strings
   {:en {:title "SistemiModerni: Cart"}
-   :es {}
-   :fr {}})
+   :es {:title ""}
+   :fr {:title ""}
+   :it {:title ""}
+   })
 
 (defn format-param
   ""
