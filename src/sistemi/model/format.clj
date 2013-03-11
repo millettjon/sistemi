@@ -97,10 +97,14 @@
               :width #(cm %)
               :depth #(cm %)
               :cutout #(tr/translate "/product" :shelving :cutout %)
-              :color #(color %)}
+              :color #(color %)
+              :finish #(tr/translate "/product" :shelving :finish %)
+              }
    :shelf {:width #(cm %)
            :depth #(cm %)
-           :color #(color %)}})
+           :color #(color %)
+           :finish #(tr/translate "/product" :shelf :finish %)
+           }})
 
 (defn translate-param
   [item param]

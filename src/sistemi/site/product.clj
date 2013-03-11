@@ -9,28 +9,36 @@
   {:en {:shelf {:name "Custom Shelf"
                 :width "width"
                 :depth "depth"
-                :finish "finish"
-                :color "color"}
+                :finish {:_ "finish" :matte "matte" :satin "satin" :glossy "glossy"}
+                :color "color"
+                }
         :shelving {:name "Custom Shelving Unit"
                    :width "width"
                    :depth "depth"
                    :height "height"
-                   :finish "finish"
+                   ;:finish "finish"
                    :color "color"
-                   :cutout {:_ "cutout"
-                            :semplice "none" :ovale "oval" :quadro "rectangle"}}
+                   :cutout {:_ "cutout" :semplice "none" :ovale "oval" :quadro "rectangle"}
+                   :finish {:_ "finish" :matte "matte" :satin "satin" :glossy "glossy"}
+                   }
         :params {:depth "depth"}}
+
    :es {}
+
    :it {:shelf {:width "Lunghezza"
                 :depth "Profondità"
-                :finish "Finitura"
-                :color "Colore"}
+                :color "Colore"
+                :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
+               ;; Not working with form.clj and
+                :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
+                }
         :shelving {:width "Lunghezza"
                    :depth "Profondità"
                    :height "Altezza"
-                   :finish "Finitura"
                    :color "Colore"
-                   :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}}}
+                   :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
+                   :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
+                   }}
 
    :fr {:shelf {:width "Largeur"
                 :depth "Profondeur"

@@ -23,7 +23,8 @@
         :quantity "Quantity"}
    :es {}
    :it {;:title ""
-        :spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
+        ;:spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
+        :spin "Clic e Tira"
         :cutout "Ritaglio"
         :width "Lunghezza"
         :depth "Profondità"
