@@ -26,7 +26,8 @@
         :width "Lunghezza"
         :depth "Profondità"
         :height "Altezza"
-        :finish "Finitura"
+        ;:finish "Finitura"
+        :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
         :color "Colore"
         :quantity "Quantità"}
 
