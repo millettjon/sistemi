@@ -1,4 +1,5 @@
-(ns sistemi.color.ral)
+(ns sistemi.color.ral
+  :use [color :only [to-rgb]])
 
 ;; References:
 ;; - http://www.ralcolor.com/
@@ -219,3 +220,6 @@
    9022 {:rgb 0x9C9C9C, :de "Perlhellgrau", :en "Pearl light grey", :fr "Gris clair nacré", :es "Gris claro perlado", :it "Grigio chiaro perlato"}
    9023 {:rgb 0x828282, :de "Perldunkelgrau", :en "Pearl dark grey", :fr "Gris fonçé nacré", :es "Gris oscuro perlado", :it "Grigio scuro perlato"}
    })
+
+;; Assumes 'color' to have a :type and :value  {:type :ral, :value 1001}
+(defmethod to-rgb :ral [color] (get-in colors [(get color :value) :rgb]))
