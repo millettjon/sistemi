@@ -1,5 +1,5 @@
-(ns sistemi.color.ral
-  :use [color :only [to-rgb]])
+(ns color.ral
+  (:use [color :only (to-rgb)]))
 
 ;; References:
 ;; - http://www.ralcolor.com/

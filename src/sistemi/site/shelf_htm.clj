@@ -55,6 +55,9 @@
         ;; color picker
         [:script {:type "text/javascript" :src "farbtastic/farbtastic.js"}]
         [:link {:rel "stylesheet" :href "farbtastic/farbtastic.css" :type "text/css"}]
+        ;; really simple color picker (nose)
+        [:script {:type "text/javascript" :src "rscp/jquery.colorPicker.min.js"}]
+        [:link {:rel "stylesheet" :href "rscp/colorPicker.css" :type "text/css"}]
 
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
@@ -107,6 +110,12 @@
        [:div.controls
         (f/select :finish {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
 
+      ;; experiment with simple-color-picker
+      [:div.control-group
+       [:label.control-label {:for "color1"} (tr/translate :color)]
+       [:div.controls
+        (f/text :color1 {:tabindex 1})]]
+
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
@@ -138,6 +147,7 @@
          $('#colorpicker').farbtastic('#color');
          $('.chzn-select').chosen();
          $('.customStyleSelectBox').customSelect();
+         $('#color1').colorPicker({colors: ['BEBD7F', 'C2B078', 'C6A664', 'E5BE01', 'CDA434', 'A98307']});
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {
