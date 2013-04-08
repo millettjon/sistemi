@@ -16,6 +16,9 @@
 
         ; layout
         :construction "Under Construction"
+        :webgl_recommended "This site works best if webgl rendering is enabled."
+        :canvas_recommended "This site requires html5 canvas or webgl to function. We recommend <a href='http://www.mozilla.org'>firefox</a> or <a href='http://www.google.com/chrome'>chrome</a>."
+
         :version "alpha version"
         :account "My Account"
         :cart {:_ "Cart"

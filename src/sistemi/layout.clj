@@ -79,16 +79,32 @@
 
        ;; ----- TOP BORDER ROW -----
        [:div.row
-        [:div.span3.greybox {:style "height: 40px;"}
-         [:div.greyborder_br {:style "height: 39px;"}]]
-        [:div.span6
-         [:div.greyborder_br
-          ;; Note: oversized line-height is used to acheive vertical centering
-          ;;{:style "line-height: 39px; text-align: center;"}
-          ;;(tr/translate :version)
-          {:style "line-height: 39px; text-align: center; font-size: 20px; text-transform: uppercase;"}
-          (tr/translate :construction)
-          ]]]
+        [:div.span9.col-wrap.greyborder_b
+         [:div.span3.greybox.col 
+          [:div.greyborder_r.col] "&nbsp;"]
+
+         ;; SITE MESSAGE AREA
+         [:div.span6.col
+          [:div.greyborder_r
+           {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
+           [:noscript "This site requires javascript"]
+           [:span#under_construction (tr/translate :construction)]
+           [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)]
+           [:span#canvas_recommended {:style "display: none; font-size: 16px; color: #F00"} (tr/translate :canvas_recommended)]
+           ]]]]
+       [:script {:type "text/javascript"}
+         "jQuery(document).ready(function() {
+           // Check for canvas and webgl.
+           if (!Detector.webgl) {
+             $('#under_construction').css('display', 'none');
+             if (Detector.canvas) {
+               $('#webgl_recommended').css('display', 'inline');
+             }
+             else {
+               $('#canvas_recommended').css('display', 'inline');
+             }
+           }
+         });"]
 
        ;; ----- HEADER ROW -----
        [:div.row {:style "height: 136px"}
