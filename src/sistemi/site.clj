@@ -16,10 +16,9 @@
 
         ; layout
         :construction "Under Construction"
-        :webgl_recommended "This site works best if webgl rendering is enabled."
-        :canvas_recommended "This site requires html5 canvas or webgl to function. We recommend <a href='http://www.mozilla.org'>firefox</a> or <a href='http://www.google.com/chrome'>chrome</a>."
-
-        :version "alpha version"
+        :webgl_recommended "This site works best if WebGL rendering is enabled."
+        :canvas_recommended "This site requires html5 canvas or WebGL to function. We recommend <a href='http://www.mozilla.org'>firefox</a> or <a href='http://www.google.com/chrome'>chrome</a>."
+        :javascript_required "This site requires javascript to function."
         :account "My Account"
         :cart {:_ "Cart"
                :add "Add to cart"
@@ -52,6 +51,10 @@
 
         ; layout
         :construction "Page En Construction"
+        :webgl_recommended "Ce site est optimisé pour une visualisation avec rendu WebGL activé."
+        :canvas_recommended "Le bon fonctionnement de ce site nécessite HTML5 canvas, ou WebGL. Nous recommandons des navigateurs comme <a href='http://www.mozilla.org'>Firefox</a> ou <a href='http://www.google.com/chrome'>Chrome</a>."
+        :javascript_required "Ce site nécessite JavaScript pour son fonctionnement."
+
         :account "Mon Compte"
         :cart {:_ "Panier"
                :add "Ajouter au panier"}
@@ -82,6 +85,10 @@
         :title ""
         :select-a-language "Scegliere una lingua"
         :construction "In Construzione"
+        :webgl_recommended "Questo sito è ottimizzato per una visualizzazione con WebGL rendering attivato."
+        :canvas_recommended "Il buon funzionamento di questo sito richiede HTML5 canvas, o WebGL. Raccomandiamo browsers come <a href='http://www.mozilla.org'>Firefox</a> o <a href='http://www.google.com/chrome'>Chrome</a>."
+        :javascript_required "Questo sito richiede JavaScript per funzionare."
+
         :account ""
         :cart {:_ ""
                :add "Aggiungere al carrello"}

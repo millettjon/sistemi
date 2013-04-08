@@ -87,22 +87,22 @@
          [:div.span6.col
           [:div.greyborder_r
            {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
-           [:noscript "This site requires javascript"]
-           [:span#under_construction (tr/translate :construction)]
+           [:noscript (tr/translate :javascript_required)]
+           [:span#under_construction {:style "display: none;"} (tr/translate :construction)]
            [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)]
            [:span#canvas_recommended {:style "display: none; font-size: 16px; color: #F00"} (tr/translate :canvas_recommended)]
            ]]]]
        [:script {:type "text/javascript"}
          "jQuery(document).ready(function() {
            // Check for canvas and webgl.
-           if (!Detector.webgl) {
-             $('#under_construction').css('display', 'none');
-             if (Detector.canvas) {
+           if (Detector.webgl) {
+             $('#under_construction').css('display', 'inline');
+           }
+           else if (Detector.canvas) {
                $('#webgl_recommended').css('display', 'inline');
-             }
-             else {
-               $('#canvas_recommended').css('display', 'inline');
-             }
+           }
+           else {
+             $('#canvas_recommended').css('display', 'inline');
            }
          });"]
 
