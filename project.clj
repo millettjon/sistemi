@@ -7,7 +7,10 @@
       :description "Sistemi Moderni Website"
       :repositories {"local" {:url ~local-repo
                               :snapshots false
-                              :releases {:checksum :ignore :update :always}}}
+                              :releases {:checksum :ignore :update :always}}
+                     "bitwalker.user-agent-utils.mvn.repo" {:url "https://raw.github.com/HaraldWalker/user-agent-utils/mvn-repo/"
+                                                            :snapshots false
+                                                            :releases {:checksum :ignore :update :always}}}
 
       :min-lein-version "2.0.0" ; needed for heroku
 
@@ -51,10 +54,17 @@
                      ;; configuration
                      [fidjet "0.0.1"]
 
-                     ;; misc
-                     [org.clojure/core.cache "0.6.2"]
-                     [ordered "1.3.2"]
+                     ;; user agent detection
+                     [bitwalker/UserAgentUtils "1.8"]
+                     
+                     ;; calculation
+                     [dgraph "1.2.1"]
                      [frinj "0.1.4"]
+
+                     ;; misc
+                     [org.clojure/core.memoize "0.5.3"]
+                     ;;[org.clojure/core.cache "0.6.3"]
+                     [ordered "1.3.2"]
                      [com.google.guava/guava "13.0.1"]
                      [org.clojure/tools.namespace "0.2.2"]]
 

@@ -5,8 +5,8 @@
             [util.path :as path]
             [sistemi.translate :as tr]
             [www.request :as req]
-            [util.net :as net]
-            )
+            [www.user-agent :as ua]
+            [util.net :as net])
   (:use app.config))
 
 (def menu-data
@@ -61,6 +61,7 @@
                        "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
                 :type "text/javascript"}]
       [:script {:src "/bootstrap/js/bootstrap.js", :type "text/javascript"}]
+      [:script {:type "text/javascript" :src "/3d/detector.js"}]
       [:link {:href "/fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
       [:meta {:name "description", :content "Modern shelving in Europe."}]
@@ -87,24 +88,17 @@
          [:div.span6.col
           [:div.greyborder_r
            {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
-           [:noscript (tr/translate :javascript_required)]
+           [:noscript {:style "color: #F00;"} (tr/translate :javascript_required)]
            [:span#under_construction {:style "display: none;"} (tr/translate :construction)]
-           [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)]
-           [:span#canvas_recommended {:style "display: none; font-size: 16px; color: #F00"} (tr/translate :canvas_recommended)]
+           [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)
+            ;; Recommend firefox/chrome for non firefox/chrome users.
+            (case (:browser_group (ua/req->features req/*req*))
+              "Firefox" ""
+              "Chrome" ""
+              [:span"&nbsp;" (tr/translate :recommended_browsers)])]
+           [:span#canvas_recommended {:style "display: none; font-size: 16px; color: #F00"}
+            (tr/translate :canvas_required) "&nbsp;" (tr/translate :recommended_browsers)]
            ]]]]
-       [:script {:type "text/javascript"}
-         "jQuery(document).ready(function() {
-           // Check for canvas and webgl.
-           if (Detector.webgl) {
-             $('#under_construction').css('display', 'inline');
-           }
-           else if (Detector.canvas) {
-               $('#webgl_recommended').css('display', 'inline');
-           }
-           else {
-             $('#canvas_recommended').css('display', 'inline');
-           }
-         });"]
 
        ;; ----- HEADER ROW -----
        [:div.row {:style "height: 136px"}

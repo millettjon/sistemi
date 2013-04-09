@@ -33,11 +33,6 @@ function makeContainer() {
   return container;
 }
 
-Detector = {
-  canvas: !! window.CanvasRenderingContext2D,
-  webgl: ( function () { try { return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' ); } catch( e ) { return false; } } )()
-}
-
 function onDocumentMouseDown( event ) {
   event.preventDefault();
   g_container.addEventListener( 'mousemove', onDocumentMouseMove, false );
