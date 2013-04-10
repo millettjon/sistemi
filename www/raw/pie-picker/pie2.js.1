@@ -1,0 +1,52 @@
+// parameters
+// - list of colors
+// - radius of circle
+// - width of outer circle
+// - width of inner circle
+//
+// questions
+// ? what should the display ordering be?
+// ? should the inner dot be hollow?
+// ? how to scale 
+
+
+function make_colorwheel() {
+  var canvas = $('#colorwheel').get(0);
+  var ctx = canvas.getContext('2d');
+  
+  var centerX = canvas.width/2;
+  var centerY = canvas.height/2;
+  var radiusOuter = canvas.height/2;
+  var radiusInner = radiusOuter * 2/3
+  var startAngle = 0;
+  var endAngle;
+  var palette = ['red','green','blue'];
+
+  // Draw outer circle.
+  for (var i = 0; i < palette.length; i++) {
+    ctx.fillStyle = palette[i];
+    ctx.beginPath();
+
+    // move to center
+    ctx.moveTo(centerX, centerY);
+
+    endAngle = (Math.PI*2)*((i+1)/palette.length);
+
+    // draw an arc
+    ctx.arc(centerX,
+            centerY,
+            canvas.height/2,  // radius
+            startAngle,
+            endAngle,
+            false);           // direction
+
+    // move back to center
+    ctx.lineTo(centerX, centerY);
+
+    ctx.fill();
+
+    startAngle = endAngle;
+  }
+}
+
+jQuery(document).ready(function() { make_colorwheel(); });
