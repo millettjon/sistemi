@@ -105,11 +105,29 @@ SM.makeBand = function(radius, width, palette) {
     // Maximize the saturation.
     hsl = FB.RGBToHSL(FB.unpack(color));
     hsl[1] = 1.0;
+    //hsl[2] = 0.5;  // mid range brightness yields the purest color
     color = FB.pack(FB.HSLToRGB(hsl));
 
     // Remove the swatch color from the palette.
-    // TODO: WTF? Why does not splicing this much things up?
+    // TODO: WTF? Why does not splicing this muck things up?
     palette.splice(colorIndex, 1);
+
+    // Sort the pallet by saturation and brightness. When mapped onto
+    // a circle, brighter colors should be on top, darker on bottom,
+    // more saturated on the left, and less saturated on the right.
+    //
+    // Steps:
+    // - saturation and brightness range from 0 to 1
+    // - re-normalize ranges to -0.5 to 0.5 for polar conversion to map onto circle
+    // - convert to polar
+    // - compare angle
+    palette.sort(function(a,b) {
+      var hslA = FB.RGBToHSL(FB.unpack(a));
+      var hslB = FB.RGBToHSL(FB.unpack(b));
+      var thetaA = Math.atan2(hslA[2] - 0.5, hslA[1] - 0.5);
+      var thetaB = Math.atan2(hslB[2] - 0.5, hslB[1] - 0.5);
+      return thetaA - thetaB;
+    });
 
     return {"type": "swatch",
             "color": color,
@@ -301,6 +319,24 @@ function makeColorWheel() {
   drawColorBand(ctx, center, band);
   //drawColorBand(ctx, center, band.swatches[0].band);
 
+  // draw some text
+  ctx.fillStyle = "#777";
+  ctx.font = "bold 12px Arial";
+
+  // Draw at center.
+  // ctx.textAlign = "center";
+  // ctx.fillText("RAL", center.x, center.y - 5, 50 );
+  // ctx.fillText("1000", center.x, center.y + 9 );
+
+  // Draw at upperleft.
+  ctx.textAlign = "left";
+  ctx.fillText("RAL", 5, 15);
+
+  // Draw at upper right.
+  ctx.textAlign = "right";
+  ctx.fillText("1015", canvas.width - 5, 15);
+  //ctx.clearRect(0, 0, canvas.width, canvas.height);  // sample of how to clear a rectangle
+
   // Hookup event handlers.
   $('#colorwheel').mousemove(SM.mouseMove(band));
 }
@@ -320,6 +356,25 @@ function makeColorWheel() {
 
 jQuery(document).ready(function() { makeColorWheel(); });
 
-// TODO: ? draw black 1px border?
+// TODO: fix bug where including mid range color breaks the sub palette
+// TODO: detect mouse over sub palette, and update color description (ral name and number)
+// TODO: detect mouse click on sub palette, call callbacks (update text area, update shelf model).
+// TODO: add circle indicators to display selected swatch. Is this
+//       even needed? Maybe just on the interior swatch?
+// TODO: add ability to set color (e.g., from text input)
 // TODO: ? put a narrow black band in between?
-// TODO: ? Can three.js be used to anti alias the rough edges?
+// TODO: ? Can three.js be used to anti alias the rough edges? (anti-aliasing)
+// TODO: try a margin between bands
+// TODO: try making border 2px
+// TODO: try hand calculating arc points
+// TODO: sort the inner bucket based on polar coordinates
+// TODO: support using predefined pie image
+//       - just need to map mouse coords to correct pie slice
+// TODO: ? support valchromat texture?
+//        http://jsfiddle.net/3U9pm/
+// TODO: ? is the trick of adding 0.5 to x and y coords useful?
+//       - http://stackoverflow.com/questions/195262/can-i-turn-off-antialiasing-on-an-html-canvas-element
+
+// TODO: add demo checkbox for using fully saturated hues in outer band
+
+// TODO: rename swatch to bucket?
