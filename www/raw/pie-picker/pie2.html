@@ -5,9 +5,58 @@
   <script src="ral.js"></script>
   <script src="pie2.js"></script>
 </head>
-<body style="background: #000;">
+<body style="background: #000; color: grey; font-family: sans-serif;">
 
   <canvas width="195" height="195" id="colorwheel"></canvas>
+
+  <br/>
+  <br/>
+  <br/>
+
+  <b>Frobs</b>
+  <table>
+    <tr>
+      <td>outer band: color function</td>
+      <td>
+        first
+        <input name="outer_band_color_fn" type="radio" value="first"/>
+        median
+        <input name="outer_band_color_fn" type="radio" value="median"/>
+        average
+        <input name="outer_band_color_fn" type="radio" value="average"/>
+        <!-- <select id="outer_band_color_fn"> -->
+        <!--   <option>first</option> -->
+        <!--   <option>median</option> -->
+        <!--   <option>average</option> -->
+        <!-- </select> -->
+      </td>
+    </tr>
+    <tr>
+      <td>outer band: force full saturation</td><td><input id="force_full_saturation" type="checkbox"></td>
+    </tr>
+    <tr>
+      <td>outer band: force brightness to 0.5</td><td><input id="force_midrange_brightness" type="checkbox"></td>
+    </tr>
+    <tr>
+      <td>segment: min width</td><td></td>
+    </tr>
+    <tr>
+      <td>segment: border width</td><td></td>
+    </tr>
+    <tr>
+      <td>band: margin</td><td></td>
+    </tr>
+    <tr>
+      <td>palette: num colors</td><td></td>
+    </tr>
+    <!-- <tr> -->
+    <!--   <td>palette: sort by hue</td><td><input id="palette_sort" type="checkbox"></td> -->
+    <!-- </tr> -->
+    <tr>
+      <td>inner band: sort by saturation and brightness</td><td><input id="inner_band_sort" type="checkbox"></td>
+    </tr>
+
+  </table>
 
 </body>
 </html>

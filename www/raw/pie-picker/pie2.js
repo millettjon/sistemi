@@ -13,7 +13,6 @@ function drawColorBand(ctx, center, band) {
   var counterClockwise = true;
 
   var palette = band.swatches.map(function(swatch) {return swatch.color});
-  console.log(palette);
 
   // Draw outer circle.
   for (var i = 0; i < palette.length; i++) {
@@ -52,7 +51,8 @@ function drawColorBand(ctx, center, band) {
 }
 
 SM.maxSwatches = function(radius) {
-  var minSwatchWidth = 35; // size in pix of minimum swatch that can be touched with a finger
+  //var minSwatchWidth = 35; // size in pix of minimum swatch that can be touched with a finger
+  var minSwatchWidth = 33; // size in pix of minimum swatch that can be touched with a finger
   return Math.floor(2*Math.PI*radius/minSwatchWidth);
 }
 
@@ -86,41 +86,103 @@ SM.bucketize = function(items, numBuckets) {
 //   color
 //   band
 SM.makeBand = function(radius, width, palette) {
+  var band = {"type": "band",
+              "radius": radius,
+              "width": width};
 
-  // Helper fn to make a swatch.
-  makeSwatch = function(palette) {
-    // Handle simple color swatch.
-    if (! (palette instanceof Array))
-      return {"type": "swatch",
-              "color": palette}
+  var maxSwatches = SM.maxSwatches(radius);
+  // TODO: Handle case where total max items is exceeded.
+  if (maxSwatches >= palette.length) {
+    // Handle case where entire palette fits.
+    band.swatches = palette.map(function(e) {return SM.makeSwatch(null, e)});
+  }
+  else {
+    // Divide palette into sub palettes.
+    var buckets = SM.bucketize(palette, maxSwatches);
+    band.swatches = buckets.map(function(e) {
+      return SM.makeSwatch(band, e)});
+  }
 
-    // Use a mid range color to represent the sub palette.
-    var colorIndex = Math.floor(palette.length/2);
+  return band;
+};
 
-    // Use the first color.
-    //var colorIndex = 0;
+// Returns the average color in a palette.
+// Note: expects and returns unpacked values.
+SM.averageColor = function(palette) {
+  var total = palette.reduce(function(previous, current, index, array) {
+    var p = previous;
+    var c = current;
+    p[0] += c[0];
+    p[1] += c[1];
+    p[2] += c[2];
+    return p
+  }, [0,0,0]);
 
-    var color = palette[colorIndex];
+  var t = total.map(function(i) {return i/palette.length});
+  return t;
+};
 
-    // Maximize the saturation.
-    hsl = FB.RGBToHSL(FB.unpack(color));
+// Makes a swatch
+SM.makeSwatch = function(band,   // parent band
+                  palette // palette of colors
+                 ) {
+  // Handle simple color swatch.
+  if (! (palette instanceof Array)) {
+    return {"type": "swatch", "color": palette}
+  };
+
+  var s = SM.state.outer_band;
+
+  // Pick a color to represent the palette.
+  var color;
+ // Use the first color.
+  switch (s.color_fn) {
+  case 'first':
+    color = palette[0];
+    break;
+  case 'median':
+    // Use the color with the median hue value.
+    color = palette[Math.floor(palette.length/2)];
+    break;
+  case 'average':
+    // Use the average color value.
+    color = FB.pack(SM.averageColor(palette.map(FB.unpack)));
+    break;
+  default:
+    throw("bad color_fn: " + s.color_fn);
+  }
+
+  // Maximize the saturation.
+  hsl = FB.RGBToHSL(FB.unpack(color));
+  if (s.force_full_saturation) {
     hsl[1] = 1.0;
-    //hsl[2] = 0.5;  // mid range brightness yields the purest color
-    color = FB.pack(FB.HSLToRGB(hsl));
+  }
 
-    // Remove the swatch color from the palette.
-    // TODO: WTF? Why does not splicing this muck things up?
-    palette.splice(colorIndex, 1);
+  // Force brightness to midrange.
+  if (s.force_midrange_brightness) {
+    hsl[2] = 0.5;
+  }
+  color = FB.pack(FB.HSLToRGB(hsl));
 
-    // Sort the pallet by saturation and brightness. When mapped onto
-    // a circle, brighter colors should be on top, darker on bottom,
-    // more saturated on the left, and less saturated on the right.
-    //
-    // Steps:
-    // - saturation and brightness range from 0 to 1
-    // - re-normalize ranges to -0.5 to 0.5 for polar conversion to map onto circle
-    // - convert to polar
-    // - compare angle
+  // Remove the swatch color from the palette.
+  // TODO: WTF? Why does not splicing this muck things up?
+  var colorIndex = 0;
+  // DON'T CRASH
+  //palette.splice(colorIndex, 1);
+  //palette.splice(colorIndex, 5);
+  //palette.shift();
+  //palette[0]="#FFFFFF";
+
+  // Sort the pallet by saturation and brightness. When mapped onto
+  // a circle, brighter colors should be on top, darker on bottom,
+  // more saturated on the left, and less saturated on the right.
+  //
+  // Steps:
+  // - saturation and brightness range from 0 to 1
+  // - re-normalize ranges to -0.5 to 0.5 for polar conversion to map onto circle
+  // - convert to polar
+  // - compare angle
+  if (SM.state.inner_band.sort) {
     palette.sort(function(a,b) {
       var hslA = FB.RGBToHSL(FB.unpack(a));
       var hslB = FB.RGBToHSL(FB.unpack(b));
@@ -128,32 +190,19 @@ SM.makeBand = function(radius, width, palette) {
       var thetaB = Math.atan2(hslB[2] - 0.5, hslB[1] - 0.5);
       return thetaA - thetaB;
     });
+  };
 
-    return {"type": "swatch",
-            "color": color,
-            "band": SM.makeBand(radius - width, width, palette)}
-  }
+  // A margin of 1, makes for a cleaner redraw since the perimeter
+  // stroke doesn't overlap the outer band.
+  var margin = 1; 
+  return {"type": "swatch",
+          "color": color,
+          "band": SM.makeBand(band.radius - band.width - margin, band.width, palette)};
+};
 
-  var band = {"type": "band",
-              "radius": radius,
-              "width": width};
-
-  var maxSwatches = SM.maxSwatches(radius);
-  if (maxSwatches >= palette.length) {
-    // Handle case where entire palette fits.
-    band.swatches = palette.map(makeSwatch);
-  }
-  else {
-    // Divide palette into sub palettes.
-    var buckets = SM.bucketize(palette, maxSwatches);
-    band.swatches = buckets.map(makeSwatch);
-  }
-
-  return band;
-}
 
 // From farbtastic.
-var FB = FB || {}
+var FB = FB || {};
 
 FB.pack = function (rgb) {
   var r = Math.round(rgb[0] * 255);
@@ -162,7 +211,7 @@ FB.pack = function (rgb) {
   return '#' + (r < 16 ? '0' : '') + r.toString(16) +
     (g < 16 ? '0' : '') + g.toString(16) +
     (b < 16 ? '0' : '') + b.toString(16);
-}
+};
 
 FB.unpack = function (color) {
   if (color.length == 7) {
@@ -175,7 +224,7 @@ FB.unpack = function (color) {
             parseInt('0x' + color.substring(2, 3)) / 15,
             parseInt('0x' + color.substring(3, 4)) / 15];
   }
-}
+};
 
 FB.RGBToHSL = function (rgb) {
     var min, max, delta, h, s, l;
@@ -196,7 +245,7 @@ FB.RGBToHSL = function (rgb) {
       h /= 6;
     }
   return [h, s, l];
-}
+};
 
 FB.hueToRGB = function (m1, m2, h) {
   h = (h < 0) ? h + 1 : ((h > 1) ? h - 1 : h);
@@ -204,7 +253,7 @@ FB.hueToRGB = function (m1, m2, h) {
   if (h * 2 < 1) return m2;
   if (h * 3 < 2) return m1 + (m2 - m1) * (0.66666 - h) * 6;
   return m1;
-}
+};
 
 FB.HSLToRGB = function (hsl) {
   var m1, m2, r, g, b;
@@ -214,7 +263,7 @@ FB.HSLToRGB = function (hsl) {
   return [this.hueToRGB(m1, m2, h+0.33333),
           this.hueToRGB(m1, m2, h),
           this.hueToRGB(m1, m2, h-0.33333)];
-}
+};
 
 // Returns the hue of an rgb value.
 FB.hue = function(rgb) {
@@ -222,11 +271,11 @@ FB.hue = function(rgb) {
   var h = FB.RGBToHSL(unpacked)[0];
   //console.log(rgb, h);
   return h;
-}
+};
 
 SM.point = function(x,y) {
   return {"x": x, "y": y};
-}
+};
 
 // Returns the x, y offset of an event in its target.
 SM.offset = function(e) {
@@ -241,7 +290,7 @@ SM.offset = function(e) {
     ypos = e.pageY - e.target.offsetTop;
   }             
   return SM.point(xpos, ypos);
-}
+};
 
 // Returns the center point of the event's target.
 SM.center = function(e) {
@@ -249,67 +298,75 @@ SM.center = function(e) {
   var x = t.width/2;
   var y = t.height/2;
   return SM.point(x, y);
-}
+};
 
 // Returns the distance between two points.
 SM.distance = function(p1, p2) {
   xd = p1.x - p2.x;
   yd = p1.y - p2.y;
   return Math.sqrt(xd*xd + yd*yd);
-}
+};
 
 // Difference between two points.
 SM.pointDiff = function(p1, p2) {
   return SM.point(p1.x - p2.x, p1.y - p2.y);
-}
+};
 
 // Global state.
-SM.state = {}
-SM.state.bucket = 0;
+SM.state = {
+  "bucket": 0,
+  "outer_band": {
+    "color_fn": "average",
+    "force_full_saturation": false,
+    "force_midrange_brightness": false
+  },
+  "inner_band": {"sort": true}
+};
 
 // Handle mouse move events.
-SM.mouseMove = function(band) {
-  return function(e) {
-    var offset = SM.offset(e);
-    var center = SM.center(e);
+SM.mouseMove = function(e) {
+  var band = e.data;
+  var offset = SM.offset(e);
+  var center = SM.center(e);
 
-    // Figure out which outer slice we are over.
-    // Are we within the outer band?
-    var distance = SM.distance(center, offset);
-    if ((distance <= band.radius) && (distance >= (band.radius - band.width))) {
-      // Which bucket does it fall into.
-      // Find polar angle.
-      p = SM.pointDiff(offset, center);
-      theta = Math.atan2(p.y, p.x);
+  // Figure out which outer slice we are over.
+  // Are we within the outer band?
+  var distance = SM.distance(center, offset);
+  if ((distance <= band.radius) && (distance >= (band.radius - band.width))) {
+    // Which bucket does it fall into.
+    // Find polar angle.
+    p = SM.pointDiff(offset, center);
+    theta = Math.atan2(p.y, p.x);
 
-      // Normalize angle to find arc length.
-      var arcLength = (theta >= 0) ?
-        theta :
-        theta + Math.PI*2;
+    // Normalize angle to find arc length.
+    var arcLength = (theta >= 0) ?
+      theta :
+      theta + Math.PI*2;
 
-      // Find bucket index.
-      var bucketArc = (Math.PI*2) / band.swatches.length;
-      var bucketIndex = Math.floor(arcLength/bucketArc);
+    // Find bucket index.
+    var bucketArc = (Math.PI*2) / band.swatches.length;
+    var bucketIndex = Math.floor(arcLength/bucketArc);
 
-      // Display
-      // Only draw if moving to a new bucket.
-      if (bucketIndex != SM.state.bucket) {
-        var ctx = e.target.getContext('2d');
-        drawColorBand(ctx, center, band.swatches[bucketIndex].band);
-        SM.state.bucket = bucketIndex;
-      }
+    // Display
+    // Only draw if moving to a new bucket.
+    if (bucketIndex != SM.state.bucket) {
+      var ctx = e.target.getContext('2d');
+      drawColorBand(ctx, center, band.swatches[bucketIndex].band);
+      SM.state.bucket = bucketIndex;
     }
-  };
+  }
 };
 
 function makeColorWheel() {
   var canvas = $('#colorwheel').get(0);
   var ctx = canvas.getContext('2d');
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
  
   // Make the graph data structure representing the color wheel.
   var radius = canvas.height/2 - 1; // leave a 1 px buff, to prevent edges of circle from touching bounding box
   var width = radius * 1/3;
-  var palette = ralPalette;
+  var palette = ralPalette.slice(0); // shallow clone
   palette.sort(function(a,b) {return FB.hue(a) - FB.hue(b)});    // Sort RAL colors by hue.
   var band = SM.makeBand(radius, width, palette);
 
@@ -317,7 +374,7 @@ function makeColorWheel() {
   // TODO: Enhance cener function to take a dom element as an argument.
   var center = SM.point(canvas.width/2, canvas.height/2);
   drawColorBand(ctx, center, band);
-  //drawColorBand(ctx, center, band.swatches[0].band);
+  drawColorBand(ctx, center, band.swatches[SM.state.bucket].band);
 
   // draw some text
   ctx.fillStyle = "#777";
@@ -338,25 +395,89 @@ function makeColorWheel() {
   //ctx.clearRect(0, 0, canvas.width, canvas.height);  // sample of how to clear a rectangle
 
   // Hookup event handlers.
-  $('#colorwheel').mousemove(SM.mouseMove(band));
+  $('#colorwheel').off('mousemove.piepick');
+  $('#colorwheel').on('mousemove.piepick', null, band, SM.mouseMove);
 }
 
-//console.log(Math.atan2(1,0)); // 1.57
-//console.log(Math.atan2(1,1)); // 0.78
-//console.log(Math.atan2(0,1)); // 0
-//console.log(Math.atan2(-1,0)); // - pi/2
-// wtf, atan2 parameter order is (y,x)?
-// 0 is ----->
-// degress proceed in counter clockwise fashion (as y axis is reversed)
+// Note: Degrees proceed in counter clockwise fashion (as y axis is reversed).
 //
 //        -pi/2
 //  pi/-pi      0
 //        pi/2
 
 
-jQuery(document).ready(function() { makeColorWheel(); });
+function render() {
+  makeColorWheel();
+};
+
+jQuery(document).ready(function() {
+
+  // --------------------------------------------------
+  // HOOKUP FROB EVENT HANDLERS
+
+  var s_os = SM.state.outer_band;
+
+  // OUTER SEGMENT COLOR_FN
+  var radios = $('input:radio[name="outer_band_color_fn"]');
+  radios.filter('[value="' + s_os.color_fn + '"]').attr('checked', true);
+  radios.change(function() {
+    s_os.color_fn = $(this).val();
+    render();
+  });
+
+  // var frob = $('#outer_band<_color_fn');
+  // frob.val(s_os.color_fn);
+  // frob.change(function() {
+  //   s_os.color_fn = $(this).val();
+  //   render();
+  // });
+
+  // FORCE FULL SATURATION
+  var frob = $('#force_full_saturation');
+  frob.prop('checked', s_os.force_full_saturation);
+  frob.change(function() {
+    s_os.force_full_saturation = $(this).is(':checked');
+    render();
+  });
+
+  // FORCE MIDRANGE BRIGHTNESS
+  var frob = $('#force_midrange_brightness');
+  frob.prop('checked', s_os.force_midrange_brightness);
+  frob.change(function() {
+    s_os.force_midrange_brightness = $(this).is(':checked');
+    render();
+  });
+
+  // PALETTE SORT
+  // var frob = $('#palette_sort');
+  // var s_pl = SM.state.palette;
+  // frob.prop('checked', s_pl.sort);
+  // frob.change(function() {
+  //   s_pl.sort = $(this).is(':checked');
+  //   render();
+  // });
+
+  // INNER BAND SORT
+  var frob = $('#inner_band_sort');
+  var s_ib = SM.state.inner_band;
+  frob.prop('checked', s_ib.sort);
+  frob.change(function() {
+    s_ib.sort = $(this).is(':checked');
+    render();
+  });
+
+  // --------------------------------------------------
+  // DRAW THE COLOR WHEEL
+  render();
+
+});
 
 // TODO: fix bug where including mid range color breaks the sub palette
+// TODO: fix bug where adding a margin breaks rendering
+// TODO: auto balance width of outer and inner buckets
+// TODO: release on github
+// TODO: blog
+// TODO: add additional mouse event handlers to handle touch interfaces properly
 // TODO: detect mouse over sub palette, and update color description (ral name and number)
 // TODO: detect mouse click on sub palette, call callbacks (update text area, update shelf model).
 // TODO: add circle indicators to display selected swatch. Is this
@@ -364,10 +485,10 @@ jQuery(document).ready(function() { makeColorWheel(); });
 // TODO: add ability to set color (e.g., from text input)
 // TODO: ? put a narrow black band in between?
 // TODO: ? Can three.js be used to anti alias the rough edges? (anti-aliasing)
+//       - see sub pixel rendering: http://www.html5rocks.com/en/tutorials/canvas/performance/
 // TODO: try a margin between bands
 // TODO: try making border 2px
 // TODO: try hand calculating arc points
-// TODO: sort the inner bucket based on polar coordinates
 // TODO: support using predefined pie image
 //       - just need to map mouse coords to correct pie slice
 // TODO: ? support valchromat texture?
@@ -378,3 +499,26 @@ jQuery(document).ready(function() { makeColorWheel(); });
 // TODO: add demo checkbox for using fully saturated hues in outer band
 
 // TODO: rename swatch to bucket?
+// TODO: ? should the bucketing algorithm take into account distance
+//         from the mean of each bucket?
+
+// TODO: use background layer?
+//       http://www.html5rocks.com/en/tutorials/canvas/performance/
+
+// TODO: highlight selected pie slices
+// TODO: ? use functional js library?
+// TODO: ? use clojurescript?
+// TODO: make stroke optional
+// TODO: adjust padding
+// TODO: move all state and configuration into a single data structure
+
+
+// ? is a 3 level wheel useful? probably not as the colors will be too similar
+// ? is a full color picker useful? not really as it doesn't narrow down enough
+
+// ? how to better determine segment widths?
+// - figure out max supported total colors based on number of bands
+//   and the outer circumferences of each band
+// - figure out the ratio of the max segments outer band / max segments inner band
+// - find factors that multiple to the palette size and have
+//   roughly the same ratio as above
