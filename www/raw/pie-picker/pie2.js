@@ -1,6 +1,101 @@
 // Namespace
 var SM = SM || {};
 
+// Focuses by outlining the entire swatch.
+function focusSwatch1(ctx, center, band, index, focus) {
+  var clockwise = false;  // TODO: factor out
+  var counterClockwise = true; // TODO: factor out
+
+  var radiusInner = band.radius - band.width;
+  var palette = band.swatches.map(function(swatch) {return swatch.color});
+
+  // Calculate start and end angles for slice.
+  var startAngle = (Math.PI*2)*(index/palette.length);
+  var endAngle = (Math.PI*2)*((index+1)/palette.length);
+
+  // Draw inner arc.
+  ctx.beginPath();
+  var startX = radiusInner * Math.cos(startAngle) + center.x;
+  var startY = radiusInner * Math.sin(startAngle) + center.y;
+  ctx.moveTo(startX, startY);
+  ctx.arc(center.x,
+          center.y,
+          radiusInner,
+          startAngle,
+          endAngle,
+          clockwise);
+
+  // Draw outer arc.
+  ctx.arc(center.x,
+          center.y,
+          band.radius,
+          endAngle,
+          startAngle,
+          counterClockwise);
+
+  // Move back to start to complete shape.
+  // TODO: ? Is closeShape useful?
+  ctx.lineTo(startX, startY);
+
+  var oldLineWidth = ctx.lineWidth;
+  var oldStyle = ctx.strokeStyle;
+  if (focus) {
+    ctx.lineWidth = SM.state.swatch.border_width - 1;
+    ctx.strokeStyle = "#fff";
+  }
+  else {
+    ctx.lineWidth = SM.state.swatch.border_width;
+    ctx.strokeStyle = "#000";
+  }
+  ctx.stroke();
+  ctx.lineWidth = oldLineWidth;
+  ctx.strokeStyle = oldStyle;
+}
+
+// Focuses by drawing a concentric arc around outside of swatch.
+function focusSwatch(ctx, center, band, index, focus) {
+  var clockwise = false;  // TODO: factor out
+
+  var radius = band.radius + 2;
+  var palette = band.swatches.map(function(swatch) {return swatch.color});
+
+  // Calculate start and end angles for slice.
+  var startAngle = (Math.PI*2)*(index/palette.length);
+  var endAngle = (Math.PI*2)*((index+1)/palette.length);
+  if (!focus) {
+    // Make unfocus angle wider to erase all traces
+    startAngle -= 0.02
+    endAngle += 0.02
+  }
+
+  // Draw arc.
+  ctx.beginPath();
+  var startX = radius * Math.cos(startAngle) + center.x;
+  var startY = radius * Math.sin(startAngle) + center.y;
+  ctx.moveTo(startX, startY);
+  ctx.arc(center.x,
+          center.y,
+          radius,
+          startAngle,
+          endAngle,
+          clockwise);
+
+  var oldLineWidth = ctx.lineWidth;
+  var oldStyle = ctx.strokeStyle;
+  if (focus) {
+    ctx.lineWidth = SM.state.swatch.border_width + 1;
+    ctx.strokeStyle = "#fff";
+  }
+  else {
+    // make unfocus line width wider to erase all traces
+    ctx.lineWidth = SM.state.swatch.border_width + 2;
+    ctx.strokeStyle = "#000";
+  }
+  ctx.stroke();
+  ctx.lineWidth = oldLineWidth;
+  ctx.strokeStyle = oldStyle;
+}
+
 // Draws a color band a circular color band of the specified width
 // and palette.
 function drawColorBand(ctx, center, band) {
@@ -42,7 +137,12 @@ function drawColorBand(ctx, center, band) {
     // Move back to start to complete shape.
     ctx.lineTo(startX, startY);
 
-    ctx.stroke();
+    var bw = SM.state.swatch.border_width;
+    if (bw > 0) {
+      ctx.lineWidth = bw;
+      ctx.stroke();
+    }
+
     ctx.fillStyle = palette[i];
     ctx.fill();
 
@@ -52,7 +152,8 @@ function drawColorBand(ctx, center, band) {
 
 SM.maxSwatches = function(radius) {
   //var minSwatchWidth = 35; // size in pix of minimum swatch that can be touched with a finger
-  var minSwatchWidth = 33; // size in pix of minimum swatch that can be touched with a finger
+  // size in pix of minimum swatch that can be touched with a finger
+  var minSwatchWidth = SM.state.swatch.min_width;
   return Math.floor(2*Math.PI*radius/minSwatchWidth);
 }
 
@@ -92,6 +193,7 @@ SM.makeBand = function(radius, width, palette) {
 
   var maxSwatches = SM.maxSwatches(radius);
   // TODO: Handle case where total max items is exceeded.
+  //       It fails trying to make empty sub bands.
   if (maxSwatches >= palette.length) {
     // Handle case where entire palette fits.
     band.swatches = palette.map(function(e) {return SM.makeSwatch(null, e)});
@@ -194,7 +296,7 @@ SM.makeSwatch = function(band,   // parent band
 
   // A margin of 1, makes for a cleaner redraw since the perimeter
   // stroke doesn't overlap the outer band.
-  var margin = 1; 
+  var margin = SM.state.band.margin;
   return {"type": "swatch",
           "color": color,
           "band": SM.makeBand(band.radius - band.width - margin, band.width, palette)};
@@ -312,14 +414,38 @@ SM.pointDiff = function(p1, p2) {
   return SM.point(p1.x - p2.x, p1.y - p2.y);
 };
 
+// current/selected
+// actual/selected
+// selected/hovered
+// selected/cursor
+
+// {
+//   "selected": {"color": "#xyz",
+//              "indices": [0,3]}
+  
+//   "cursor": {"color": "#xyz",
+//              "indices": [0,3]}
+// }
+
 // Global state.
+// store color and band indexes for both current and selected
+// one which mouse is over
+// actual saved color, and associated indices
 SM.state = {
   "bucket": 0,
+  "cursor": {"color": null, "indices": null},
+  "selected": {"color": null, "indices": null},
   "outer_band": {
     "color_fn": "average",
     "force_full_saturation": false,
     "force_midrange_brightness": false
   },
+  "band": {"margin": 1},
+  "swatch": {
+    "min_width": 32,
+    "border_width": 2
+  },
+  "palette": {"sort": true},
   "inner_band": {"sort": true}
 };
 
@@ -329,11 +455,11 @@ SM.mouseMove = function(e) {
   var offset = SM.offset(e);
   var center = SM.center(e);
 
-  // Figure out which outer slice we are over.
-  // Are we within the outer band?
   var distance = SM.distance(center, offset);
+
+  // Are we within the outer band?
   if ((distance <= band.radius) && (distance >= (band.radius - band.width))) {
-    // Which bucket does it fall into.
+    // Which swatch are we over?
     // Find polar angle.
     p = SM.pointDiff(offset, center);
     theta = Math.atan2(p.y, p.x);
@@ -349,12 +475,24 @@ SM.mouseMove = function(e) {
 
     // Display
     // Only draw if moving to a new bucket.
+//    var outerIndex = SM.state.cursor.indices[0];
     if (bucketIndex != SM.state.bucket) {
       var ctx = e.target.getContext('2d');
+      // Highlight current swatch in outer band.
+      focusSwatch(ctx, center, band, SM.state.bucket, false);
+      focusSwatch(ctx, center, band, bucketIndex, true);
+
+      // Redraw inner band.
       drawColorBand(ctx, center, band.swatches[bucketIndex].band);
       SM.state.bucket = bucketIndex;
     }
   }
+
+  // Are we within the inner band?
+  else if (distance <= (band.radius - band.width - SM.state.band.margin)) {
+    // need an inner bucket index
+  }
+  
 };
 
 function makeColorWheel() {
@@ -364,16 +502,23 @@ function makeColorWheel() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
  
   // Make the graph data structure representing the color wheel.
-  var radius = canvas.height/2 - 1; // leave a 1 px buff, to prevent edges of circle from touching bounding box
+  // Note: 1px margin if not focusing, 4 px if focusing
+  var radius = canvas.height/2 - 4; // leave a small marging, to prevent edges of circle from touching bounding box
   var width = radius * 1/3;
   var palette = ralPalette.slice(0); // shallow clone
-  palette.sort(function(a,b) {return FB.hue(a) - FB.hue(b)});    // Sort RAL colors by hue.
+
+  if (SM.state.palette.sort) {
+    // Sort RAL colors by hue.
+    palette.sort(function(a,b) {return FB.hue(a) - FB.hue(b)});
+  }
+
   var band = SM.makeBand(radius, width, palette);
 
   // Draw the outer band of the wheel.
   // TODO: Enhance cener function to take a dom element as an argument.
   var center = SM.point(canvas.width/2, canvas.height/2);
   drawColorBand(ctx, center, band);
+  focusSwatch(ctx, center, band, SM.state.bucket, true);
   drawColorBand(ctx, center, band.swatches[SM.state.bucket].band);
 
   // draw some text
@@ -448,14 +593,47 @@ jQuery(document).ready(function() {
     render();
   });
 
+  // SWATCH MIN WIDTH
+  var frob = $('#swatch_min_width');
+  var s_sw = SM.state.swatch;
+  frob.val(s_sw.min_width);
+  frob.change(function() {
+    s_sw.min_width = $(this).val();
+    render();
+  });
+
+  // SWATCH BORDER WIDTH
+  var frob = $('#swatch_border_width');
+  var s_sw = SM.state.swatch;
+  frob.val(s_sw.border_width);
+  frob.change(function() {
+    s_sw.border_width = $(this).val();
+    render();
+  });
+
+  // BAND MARGIN
+  var frob = $('#band_margin');
+  var s_bnd = SM.state.band;
+  frob.val(s_bnd.margin);
+  frob.change(function() {
+    s_bnd.margin = $(this).val();
+    render();
+  });
+
+  // PALETTE NUM COLORS
+  // TODO: hookup to actual control.
+  // TODO: move ral to its own namespace.
+  // TODO: move to stats area.
+  $('#palette_num_colors').text(ralPalette.length);
+
   // PALETTE SORT
-  // var frob = $('#palette_sort');
-  // var s_pl = SM.state.palette;
-  // frob.prop('checked', s_pl.sort);
-  // frob.change(function() {
-  //   s_pl.sort = $(this).is(':checked');
-  //   render();
-  // });
+  var frob = $('#palette_sort');
+  var s_pl = SM.state.palette;
+  frob.prop('checked', s_pl.sort);
+  frob.change(function() {
+    s_pl.sort = $(this).is(':checked');
+    render();
+  });
 
   // INNER BAND SORT
   var frob = $('#inner_band_sort');
@@ -520,5 +698,12 @@ jQuery(document).ready(function() {
 // - figure out max supported total colors based on number of bands
 //   and the outer circumferences of each band
 // - figure out the ratio of the max segments outer band / max segments inner band
-// - find factors that multiple to the palette size and have
+// - find factors that multiply to the palette size and have
 //   roughly the same ratio as above
+
+// ? how to find the index of the selected color?
+//   ? search each swatch in outer band?
+//   ? search once and save index?
+//     - selected.color = #fab
+//     - selected.index = [indexOuter, indexInner]
+// ? use gray arc to indicate selected color?
