@@ -208,12 +208,11 @@ SM.bucketize = function(items, numBuckets) {
   var startIndex = 0;
   var endIndex;
   var bucketSize = items.length/numBuckets;
-  //console.log("bucketize: numBuckets: ", numBuckets);
-  //console.log("bucketize: bucketSize: ", bucketSize);
+
   // Note: Make sure items are evenly distributed.
   for (i=1; i <= numBuckets; i++) {
     endIndex = Math.round(i*bucketSize);
-    buckets.push(items.slice(startIndex, endIndex));
+    buckets.push(items.slice(startIndex, endIndex + 1));
     startIndex = endIndex + 1;
   }
   return buckets;
@@ -402,8 +401,8 @@ SM.state = {
 SM.state.band.margin = 0;
 SM.state.swatch.min_width = 25;
 SM.state.swatch.border_width = 0;
-//SM.state.palette.sort = false;
-//SM.state.inner_band.sort = 
+SM.state.palette.sort = false;
+SM.state.inner_band.sort = false;
 
 // Returns the index of the buck which the mouse is in.
 SM.getBucketIndex = function(e, band) {
