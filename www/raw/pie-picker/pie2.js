@@ -74,7 +74,7 @@ function clearColorLabel(e) {
   //       circle and clear it.
   var ctx = e.target.getContext('2d');
   var center = SM.center(e);
-  ctx.clearRect(center.x - 25, center.y - 7.5 ,50, 15);
+  ctx.clearRect(center.x - 25, center.y - 9 + 4 , 50, 18);
 }
 
 function drawColorLabel(e) {
@@ -86,7 +86,7 @@ function drawColorLabel(e) {
   ctx.font = "bold 12px Arial";
   ctx.textAlign = "center";
   clearColorLabel(e);
-  ctx.fillText(color.ral, center.x, center.y, 50);
+  ctx.fillText(color.ral, center.x, center.y + 4, 50);
 }
 
 // Sets the focus on the inner band.
