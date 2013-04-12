@@ -69,15 +69,36 @@ function clearOuterFocus(e) {
   }
 }
 
+// Run code that uses a drawing context and reset the fillStyle afterwords.
+function withContext(ctx, fn) {
+  var fs = ctx.fillStyle;
+  fn.call();
+  ctx.fillStyle = fs;
+}
+
 function clearColorLabel(e) {
-  // TODO: calculate a bounding box based on the diameter of the inner
-  //       circle and clear it.
   var ctx = e.target.getContext('2d');
   var center = SM.center(e);
-  ctx.clearRect(center.x - 25, center.y - 10 + 4 , 50, 20);
+
+  // Calculate a bounding radius of inner circle and clear it.
+  var band = e.data.swatches[0].band;  // inner band
+  var radius =
+    band.radius - // outer radius of inner band
+    band.width -  // width of inner band
+    3 -           // width of focus arc
+    1;            // safety margin
+
+  withContext(ctx, function() {
+    ctx.beginPath();
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI, false);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+  })
 }
 
 function drawColorLabel(e) {
+  clearColorLabel(e);
+
   // Draw color label.
   var ctx = e.target.getContext('2d');
   var center = SM.center(e);
@@ -85,7 +106,6 @@ function drawColorLabel(e) {
   ctx.fillStyle = "#AAA";
   ctx.font = "bold 12px Arial";
   ctx.textAlign = "center";
-  clearColorLabel(e);
   ctx.fillText(color.ral, center.x, center.y + 4, 50);
 }
 
