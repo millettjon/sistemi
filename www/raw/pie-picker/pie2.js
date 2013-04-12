@@ -323,14 +323,12 @@ SM.makeSwatch = function(band,   // parent band
           "band": SM.makeBand(band.radius - band.width - margin, band.width, palette)};
 };
 
-
 SM.point = function(x,y) {
   return {"x": x, "y": y};
 };
 
 // Returns the x, y offset of an event in its target.
 SM.offset = function(e) {
-
   // Mouse event.
   if (e.offsetX != undefined)
     return SM.point(e.offsetX, e.offsetY);
@@ -341,10 +339,10 @@ SM.offset = function(e) {
   if (e.pageX != undefined)
     return SM.point(e.pageX - ox, e.pageY - oy);
 
-  // Touch event.
-  var te = event.touches[0];
-  return SM.point(te.pageX - ox, te.pageY - oy);
-
+  // Lookup touches from the original event since jquery doesn't
+  // integrate w/ touch data.
+  var t = e.originalEvent.touches[0];
+  return SM.point(t.pageX - ox, t.pageY - oy);
 };
 
 // Returns the center point of the event's target.
@@ -475,6 +473,7 @@ function log(s) {
 }
 
 SM.touchmove = function(e) {
+  log("touchmove");
   var oe = e.originalEvent;
   if ( oe.touches.length == 1 ) {
     e.preventDefault();
@@ -486,6 +485,8 @@ SM.touchstart = function(e) {
   var oe = e.originalEvent;
   if ( oe.touches.length == 1 ) {
     e.preventDefault();
+    // needed for firefox on android to focus a swatch on tap
+    SM.mousemove(e);
   }
 }
 
@@ -737,3 +738,10 @@ jQuery(document).ready(function() {
 // NOTES
 // ? is a 3 level wheel useful? probably not as the colors will be too similar
 // ? is a full color picker useful? not really as it doesn't narrow down enough
+
+// TESTED BROWSERS
+// test: linux firefox
+// test: linux crhome
+// test: android browser
+// test: android firefox
+// test: android chrome
