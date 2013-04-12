@@ -74,7 +74,7 @@ function clearColorLabel(e) {
   //       circle and clear it.
   var ctx = e.target.getContext('2d');
   var center = SM.center(e);
-  ctx.clearRect(center.x - 25, center.y - 9 + 4 , 50, 18);
+  ctx.clearRect(center.x - 25, center.y - 10 + 4 , 50, 20);
 }
 
 function drawColorLabel(e) {
@@ -324,24 +324,27 @@ SM.makeSwatch = function(band,   // parent band
 };
 
 
-
 SM.point = function(x,y) {
   return {"x": x, "y": y};
 };
 
 // Returns the x, y offset of an event in its target.
 SM.offset = function(e) {
-  var xpos = e.offsetX;
-  var ypos = e.offsetY;
 
-  // Hack for Firefox
-  if (e.offsetX==undefined) {
-    //xpos = e.pageX - $('#colorwheel').offset().left;
-    xpos = e.pageX - e.target.offsetLeft;
-    //ypos = e.pageY - $('#colorwheel').offset().top;
-    ypos = e.pageY - e.target.offsetTop;
-  }             
-  return SM.point(xpos, ypos);
+  // Mouse event.
+  if (e.offsetX != undefined)
+    return SM.point(e.offsetX, e.offsetY);
+
+  var ox = e.target.offsetLeft;
+  var oy = e.target.offsetTop;
+  // Firefox mouse event.
+  if (e.pageX != undefined)
+    return SM.point(e.pageX - ox, e.pageY - oy);
+
+  // Touch event.
+  var te = event.touches[0];
+  return SM.point(te.pageX - ox, te.pageY - oy);
+
 };
 
 // Returns the center point of the event's target.
@@ -461,6 +464,31 @@ SM.inInnerBand = function(e) {
   return (distance <= radius && (distance >= (radius = band.width))) 
 }
 
+function clearLog() {
+  $('#message').html('&nbsp;');
+}
+
+function log(s) {
+  $('#message').text(s);
+  //$('#message').append(s + " ");
+  setTimeout(clearLog, 2000);
+}
+
+SM.touchmove = function(e) {
+  var oe = e.originalEvent;
+  if ( oe.touches.length == 1 ) {
+    e.preventDefault();
+    SM.mousemove(e);
+  }
+}
+
+SM.touchstart = function(e) {
+  var oe = e.originalEvent;
+  if ( oe.touches.length == 1 ) {
+    e.preventDefault();
+  }
+}
+
 // Handle mouse move events.
 SM.mousemove = function(e) {
   var ctx = e.target.getContext('2d');
@@ -560,6 +588,9 @@ function makeColorWheel() {
   $('#colorwheel').on('mousemove.piepick', null, band, SM.mousemove);
   $('#colorwheel').off('mousedown.piepick');
   $('#colorwheel').on('mousedown.piepick', null, band, SM.mousedown);
+
+  $('#colorwheel').on('touchmove.piepick', null, band, SM.touchmove);
+  $('#colorwheel').on('touchstart.piepick', null, band, SM.touchstart);
 }
 
 // Note: Degrees proceed in counter clockwise fashion (as y axis is reversed).

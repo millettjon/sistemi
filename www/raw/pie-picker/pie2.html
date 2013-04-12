@@ -5,8 +5,17 @@
   <script src="ral.js"></script>
   <script src="color.js"></script>
   <script src="pie2.js"></script>
+  <style>
+    /* eliminate focus border on canvas */
+    canvas {
+      outline: none;
+      -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile  webkit */
+    }
+  </style>
 </head>
 <body style="background: #000; color: grey; font-family: sans-serif;">
+
+  <p id="message" >&nbsp;</p>
 
   <canvas width="195" height="195" id="colorwheel"></canvas>
 
