@@ -432,7 +432,10 @@ SM.getColor = function(e) {
 
   // find the selected color
   var band = e.data;
-  var [oi, ii] = SM.state.cursor.indices;
+  var ids = SM.state.cursor.indices;
+  var oi = ids[0];
+  var ii = ids[1];
+
   if ((oi == null) || (ii == null))
     return null;
 
