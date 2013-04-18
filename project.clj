@@ -58,7 +58,7 @@
                      [bitwalker/UserAgentUtils "1.8"]
                      
                      ;; calculation
-                     [dgraph "1.2.1"]
+                     [dgraph "1.2.2"]
                      [frinj "0.1.4"]
 
                      ;; misc
