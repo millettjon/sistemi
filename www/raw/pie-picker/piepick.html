@@ -1,23 +1,23 @@
 <html>
 <head>
   <title>Pie Color Picker</title>
-  <script src="../js/jquery-1.7.1.min.js"></script>
-  <script src="ral.js"></script>
-  <script src="color.js"></script>
-  <script src="pie2.js"></script>
-  <style>
-    /* eliminate focus border on canvas */
-    canvas {
-      outline: none;
-      -webkit-tap-highlight-color: rgba(255, 255, 255, 0); /* mobile  webkit */
-    }
-  </style>
+  <!-- <script src="//code.jquery.com/jquery-1.9.1.min.js"></script> -->
+  <script src="../js/jquery-1.9.1.min.js"></script>
+
+  <script type="text/javascript" src="../js/main.js"></script>
+  <!-- <script type="text/javascript" src="../js/main.min.js"></script> -->
+  
+  <!-- <script src="ral.js"></script> -->
+  <!-- <script src="color.js"></script> -->
+
+  <link href="piepick.css" rel="stylesheet" type="text/css">
+  <script src="piepick.js"></script>
+
 </head>
+
 <body style="background: #000; color: grey; font-family: sans-serif;">
 
-  <p id="message" >&nbsp;</p>
-
-  <canvas width="195" height="195" id="colorwheel"></canvas>
+  <canvas id="colorwheel" width="195" height="195"></canvas>
 
   <br/>
   <br/>
@@ -34,11 +34,6 @@
         <input name="outer_band_color_fn" type="radio" value="median"/>
         average
         <input name="outer_band_color_fn" type="radio" value="average"/>
-        <!-- <select id="outer_band_color_fn"> -->
-        <!--   <option>first</option> -->
-        <!--   <option>median</option> -->
-        <!--   <option>average</option> -->
-        <!-- </select> -->
       </td>
     </tr>
     <tr>
@@ -66,6 +61,9 @@
       <td>inner band: sort by saturation and brightness</td><td><input id="inner_band_sort" type="checkbox"></td>
     </tr>
 
+    <tr>
+      <td>focus bar width: </td><td><input id="focus_bar_width" type="text" style="width: 25px;"></td>
+    </tr>
   </table>
 
 </body>
