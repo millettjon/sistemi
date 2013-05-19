@@ -1,7 +1,8 @@
 $(function() {
 
-  function onColor(oldColor, newColor) {
-    console.log("onColor: ", oldColor, newColor);
+  function onColor(color) {
+    console.log("onColor: ", color);
+    alert("onColor: " + color);
   }
 
   var canvas = $('#colorwheel').get(0);

@@ -385,7 +385,7 @@ Steps:
 (defn on-mousedown
   [e]
   (when-let [color (get-color e)]
-    (log "color: " color)))
+    ((:callback wheel) color)))
 
 (defn on-touchstart
   [e]
@@ -442,6 +442,7 @@ Steps:
         ;; :state   mutable state (e.g., for cursor)
         (set! wheel (assoc wheel
                       :band band
+                      :callback callback
                       :canvas canvas
                       :ctx (c/get-context canvas "2d")
                       :center (c2/center canvas)
