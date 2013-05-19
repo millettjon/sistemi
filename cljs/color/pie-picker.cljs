@@ -409,6 +409,12 @@ Steps:
       (.-preventDefault e)
       (on-mousedown e))))
 
+(defn on-mouseout
+  [e]
+  (clear-inner-focus)
+  (clear-inner-focus)
+  (redraw))
+
 (defn wheel-fn
   "Returns a function that binds wheel to w and calls f inside that binding."
   [w f]
@@ -423,8 +429,6 @@ Steps:
 ;; options:  optional map to override defaults options
 (defn ^:export init [canvas, palette, callback, options]
   (log "initializing")
-;  (log canvas)
-;  (log palette)
   (let [options (util.map/deep-merge-with identity defaults options)]
     (binding [wheel {:opts options}]
       ;; Make the graph data structure representing the color wheel.
@@ -457,4 +461,5 @@ Steps:
         (d/listen! canvas :touchstart (wheel-fn wheel on-touchstart))
         (d/listen! canvas :touchmove (wheel-fn wheel on-touchmove))
         (d/listen! canvas :touchend (wheel-fn wheel on-touchend))
+        (d/listen! canvas :mouseout (wheel-fn wheel on-mouseout))
         ))))
