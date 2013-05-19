@@ -298,8 +298,8 @@ Steps:
   [e]
   (let [{:keys [ctx center band]} wheel
         outer-bucket-index (bucket-index e band)]
-      (focus-swatch band outer-bucket-index true false)
-      (set-cursor! :outer outer-bucket-index)))
+    (focus-swatch band outer-bucket-index true false)
+    (set-cursor! :outer outer-bucket-index)))
 
 (defn- clear-inner-focus
   "Clear focus on inner band."
@@ -412,7 +412,7 @@ Steps:
 (defn on-mouseout
   [e]
   (clear-inner-focus)
-  (clear-inner-focus)
+  (clear-outer-focus)
   (redraw))
 
 (defn wheel-fn
