@@ -91,6 +91,11 @@ function onDocumentTouchMove( event ) {
   }
 }
 
+// Converts a hex rgb string to an int.
+function rgbHexToInt(rgb) {
+  return parseInt(rgb.substring(1), 16);
+}
+
 // Converts a jquery rgb color string to a hex integer.
 function rgb2hex(rgb) {
   var rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
@@ -102,11 +107,9 @@ function luminence(color) {
   var r = (color >> 16) / 255;
   var g = (color >> 8 & 0xFF) / 255;
   var b = (color & 0xFF) / 255;
-  console.log("r: " + r);
   var min = Math.min(r, Math.min(g, b));
   var max = Math.max(r, Math.max(g, b));
   var l = (min + max) / 2;
-  console.log("luminence: " + l);
   return l;
 }
 

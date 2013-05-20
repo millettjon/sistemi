@@ -385,7 +385,7 @@ Steps:
 (defn on-mousedown
   [e]
   (when-let [color (get-color e)]
-    ((:callback wheel) color)))
+    ((:callback wheel) (clj->js color))))
 
 (defn on-touchstart
   [e]

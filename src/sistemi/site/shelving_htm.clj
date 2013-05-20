@@ -56,8 +56,8 @@
         [:style ".customStyleSelectBoxInner {background:url(jquery.customSelect/arrow.png) no-repeat center right; }"]
 
         ;; color picker
-        [:script {:type "text/javascript" :src "farbtastic/farbtastic.js"}]
-        [:link {:rel "stylesheet" :href "farbtastic/farbtastic.css" :type "text/css"}]
+        [:script {:type "text/javascript" :src "js/main.js"}]
+        [:link {:rel "stylesheet" :href "pie-picker/piepick.css" :type "text/css"}]
 
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
@@ -127,7 +127,7 @@
        [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
         (f/text :color {:tabindex 1})]]
-      [:div#colorpicker {:style "margin-left: 20px;"}]
+      [:canvas#colorwheel {:width "195" :height "195"}]
 
       [:div {:style "text-align: right"}
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
@@ -145,7 +145,6 @@
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.
-         $('#colorpicker').farbtastic('#color');
          $('.chzn-select').chosen();
          $('.customStyleSelectBox').customSelect();
 
@@ -167,6 +166,36 @@
            updateAnimation(shelving);
          });
 
+         // --------------------
+         // Setup the color picker.
+         function onColor(color) {
+           // Update background color of color select box.
+           var e = $('#color');
+           var rgb = color.rgb;
+           e.css('background-color', rgb);
+
+           // Update text of color select box.
+           var t = color.type
+           e.val(t.toUpperCase() + ' ' + color[t]);           
+
+           // Update the model.
+           var hex = rgbHexToInt(rgb);
+           if (shelving.color != hex) {
+             shelving.color = hex; // why is this an int?
+             // For dark colors, use a gray background.
+             var bg = luminence(hex) > 0.1 ? '#000' : '#DDD';
+             $('#model').css({'background-color': bg});
+             updateAnimation(shelving);
+           }
+         }
+
+         var canvas = $('#colorwheel').get(0);
+         var palette = color.ral.palette;
+         var callback = onColor;
+         var options = null;
+         color.pie_picker.init(canvas, palette, callback, options);
+         // --------------------
+
          // Set the container div height to match the width.
          var model = $('#model');
          var height = model.width();
@@ -179,21 +208,21 @@
          // The color picker doesn't have a way to supply a callback in addition
          // to the synched form field. So, periodically check the background color
          // of the synched form field and re-render when it changes.
-         function checkColor() {
-           var color = $('#color').css('background-color');
-           color = rgb2hex(color);
-           if (shelving.color != color) {
-             shelving.color = color;
-             // For dark colors, use a gray background.
-             var bg = luminence(color) > 0.1 ? '#000' : '#666';
-             $('#model').css({'background-color': bg});
-             updateAnimation(shelving);
-           }
-           // Rate limit model updates since the color picker spews events rapidly
-           // and can cause slowness and/or webgl crashes.
-           setTimeout(function() {requestAnimFrame(checkColor);}, 1000);
-         }
-         checkColor();
+//         function checkColor() {
+//           var color = $('#color').css('background-color');
+//           color = rgb2hex(color);
+//           if (shelving.color != color) {
+//             shelving.color = color;
+//             // For dark colors, use a gray background.
+//             var bg = luminence(color) > 0.1 ? '#000' : '#666';
+//             $('#model').css({'background-color': bg});
+//             updateAnimation(shelving);
+//           }
+//           // Rate limit model updates since the color picker spews events rapidly
+//           // and can cause slowness and/or webgl crashes.
+//           setTimeout(function() {requestAnimFrame(checkColor);}, 1000);
+//         }
+//         checkColor();
      });"
      ]]
    ])
