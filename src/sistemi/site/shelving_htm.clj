@@ -81,7 +81,7 @@
 
 (defn body
   []
-  [:div.row
+  [:div.row {:style "background-color: #FFF;"}
    [:div.span6
     [:div#model]
     ;; ? what should display if canvas is not available?
@@ -183,8 +183,8 @@
            if (shelving.color != hex) {
              shelving.color = hex; // why is this an int?
              // For dark colors, use a gray background.
-             var bg = luminence(hex) > 0.1 ? '#000' : '#DDD';
-             $('#model').css({'background-color': bg});
+             //var bg = luminence(hex) > 0.1 ? '#000' : '#DDD';
+             //$('#model').css({'background-color': bg});
              updateAnimation(shelving);
            }
          }
