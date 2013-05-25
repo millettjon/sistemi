@@ -52,7 +52,7 @@
 
         ;; customSelect
         [:script {:type "text/javascript" :src "jquery.customSelect/customSelect.jquery.js"}]
-        [:style "span.customStyleSelectBox {height: 23px; line-height: 24px; width: 88px; background-color: #fff; color:#555; padding:0px 3px 0px 7px; border:1px solid #e7dab0; -moz-border-radius: 5px; -webkit-border-radius: 5px;border-radius: 5px 5px; }"]
+        [:style "span.customStyleSelectBox {height: 23px; line-height: 24px; width: 150px; background-color: #fff; color:#555; padding:0px 3px 0px 7px; border:1px solid #e7dab0; -moz-border-radius: 5px; -webkit-border-radius: 5px;border-radius: 5px 5px; }"]
         [:style ".customStyleSelectBoxInner {background:url(jquery.customSelect/arrow.png) no-repeat center right; }"]
 
         ;; color picker
@@ -68,10 +68,10 @@
         [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
 
         [:style "#shelf-form .control-group {margin-bottom: 12px}"]
-        [:style "#shelf-form .control-label {width: 100px; color: #FFF; padding-top: 4px}"]
-        [:style "#shelf-form .controls {margin-left: 115px;}"]
+        [:style "#shelf-form .control-label {width: 45px; color: #FFF; padding-top: 4px}"]
+        [:style "#shelf-form .controls {margin-left: 55px;}"]
 
-        [:style "#shelf-form .chzn-select {width: 100px;}"]
+        [:style "#shelf-form .chzn-select {width: 160px;}"]
         [:style "#shelf-form input {border-radius: 5px;}"]
         [:style "#shelf-form select {height: 23px; line-height: 24px;}"]
 
@@ -81,13 +81,27 @@
 
 (defn body
   []
-  [:div.row {:style "background-color: #FFF;"}
-   [:div.span6
+  [:div.row
+   [:div#design-box.span6  {:style "background-color: #FFF;"}
+    ;; 3d model
     [:div#model]
-    ;; ? what should display if canvas is not available?
-    #_[:img {:src "/img/0600.0600.0200.0018.S.427.png"}]
-    ;; TODO: Remove this for static rendering. Use rotation icons?
-    [:div {:style "text-align: center;"} (tr/translate :spin)]]
+
+    ;; Toolbar
+    ;; Note: This must be position: relative to allow the spin text to be positioned relative to it.
+    [:div {:style "height: 70px; position: relative;"}
+
+     ;; Note: This must be positioned with z-index: 1 to be over the
+     ;; spin div.
+     [:button#toggle-background.btn.btn-inverse.btn-small {:style "margin-left: 20px; position: relative; z-index: 1"}
+      [:i.icon-white.icon-adjust {:style "margin-right: 10px;"}] "background"]
+
+     [:div {:style "position: absolute; top: 5px; width: 100%; text-align: right; z-index: 0;"}
+      [:span {:style "margin-right: 20px;"} (tr/translate :spin)]]
+
+     ]]
+
+#_ [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
+                                                                      (tr/translate :cart :update))]
 
    [:div.span3
     
@@ -116,12 +130,12 @@
       [:div.control-group
        [:label.control-label {:for "cutout"} (tr/translate :cutout)]
        [:div.controls
-        (f/select :cutout {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
+        (f/select :cutout {:class "customStyleSelectBox" :style "width: 165px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "finish"} (tr/translate :finish)]
        [:div.controls
-        (f/select :finish {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
+        (f/select :finish {:class "customStyleSelectBox" :style "width: 165px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
@@ -196,6 +210,19 @@
          color.pie_picker.init(canvas, palette, callback, options);
          // --------------------
 
+         // Toggle background button handler.
+         $('#toggle-background').click(function(e) {
+           var box = $('#design-box');
+           var bg = box.css('background-color');
+           console.log(bg);
+           if (bg === 'rgb(255, 255, 255)') {
+             box.css('background-color', '#000');
+           }
+           else {
+             box.css('background-color', '#FFF');
+           }
+         });
+
          // Set the container div height to match the width.
          var model = $('#model');
          var height = model.width();
@@ -204,29 +231,10 @@
          // Start animating.
          drawShelving(shelving, model[0]);
          startAnimation();
-
-         // The color picker doesn't have a way to supply a callback in addition
-         // to the synched form field. So, periodically check the background color
-         // of the synched form field and re-render when it changes.
-//         function checkColor() {
-//           var color = $('#color').css('background-color');
-//           color = rgb2hex(color);
-//           if (shelving.color != color) {
-//             shelving.color = color;
-//             // For dark colors, use a gray background.
-//             var bg = luminence(color) > 0.1 ? '#000' : '#666';
-//             $('#model').css({'background-color': bg});
-//             updateAnimation(shelving);
-//           }
-//           // Rate limit model updates since the color picker spews events rapidly
-//           // and can cause slowness and/or webgl crashes.
-//           setTimeout(function() {requestAnimFrame(checkColor);}, 1000);
-//         }
-//         checkColor();
      });"
      ]]
    ])
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form (:shelving sf/cart-items) (:params req) (body)) 544)))
+  (response (standard-page (head) (f/with-form (:shelving sf/cart-items) (:params req) (body)) 520)))
