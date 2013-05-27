@@ -82,7 +82,7 @@
 (defn body
   []
   [:div.row
-   [:div#design-box.span6  {:style "background-color: #FFF;"}
+   [:div#design-box.span6  {:style "background-color: #000;"}
     ;; 3d model
     [:div#model]
 
