@@ -1,0 +1,5 @@
+* FILES
+palette-64.xcf    64x64 squares of each color cropped from image scaled down to 512
+
+* NOTES
+Need to get a better source texture for chocolate brown oiled.
