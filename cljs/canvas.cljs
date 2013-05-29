@@ -2,6 +2,7 @@
   (:require [monet.canvas :as c])
   (:use [jayq.util :only [log]]))
 
+;;
 ;; Note: Degrees proceed in counter clockwise fashion (as y axis is reversed).
 ;;
 ;;         -pi/2
@@ -50,7 +51,18 @@
 (defn center
   "Returns the center of an element or event."
   [item]
+  (let [e (if (.-nodeType item)
+            item ; dom element
+            (.-target item) ; event target
+            )]
+    (point (-> e .-width (/ 2))
+           (-> e .-height (/ 2)))))
 
+;; WTF, somehow having this here fixes the center not found error
+;;
+(defn centerZ
+  "Returns the center of an element or event."
+  [item]
   (let [e (if (.-nodeType item)
             item ; dom element
             (.-target item) ; event target
@@ -78,3 +90,8 @@
 (defn clear [ctx]
   "Clears a canvas."
   (c/clear-rect ctx (extent ctx)))
+
+(defn image
+  [ctx img {:keys [x y]}]
+  (.drawImage ctx img x y)
+  ctx)

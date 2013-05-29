@@ -429,6 +429,7 @@ Steps:
 ;; options:  optional map to override defaults options
 (defn ^:export init [canvas, palette, callback, options]
   (log "initializing")
+  ;;(c2/centerZ canvas)
   (let [options (util.map/deep-merge-with identity defaults options)]
     (binding [wheel {:opts options}]
       ;; Make the graph data structure representing the color wheel.
