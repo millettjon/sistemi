@@ -42,25 +42,16 @@
 
       (if (-> e .-pageX nil? not)
         ;; firefox mouse event
-        (point (- (.-pageX e) ox) (- (.-pageY e) oy))
+        ;; See: http://www.jacklmoore.com/notes/mouse-position/
+        (let [rect (-> e .-target .getBoundingClientRect)]
+          (point (- (.-clientX e) (.-left rect)) (- (.-clientY e) (.-top rect))))
+        #_(point (- (.-pageX e) ox) (- (.-pageY e) oy))
 
         ; touch event
         (let [t (-> e .-touches first)]
           (point (- (.-pageX t) ox) (- (.-pageY t) oy)))))))
 
 (defn center
-  "Returns the center of an element or event."
-  [item]
-  (let [e (if (.-nodeType item)
-            item ; dom element
-            (.-target item) ; event target
-            )]
-    (point (-> e .-width (/ 2))
-           (-> e .-height (/ 2)))))
-
-;; WTF, somehow having this here fixes the center not found error
-;;
-(defn centerZ
   "Returns the center of an element or event."
   [item]
   (let [e (if (.-nodeType item)
