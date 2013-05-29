@@ -1,12 +1,7 @@
 (ns color.valchromat
-  "Valchromate colors.")
+  "Valchromat colors.")
 
 ;; Official list of colors - http://www.valchromat.pt/gama.aspx?menuid=963&eid=3058
-
-;; ? where can i get samples from for rendering?
-;; - http://www.privatelabel.co.za/valcromat/html/downloads/Valchromat-Colour-Chart.pdf
-;; - http://www.polytecdesign.com.au/architectural/valchromat/
-;;   - large samples
 
 (def palette-raw
   (map #(assoc % :type :valchromat)
@@ -15,12 +10,12 @@
         {:name :black :code :SBL}
         {:name :chocolate-brown :code :SCB}
         {:name :brown :code :SBR}
-        {:name :yellow :code :SYW}
-        {:name :orange :code :SOR}
         {:name :red :code :SSC}
-        {:name :violet :code :SVI}
+        {:name :orange :code :SOR}
+        {:name :yellow :code :SYW}
+        {:name :green :code :SGR}
         {:name :blue :code :SRB}
-        {:name :green :code :SGR}]))
+        {:name :violet :code :SVI}]))
 
-(def palette-oil
-  (map #(assoc % :finish :oil) palette-raw))
+(def palette-oiled
+  (map #(assoc % :finish :oiled) palette-raw))

@@ -22,23 +22,6 @@
    :focus-bar-width 2
    })
 
-(defn- clear-color-label
-  []
-  (let [{:keys [ctx center opts]} wheel
-        ;; Calculate a bounding radius of inner circle and clear it.
-        radius (- (:radius opts)
-                  (:width opts)
-                  3  ; width of focus arc
-                  1  ; safety margin
-                  )]
-
-    ;; Fill inner circle with black.
-    (-> ctx
-        c/begin-path
-        (c2/arc center radius 0 (* 2 Math/PI) :cw)
-        (c/fill-style "black")
-        c/fill)))
-
 (defn- draw-static-wheel
   [ctx]
   (let [{:keys [background center]
@@ -82,6 +65,15 @@
             (c2/line-to start)
             c/fill)))))
 
+(defn- set-color-label!
+  [state & [index]]
+  (let [text (case state
+               :empty ""
+               :palette "Valchromat"
+               :color (->> index (nth (:palette wheel)) :name name))]
+    (-> (:color-label wheel)
+        (d/set-text! text))))
+
 (defn- redraw
   []
   (let [{:keys [ctx]} wheel]
@@ -92,13 +84,13 @@
         (c/fill-style :#777)
         (c/font-style "bold 12px Arial")
         (c/text-align :left)
-        (c/text {:text "VAL" :x 0 :y 15})
+        #_(c/text {:text "VAL" :x 0 :y 15})
 
         ;; Draw background wheel image.
         ;;draw-static-wheel
         draw-wheel)
 
-    (clear-color-label)))
+    (set-color-label! :palette)))
 
 ;; Adjust angle to match start of pie slices.
 ;; Note:
@@ -132,19 +124,20 @@
         arc-length (adjust-angle theta)
 
         ;; Find bucket index.
-        bucket-arc (-> Math.PI (* 2) (/ (-> wheel :swatches count)))
+        bucket-arc (-> Math.PI (* 2) (/ (-> wheel :palette count)))
         ]
     (Math/floor (-> arc-length (/ bucket-arc)))))
 
+    
 (defn- focus-swatch
   "Focuses or unfocuses a swatch"
   [index focus?]   ; focus if focus? is true, otherwise unfocus
-  (let [{:keys [ctx center swatches]
+  (let [{:keys [ctx center palette]
          {:keys [radius]} :opts} wheel
         radius (+ radius 2) ; add a margin to the radius
 
         ;; find start and end angles for the slice
-        palette-length (count swatches)
+        palette-length (count palette)
         start-angle (-> Math/PI (* 2) (* index) (/ palette-length))
         end-angle (-> Math/PI (* 2) (* (inc index)) (/ palette-length))
 
@@ -175,8 +168,9 @@
   [e]
   (let [{:keys [ctx center cursor]} wheel
         index (bucket-index e)]
-    (log "set-focus: index: " index)
+    #_ (log "set-focus: index: " index)
     (focus-swatch index true)
+    (set-color-label! :color index)
     (swap! cursor (constantly index))))
 
 (defn on-mousemove
@@ -193,7 +187,8 @@
      (and (<= distance radius)
           (>= distance (- radius width)))
      (let [index (bucket-index e)]
-        #_(log "outer band: " index)
+        (log "outer band: " index)
+        (log offset)
         ;; Update display if moving to a new bucket.
         (when (not= @cursor index)
           (clear-focus)
@@ -203,22 +198,24 @@
      ;; OUTSIDE THE OUTER BAND
      (> distance radius)
      (when @cursor
-       (log "outside")
+       #_ (log "outside")
        (clear-focus)
        (redraw))
 
      ;; IN THE INNER CIRCLE
      :default
      (when @cursor
-       (log "inside")
+       #_ (log "inside")
+       (set-color-label! :empty)
        (clear-focus)))))
 
 (defn on-mousedown
   [e]
   (log "mousedown")
-  ;; (when-let [color (get-color e)]
-  ;;   ((:callback wheel) (clj->js color)))
-  )
+  (when-let [index @(:cursor wheel)]
+    (let [{:keys [callback palette]} wheel
+          color (nth palette index)]
+      (callback (clj->js color)))))
 
 (defn on-touchstart
   [e]
@@ -254,44 +251,68 @@
     (binding [wheel w]
       (apply f args))))
 
-(defn ^:export init [canvas callback]
+(defn ^:export init [canvas palette callback]
   (log "initializing valchromat wheel raw")
 
-  (onload-let [wheel-raw "valchromat-wheel-raw.png"
-               palette-raw "valchromat-raw-palette-64.jpg"
-               palette-oiled "valchromat-oiled-palette-64.jpg"]
+  ;; TODO: load textures based on current palette
+  ;;(log (-> js/window .-location .-pathname))
 
-              ;; draw raw palette
-              (d/append! (sel1 :body) [:br])
-              (d/append! (sel1 :body) [:br])
-              (doseq [i (range 11)]
-                (let [swatch (img/get-img palette-raw 64 i)]
-                  (d/append! (sel1 :body) swatch)))
+  ;; ? how to load image relative to namespace?
+  ;;   - note: can't be relative since any page could be calling this
+  ;; ns color.val-picker
+  ;; path /color/val-picker/foo
+  ;;
+  ;; ? how to determine root path when loaded as a file?
+  ;;   - search back up path for munged namespace file://foo/bar/baz/color/val-picker
+  ;;
+  ;; actual path is /pie-picker
 
-              ;; draw oiled palette
-              (d/append! (sel1 :body) [:br])
-              (doseq [i (range 11)]
-                (let [swatch (img/get-img palette-oiled 64 i)]
-                  (d/append! (sel1 :body) swatch)))
+  ;; ? how to determine location of image?
+  ;; ? how to get this to work for both a file and a web page?
+  ;; ? is there a way to determine the current root?
+  ;; ? is there a way to load images from the directory in which we are?
+  ;; /pie-picker/valchromat-raw-palette-64.jpg
+  ;; /pie-picker/valchromat-raw-palette-64.jpg
+  (let [[palette palette-src] (case palette
+                                "raw"  [color.valchromat/palette-raw "valchromat-raw-palette-64.jpg"]
+                                "oiled" [color.valchromat/palette-oiled "valchromat-oiled-palette-64.jpg"])]
+    (onload-let [;;wheel-raw "valchromat-wheel-raw.png"
+                 ;;palette-raw "valchromat-raw-palette-64.jpg"
+                 ;;palette-oiled "valchromat-oiled-palette-64.jpg"
+                 textures palette-src]
 
-              ;; (c2/centerZ canvas)
-              (set! wheel (assoc wheel
-                            :opts defaults
-                            :swatches [1 2 3 4 5 6 7 8 9 10 11]
-                            :textures (for [i (range 11)] (img/get-img palette-raw 64 i))
-                            :canvas canvas
-                            :callback callback
-                            :background wheel-raw
-                            :ctx (c/get-context canvas "2d")
-                            :center (c2/center canvas)
-                            :cursor (atom nil)))
-              (redraw)
+                ;; draw raw palette
+                ;; (d/append! (sel1 :body) [:br])
+                ;; (d/append! (sel1 :body) [:br])
+                ;; (doseq [i (range 11)]
+                ;;   (let [swatch (img/get-img palette-raw 64 i)]
+                ;;     (d/append! (sel1 :body) swatch)))
 
-              ;; Hookup event handlers.
-              (d/listen! canvas :mousemove (wheel-fn wheel on-mousemove))
-              (d/listen! canvas :mousedown (wheel-fn wheel on-mousedown))
-              (d/listen! canvas :touchstart (wheel-fn wheel on-touchstart))
-              (d/listen! canvas :touchmove (wheel-fn wheel on-touchmove))
-              (d/listen! canvas :touchend (wheel-fn wheel on-touchend))
-              (d/listen! canvas :mouseout (wheel-fn wheel on-mouseout))
-              ))
+                ;; draw oiled palette
+                ;; (d/append! (sel1 :body) [:br])
+                ;; (doseq [i (range 11)]
+                ;;   (let [swatch (img/get-img palette-oiled 64 i)]
+                ;;     (d/append! (sel1 :body) swatch)))
+
+                (set! wheel (assoc wheel
+                              :opts defaults
+                              :palette palette
+                              :textures (for [i (range 11)] (img/get-img textures 64 i))
+                              :canvas canvas
+                              :color-label (sel1 :#color-label)
+                              :callback callback
+                              ;;:background wheel-raw
+                              :ctx (c/get-context canvas "2d")
+                              :center (c2/center canvas)
+                              :cursor (atom nil)))
+                (log (c2/center canvas))
+                (redraw)
+
+                ;; Hookup event handlers.
+                (d/listen! canvas :mousemove (wheel-fn wheel on-mousemove))
+                (d/listen! canvas :mousedown (wheel-fn wheel on-mousedown))
+                (d/listen! canvas :touchstart (wheel-fn wheel on-touchstart))
+                (d/listen! canvas :touchmove (wheel-fn wheel on-touchmove))
+                (d/listen! canvas :touchend (wheel-fn wheel on-touchend))
+                (d/listen! canvas :mouseout (wheel-fn wheel on-mouseout))
+                )))

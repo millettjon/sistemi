@@ -22,7 +22,7 @@ Example:
           ;; Create a list of images and there sources to later load.
           ;; Set up the onload hander for each image to add it to the atom.
           m (into {} (for [[k src] m]
-                       [src (let [img (js* "new Image()")
+                       [src (let [img (js/Image.)
                                   f   (fn [] (swap! a #(assoc % k img)))]
                               (set! (.-onabort img) f)
                               (set! (.-onerror img) f)
