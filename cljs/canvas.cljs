@@ -86,3 +86,4 @@
   [ctx img {:keys [x y]}]
   (.drawImage ctx img x y)
   ctx)
+

@@ -1,5 +1,6 @@
 (ns color.val-picker
-  (:require [monet.canvas :as c]
+  (:require [color.valchromat :as v]
+            [monet.canvas :as c]
             [canvas :as c2]
             [dommy.core :as d]
             util.map
@@ -69,7 +70,7 @@
   [state & [index]]
   (let [text (case state
                :empty ""
-               :palette "Valchromat"
+               :palette (:label wheel)
                :color (->> index (nth (:palette wheel)) :name name))]
     (-> (:color-label wheel)
         (d/set-text! text))))
@@ -92,24 +93,11 @@
 
     (set-color-label! :palette)))
 
-;; Adjust angle to match start of pie slices.
-;; Note:
-;; - the pie chart is aligned at 6 o'clock and
-;; - 3 pie slices are just greater than 90 degrees
-(defn- adjust-angle
-  "Adjusts an angle for swatch offset."
-  ([angle] (adjust-angle angle :cw))
-  ([angle direction]
-  (let [offset (- (* (/ (* 2 Math/PI) 11) 3) ; 3 pie sections
-                    (/ Math/PI 2))
-        f (get {:cw + :ccw -} direction)
-        ;angle (f angle offset)
-        ]
-
-    ;; Normalize and returnl
-    (if (>= angle 0)
-      angle
-      (+ angle (* 2 Math/PI))))))
+(defn- normalize-angle
+  [angle]
+  (if (>= angle 0)
+    angle
+    (+ angle (* 2 Math/PI))))
 
 (defn- bucket-index
   "Returns the index of the swatch which the mouse is over."
@@ -119,14 +107,12 @@
 
         ;; Find polar angle.
         p (c2/point-diff offset center)
-        theta (Math/atan2 (:y p) (:x p))
-
-        arc-length (adjust-angle theta)
+        theta (-> (Math/atan2 (:y p) (:x p)) normalize-angle)
 
         ;; Find bucket index.
         bucket-arc (-> Math.PI (* 2) (/ (-> wheel :palette count)))
         ]
-    (Math/floor (-> arc-length (/ bucket-arc)))))
+    (Math/floor (-> theta (/ bucket-arc)))))
 
     
 (defn- focus-swatch
@@ -146,8 +132,8 @@
         end-angle (+ end-angle (if focus? 0 0.02))
 
         ;; adjust for offset of pie slices in image
-        start-angle (adjust-angle start-angle :ccw)
-        end-angle (adjust-angle end-angle :ccw)]
+        start-angle (normalize-angle start-angle)
+        end-angle (normalize-angle end-angle)]
 
     ;; Draw focus arc.
     (-> ctx
@@ -187,13 +173,11 @@
      (and (<= distance radius)
           (>= distance (- radius width)))
      (let [index (bucket-index e)]
-        (log "outer band: " index)
-        (log offset)
-        ;; Update display if moving to a new bucket.
-        (when (not= @cursor index)
-          (clear-focus)
-          (set-focus e)
-          ))
+       #_ (log "outer band: " index)
+       ;; Update display if moving to a new bucket.
+       (when (not= @cursor index)
+         (clear-focus)
+         (set-focus e)))
 
      ;; OUTSIDE THE OUTER BAND
      (> distance radius)
@@ -251,61 +235,26 @@
     (binding [wheel w]
       (apply f args))))
 
-(defn ^:export init [canvas palette callback]
+(defn ^:export init [canvas palette-name callback]
   (log "initializing valchromat wheel raw")
 
   ;; TODO: load textures based on current palette
   ;;(log (-> js/window .-location .-pathname))
 
-  ;; ? how to load image relative to namespace?
-  ;;   - note: can't be relative since any page could be calling this
-  ;; ns color.val-picker
-  ;; path /color/val-picker/foo
-  ;;
-  ;; ? how to determine root path when loaded as a file?
-  ;;   - search back up path for munged namespace file://foo/bar/baz/color/val-picker
-  ;;
-  ;; actual path is /pie-picker
-
-  ;; ? how to determine location of image?
-  ;; ? how to get this to work for both a file and a web page?
-  ;; ? is there a way to determine the current root?
-  ;; ? is there a way to load images from the directory in which we are?
-  ;; /pie-picker/valchromat-raw-palette-64.jpg
-  ;; /pie-picker/valchromat-raw-palette-64.jpg
-  (let [[palette palette-src] (case palette
-                                "raw"  [color.valchromat/palette-raw "valchromat-raw-palette-64.jpg"]
-                                "oiled" [color.valchromat/palette-oiled "valchromat-oiled-palette-64.jpg"])]
-    (onload-let [;;wheel-raw "valchromat-wheel-raw.png"
-                 ;;palette-raw "valchromat-raw-palette-64.jpg"
-                 ;;palette-oiled "valchromat-oiled-palette-64.jpg"
-                 textures palette-src]
-
-                ;; draw raw palette
-                ;; (d/append! (sel1 :body) [:br])
-                ;; (d/append! (sel1 :body) [:br])
-                ;; (doseq [i (range 11)]
-                ;;   (let [swatch (img/get-img palette-raw 64 i)]
-                ;;     (d/append! (sel1 :body) swatch)))
-
-                ;; draw oiled palette
-                ;; (d/append! (sel1 :body) [:br])
-                ;; (doseq [i (range 11)]
-                ;;   (let [swatch (img/get-img palette-oiled 64 i)]
-                ;;     (d/append! (sel1 :body) swatch)))
-
+  (let [{:keys [colors textures-src label]} ((keyword palette-name) v/palettes)]
+    (onload-let [textures textures-src]
                 (set! wheel (assoc wheel
                               :opts defaults
-                              :palette palette
+                              :palette colors
                               :textures (for [i (range 11)] (img/get-img textures 64 i))
                               :canvas canvas
                               :color-label (sel1 :#color-label)
+                              :label label
                               :callback callback
                               ;;:background wheel-raw
                               :ctx (c/get-context canvas "2d")
                               :center (c2/center canvas)
                               :cursor (atom nil)))
-                (log (c2/center canvas))
                 (redraw)
 
                 ;; Hookup event handlers.
