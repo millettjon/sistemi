@@ -237,14 +237,11 @@
 
 (defn ^:export init [container palette-name callback]
   (log "initializing valchromat wheel " palette-name)
-  ;(d/append! (sel1 container) [:p "here is some text"])
-  ;(d/append! (sel1 :#colorwheel-container) [:p "here is some textz"])
-  ;(d/append! (sel1 :body) [:p "here is some text"])
 
   ;; TODO: load textures based on current palette
   ;;(log (-> js/window .-location .-pathname))
 
-  (let [canvas (node [:canvas {:width 195 :height 195 :style {:positionz "relative" #_ "absolute" :left "0px" :top "0px"}}])
+  (let [canvas (node [:canvas {:width 195 :height 195}])
         color-label (node [:span {:style {:display "table-cell" :vertical-align "middle" :max-width "90px"}}])
         {:keys [colors textures-src label]} ((keyword palette-name) v/palettes)]
     (onload-let [textures textures-src]
