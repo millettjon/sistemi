@@ -1,7 +1,9 @@
 #!/bin/bash
 
+# Foreman starts on port 5000 by default, however linode blocks this
+# (and some other ports) so change the port to one that works.
 if [[ -e etc/environment ]]; then
-    foreman start -e etc/environment
+    foreman start -e etc/environment -p 2000
 else
-    foreman start
+    foreman start -p 2000
 fi
