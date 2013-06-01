@@ -6,7 +6,7 @@
             util.map
             [image :as img])
   (:use [jayq.util :only [log]])
-  (:use-macros [dommy.macros :only [sel sel1]]
+  (:use-macros [dommy.macros :only [sel sel1 node]]
                [image.macros :only [onload-let]]))
 
 (def ^:dynamic wheel)
@@ -235,33 +235,96 @@
     (binding [wheel w]
       (apply f args))))
 
-(defn ^:export init [canvas palette-name callback]
-  (log "initializing valchromat wheel raw")
+(defn ^:export init [container palette-name callback]
+  (log "initializing valchromat wheel " palette-name)
+  ;(d/append! (sel1 container) [:p "here is some text"])
+  ;(d/append! (sel1 :#colorwheel-container) [:p "here is some textz"])
+  ;(d/append! (sel1 :body) [:p "here is some text"])
 
   ;; TODO: load textures based on current palette
   ;;(log (-> js/window .-location .-pathname))
 
-  (let [{:keys [colors textures-src label]} ((keyword palette-name) v/palettes)]
+  (let [canvas (node [:canvas {:width 195 :height 195 :style {:positionz "relative" #_ "absolute" :left "0px" :top "0px"}}])
+        color-label (node [:span {:style {:display "table-cell" :vertical-align "middle" :max-width "90px"}}])
+        {:keys [colors textures-src label]} ((keyword palette-name) v/palettes)]
     (onload-let [textures textures-src]
+                ;; Setup the dynamic var to use in event handlers.
                 (set! wheel (assoc wheel
                               :opts defaults
                               :palette colors
                               :textures (for [i (range 11)] (img/get-img textures 64 i))
                               :canvas canvas
-                              :color-label (sel1 :#color-label)
+                              :color-label color-label
                               :label label
                               :callback callback
-                              ;;:background wheel-raw
                               :ctx (c/get-context canvas "2d")
                               :center (c2/center canvas)
                               :cursor (atom nil)))
-                (redraw)
 
-                ;; Hookup event handlers.
-                (d/listen! canvas :mousemove (wheel-fn wheel on-mousemove))
-                (d/listen! canvas :mousedown (wheel-fn wheel on-mousedown))
-                (d/listen! canvas :touchstart (wheel-fn wheel on-touchstart))
-                (d/listen! canvas :touchmove (wheel-fn wheel on-touchmove))
-                (d/listen! canvas :touchend (wheel-fn wheel on-touchend))
-                (d/listen! canvas :mouseout (wheel-fn wheel on-mouseout))
-                )))
+                (let [;; Add DOM elements to container
+                      ;; wrapper needs position relative so that color label div and be positioned absolutely
+                      wrapper [:div {:style {:position "relative"}}
+                               canvas
+                               ;; wrapper div to center color label in wheel
+                               ;; note: z-index of -1 so that canvas doesn't get mouseout events when mouse is over label
+                               [:div {:style {:position "absolute" :left "53px" :top "72px"
+                                              :width "90px" :height "50px"
+                                              :font-size "12px"
+                                              :color "#AAA"
+                                              :display "table"
+                                              :text-align "center"
+                                              :overflow "hidden"
+                                              :z-index "-1"}}
+                                color-label]]]
+
+                  (d/append! (sel1 (keyword container)) wrapper)
+
+                  (redraw)
+
+                  ;; Hookup event handlers.
+                  (d/listen! canvas :mousemove (wheel-fn wheel on-mousemove))
+                  (d/listen! canvas :mousedown (wheel-fn wheel on-mousedown))
+                  (d/listen! canvas :touchstart (wheel-fn wheel on-touchstart))
+                  (d/listen! canvas :touchmove (wheel-fn wheel on-touchmove))
+                  (d/listen! canvas :touchend (wheel-fn wheel on-touchend))
+                  (d/listen! canvas :mouseout (wheel-fn wheel on-mouseout))
+                  ))))
+
+;;  visibility:
+;;    visible  default
+;;    hidden   takes up space
+;;    none     doesn't take up space
+;; ? How to delete event handlers?
+;; ? How to show/hide a layer?
+;;   ? Do the event handers need disabled if a layer is hidden?
+;; ? How does the color field get updated?
+;; ? How does the finish update the color wheel?
+
+;; requirements
+;; - switching between 3 color wheels that overlap in the same space
+;;   ? visibility: none?
+;;     ? is there a flicker when updating layout after a switch?
+;;   ? visibility: hidden
+;;     - requires absolute positioning
+;;       - which requires a container div with non-static positioning
+
+;; div             external container
+;;   div           internal wrapper container
+;;     canvas  
+;;     div         div for verticle and horizontal centering of label
+;;       label     centered label to display palette/color name
+
+;; ? how to overlap two color wheels?
+;;   - do it in page w/ wrapper div and absolute positioning
+;;     div      wheel area (position relative; fixed size?)
+;;       div-ral     container for ral color wheel (absolute position 0 0)
+;;       div-raw     container for raw color wheel (absolute position 0 0)
+;;       div-oiled   container for oiled color wheel (absolute position 0 0)
+;;
+;; ? how to toggle visibility?
+;;   oiled check box
+;;   ? how to show hide elements?
+;;     - show/hide the container
+;;     ? how to return dom elements to normal js? ?use selector strings?
+;;       - can't return anything since image-let is asynchronous
+;;         - onload callback?

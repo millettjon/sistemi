@@ -9,26 +9,13 @@
 
 <body style="background: #000; color: grey; font-family: sans-serif;">
 
-  <div style="position: relative; top: 0; left: 0;">
-    <canvas id="colorwheel" width="195" height="195"></canvas>
-    <div style="position: absolute; left: 53px; top: 72px;
-                width: 90px; height: 50px;
-                background_: #222;
-                font_: bold 12px Arial;
-                font-size: 12px;
-                color: #AAA;
-                display: table;
-                text-align: center;
-                overflow: hidden;
-                z-index: -1;
-                ">
-      <!-- note: z-index of -1 so that canvas doesn't get mouseout events when mouse is over label -->
-      <!-- <span style="display: table-cell; vertical-align: middle;">RAL<br/>(laquer)</span> -->
-      <!-- <span style="display: table-cell; vertical-align: middle;">Valchromat</span> -->
-      <!-- <span id="color-label" style="display: table-cell; vertical-align: middle;">Valchromat</br>(oiled)</span> -->
-      <span id="color-label" style="display: table-cell; vertical-align: middle; max-width: 90px;"></span>
-    </div>
+  <div style="position: relative; height: 195px; width: 195px;">
+    <div id="wheel-raw" style="position: absolute; top: 0px; left: 0px;"></div>
+    <div id="wheel-oiled" style="position: absolute; top: 0px; left: 0px; visibility: hidden;"></div>
   </div>
+
+  <br/>
+  Oiled <input id="oiled" type="checkbox">
 
 </body>
 </html>
