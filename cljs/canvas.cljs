@@ -2,6 +2,7 @@
   (:require [monet.canvas :as c])
   (:use [jayq.util :only [log]]))
 
+
 ;;
 ;; Note: Degrees proceed in counter clockwise fashion (as y axis is reversed).
 ;;
@@ -31,25 +32,17 @@
 (defn offset
   "Returns the x, y offset of an event in its target."
   [e]
-  (let [])
-  
-  (if (-> e .-offsetX nil? not)
+  (if-let [ox (.-offsetX e)]
     ;; mouse event
-    (point (.-offsetX e) (.-offsetY e))
+    (point ox (.-offsetY e))
 
-    (let [ox (-> e .-target .-offsetLeft)
-          oy (-> e .-target .-offsetTop)]
-
-      (if (-> e .-pageX nil? not)
-        ;; firefox mouse event
-        ;; See: http://www.jacklmoore.com/notes/mouse-position/
-        (let [rect (-> e .-target .getBoundingClientRect)]
-          (point (- (.-clientX e) (.-left rect)) (- (.-clientY e) (.-top rect))))
-        #_(point (- (.-pageX e) ox) (- (.-pageY e) oy))
-
-        ; touch event
-        (let [t (-> e .-touches first)]
-          (point (- (.-pageX t) ox) (- (.-pageY t) oy)))))))
+    ;; firefox mouse event
+    ;; See: http://www.jacklmoore.com/notes/mouse-position/
+    (let [rect (-> e .-target .getBoundingClientRect)
+          item (if-let [touches (-> e .-touches)] ; touch event
+                 (.item touches 0)
+                 e)]
+      (point (- (.-clientX item) (.-left rect)) (- (.-clientY item) (.-top rect))))))
 
 (defn center
   "Returns the center of an element or event."
@@ -86,4 +79,4 @@
   [ctx img {:keys [x y]}]
   (.drawImage ctx img x y)
   ctx)
-;
+

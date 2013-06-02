@@ -203,25 +203,22 @@
 
 (defn on-touchstart
   [e]
-  (let [oe (.-originalEvent e)]
-    (when (= 1 (.. oe touches length))
-      (.-preventDefault e)
-      (on-mousemove e) ; needed for firefox on android to focus a swatch on tap
-      )))
+  (when (= 1 (-> e .-touches .-length))
+    (.preventDefault e)
+    (on-mousemove e) ; needed for firefox on android to focus a swatch on tap
+    ))
 
 (defn on-touchmove
   [e]
-  (let [oe (.-originalEvent e)]
-    (when (= 1 (.. oe touches length))
-      (.-preventDefault e)
-      (on-mousemove e))))
+  (when (= 1 (-> e .-touches .-length))
+    (.-preventDefault e)
+    (on-mousemove e)))
 
 (defn on-touchend
   [e]
-  (let [oe (.-originalEvent e)]
-    (when (= 1 (.. oe touches length))
-      (.-preventDefault e)
-      (on-mousedown e))))
+  (when (= 1 (-> e .-touches .-length))
+    (.-preventDefault e)
+    (on-mousedown e)))
 
 (defn on-mouseout
   [e]
