@@ -23679,42 +23679,42 @@ goog.require("monet.canvas");
 goog.require("color.valchromat");
 color.val_picker.defaults = cljs.core.ObjMap.fromObject(["\ufdd0'radius", "\ufdd0'width", "\ufdd0'focus-bar-width"], {"\ufdd0'radius":94, "\ufdd0'width":43, "\ufdd0'focus-bar-width":2});
 color.val_picker.draw_static_wheel = function draw_static_wheel(ctx) {
-  var map__29444 = color.val_picker.wheel;
-  var map__29444__$1 = cljs.core.seq_QMARK_.call(null, map__29444) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29444) : map__29444;
-  var center = cljs.core._lookup.call(null, map__29444__$1, "\ufdd0'center", null);
-  var background = cljs.core._lookup.call(null, map__29444__$1, "\ufdd0'background", null);
-  var map__29445 = cljs.core._lookup.call(null, map__29444__$1, "\ufdd0'opts", null);
-  var map__29445__$1 = cljs.core.seq_QMARK_.call(null, map__29445) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29445) : map__29445;
-  var radius = cljs.core._lookup.call(null, map__29445__$1, "\ufdd0'radius", null);
+  var map__46412 = color.val_picker.wheel;
+  var map__46412__$1 = cljs.core.seq_QMARK_.call(null, map__46412) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46412) : map__46412;
+  var center = cljs.core._lookup.call(null, map__46412__$1, "\ufdd0'center", null);
+  var background = cljs.core._lookup.call(null, map__46412__$1, "\ufdd0'background", null);
+  var map__46413 = cljs.core._lookup.call(null, map__46412__$1, "\ufdd0'opts", null);
+  var map__46413__$1 = cljs.core.seq_QMARK_.call(null, map__46413) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46413) : map__46413;
+  var radius = cljs.core._lookup.call(null, map__46413__$1, "\ufdd0'radius", null);
   return monet.canvas.stroke.call(null, monet.canvas.stroke_style.call(null, monet.canvas.stroke_width.call(null, canvas.arc.call(null, monet.canvas.begin_path.call(null, canvas.image.call(null, ctx, (new cljs.core.Keyword("\ufdd0'background")).call(null, color.val_picker.wheel), cljs.core.ObjMap.fromObject(["\ufdd0'x", "\ufdd0'y"], {"\ufdd0'x":0, "\ufdd0'y":0}))), center, radius - 0, 0, 2 * Math.PI, "\ufdd0'cw"), 4), "#000"))
 };
 color.val_picker.draw_wheel = function draw_wheel(ctx) {
-  var map__29449 = color.val_picker.wheel;
-  var map__29449__$1 = cljs.core.seq_QMARK_.call(null, map__29449) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29449) : map__29449;
-  var textures = cljs.core._lookup.call(null, map__29449__$1, "\ufdd0'textures", null);
-  var center = cljs.core._lookup.call(null, map__29449__$1, "\ufdd0'center", null);
-  var map__29450 = cljs.core._lookup.call(null, map__29449__$1, "\ufdd0'opts", null);
-  var map__29450__$1 = cljs.core.seq_QMARK_.call(null, map__29450) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29450) : map__29450;
-  var width = cljs.core._lookup.call(null, map__29450__$1, "\ufdd0'width", null);
-  var radius = cljs.core._lookup.call(null, map__29450__$1, "\ufdd0'radius", null);
+  var map__46417 = color.val_picker.wheel;
+  var map__46417__$1 = cljs.core.seq_QMARK_.call(null, map__46417) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46417) : map__46417;
+  var textures = cljs.core._lookup.call(null, map__46417__$1, "\ufdd0'textures", null);
+  var center = cljs.core._lookup.call(null, map__46417__$1, "\ufdd0'center", null);
+  var map__46418 = cljs.core._lookup.call(null, map__46417__$1, "\ufdd0'opts", null);
+  var map__46418__$1 = cljs.core.seq_QMARK_.call(null, map__46418) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46418) : map__46418;
+  var width = cljs.core._lookup.call(null, map__46418__$1, "\ufdd0'width", null);
+  var radius = cljs.core._lookup.call(null, map__46418__$1, "\ufdd0'radius", null);
   var inner_radius = radius - width;
   var len = cljs.core.count.call(null, textures);
-  var angle_fn = function(p1__29441_SHARP_) {
-    return p1__29441_SHARP_ / len * 2 * Math.PI
+  var angle_fn = function(p1__46409_SHARP_) {
+    return p1__46409_SHARP_ / len * 2 * Math.PI
   };
-  var G__29451 = cljs.core.seq.call(null, cljs.core.range.call(null, len));
+  var G__46419 = cljs.core.seq.call(null, cljs.core.range.call(null, len));
   while(true) {
-    if(G__29451) {
-      var i = cljs.core.first.call(null, G__29451);
-      var start_angle_29452 = angle_fn.call(null, i);
-      var end_angle_29453 = angle_fn.call(null, i + 1);
-      var start_29454 = canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_29452) + (new cljs.core.Keyword("\ufdd0'x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_29452) + (new cljs.core.Keyword("\ufdd0'y")).call(null, center));
-      var texture_29455 = cljs.core.nth.call(null, textures, i);
-      var pattern_29456 = ctx.createPattern(cljs.core.nth.call(null, textures, i), "repeat");
-      ctx.fillStyle = pattern_29456;
-      monet.canvas.fill.call(null, canvas.line_to.call(null, canvas.arc.call(null, canvas.arc.call(null, canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_29454), center, inner_radius, start_angle_29452, end_angle_29453, "\ufdd0'cw"), center, radius, end_angle_29453, start_angle_29452, "\ufdd0'ccw"), start_29454));
-      var G__29457 = cljs.core.next.call(null, G__29451);
-      G__29451 = G__29457;
+    if(G__46419) {
+      var i = cljs.core.first.call(null, G__46419);
+      var start_angle_46420 = angle_fn.call(null, i);
+      var end_angle_46421 = angle_fn.call(null, i + 1);
+      var start_46422 = canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_46420) + (new cljs.core.Keyword("\ufdd0'x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_46420) + (new cljs.core.Keyword("\ufdd0'y")).call(null, center));
+      var texture_46423 = cljs.core.nth.call(null, textures, i);
+      var pattern_46424 = ctx.createPattern(cljs.core.nth.call(null, textures, i), "repeat");
+      ctx.fillStyle = pattern_46424;
+      monet.canvas.fill.call(null, canvas.line_to.call(null, canvas.arc.call(null, canvas.arc.call(null, canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_46422), center, inner_radius, start_angle_46420, end_angle_46421, "\ufdd0'cw"), center, radius, end_angle_46421, start_angle_46420, "\ufdd0'ccw"), start_46422));
+      var G__46425 = cljs.core.next.call(null, G__46419);
+      G__46419 = G__46425;
       continue
     }else {
       return null
@@ -23723,18 +23723,18 @@ color.val_picker.draw_wheel = function draw_wheel(ctx) {
   }
 };
 color.val_picker.set_color_label_BANG_ = function() {
-  var set_color_label_BANG___delegate = function(state, p__29458) {
-    var vec__29461 = p__29458;
-    var index = cljs.core.nth.call(null, vec__29461, 0, null);
+  var set_color_label_BANG___delegate = function(state, p__46426) {
+    var vec__46429 = p__46426;
+    var index = cljs.core.nth.call(null, vec__46429, 0, null);
     var text = function() {
-      var G__29462 = state;
-      if(cljs.core._EQ_.call(null, "\ufdd0'color", G__29462)) {
+      var G__46430 = state;
+      if(cljs.core._EQ_.call(null, "\ufdd0'color", G__46430)) {
         return cljs.core.name.call(null, (new cljs.core.Keyword("\ufdd0'name")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'palette")).call(null, color.val_picker.wheel), index)))
       }else {
-        if(cljs.core._EQ_.call(null, "\ufdd0'palette", G__29462)) {
+        if(cljs.core._EQ_.call(null, "\ufdd0'palette", G__46430)) {
           return(new cljs.core.Keyword("\ufdd0'label")).call(null, color.val_picker.wheel)
         }else {
-          if(cljs.core._EQ_.call(null, "\ufdd0'empty", G__29462)) {
+          if(cljs.core._EQ_.call(null, "\ufdd0'empty", G__46430)) {
             return""
           }else {
             if("\ufdd0'else") {
@@ -23749,25 +23749,25 @@ color.val_picker.set_color_label_BANG_ = function() {
     return dommy.core.set_text_BANG_.call(null, (new cljs.core.Keyword("\ufdd0'color-label")).call(null, color.val_picker.wheel), text)
   };
   var set_color_label_BANG_ = function(state, var_args) {
-    var p__29458 = null;
+    var p__46426 = null;
     if(goog.isDef(var_args)) {
-      p__29458 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 1), 0)
+      p__46426 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 1), 0)
     }
-    return set_color_label_BANG___delegate.call(this, state, p__29458)
+    return set_color_label_BANG___delegate.call(this, state, p__46426)
   };
   set_color_label_BANG_.cljs$lang$maxFixedArity = 1;
-  set_color_label_BANG_.cljs$lang$applyTo = function(arglist__29463) {
-    var state = cljs.core.first(arglist__29463);
-    var p__29458 = cljs.core.rest(arglist__29463);
-    return set_color_label_BANG___delegate(state, p__29458)
+  set_color_label_BANG_.cljs$lang$applyTo = function(arglist__46431) {
+    var state = cljs.core.first(arglist__46431);
+    var p__46426 = cljs.core.rest(arglist__46431);
+    return set_color_label_BANG___delegate(state, p__46426)
   };
   set_color_label_BANG_.cljs$lang$arity$variadic = set_color_label_BANG___delegate;
   return set_color_label_BANG_
 }();
 color.val_picker.redraw = function redraw() {
-  var map__29465 = color.val_picker.wheel;
-  var map__29465__$1 = cljs.core.seq_QMARK_.call(null, map__29465) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29465) : map__29465;
-  var ctx = cljs.core._lookup.call(null, map__29465__$1, "\ufdd0'ctx", null);
+  var map__46433 = color.val_picker.wheel;
+  var map__46433__$1 = cljs.core.seq_QMARK_.call(null, map__46433) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46433) : map__46433;
+  var ctx = cljs.core._lookup.call(null, map__46433__$1, "\ufdd0'ctx", null);
   color.val_picker.draw_wheel.call(null, monet.canvas.text_align.call(null, monet.canvas.font_style.call(null, monet.canvas.fill_style.call(null, canvas.clear.call(null, ctx), "\ufdd0'#777"), "bold 12px Arial"), "\ufdd0'left"));
   return color.val_picker.set_color_label_BANG_.call(null, "\ufdd0'palette")
 };
@@ -23787,14 +23787,14 @@ color.val_picker.bucket_index = function bucket_index(e) {
   return Math.floor.call(null, theta / bucket_arc)
 };
 color.val_picker.focus_swatch = function focus_swatch(index, focus_QMARK_) {
-  var map__29468 = color.val_picker.wheel;
-  var map__29468__$1 = cljs.core.seq_QMARK_.call(null, map__29468) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29468) : map__29468;
-  var palette = cljs.core._lookup.call(null, map__29468__$1, "\ufdd0'palette", null);
-  var center = cljs.core._lookup.call(null, map__29468__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__29468__$1, "\ufdd0'ctx", null);
-  var map__29469 = cljs.core._lookup.call(null, map__29468__$1, "\ufdd0'opts", null);
-  var map__29469__$1 = cljs.core.seq_QMARK_.call(null, map__29469) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29469) : map__29469;
-  var radius = cljs.core._lookup.call(null, map__29469__$1, "\ufdd0'radius", null);
+  var map__46436 = color.val_picker.wheel;
+  var map__46436__$1 = cljs.core.seq_QMARK_.call(null, map__46436) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46436) : map__46436;
+  var palette = cljs.core._lookup.call(null, map__46436__$1, "\ufdd0'palette", null);
+  var center = cljs.core._lookup.call(null, map__46436__$1, "\ufdd0'center", null);
+  var ctx = cljs.core._lookup.call(null, map__46436__$1, "\ufdd0'ctx", null);
+  var map__46437 = cljs.core._lookup.call(null, map__46436__$1, "\ufdd0'opts", null);
+  var map__46437__$1 = cljs.core.seq_QMARK_.call(null, map__46437) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46437) : map__46437;
+  var radius = cljs.core._lookup.call(null, map__46437__$1, "\ufdd0'radius", null);
   var radius__$1 = radius + 2;
   var palette_length = cljs.core.count.call(null, palette);
   var start_angle = Math.PI * 2 * index / palette_length;
@@ -23808,13 +23808,13 @@ color.val_picker.focus_swatch = function focus_swatch(index, focus_QMARK_) {
 color.val_picker.clear_focus = function clear_focus() {
   var temp__4092__auto__ = color.val_picker.wheel;
   if(cljs.core.truth_(temp__4092__auto__)) {
-    var map__29472 = temp__4092__auto__;
-    var map__29472__$1 = cljs.core.seq_QMARK_.call(null, map__29472) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29472) : map__29472;
-    var cursor = cljs.core._lookup.call(null, map__29472__$1, "\ufdd0'cursor", null);
-    var map__29473_29474 = color.val_picker.wheel;
-    var map__29473_29475__$1 = cljs.core.seq_QMARK_.call(null, map__29473_29474) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29473_29474) : map__29473_29474;
-    var center_29476 = cljs.core._lookup.call(null, map__29473_29475__$1, "\ufdd0'center", null);
-    var ctx_29477 = cljs.core._lookup.call(null, map__29473_29475__$1, "\ufdd0'ctx", null);
+    var map__46440 = temp__4092__auto__;
+    var map__46440__$1 = cljs.core.seq_QMARK_.call(null, map__46440) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46440) : map__46440;
+    var cursor = cljs.core._lookup.call(null, map__46440__$1, "\ufdd0'cursor", null);
+    var map__46441_46442 = color.val_picker.wheel;
+    var map__46441_46443__$1 = cljs.core.seq_QMARK_.call(null, map__46441_46442) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46441_46442) : map__46441_46442;
+    var center_46444 = cljs.core._lookup.call(null, map__46441_46443__$1, "\ufdd0'center", null);
+    var ctx_46445 = cljs.core._lookup.call(null, map__46441_46443__$1, "\ufdd0'ctx", null);
     color.val_picker.focus_swatch.call(null, cljs.core.deref.call(null, cursor), false);
     return cljs.core.swap_BANG_.call(null, cursor, cljs.core.constantly.call(null, null))
   }else {
@@ -23822,22 +23822,22 @@ color.val_picker.clear_focus = function clear_focus() {
   }
 };
 color.val_picker.set_focus = function set_focus(e) {
-  var map__29479 = color.val_picker.wheel;
-  var map__29479__$1 = cljs.core.seq_QMARK_.call(null, map__29479) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29479) : map__29479;
-  var cursor = cljs.core._lookup.call(null, map__29479__$1, "\ufdd0'cursor", null);
-  var center = cljs.core._lookup.call(null, map__29479__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__29479__$1, "\ufdd0'ctx", null);
+  var map__46447 = color.val_picker.wheel;
+  var map__46447__$1 = cljs.core.seq_QMARK_.call(null, map__46447) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46447) : map__46447;
+  var cursor = cljs.core._lookup.call(null, map__46447__$1, "\ufdd0'cursor", null);
+  var center = cljs.core._lookup.call(null, map__46447__$1, "\ufdd0'center", null);
+  var ctx = cljs.core._lookup.call(null, map__46447__$1, "\ufdd0'ctx", null);
   var index = color.val_picker.bucket_index.call(null, e);
   color.val_picker.focus_swatch.call(null, index, true);
   color.val_picker.set_color_label_BANG_.call(null, "\ufdd0'color", index);
   return cljs.core.swap_BANG_.call(null, cursor, cljs.core.constantly.call(null, index))
 };
 color.val_picker.on_mousemove = function on_mousemove(e) {
-  var map__29481 = color.val_picker.wheel;
-  var map__29481__$1 = cljs.core.seq_QMARK_.call(null, map__29481) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29481) : map__29481;
-  var cursor = cljs.core._lookup.call(null, map__29481__$1, "\ufdd0'cursor", null);
-  var opts = cljs.core._lookup.call(null, map__29481__$1, "\ufdd0'opts", null);
-  var center = cljs.core._lookup.call(null, map__29481__$1, "\ufdd0'center", null);
+  var map__46449 = color.val_picker.wheel;
+  var map__46449__$1 = cljs.core.seq_QMARK_.call(null, map__46449) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46449) : map__46449;
+  var cursor = cljs.core._lookup.call(null, map__46449__$1, "\ufdd0'cursor", null);
+  var opts = cljs.core._lookup.call(null, map__46449__$1, "\ufdd0'opts", null);
+  var center = cljs.core._lookup.call(null, map__46449__$1, "\ufdd0'center", null);
   var offset = canvas.offset.call(null, e);
   var distance = canvas.distance.call(null, center, offset);
   var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, opts);
@@ -23884,10 +23884,10 @@ color.val_picker.on_mousedown = function on_mousedown(e) {
   var temp__4092__auto__ = cljs.core.deref.call(null, (new cljs.core.Keyword("\ufdd0'cursor")).call(null, color.val_picker.wheel));
   if(cljs.core.truth_(temp__4092__auto__)) {
     var index = temp__4092__auto__;
-    var map__29483 = color.val_picker.wheel;
-    var map__29483__$1 = cljs.core.seq_QMARK_.call(null, map__29483) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29483) : map__29483;
-    var palette = cljs.core._lookup.call(null, map__29483__$1, "\ufdd0'palette", null);
-    var callback = cljs.core._lookup.call(null, map__29483__$1, "\ufdd0'callback", null);
+    var map__46451 = color.val_picker.wheel;
+    var map__46451__$1 = cljs.core.seq_QMARK_.call(null, map__46451) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46451) : map__46451;
+    var palette = cljs.core._lookup.call(null, map__46451__$1, "\ufdd0'palette", null);
+    var callback = cljs.core._lookup.call(null, map__46451__$1, "\ufdd0'callback", null);
     var color__$1 = cljs.core.nth.call(null, palette, index);
     return callback.call(null, cljs.core.clj__GT_js.call(null, color__$1))
   }else {
@@ -23924,70 +23924,70 @@ color.val_picker.on_mouseout = function on_mouseout(e) {
 };
 color.val_picker.wheel_fn = function wheel_fn(w, f) {
   return function() {
-    var G__29488__delegate = function(args) {
-      var wheel29486 = color.val_picker.wheel;
+    var G__46456__delegate = function(args) {
+      var wheel46454 = color.val_picker.wheel;
       try {
         color.val_picker.wheel = w;
         return cljs.core.apply.call(null, f, args)
       }finally {
-        color.val_picker.wheel = wheel29486
+        color.val_picker.wheel = wheel46454
       }
     };
-    var G__29488 = function(var_args) {
+    var G__46456 = function(var_args) {
       var args = null;
       if(goog.isDef(var_args)) {
         args = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0)
       }
-      return G__29488__delegate.call(this, args)
+      return G__46456__delegate.call(this, args)
     };
-    G__29488.cljs$lang$maxFixedArity = 0;
-    G__29488.cljs$lang$applyTo = function(arglist__29489) {
-      var args = cljs.core.seq(arglist__29489);
-      return G__29488__delegate(args)
+    G__46456.cljs$lang$maxFixedArity = 0;
+    G__46456.cljs$lang$applyTo = function(arglist__46457) {
+      var args = cljs.core.seq(arglist__46457);
+      return G__46456__delegate(args)
     };
-    G__29488.cljs$lang$arity$variadic = G__29488__delegate;
-    return G__29488
+    G__46456.cljs$lang$arity$variadic = G__46456__delegate;
+    return G__46456
   }()
 };
 color.val_picker.init = function init(container, palette_name, callback) {
   jayq.util.log.call(null, "initializing valchromat wheel ", palette_name);
   var canvas__$1 = function() {
-    var dom29497 = document.createElement("canvas");
+    var dom46465 = document.createElement("canvas");
     if(195) {
-      dom29497.setAttribute("width", 195)
+      dom46465.setAttribute("width", 195)
     }else {
     }
     if(195) {
-      dom29497.setAttribute("height", 195)
+      dom46465.setAttribute("height", 195)
     }else {
     }
-    return dom29497
+    return dom46465
   }();
   var color_label = function() {
-    var dom29498 = document.createElement("span");
+    var dom46466 = document.createElement("span");
     if(cljs.core.truth_(cljs.core.ObjMap.fromObject(["\ufdd0'display", "\ufdd0'vertical-align", "\ufdd0'max-width"], {"\ufdd0'display":"table-cell", "\ufdd0'vertical-align":"middle", "\ufdd0'max-width":"90px"}))) {
-      dom29498.setAttribute("style", dommy.core.style_str.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'display", "\ufdd0'vertical-align", "\ufdd0'max-width"], {"\ufdd0'display":"table-cell", "\ufdd0'vertical-align":"middle", "\ufdd0'max-width":"90px"})))
+      dom46466.setAttribute("style", dommy.core.style_str.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'display", "\ufdd0'vertical-align", "\ufdd0'max-width"], {"\ufdd0'display":"table-cell", "\ufdd0'vertical-align":"middle", "\ufdd0'max-width":"90px"})))
     }else {
     }
-    return dom29498
+    return dom46466
   }();
-  var map__29496 = cljs.core.keyword.call(null, palette_name).call(null, color.valchromat.palettes);
-  var map__29496__$1 = cljs.core.seq_QMARK_.call(null, map__29496) ? cljs.core.apply.call(null, cljs.core.hash_map, map__29496) : map__29496;
-  var label = cljs.core._lookup.call(null, map__29496__$1, "\ufdd0'label", null);
-  var textures_src = cljs.core._lookup.call(null, map__29496__$1, "\ufdd0'textures-src", null);
-  var colors = cljs.core._lookup.call(null, map__29496__$1, "\ufdd0'colors", null);
-  return image.onload.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'textures"], {"\ufdd0'textures":textures_src}), function(images29499) {
-    var textures = (new cljs.core.Keyword("\ufdd0'textures")).call(null, images29499);
+  var map__46464 = cljs.core.keyword.call(null, palette_name).call(null, color.valchromat.palettes);
+  var map__46464__$1 = cljs.core.seq_QMARK_.call(null, map__46464) ? cljs.core.apply.call(null, cljs.core.hash_map, map__46464) : map__46464;
+  var label = cljs.core._lookup.call(null, map__46464__$1, "\ufdd0'label", null);
+  var textures_src = cljs.core._lookup.call(null, map__46464__$1, "\ufdd0'textures-src", null);
+  var colors = cljs.core._lookup.call(null, map__46464__$1, "\ufdd0'colors", null);
+  return image.onload.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'textures"], {"\ufdd0'textures":textures_src}), function(images46467) {
+    var textures = (new cljs.core.Keyword("\ufdd0'textures")).call(null, images46467);
     color.val_picker.wheel = cljs.core.assoc.call(null, color.val_picker.wheel, "\ufdd0'opts", color.val_picker.defaults, "\ufdd0'palette", colors, "\ufdd0'textures", function() {
-      var iter__2632__auto__ = function iter__29500(s__29501) {
+      var iter__2632__auto__ = function iter__46468(s__46469) {
         return new cljs.core.LazySeq(null, false, function() {
-          var s__29501__$1 = s__29501;
+          var s__46469__$1 = s__46469;
           while(true) {
-            var temp__4092__auto__ = cljs.core.seq.call(null, s__29501__$1);
+            var temp__4092__auto__ = cljs.core.seq.call(null, s__46469__$1);
             if(temp__4092__auto__) {
               var xs__4579__auto__ = temp__4092__auto__;
               var i = cljs.core.first.call(null, xs__4579__auto__);
-              return cljs.core.cons.call(null, image.get_img.call(null, textures, 64, i), iter__29500.call(null, cljs.core.rest.call(null, s__29501__$1)))
+              return cljs.core.cons.call(null, image.get_img.call(null, textures, 64, i), iter__46468.call(null, cljs.core.rest.call(null, s__46469__$1)))
             }else {
               return null
             }
@@ -24010,6 +24010,493 @@ color.val_picker.init = function init(container, palette_name, callback) {
   })
 };
 goog.exportSymbol("color.val_picker.init", color.val_picker.init);
+goog.provide("color.ral_picker");
+goog.require("cljs.core");
+goog.require("jayq.util");
+goog.require("jayq.util");
+goog.require("util.map");
+goog.require("dommy.core");
+goog.require("canvas");
+goog.require("monet.canvas");
+color.ral_picker.defaults = cljs.core.ObjMap.fromObject(["\ufdd0'outer-band", "\ufdd0'band", "\ufdd0'swatch", "\ufdd0'palette", "\ufdd0'inner-band", "\ufdd0'focus-bar-width"], {"\ufdd0'outer-band":cljs.core.ObjMap.fromObject(["\ufdd0'color-fn", "\ufdd0'force-full-saturation", "\ufdd0'force-midrange-brightness"], {"\ufdd0'color-fn":"\ufdd0'average", "\ufdd0'force-full-saturation":false, "\ufdd0'force-midrange-brightness":false}), "\ufdd0'band":cljs.core.ObjMap.fromObject(["\ufdd0'margin"], {"\ufdd0'margin":0}), 
+"\ufdd0'swatch":cljs.core.ObjMap.fromObject(["\ufdd0'min-width", "\ufdd0'border-width"], {"\ufdd0'min-width":25, "\ufdd0'border-width":0}), "\ufdd0'palette":cljs.core.ObjMap.fromObject(["\ufdd0'sort"], {"\ufdd0'sort":false}), "\ufdd0'inner-band":cljs.core.ObjMap.fromObject(["\ufdd0'sort"], {"\ufdd0'sort":false}), "\ufdd0'focus-bar-width":2});
+color.ral_picker.bucketize = function bucketize(items, num_buckets) {
+  var bucket_size = cljs.core.count.call(null, items) / num_buckets;
+  return cljs.core.map.call(null, function(p1__72503_SHARP_) {
+    return cljs.core.map.call(null, cljs.core.second, p1__72503_SHARP_)
+  }, cljs.core.partition_by.call(null, function(p__72506) {
+    var vec__72507 = p__72506;
+    var idx = cljs.core.nth.call(null, vec__72507, 0, null);
+    var elm = cljs.core.nth.call(null, vec__72507, 1, null);
+    return Math.floor.call(null, idx / bucket_size)
+  }, cljs.core.map.call(null, cljs.core.vector, cljs.core.range.call(null), items)))
+};
+color.ral_picker.max_swatches = function max_swatches(radius) {
+  return Math.floor.call(null, radius * 2 * Math.PI / cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'swatch", "\ufdd0'min-width"], true)))
+};
+color.ral_picker.make_simple_swatch = function make_simple_swatch(color__$1) {
+  return cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'color"], {"\ufdd0'type":"\ufdd0'swatch", "\ufdd0'color":color__$1})
+};
+color.ral_picker.swatch_color = function swatch_color(palette) {
+  var color_fn = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'outer-band", "\ufdd0'color-fn"], true));
+  var G__72510 = color_fn;
+  if(cljs.core._EQ_.call(null, "\ufdd0'default", G__72510)) {
+    throw[cljs.core.str("bad color-fn: "), cljs.core.str(color_fn)].join("");
+  }else {
+    if(cljs.core._EQ_.call(null, "\ufdd0'average", G__72510)) {
+      return color.average.call(null, palette)
+    }else {
+      if(cljs.core._EQ_.call(null, "\ufdd0'median", G__72510)) {
+        return cljs.core.nth.call(null, palette, Math.floor.call(null, cljs.core.count.call(null, palette) / 2))
+      }else {
+        if(cljs.core._EQ_.call(null, "\ufdd0'first", G__72510)) {
+          return cljs.core.first.call(null, palette)
+        }else {
+          if("\ufdd0'else") {
+            throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(color_fn)].join(""));
+          }else {
+            return null
+          }
+        }
+      }
+    }
+  }
+};
+color.ral_picker.sort_by_saturation_and_brightness = function sort_by_saturation_and_brightness(palette) {
+  var f = function(p1__72508_SHARP_) {
+    var vec__72512 = color.hsl.call(null, (new cljs.core.Keyword("\ufdd0'rgb")).call(null, p1__72508_SHARP_));
+    var _ = cljs.core.nth.call(null, vec__72512, 0, null);
+    var s = cljs.core.nth.call(null, vec__72512, 1, null);
+    var l = cljs.core.nth.call(null, vec__72512, 2, null);
+    return Math.atan2.call(null, l - 0.5, s - 0.5)
+  };
+  return cljs.core.sort_by.call(null, f, palette)
+};
+color.ral_picker.make_complex_swatch = function make_complex_swatch(palette, parent_band) {
+  var color__$1 = color.ral_picker.swatch_color.call(null, palette);
+  var hsl = color.hsl.call(null, color__$1);
+  var hsl__$1 = cljs.core.truth_(cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'outer-band", "\ufdd0'force-full-saturation"], true))) ? cljs.core.assoc.call(null, hsl, 1, 1) : hsl;
+  var hsl__$2 = cljs.core.truth_(cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'outer-band", "\ufdd0'force-midrange-brightness"], true))) ? cljs.core.assoc.call(null, hsl__$1, 2, 0.5) : hsl__$1;
+  var color__$2 = cljs.core.assoc.call(null, cljs.core.ObjMap.EMPTY, "\ufdd0'rgb", color.pack_rgb.call(null, color.hsl_to_rgb.call(null, hsl__$2)));
+  var palette__$1 = cljs.core.truth_(cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'inner-band", "\ufdd0'sort"], true))) ? color.ral_picker.sort_by_saturation_and_brightness.call(null, palette) : palette;
+  var margin = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'band", "\ufdd0'margin"], true));
+  var width = (new cljs.core.Keyword("\ufdd0'width")).call(null, parent_band);
+  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, parent_band) - width - margin;
+  return cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'color", "\ufdd0'band"], {"\ufdd0'type":"\ufdd0'swatch", "\ufdd0'color":color__$2, "\ufdd0'band":color.ral_picker.make_band.call(null, radius, width, palette__$1)})
+};
+color.ral_picker.make_band = function make_band(radius, width, palette) {
+  var len = cljs.core.count.call(null, palette);
+  var max_swatches = color.ral_picker.max_swatches.call(null, radius);
+  var band = cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'radius", "\ufdd0'width"], {"\ufdd0'type":"\ufdd0'band", "\ufdd0'radius":radius, "\ufdd0'width":width});
+  var swatch = len <= max_swatches ? cljs.core.map.call(null, color.ral_picker.make_simple_swatch, palette) : cljs.core.map.call(null, function(p1__72513_SHARP_) {
+    return color.ral_picker.make_complex_swatch.call(null, p1__72513_SHARP_, band)
+  }, color.ral_picker.bucketize.call(null, palette, max_swatches));
+  return cljs.core.assoc.call(null, band, "\ufdd0'swatches", swatch)
+};
+color.ral_picker.draw_color_band = function draw_color_band(band) {
+  var map__72517 = color.ral_picker.wheel;
+  var map__72517__$1 = cljs.core.seq_QMARK_.call(null, map__72517) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72517) : map__72517;
+  var center = cljs.core._lookup.call(null, map__72517__$1, "\ufdd0'center", null);
+  var ctx = cljs.core._lookup.call(null, map__72517__$1, "\ufdd0'ctx", null);
+  var inner_radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0'width")).call(null, band);
+  var palette = cljs.core.map.call(null, "\ufdd0'color", (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band));
+  var len = cljs.core.count.call(null, palette);
+  var angle_fn = function(p1__72514_SHARP_) {
+    return p1__72514_SHARP_ / len * 2 * Math.PI
+  };
+  var G__72518 = cljs.core.seq.call(null, cljs.core.range.call(null, len));
+  while(true) {
+    if(G__72518) {
+      var i = cljs.core.first.call(null, G__72518);
+      var start_angle_72519 = angle_fn.call(null, i);
+      var end_angle_72520 = angle_fn.call(null, i + 1);
+      var start_72521 = canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_72519) + (new cljs.core.Keyword("\ufdd0'x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_72519) + (new cljs.core.Keyword("\ufdd0'y")).call(null, center));
+      monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, canvas.line_to.call(null, canvas.arc.call(null, canvas.arc.call(null, canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_72521), center, inner_radius, start_angle_72519, end_angle_72520, "\ufdd0'cw"), center, (new cljs.core.Keyword("\ufdd0'radius")).call(null, band), end_angle_72520, start_angle_72519, "\ufdd0'ccw"), start_72521), (new cljs.core.Keyword("\ufdd0'rgb")).call(null, cljs.core.nth.call(null, palette, 
+      i))));
+      var bw_72522 = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'swatch", "\ufdd0'border-width"], true));
+      if(bw_72522 > 0) {
+        monet.canvas.stroke.call(null, monet.canvas.stroke_width.call(null, ctx, bw_72522))
+      }else {
+      }
+      var G__72523 = cljs.core.next.call(null, G__72518);
+      G__72518 = G__72523;
+      continue
+    }else {
+      return null
+    }
+    break
+  }
+};
+color.ral_picker.in_inner_band_QMARK_ = function in_inner_band_QMARK_(e) {
+  var map__72525 = color.ral_picker.wheel;
+  var map__72525__$1 = cljs.core.seq_QMARK_.call(null, map__72525) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72525) : map__72525;
+  var center = cljs.core._lookup.call(null, map__72525__$1, "\ufdd0'center", null);
+  var band = cljs.core._lookup.call(null, map__72525__$1, "\ufdd0'band", null);
+  var offset = canvas.offset.call(null, e);
+  var distance = canvas.distance.call(null, center, offset);
+  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0'width")).call(null, band) - cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'band", "\ufdd0'margin"], true));
+  var and__3941__auto__ = distance <= radius;
+  if(and__3941__auto__) {
+    return distance >= radius - (new cljs.core.Keyword("\ufdd0'width")).call(null, band)
+  }else {
+    return and__3941__auto__
+  }
+};
+color.ral_picker.bucket_index = function bucket_index(e, band) {
+  var offset = canvas.offset.call(null, e);
+  var center = canvas.center.call(null, e);
+  var p = canvas.point_diff.call(null, offset, center);
+  var theta = Math.atan2.call(null, (new cljs.core.Keyword("\ufdd0'y")).call(null, p), (new cljs.core.Keyword("\ufdd0'x")).call(null, p));
+  var arc_length = theta >= 0 ? theta : theta + 2 * Math.PI;
+  var bucket_arc = Math.PI * 2 / cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band));
+  return Math.floor.call(null, arc_length / bucket_arc)
+};
+color.ral_picker.cursor = function cursor() {
+  return(new cljs.core.Keyword("\ufdd0'cursor")).call(null, cljs.core.deref.call(null, (new cljs.core.Keyword("\ufdd0'state")).call(null, color.ral_picker.wheel)))
+};
+color.ral_picker.inner_index = function inner_index() {
+  return(new cljs.core.Keyword("\ufdd0'inner")).call(null, color.ral_picker.cursor.call(null))
+};
+color.ral_picker.outer_index = function outer_index() {
+  return(new cljs.core.Keyword("\ufdd0'outer")).call(null, color.ral_picker.cursor.call(null))
+};
+color.ral_picker.set_cursor_BANG_ = function set_cursor_BANG_(k, v) {
+  return cljs.core.swap_BANG_.call(null, (new cljs.core.Keyword("\ufdd0'state")).call(null, color.ral_picker.wheel), function(p1__72526_SHARP_) {
+    return cljs.core.assoc_in.call(null, p1__72526_SHARP_, cljs.core.PersistentVector.fromArray(["\ufdd0'cursor", k], true), v)
+  })
+};
+color.ral_picker.focus_swatch = function focus_swatch(band, index, focus_QMARK_, inner_QMARK_) {
+  var map__72528 = color.ral_picker.wheel;
+  var map__72528__$1 = cljs.core.seq_QMARK_.call(null, map__72528) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72528) : map__72528;
+  var center = cljs.core._lookup.call(null, map__72528__$1, "\ufdd0'center", null);
+  var ctx = cljs.core._lookup.call(null, map__72528__$1, "\ufdd0'ctx", null);
+  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band);
+  var radius__$1 = cljs.core.truth_(inner_QMARK_) ? radius - (new cljs.core.Keyword("\ufdd0'width")).call(null, band) - 2 : radius + 2;
+  var palette_length = cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band));
+  var start_angle = Math.PI * 2 * index / palette_length;
+  var end_angle = Math.PI * 2 * (index + 1) / palette_length;
+  var start_angle__$1 = start_angle - (cljs.core.truth_(focus_QMARK_) ? 0 : 0.02);
+  var end_angle__$1 = end_angle + (cljs.core.truth_(focus_QMARK_) ? 0 : 0.02);
+  return monet.canvas.stroke.call(null, monet.canvas.stroke_style.call(null, monet.canvas.stroke_width.call(null, canvas.arc.call(null, monet.canvas.begin_path.call(null, ctx), center, radius__$1, start_angle__$1, end_angle__$1, "\ufdd0'cw"), cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'focus-bar-width"], true)) + (cljs.core.truth_(focus_QMARK_) ? 0 : 1)), cljs.core.truth_(focus_QMARK_) ? "#fff" : "#000"))
+};
+color.ral_picker.get_color = function get_color(e) {
+  if(cljs.core.truth_(color.ral_picker.in_inner_band_QMARK_.call(null, e))) {
+    var band = (new cljs.core.Keyword("\ufdd0'band")).call(null, color.ral_picker.wheel);
+    var oi = color.ral_picker.outer_index.call(null);
+    var ii = color.ral_picker.inner_index.call(null);
+    if(cljs.core.truth_(function() {
+      var and__3941__auto__ = oi;
+      if(cljs.core.truth_(and__3941__auto__)) {
+        return ii
+      }else {
+        return and__3941__auto__
+      }
+    }())) {
+      return(new cljs.core.Keyword("\ufdd0'color")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), oi))), ii))
+    }else {
+      return null
+    }
+  }else {
+    return null
+  }
+};
+color.ral_picker.set_color_label_BANG_ = function() {
+  var set_color_label_BANG___delegate = function(state, p__72529) {
+    var vec__72532 = p__72529;
+    var color__$1 = cljs.core.nth.call(null, vec__72532, 0, null);
+    var text = function() {
+      var G__72533 = state;
+      if(cljs.core._EQ_.call(null, "\ufdd0'color", G__72533)) {
+        return(new cljs.core.Keyword("\ufdd0'ral")).call(null, color__$1)
+      }else {
+        if(cljs.core._EQ_.call(null, "\ufdd0'palette", G__72533)) {
+          return"RAL"
+        }else {
+          if(cljs.core._EQ_.call(null, "\ufdd0'empty", G__72533)) {
+            return""
+          }else {
+            if("\ufdd0'else") {
+              throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(state)].join(""));
+            }else {
+              return null
+            }
+          }
+        }
+      }
+    }();
+    return dommy.core.set_text_BANG_.call(null, (new cljs.core.Keyword("\ufdd0'color-label")).call(null, color.ral_picker.wheel), text)
+  };
+  var set_color_label_BANG_ = function(state, var_args) {
+    var p__72529 = null;
+    if(goog.isDef(var_args)) {
+      p__72529 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 1), 0)
+    }
+    return set_color_label_BANG___delegate.call(this, state, p__72529)
+  };
+  set_color_label_BANG_.cljs$lang$maxFixedArity = 1;
+  set_color_label_BANG_.cljs$lang$applyTo = function(arglist__72534) {
+    var state = cljs.core.first(arglist__72534);
+    var p__72529 = cljs.core.rest(arglist__72534);
+    return set_color_label_BANG___delegate(state, p__72529)
+  };
+  set_color_label_BANG_.cljs$lang$arity$variadic = set_color_label_BANG___delegate;
+  return set_color_label_BANG_
+}();
+color.ral_picker.clear_outer_focus = function clear_outer_focus() {
+  var temp__4092__auto__ = color.ral_picker.outer_index.call(null);
+  if(cljs.core.truth_(temp__4092__auto__)) {
+    var outer_index = temp__4092__auto__;
+    var map__72536_72537 = color.ral_picker.wheel;
+    var map__72536_72538__$1 = cljs.core.seq_QMARK_.call(null, map__72536_72537) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72536_72537) : map__72536_72537;
+    var band_72539 = cljs.core._lookup.call(null, map__72536_72538__$1, "\ufdd0'band", null);
+    var center_72540 = cljs.core._lookup.call(null, map__72536_72538__$1, "\ufdd0'center", null);
+    var ctx_72541 = cljs.core._lookup.call(null, map__72536_72538__$1, "\ufdd0'ctx", null);
+    color.ral_picker.focus_swatch.call(null, band_72539, outer_index, false, false);
+    return color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0'outer", null)
+  }else {
+    return null
+  }
+};
+color.ral_picker.set_outer_focus = function set_outer_focus(e) {
+  color.ral_picker.set_color_label_BANG_.call(null, "\ufdd0'empty");
+  var map__72543 = color.ral_picker.wheel;
+  var map__72543__$1 = cljs.core.seq_QMARK_.call(null, map__72543) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72543) : map__72543;
+  var band = cljs.core._lookup.call(null, map__72543__$1, "\ufdd0'band", null);
+  var center = cljs.core._lookup.call(null, map__72543__$1, "\ufdd0'center", null);
+  var ctx = cljs.core._lookup.call(null, map__72543__$1, "\ufdd0'ctx", null);
+  var outer_bucket_index = color.ral_picker.bucket_index.call(null, e, band);
+  color.ral_picker.focus_swatch.call(null, band, outer_bucket_index, true, false);
+  return color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0'outer", outer_bucket_index)
+};
+color.ral_picker.clear_inner_focus = function clear_inner_focus() {
+  var temp__4092__auto__ = color.ral_picker.outer_index.call(null);
+  if(cljs.core.truth_(temp__4092__auto__)) {
+    var outer_index = temp__4092__auto__;
+    var temp__4092__auto____$1 = color.ral_picker.inner_index.call(null);
+    if(cljs.core.truth_(temp__4092__auto____$1)) {
+      var inner_index = temp__4092__auto____$1;
+      var map__72545 = color.ral_picker.wheel;
+      var map__72545__$1 = cljs.core.seq_QMARK_.call(null, map__72545) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72545) : map__72545;
+      var center = cljs.core._lookup.call(null, map__72545__$1, "\ufdd0'center", null);
+      var ctx = cljs.core._lookup.call(null, map__72545__$1, "\ufdd0'ctx", null);
+      var band = cljs.core._lookup.call(null, map__72545__$1, "\ufdd0'band", null);
+      var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_index));
+      color.ral_picker.focus_swatch.call(null, inner_band, inner_index, false, true);
+      color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0'inner", null);
+      return color.ral_picker.set_color_label_BANG_.call(null, "\ufdd0'empty")
+    }else {
+      return null
+    }
+  }else {
+    return null
+  }
+};
+color.ral_picker.set_inner_focus = function set_inner_focus(e) {
+  var map__72547 = color.ral_picker.wheel;
+  var map__72547__$1 = cljs.core.seq_QMARK_.call(null, map__72547) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72547) : map__72547;
+  var center = cljs.core._lookup.call(null, map__72547__$1, "\ufdd0'center", null);
+  var ctx = cljs.core._lookup.call(null, map__72547__$1, "\ufdd0'ctx", null);
+  var band = cljs.core._lookup.call(null, map__72547__$1, "\ufdd0'band", null);
+  var temp__4092__auto__ = color.ral_picker.outer_index.call(null);
+  if(cljs.core.truth_(temp__4092__auto__)) {
+    var outer_index = temp__4092__auto__;
+    var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_index));
+    var inner_index = color.ral_picker.bucket_index.call(null, e, inner_band);
+    color.ral_picker.focus_swatch.call(null, inner_band, inner_index, true, true);
+    color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0'inner", inner_index);
+    return color.ral_picker.set_color_label_BANG_.call(null, "\ufdd0'color", color.ral_picker.get_color.call(null, e))
+  }else {
+    return null
+  }
+};
+color.ral_picker.redraw = function redraw() {
+  var map__72549 = color.ral_picker.wheel;
+  var map__72549__$1 = cljs.core.seq_QMARK_.call(null, map__72549) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72549) : map__72549;
+  var center = cljs.core._lookup.call(null, map__72549__$1, "\ufdd0'center", null);
+  var band = cljs.core._lookup.call(null, map__72549__$1, "\ufdd0'band", null);
+  var ctx = cljs.core._lookup.call(null, map__72549__$1, "\ufdd0'ctx", null);
+  var canvas__$1 = cljs.core._lookup.call(null, map__72549__$1, "\ufdd0'canvas", null);
+  canvas.clear.call(null, ctx);
+  color.ral_picker.draw_color_band.call(null, (new cljs.core.Keyword("\ufdd0'band")).call(null, color.ral_picker.wheel));
+  return color.ral_picker.set_color_label_BANG_.call(null, "\ufdd0'palette")
+};
+color.ral_picker.on_mousemove = function on_mousemove(e) {
+  var map__72551 = color.ral_picker.wheel;
+  var map__72551__$1 = cljs.core.seq_QMARK_.call(null, map__72551) ? cljs.core.apply.call(null, cljs.core.hash_map, map__72551) : map__72551;
+  var center = cljs.core._lookup.call(null, map__72551__$1, "\ufdd0'center", null);
+  var band = cljs.core._lookup.call(null, map__72551__$1, "\ufdd0'band", null);
+  var offset = canvas.offset.call(null, e);
+  var distance = canvas.distance.call(null, center, offset);
+  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band);
+  var inner_index = color.ral_picker.inner_index.call(null);
+  var outer_index = color.ral_picker.outer_index.call(null);
+  if(function() {
+    var and__3941__auto__ = distance <= radius;
+    if(and__3941__auto__) {
+      return distance >= radius - (new cljs.core.Keyword("\ufdd0'width")).call(null, band)
+    }else {
+      return and__3941__auto__
+    }
+  }()) {
+    var outer_bucket_index = color.ral_picker.bucket_index.call(null, e, band);
+    if(cljs.core.truth_(inner_index)) {
+      color.ral_picker.clear_inner_focus.call(null)
+    }else {
+    }
+    if(cljs.core.not_EQ_.call(null, outer_bucket_index, outer_index)) {
+      color.ral_picker.clear_outer_focus.call(null);
+      color.ral_picker.set_outer_focus.call(null, e);
+      var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_bucket_index));
+      return color.ral_picker.draw_color_band.call(null, inner_band)
+    }else {
+      return null
+    }
+  }else {
+    if(cljs.core.truth_(color.ral_picker.in_inner_band_QMARK_.call(null, e))) {
+      if(cljs.core.truth_(outer_index)) {
+        var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_index));
+        var inner_bucket_index = color.ral_picker.bucket_index.call(null, e, inner_band);
+        if(cljs.core.not_EQ_.call(null, inner_index, inner_bucket_index)) {
+          color.ral_picker.clear_inner_focus.call(null);
+          return color.ral_picker.set_inner_focus.call(null, e)
+        }else {
+          return null
+        }
+      }else {
+        return null
+      }
+    }else {
+      if(distance > radius) {
+        if(cljs.core.truth_(outer_index)) {
+          color.ral_picker.clear_inner_focus.call(null);
+          color.ral_picker.clear_outer_focus.call(null);
+          return color.ral_picker.redraw.call(null)
+        }else {
+          return null
+        }
+      }else {
+        if("\ufdd0'default") {
+          return color.ral_picker.clear_inner_focus.call(null)
+        }else {
+          return null
+        }
+      }
+    }
+  }
+};
+color.ral_picker.on_mousedown = function on_mousedown(e) {
+  var temp__4092__auto__ = color.ral_picker.get_color.call(null, e);
+  if(cljs.core.truth_(temp__4092__auto__)) {
+    var color__$1 = temp__4092__auto__;
+    return(new cljs.core.Keyword("\ufdd0'callback")).call(null, color.ral_picker.wheel).call(null, cljs.core.clj__GT_js.call(null, color__$1))
+  }else {
+    return null
+  }
+};
+color.ral_picker.on_touchstart = function on_touchstart(e) {
+  if(cljs.core._EQ_.call(null, 1, e.touches.length)) {
+    e.preventDefault();
+    return color.ral_picker.on_mousemove.call(null, e)
+  }else {
+    return null
+  }
+};
+color.ral_picker.on_touchmove = function on_touchmove(e) {
+  if(cljs.core._EQ_.call(null, 1, e.touches.length)) {
+    e.preventDefault();
+    return color.ral_picker.on_mousemove.call(null, e)
+  }else {
+    return null
+  }
+};
+color.ral_picker.on_touchend = function on_touchend(e) {
+  if(cljs.core._EQ_.call(null, 1, e.touches.length)) {
+    e.preventDefault();
+    return color.ral_picker.on_mousedown.call(null, e)
+  }else {
+    return null
+  }
+};
+color.ral_picker.on_mouseout = function on_mouseout(e) {
+  color.ral_picker.clear_inner_focus.call(null);
+  color.ral_picker.clear_outer_focus.call(null);
+  return color.ral_picker.redraw.call(null)
+};
+color.ral_picker.wheel_fn = function wheel_fn(w, f) {
+  return function() {
+    var G__72556__delegate = function(args) {
+      var wheel72554 = color.ral_picker.wheel;
+      try {
+        color.ral_picker.wheel = w;
+        return cljs.core.apply.call(null, f, args)
+      }finally {
+        color.ral_picker.wheel = wheel72554
+      }
+    };
+    var G__72556 = function(var_args) {
+      var args = null;
+      if(goog.isDef(var_args)) {
+        args = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0)
+      }
+      return G__72556__delegate.call(this, args)
+    };
+    G__72556.cljs$lang$maxFixedArity = 0;
+    G__72556.cljs$lang$applyTo = function(arglist__72557) {
+      var args = cljs.core.seq(arglist__72557);
+      return G__72556__delegate(args)
+    };
+    G__72556.cljs$lang$arity$variadic = G__72556__delegate;
+    return G__72556
+  }()
+};
+color.ral_picker.init = function init(container, palette, callback) {
+  jayq.util.log.call(null, "initializing ral color wheel");
+  var options = util.map.deep_merge_with.call(null, cljs.core.identity, color.ral_picker.defaults, cljs.core.ObjMap.EMPTY);
+  var canvas__$1 = function() {
+    var dom72562 = document.createElement("canvas");
+    if(195) {
+      dom72562.setAttribute("width", 195)
+    }else {
+    }
+    if(195) {
+      dom72562.setAttribute("height", 195)
+    }else {
+    }
+    return dom72562
+  }();
+  var color_label = function() {
+    var dom72563 = document.createElement("span");
+    if(cljs.core.truth_(cljs.core.ObjMap.fromObject(["\ufdd0'display", "\ufdd0'vertical-align", "\ufdd0'max-width"], {"\ufdd0'display":"table-cell", "\ufdd0'vertical-align":"middle", "\ufdd0'max-width":"90px"}))) {
+      dom72563.setAttribute("style", dommy.core.style_str.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'display", "\ufdd0'vertical-align", "\ufdd0'max-width"], {"\ufdd0'display":"table-cell", "\ufdd0'vertical-align":"middle", "\ufdd0'max-width":"90px"})))
+    }else {
+    }
+    return dom72563
+  }();
+  var wheel72564 = color.ral_picker.wheel;
+  try {
+    color.ral_picker.wheel = cljs.core.ObjMap.fromObject(["\ufdd0'opts"], {"\ufdd0'opts":options});
+    var margin = (new cljs.core.Keyword("\ufdd0'focus-bar-width")).call(null, options) + 1;
+    var radius = canvas__$1.height / 2 - margin;
+    var width = radius / 3;
+    var palette__$1 = cljs.core.truth_(cljs.core.get_in.call(null, options, cljs.core.PersistentVector.fromArray(["\ufdd0'palette", "\ufdd0'sort"], true))) ? cljs.core.sort_by.call(null, color.hue, palette) : palette;
+    var band = color.ral_picker.make_band.call(null, radius, width, palette__$1);
+    color.ral_picker.wheel = cljs.core.assoc.call(null, color.ral_picker.wheel, "\ufdd0'band", band, "\ufdd0'callback", callback, "\ufdd0'canvas", canvas__$1, "\ufdd0'color-label", color_label, "\ufdd0'ctx", monet.canvas.get_context.call(null, canvas__$1, "2d"), "\ufdd0'center", canvas.center.call(null, canvas__$1), "\ufdd0'state", cljs.core.atom.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'cursor"], {"\ufdd0'cursor":cljs.core.ObjMap.fromObject(["\ufdd0'outer", "\ufdd0'inner"], {"\ufdd0'outer":null, 
+    "\ufdd0'inner":null})})));
+    var wrapper_72566 = cljs.core.PersistentVector.fromArray(["\ufdd0'div", cljs.core.ObjMap.fromObject(["\ufdd0'style"], {"\ufdd0'style":cljs.core.ObjMap.fromObject(["\ufdd0'position"], {"\ufdd0'position":"relative"})}), canvas__$1, cljs.core.PersistentVector.fromArray(["\ufdd0'div", cljs.core.ObjMap.fromObject(["\ufdd0'style"], {"\ufdd0'style":cljs.core.ObjMap.fromObject(["\ufdd0'position", "\ufdd0'display", "\ufdd0'width", "\ufdd0'font-weight", "\ufdd0'color", "\ufdd0'z-index", "\ufdd0'font-size", 
+    "\ufdd0'text-align", "\ufdd0'overflow", "\ufdd0'top", "\ufdd0'left", "\ufdd0'height"], {"\ufdd0'position":"absolute", "\ufdd0'display":"table", "\ufdd0'width":"90px", "\ufdd0'font-weight":"bold", "\ufdd0'color":"#AAA", "\ufdd0'z-index":"-1", "\ufdd0'font-size":"12px", "\ufdd0'text-align":"center", "\ufdd0'overflow":"hidden", "\ufdd0'top":"72px", "\ufdd0'left":"53px", "\ufdd0'height":"50px"})}), color_label], true)], true);
+    dommy.core.append_BANG_.call(null, document.querySelector(dommy.core.selector.call(null, cljs.core.keyword.call(null, container))), wrapper_72566);
+    color.ral_picker.redraw.call(null);
+    dommy.core.listen_BANG_.call(null, canvas__$1, "\ufdd0'mousemove", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_mousemove));
+    dommy.core.listen_BANG_.call(null, canvas__$1, "\ufdd0'mousedown", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_mousedown));
+    dommy.core.listen_BANG_.call(null, canvas__$1, "\ufdd0'touchstart", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_touchstart));
+    dommy.core.listen_BANG_.call(null, canvas__$1, "\ufdd0'touchmove", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_touchmove));
+    dommy.core.listen_BANG_.call(null, canvas__$1, "\ufdd0'touchend", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_touchend));
+    return dommy.core.listen_BANG_.call(null, canvas__$1, "\ufdd0'mouseout", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_mouseout))
+  }finally {
+    color.ral_picker.wheel = wheel72564
+  }
+};
+goog.exportSymbol("color.ral_picker.init", color.ral_picker.init);
 goog.provide("color.ral");
 goog.require("cljs.core");
 color.ral.palette = cljs.core.map.call(null, function(p1__3410_SHARP_) {
@@ -24058,440 +24545,3 @@ color.ral.palette = cljs.core.map.call(null, function(p1__3410_SHARP_) {
 "\ufdd0'rgb"], {"\ufdd0'ral":9006, "\ufdd0'rgb":"#A5A5A5"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9007, "\ufdd0'rgb":"#8F8F8F"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9010, "\ufdd0'rgb":"#FFFFFF"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9011, "\ufdd0'rgb":"#1C1C1C"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9016, "\ufdd0'rgb":"#F6F6F6"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", 
 "\ufdd0'rgb"], {"\ufdd0'ral":9017, "\ufdd0'rgb":"#1E1E1E"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9018, "\ufdd0'rgb":"#D7D7D7"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9022, "\ufdd0'rgb":"#9C9C9C"}), cljs.core.ObjMap.fromObject(["\ufdd0'ral", "\ufdd0'rgb"], {"\ufdd0'ral":9023, "\ufdd0'rgb":"#828282"})], true));
 goog.exportSymbol("color.ral.palette", color.ral.palette);
-goog.provide("color.pie_picker");
-goog.require("cljs.core");
-goog.require("jayq.util");
-goog.require("jayq.util");
-goog.require("util.map");
-goog.require("dommy.core");
-goog.require("canvas");
-goog.require("monet.canvas");
-color.pie_picker.defaults = cljs.core.ObjMap.fromObject(["\ufdd0'outer-band", "\ufdd0'band", "\ufdd0'swatch", "\ufdd0'palette", "\ufdd0'inner-band", "\ufdd0'focus-bar-width"], {"\ufdd0'outer-band":cljs.core.ObjMap.fromObject(["\ufdd0'color-fn", "\ufdd0'force-full-saturation", "\ufdd0'force-midrange-brightness"], {"\ufdd0'color-fn":"\ufdd0'average", "\ufdd0'force-full-saturation":false, "\ufdd0'force-midrange-brightness":false}), "\ufdd0'band":cljs.core.ObjMap.fromObject(["\ufdd0'margin"], {"\ufdd0'margin":0}), 
-"\ufdd0'swatch":cljs.core.ObjMap.fromObject(["\ufdd0'min-width", "\ufdd0'border-width"], {"\ufdd0'min-width":25, "\ufdd0'border-width":0}), "\ufdd0'palette":cljs.core.ObjMap.fromObject(["\ufdd0'sort"], {"\ufdd0'sort":false}), "\ufdd0'inner-band":cljs.core.ObjMap.fromObject(["\ufdd0'sort"], {"\ufdd0'sort":false}), "\ufdd0'focus-bar-width":2});
-color.pie_picker.bucketize = function bucketize(items, num_buckets) {
-  var bucket_size = cljs.core.count.call(null, items) / num_buckets;
-  return cljs.core.map.call(null, function(p1__3353_SHARP_) {
-    return cljs.core.map.call(null, cljs.core.second, p1__3353_SHARP_)
-  }, cljs.core.partition_by.call(null, function(p__3356) {
-    var vec__3357 = p__3356;
-    var idx = cljs.core.nth.call(null, vec__3357, 0, null);
-    var elm = cljs.core.nth.call(null, vec__3357, 1, null);
-    return Math.floor.call(null, idx / bucket_size)
-  }, cljs.core.map.call(null, cljs.core.vector, cljs.core.range.call(null), items)))
-};
-color.pie_picker.max_swatches = function max_swatches(radius) {
-  return Math.floor.call(null, radius * 2 * Math.PI / cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'swatch", "\ufdd0'min-width"], true)))
-};
-color.pie_picker.make_simple_swatch = function make_simple_swatch(color__$1) {
-  return cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'color"], {"\ufdd0'type":"\ufdd0'swatch", "\ufdd0'color":color__$1})
-};
-color.pie_picker.swatch_color = function swatch_color(palette) {
-  var color_fn = cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'outer-band", "\ufdd0'color-fn"], true));
-  var G__3360 = color_fn;
-  if(cljs.core._EQ_.call(null, "\ufdd0'default", G__3360)) {
-    throw[cljs.core.str("bad color-fn: "), cljs.core.str(color_fn)].join("");
-  }else {
-    if(cljs.core._EQ_.call(null, "\ufdd0'average", G__3360)) {
-      return color.average.call(null, palette)
-    }else {
-      if(cljs.core._EQ_.call(null, "\ufdd0'median", G__3360)) {
-        return cljs.core.nth.call(null, palette, Math.floor.call(null, cljs.core.count.call(null, palette) / 2))
-      }else {
-        if(cljs.core._EQ_.call(null, "\ufdd0'first", G__3360)) {
-          return cljs.core.first.call(null, palette)
-        }else {
-          if("\ufdd0'else") {
-            throw new Error([cljs.core.str("No matching clause: "), cljs.core.str(color_fn)].join(""));
-          }else {
-            return null
-          }
-        }
-      }
-    }
-  }
-};
-color.pie_picker.sort_by_saturation_and_brightness = function sort_by_saturation_and_brightness(palette) {
-  var f = function(p1__3358_SHARP_) {
-    var vec__3362 = color.hsl.call(null, (new cljs.core.Keyword("\ufdd0'rgb")).call(null, p1__3358_SHARP_));
-    var _ = cljs.core.nth.call(null, vec__3362, 0, null);
-    var s = cljs.core.nth.call(null, vec__3362, 1, null);
-    var l = cljs.core.nth.call(null, vec__3362, 2, null);
-    return Math.atan2.call(null, l - 0.5, s - 0.5)
-  };
-  return cljs.core.sort_by.call(null, f, palette)
-};
-color.pie_picker.make_complex_swatch = function make_complex_swatch(palette, parent_band) {
-  var color__$1 = color.pie_picker.swatch_color.call(null, palette);
-  var hsl = color.hsl.call(null, color__$1);
-  var hsl__$1 = cljs.core.truth_(cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'outer-band", "\ufdd0'force-full-saturation"], true))) ? cljs.core.assoc.call(null, hsl, 1, 1) : hsl;
-  var hsl__$2 = cljs.core.truth_(cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'outer-band", "\ufdd0'force-midrange-brightness"], true))) ? cljs.core.assoc.call(null, hsl__$1, 2, 0.5) : hsl__$1;
-  var color__$2 = cljs.core.assoc.call(null, cljs.core.ObjMap.EMPTY, "\ufdd0'rgb", color.pack_rgb.call(null, color.hsl_to_rgb.call(null, hsl__$2)));
-  var palette__$1 = cljs.core.truth_(cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'inner-band", "\ufdd0'sort"], true))) ? color.pie_picker.sort_by_saturation_and_brightness.call(null, palette) : palette;
-  var margin = cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'band", "\ufdd0'margin"], true));
-  var width = (new cljs.core.Keyword("\ufdd0'width")).call(null, parent_band);
-  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, parent_band) - width - margin;
-  return cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'color", "\ufdd0'band"], {"\ufdd0'type":"\ufdd0'swatch", "\ufdd0'color":color__$2, "\ufdd0'band":color.pie_picker.make_band.call(null, radius, width, palette__$1)})
-};
-color.pie_picker.make_band = function make_band(radius, width, palette) {
-  var len = cljs.core.count.call(null, palette);
-  var max_swatches = color.pie_picker.max_swatches.call(null, radius);
-  var band = cljs.core.ObjMap.fromObject(["\ufdd0'type", "\ufdd0'radius", "\ufdd0'width"], {"\ufdd0'type":"\ufdd0'band", "\ufdd0'radius":radius, "\ufdd0'width":width});
-  var swatch = len <= max_swatches ? cljs.core.map.call(null, color.pie_picker.make_simple_swatch, palette) : cljs.core.map.call(null, function(p1__3363_SHARP_) {
-    return color.pie_picker.make_complex_swatch.call(null, p1__3363_SHARP_, band)
-  }, color.pie_picker.bucketize.call(null, palette, max_swatches));
-  return cljs.core.assoc.call(null, band, "\ufdd0'swatches", swatch)
-};
-color.pie_picker.draw_color_band = function draw_color_band(band) {
-  var map__3367 = color.pie_picker.wheel;
-  var map__3367__$1 = cljs.core.seq_QMARK_.call(null, map__3367) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3367) : map__3367;
-  var center = cljs.core._lookup.call(null, map__3367__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__3367__$1, "\ufdd0'ctx", null);
-  var inner_radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0'width")).call(null, band);
-  var palette = cljs.core.map.call(null, "\ufdd0'color", (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band));
-  var len = cljs.core.count.call(null, palette);
-  var angle_fn = function(p1__3364_SHARP_) {
-    return p1__3364_SHARP_ / len * 2 * Math.PI
-  };
-  var G__3368 = cljs.core.seq.call(null, cljs.core.range.call(null, len));
-  while(true) {
-    if(G__3368) {
-      var i = cljs.core.first.call(null, G__3368);
-      var start_angle_3369 = angle_fn.call(null, i);
-      var end_angle_3370 = angle_fn.call(null, i + 1);
-      var start_3371 = canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_3369) + (new cljs.core.Keyword("\ufdd0'x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_3369) + (new cljs.core.Keyword("\ufdd0'y")).call(null, center));
-      monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, canvas.line_to.call(null, canvas.arc.call(null, canvas.arc.call(null, canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_3371), center, inner_radius, start_angle_3369, end_angle_3370, "\ufdd0'cw"), center, (new cljs.core.Keyword("\ufdd0'radius")).call(null, band), end_angle_3370, start_angle_3369, "\ufdd0'ccw"), start_3371), (new cljs.core.Keyword("\ufdd0'rgb")).call(null, cljs.core.nth.call(null, palette, 
-      i))));
-      var bw_3372 = cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'swatch", "\ufdd0'border-width"], true));
-      if(bw_3372 > 0) {
-        monet.canvas.stroke.call(null, monet.canvas.stroke_width.call(null, ctx, bw_3372))
-      }else {
-      }
-      var G__3373 = cljs.core.next.call(null, G__3368);
-      G__3368 = G__3373;
-      continue
-    }else {
-      return null
-    }
-    break
-  }
-};
-color.pie_picker.in_inner_band_QMARK_ = function in_inner_band_QMARK_(e) {
-  var map__3375 = color.pie_picker.wheel;
-  var map__3375__$1 = cljs.core.seq_QMARK_.call(null, map__3375) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3375) : map__3375;
-  var center = cljs.core._lookup.call(null, map__3375__$1, "\ufdd0'center", null);
-  var band = cljs.core._lookup.call(null, map__3375__$1, "\ufdd0'band", null);
-  var offset = canvas.offset.call(null, e);
-  var distance = canvas.distance.call(null, center, offset);
-  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0'width")).call(null, band) - cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'band", "\ufdd0'margin"], true));
-  var and__3941__auto__ = distance <= radius;
-  if(and__3941__auto__) {
-    return distance >= radius - (new cljs.core.Keyword("\ufdd0'width")).call(null, band)
-  }else {
-    return and__3941__auto__
-  }
-};
-color.pie_picker.bucket_index = function bucket_index(e, band) {
-  var offset = canvas.offset.call(null, e);
-  var center = canvas.center.call(null, e);
-  var p = canvas.point_diff.call(null, offset, center);
-  var theta = Math.atan2.call(null, (new cljs.core.Keyword("\ufdd0'y")).call(null, p), (new cljs.core.Keyword("\ufdd0'x")).call(null, p));
-  var arc_length = theta >= 0 ? theta : theta + 2 * Math.PI;
-  var bucket_arc = Math.PI * 2 / cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band));
-  return Math.floor.call(null, arc_length / bucket_arc)
-};
-color.pie_picker.cursor = function cursor() {
-  return(new cljs.core.Keyword("\ufdd0'cursor")).call(null, cljs.core.deref.call(null, (new cljs.core.Keyword("\ufdd0'state")).call(null, color.pie_picker.wheel)))
-};
-color.pie_picker.inner_index = function inner_index() {
-  return(new cljs.core.Keyword("\ufdd0'inner")).call(null, color.pie_picker.cursor.call(null))
-};
-color.pie_picker.outer_index = function outer_index() {
-  return(new cljs.core.Keyword("\ufdd0'outer")).call(null, color.pie_picker.cursor.call(null))
-};
-color.pie_picker.set_cursor_BANG_ = function set_cursor_BANG_(k, v) {
-  return cljs.core.swap_BANG_.call(null, (new cljs.core.Keyword("\ufdd0'state")).call(null, color.pie_picker.wheel), function(p1__3376_SHARP_) {
-    return cljs.core.assoc_in.call(null, p1__3376_SHARP_, cljs.core.PersistentVector.fromArray(["\ufdd0'cursor", k], true), v)
-  })
-};
-color.pie_picker.focus_swatch = function focus_swatch(band, index, focus_QMARK_, inner_QMARK_) {
-  var map__3378 = color.pie_picker.wheel;
-  var map__3378__$1 = cljs.core.seq_QMARK_.call(null, map__3378) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3378) : map__3378;
-  var center = cljs.core._lookup.call(null, map__3378__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__3378__$1, "\ufdd0'ctx", null);
-  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band);
-  var radius__$1 = cljs.core.truth_(inner_QMARK_) ? radius - (new cljs.core.Keyword("\ufdd0'width")).call(null, band) - 2 : radius + 2;
-  var palette_length = cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band));
-  var start_angle = Math.PI * 2 * index / palette_length;
-  var end_angle = Math.PI * 2 * (index + 1) / palette_length;
-  var start_angle__$1 = start_angle - (cljs.core.truth_(focus_QMARK_) ? 0 : 0.02);
-  var end_angle__$1 = end_angle + (cljs.core.truth_(focus_QMARK_) ? 0 : 0.02);
-  return monet.canvas.stroke.call(null, monet.canvas.stroke_style.call(null, monet.canvas.stroke_width.call(null, canvas.arc.call(null, monet.canvas.begin_path.call(null, ctx), center, radius__$1, start_angle__$1, end_angle__$1, "\ufdd0'cw"), cljs.core.get_in.call(null, color.pie_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0'opts", "\ufdd0'focus-bar-width"], true)) + (cljs.core.truth_(focus_QMARK_) ? 0 : 1)), cljs.core.truth_(focus_QMARK_) ? "#fff" : "#000"))
-};
-color.pie_picker.get_color = function get_color(e) {
-  if(cljs.core.truth_(color.pie_picker.in_inner_band_QMARK_.call(null, e))) {
-    var band = (new cljs.core.Keyword("\ufdd0'band")).call(null, color.pie_picker.wheel);
-    var oi = color.pie_picker.outer_index.call(null);
-    var ii = color.pie_picker.inner_index.call(null);
-    if(cljs.core.truth_(function() {
-      var and__3941__auto__ = oi;
-      if(cljs.core.truth_(and__3941__auto__)) {
-        return ii
-      }else {
-        return and__3941__auto__
-      }
-    }())) {
-      return(new cljs.core.Keyword("\ufdd0'color")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), oi))), ii))
-    }else {
-      return null
-    }
-  }else {
-    return null
-  }
-};
-color.pie_picker.clear_color_label = function clear_color_label() {
-  var map__3380 = color.pie_picker.wheel;
-  var map__3380__$1 = cljs.core.seq_QMARK_.call(null, map__3380) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3380) : map__3380;
-  var center = cljs.core._lookup.call(null, map__3380__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__3380__$1, "\ufdd0'ctx", null);
-  var band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.first.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, (new cljs.core.Keyword("\ufdd0'band")).call(null, color.pie_picker.wheel))));
-  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0'width")).call(null, band) - 3 - 1;
-  return monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, canvas.arc.call(null, monet.canvas.begin_path.call(null, ctx), center, radius, 0, 2 * Math.PI, "\ufdd0'cw"), "black"))
-};
-color.pie_picker.draw_color_label = function draw_color_label(e) {
-  color.pie_picker.clear_color_label.call(null);
-  var map__3382 = color.pie_picker.wheel;
-  var map__3382__$1 = cljs.core.seq_QMARK_.call(null, map__3382) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3382) : map__3382;
-  var center = cljs.core._lookup.call(null, map__3382__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__3382__$1, "\ufdd0'ctx", null);
-  var color__$1 = color.pie_picker.get_color.call(null, e);
-  return monet.canvas.text.call(null, monet.canvas.text_align.call(null, monet.canvas.font_style.call(null, monet.canvas.fill_style.call(null, ctx, "#AAA"), "bold 12px Arial"), "center"), cljs.core.ObjMap.fromObject(["\ufdd0'text", "\ufdd0'x", "\ufdd0'y"], {"\ufdd0'text":(new cljs.core.Keyword("\ufdd0'ral")).call(null, color__$1), "\ufdd0'x":(new cljs.core.Keyword("\ufdd0'x")).call(null, center), "\ufdd0'y":(new cljs.core.Keyword("\ufdd0'y")).call(null, center) + 4}))
-};
-color.pie_picker.clear_outer_focus = function clear_outer_focus() {
-  var temp__4092__auto__ = color.pie_picker.outer_index.call(null);
-  if(cljs.core.truth_(temp__4092__auto__)) {
-    var outer_index = temp__4092__auto__;
-    var map__3384_3385 = color.pie_picker.wheel;
-    var map__3384_3386__$1 = cljs.core.seq_QMARK_.call(null, map__3384_3385) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3384_3385) : map__3384_3385;
-    var band_3387 = cljs.core._lookup.call(null, map__3384_3386__$1, "\ufdd0'band", null);
-    var center_3388 = cljs.core._lookup.call(null, map__3384_3386__$1, "\ufdd0'center", null);
-    var ctx_3389 = cljs.core._lookup.call(null, map__3384_3386__$1, "\ufdd0'ctx", null);
-    color.pie_picker.focus_swatch.call(null, band_3387, outer_index, false, false);
-    return color.pie_picker.set_cursor_BANG_.call(null, "\ufdd0'outer", null)
-  }else {
-    return null
-  }
-};
-color.pie_picker.set_outer_focus = function set_outer_focus(e) {
-  var map__3391 = color.pie_picker.wheel;
-  var map__3391__$1 = cljs.core.seq_QMARK_.call(null, map__3391) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3391) : map__3391;
-  var band = cljs.core._lookup.call(null, map__3391__$1, "\ufdd0'band", null);
-  var center = cljs.core._lookup.call(null, map__3391__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__3391__$1, "\ufdd0'ctx", null);
-  var outer_bucket_index = color.pie_picker.bucket_index.call(null, e, band);
-  color.pie_picker.focus_swatch.call(null, band, outer_bucket_index, true, false);
-  return color.pie_picker.set_cursor_BANG_.call(null, "\ufdd0'outer", outer_bucket_index)
-};
-color.pie_picker.clear_inner_focus = function clear_inner_focus() {
-  var temp__4092__auto__ = color.pie_picker.outer_index.call(null);
-  if(cljs.core.truth_(temp__4092__auto__)) {
-    var outer_index = temp__4092__auto__;
-    var temp__4092__auto____$1 = color.pie_picker.inner_index.call(null);
-    if(cljs.core.truth_(temp__4092__auto____$1)) {
-      var inner_index = temp__4092__auto____$1;
-      var map__3393 = color.pie_picker.wheel;
-      var map__3393__$1 = cljs.core.seq_QMARK_.call(null, map__3393) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3393) : map__3393;
-      var center = cljs.core._lookup.call(null, map__3393__$1, "\ufdd0'center", null);
-      var ctx = cljs.core._lookup.call(null, map__3393__$1, "\ufdd0'ctx", null);
-      var band = cljs.core._lookup.call(null, map__3393__$1, "\ufdd0'band", null);
-      var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_index));
-      color.pie_picker.focus_swatch.call(null, inner_band, inner_index, false, true);
-      color.pie_picker.set_cursor_BANG_.call(null, "\ufdd0'inner", null);
-      return color.pie_picker.clear_color_label.call(null)
-    }else {
-      return null
-    }
-  }else {
-    return null
-  }
-};
-color.pie_picker.set_inner_focus = function set_inner_focus(e) {
-  var map__3395 = color.pie_picker.wheel;
-  var map__3395__$1 = cljs.core.seq_QMARK_.call(null, map__3395) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3395) : map__3395;
-  var center = cljs.core._lookup.call(null, map__3395__$1, "\ufdd0'center", null);
-  var ctx = cljs.core._lookup.call(null, map__3395__$1, "\ufdd0'ctx", null);
-  var band = cljs.core._lookup.call(null, map__3395__$1, "\ufdd0'band", null);
-  var temp__4092__auto__ = color.pie_picker.outer_index.call(null);
-  if(cljs.core.truth_(temp__4092__auto__)) {
-    var outer_index = temp__4092__auto__;
-    var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_index));
-    var inner_index = color.pie_picker.bucket_index.call(null, e, inner_band);
-    color.pie_picker.focus_swatch.call(null, inner_band, inner_index, true, true);
-    color.pie_picker.set_cursor_BANG_.call(null, "\ufdd0'inner", inner_index);
-    return color.pie_picker.draw_color_label.call(null, e)
-  }else {
-    return null
-  }
-};
-color.pie_picker.redraw = function redraw() {
-  var map__3397 = color.pie_picker.wheel;
-  var map__3397__$1 = cljs.core.seq_QMARK_.call(null, map__3397) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3397) : map__3397;
-  var center = cljs.core._lookup.call(null, map__3397__$1, "\ufdd0'center", null);
-  var band = cljs.core._lookup.call(null, map__3397__$1, "\ufdd0'band", null);
-  var ctx = cljs.core._lookup.call(null, map__3397__$1, "\ufdd0'ctx", null);
-  var canvas = cljs.core._lookup.call(null, map__3397__$1, "\ufdd0'canvas", null);
-  monet.canvas.text.call(null, monet.canvas.text_align.call(null, monet.canvas.font_style.call(null, monet.canvas.fill_style.call(null, canvas.clear.call(null, ctx), "\ufdd0'#777"), "bold 12px Arial"), "\ufdd0'left"), cljs.core.ObjMap.fromObject(["\ufdd0'text", "\ufdd0'x", "\ufdd0'y"], {"\ufdd0'text":"RAL", "\ufdd0'x":5, "\ufdd0'y":15}));
-  return color.pie_picker.draw_color_band.call(null, band)
-};
-color.pie_picker.on_mousemove = function on_mousemove(e) {
-  var map__3399 = color.pie_picker.wheel;
-  var map__3399__$1 = cljs.core.seq_QMARK_.call(null, map__3399) ? cljs.core.apply.call(null, cljs.core.hash_map, map__3399) : map__3399;
-  var center = cljs.core._lookup.call(null, map__3399__$1, "\ufdd0'center", null);
-  var band = cljs.core._lookup.call(null, map__3399__$1, "\ufdd0'band", null);
-  var offset = canvas.offset.call(null, e);
-  var distance = canvas.distance.call(null, center, offset);
-  var radius = (new cljs.core.Keyword("\ufdd0'radius")).call(null, band);
-  var outer_index = color.pie_picker.outer_index.call(null);
-  if(function() {
-    var and__3941__auto__ = distance <= radius;
-    if(and__3941__auto__) {
-      return distance >= radius - (new cljs.core.Keyword("\ufdd0'width")).call(null, band)
-    }else {
-      return and__3941__auto__
-    }
-  }()) {
-    var outer_bucket_index = color.pie_picker.bucket_index.call(null, e, band);
-    if(cljs.core.not_EQ_.call(null, outer_bucket_index, outer_index)) {
-      color.pie_picker.clear_inner_focus.call(null);
-      color.pie_picker.clear_outer_focus.call(null);
-      color.pie_picker.set_outer_focus.call(null, e);
-      var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_bucket_index));
-      return color.pie_picker.draw_color_band.call(null, inner_band)
-    }else {
-      return null
-    }
-  }else {
-    if(cljs.core.truth_(color.pie_picker.in_inner_band_QMARK_.call(null, e))) {
-      if(cljs.core.truth_(outer_index)) {
-        var inner_band = (new cljs.core.Keyword("\ufdd0'band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0'swatches")).call(null, band), outer_index));
-        var inner_bucket_index = color.pie_picker.bucket_index.call(null, e, inner_band);
-        var inner_index = color.pie_picker.inner_index.call(null);
-        if(cljs.core.not_EQ_.call(null, inner_index, inner_bucket_index)) {
-          color.pie_picker.clear_inner_focus.call(null);
-          return color.pie_picker.set_inner_focus.call(null, e)
-        }else {
-          return null
-        }
-      }else {
-        return null
-      }
-    }else {
-      if(distance > radius) {
-        if(cljs.core.truth_(outer_index)) {
-          color.pie_picker.clear_inner_focus.call(null);
-          color.pie_picker.clear_outer_focus.call(null);
-          return color.pie_picker.redraw.call(null)
-        }else {
-          return null
-        }
-      }else {
-        if("\ufdd0'default") {
-          return color.pie_picker.clear_inner_focus.call(null)
-        }else {
-          return null
-        }
-      }
-    }
-  }
-};
-color.pie_picker.on_mousedown = function on_mousedown(e) {
-  var temp__4092__auto__ = color.pie_picker.get_color.call(null, e);
-  if(cljs.core.truth_(temp__4092__auto__)) {
-    var color__$1 = temp__4092__auto__;
-    return(new cljs.core.Keyword("\ufdd0'callback")).call(null, color.pie_picker.wheel).call(null, cljs.core.clj__GT_js.call(null, color__$1))
-  }else {
-    return null
-  }
-};
-color.pie_picker.on_touchstart = function on_touchstart(e) {
-  var oe = e.originalEvent;
-  if(cljs.core._EQ_.call(null, 1, oe.touches().length())) {
-    e.preventDefault;
-    return color.pie_picker.on_mousemove.call(null, e)
-  }else {
-    return null
-  }
-};
-color.pie_picker.on_touchmove = function on_touchmove(e) {
-  var oe = e.originalEvent;
-  if(cljs.core._EQ_.call(null, 1, oe.touches().length())) {
-    e.preventDefault;
-    return color.pie_picker.on_mousemove.call(null, e)
-  }else {
-    return null
-  }
-};
-color.pie_picker.on_touchend = function on_touchend(e) {
-  var oe = e.originalEvent;
-  if(cljs.core._EQ_.call(null, 1, oe.touches().length())) {
-    e.preventDefault;
-    return color.pie_picker.on_mousedown.call(null, e)
-  }else {
-    return null
-  }
-};
-color.pie_picker.on_mouseout = function on_mouseout(e) {
-  color.pie_picker.clear_inner_focus.call(null);
-  color.pie_picker.clear_outer_focus.call(null);
-  return color.pie_picker.redraw.call(null)
-};
-color.pie_picker.wheel_fn = function wheel_fn(w, f) {
-  return function() {
-    var G__3404__delegate = function(args) {
-      var wheel3402 = color.pie_picker.wheel;
-      try {
-        color.pie_picker.wheel = w;
-        return cljs.core.apply.call(null, f, args)
-      }finally {
-        color.pie_picker.wheel = wheel3402
-      }
-    };
-    var G__3404 = function(var_args) {
-      var args = null;
-      if(goog.isDef(var_args)) {
-        args = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0)
-      }
-      return G__3404__delegate.call(this, args)
-    };
-    G__3404.cljs$lang$maxFixedArity = 0;
-    G__3404.cljs$lang$applyTo = function(arglist__3405) {
-      var args = cljs.core.seq(arglist__3405);
-      return G__3404__delegate(args)
-    };
-    G__3404.cljs$lang$arity$variadic = G__3404__delegate;
-    return G__3404
-  }()
-};
-color.pie_picker.init = function init(canvas, palette, callback, options) {
-  jayq.util.log.call(null, "initializing");
-  var options__$1 = util.map.deep_merge_with.call(null, cljs.core.identity, color.pie_picker.defaults, options);
-  var wheel3408 = color.pie_picker.wheel;
-  try {
-    color.pie_picker.wheel = cljs.core.ObjMap.fromObject(["\ufdd0'opts"], {"\ufdd0'opts":options__$1});
-    var margin = (new cljs.core.Keyword("\ufdd0'focus-bar-width")).call(null, options__$1) + 1;
-    var radius = canvas.height / 2 - margin;
-    var width = radius / 3;
-    var palette__$1 = cljs.core.truth_(cljs.core.get_in.call(null, options__$1, cljs.core.PersistentVector.fromArray(["\ufdd0'palette", "\ufdd0'sort"], true))) ? cljs.core.sort_by.call(null, color.hue, palette) : palette;
-    var band = color.pie_picker.make_band.call(null, radius, width, palette__$1);
-    color.pie_picker.wheel = cljs.core.assoc.call(null, color.pie_picker.wheel, "\ufdd0'band", band, "\ufdd0'callback", callback, "\ufdd0'canvas", canvas, "\ufdd0'ctx", monet.canvas.get_context.call(null, canvas, "2d"), "\ufdd0'center", canvas.center.call(null, canvas), "\ufdd0'state", cljs.core.atom.call(null, cljs.core.ObjMap.fromObject(["\ufdd0'cursor"], {"\ufdd0'cursor":cljs.core.ObjMap.fromObject(["\ufdd0'outer", "\ufdd0'inner"], {"\ufdd0'outer":null, "\ufdd0'inner":null})})));
-    color.pie_picker.redraw.call(null);
-    dommy.core.listen_BANG_.call(null, canvas, "\ufdd0'mousemove", color.pie_picker.wheel_fn.call(null, color.pie_picker.wheel, color.pie_picker.on_mousemove));
-    dommy.core.listen_BANG_.call(null, canvas, "\ufdd0'mousedown", color.pie_picker.wheel_fn.call(null, color.pie_picker.wheel, color.pie_picker.on_mousedown));
-    dommy.core.listen_BANG_.call(null, canvas, "\ufdd0'touchstart", color.pie_picker.wheel_fn.call(null, color.pie_picker.wheel, color.pie_picker.on_touchstart));
-    dommy.core.listen_BANG_.call(null, canvas, "\ufdd0'touchmove", color.pie_picker.wheel_fn.call(null, color.pie_picker.wheel, color.pie_picker.on_touchmove));
-    dommy.core.listen_BANG_.call(null, canvas, "\ufdd0'touchend", color.pie_picker.wheel_fn.call(null, color.pie_picker.wheel, color.pie_picker.on_touchend));
-    return dommy.core.listen_BANG_.call(null, canvas, "\ufdd0'mouseout", color.pie_picker.wheel_fn.call(null, color.pie_picker.wheel, color.pie_picker.on_mouseout))
-  }finally {
-    color.pie_picker.wheel = wheel3408
-  }
-};
-goog.exportSymbol("color.pie_picker.init", color.pie_picker.init);

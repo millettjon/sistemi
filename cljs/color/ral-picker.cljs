@@ -1,10 +1,10 @@
-(ns color.pie-picker
+(ns color.ral-picker
   (:require [monet.canvas :as c]
             [canvas :as c2]
             [dommy.core :as d]
             util.map)
   (:use [jayq.util :only [log]])
-  (:use-macros [dommy.macros :only [sel sel1]]))
+  (:use-macros [dommy.macros :only [sel sel1 node]]))
 
 (def defaults
   "Configuration defaults."
@@ -256,34 +256,13 @@ Steps:
       (if (and oi ii)
         (-> band :swatches (nth oi) :band :swatches (nth ii) :color)))))
 
-(defn- clear-color-label
-  []
-  (let [{:keys [ctx center]} wheel
-        ;; Calculate a bounding radius of inner circle and clear it.
-        band (-> wheel :band :swatches first :band)  ; get some inner band 
-        radius (- (:radius band) ; outer radius of inner band
-                  (:width band) ; width of inner band
-                  3 ; width of focus arc
-                  1 ; safety margin
-                  )]
-
-    ;; Fill inner circle with black.
-    (-> ctx
-        c/begin-path
-        (c2/arc center radius 0 (* 2 Math/PI) :cw)
-        (c/fill-style "black")
-        c/fill)))
-
-(defn- draw-color-label
-  [e]
-  (clear-color-label)
-  (let [{:keys [ctx center]} wheel
-        color (get-color e)]
-    (-> ctx
-        (c/fill-style "#AAA")
-        (c/font-style "bold 12px Arial")
-        (c/text-align "center")
-        (c/text {:text (:ral color) :x (:x center) :y (+ (:y center) 4)}))))
+(defn- set-color-label!
+  [state & [color]]
+  (let [text (case state
+               :empty ""
+               :palette "RAL"
+               :color (:ral color))]
+    (-> wheel :color-label (d/set-text! text))))
 
 (defn- clear-outer-focus
   "Clears the focus on the outer band."
@@ -296,6 +275,7 @@ Steps:
 (defn- set-outer-focus
   "Sets the focus on the outer band."
   [e]
+  (set-color-label! :empty)
   (let [{:keys [ctx center band]} wheel
         outer-bucket-index (bucket-index e band)]
     (focus-swatch band outer-bucket-index true false)
@@ -310,7 +290,7 @@ Steps:
             inner-band (-> band :swatches (nth outer-index) :band)]
         (focus-swatch inner-band inner-index false true)
         (set-cursor! :inner nil)
-        (clear-color-label)))))
+        (set-color-label! :empty)))))
 
 (defn- set-inner-focus
   "Sets the focus on the inner band."
@@ -321,21 +301,14 @@ Steps:
             inner-index (bucket-index e inner-band)]
         (focus-swatch inner-band inner-index true true)
         (set-cursor! :inner inner-index)
-        (draw-color-label e)))))
+        (set-color-label! :color (get-color e))))))
 
 (defn- redraw
   []
   (let [{:keys [canvas ctx band center]} wheel]
-
-    ;; Draw label at upper left.
-    (-> ctx
-        c2/clear
-        (c/fill-style :#777)
-        (c/font-style "bold 12px Arial")
-        (c/text-align :left)
-      (c/text {:text "RAL" :x 5 :y 15}))
-
-    (draw-color-band band)))
+    (c2/clear ctx)
+    (-> wheel :band draw-color-band)
+    (set-color-label! :palette)))
 
 (defn on-mousemove
   "Handle mouse move events."
@@ -344,6 +317,7 @@ Steps:
         offset (c2/offset e)
         distance (c2/distance center offset)
         radius (:radius band)
+        inner-index (inner-index)
         outer-index (outer-index)]
 
     (cond
@@ -351,10 +325,12 @@ Steps:
      (and (<= distance radius)
           (>= distance (- radius (:width band))))
      (let [outer-bucket-index (bucket-index e band)]
+       ;; If there was an inner focus, clear it.
+       (if inner-index
+         (clear-inner-focus))
        #_ (log "outer band index=" outer-bucket-index)
        ;; Update display if moving to a new bucket.
        (when (not= outer-bucket-index outer-index)
-         (clear-inner-focus)
          (clear-outer-focus)
          (set-outer-focus e)
          (let [inner-band (-> band :swatches (nth outer-bucket-index) :band)]
@@ -365,8 +341,7 @@ Steps:
      (when outer-index
        ;; Only draw if moving to a new bucket.
        (let [inner-band (-> band :swatches (nth outer-index) :band)
-             inner-bucket-index (bucket-index e inner-band)
-             inner-index (inner-index)]
+             inner-bucket-index (bucket-index e inner-band)]
          (when (not= inner-index inner-bucket-index)
            (clear-inner-focus)
            (set-inner-focus e))))
@@ -389,25 +364,22 @@ Steps:
 
 (defn on-touchstart
   [e]
-  (let [oe (.-originalEvent e)]
-    (when (= 1 (.. oe touches length))
-      (.-preventDefault e)
-      (on-mousemove e) ; needed for firefox on android to focus a swatch on tap
-      )))
+  (when (= 1 (-> e .-touches .-length))
+    (.preventDefault e)
+    (on-mousemove e) ; needed for firefox on android to focus a swatch on tap
+    ))
 
 (defn on-touchmove
   [e]
-  (let [oe (.-originalEvent e)]
-    (when (= 1 (.. oe touches length))
-      (.-preventDefault e)
-      (on-mousemove e))))
+  (when (= 1 (-> e .-touches .-length))
+    (.preventDefault e)
+    (on-mousemove e)))
 
 (defn on-touchend
   [e]
-  (let [oe (.-originalEvent e)]
-    (when (= 1 (.. oe touches length))
-      (.-preventDefault e)
-      (on-mousedown e))))
+  (when (= 1 (-> e .-touches .-length))
+    (.preventDefault e)
+    (on-mousedown e)))
 
 (defn on-mouseout
   [e]
@@ -422,15 +394,12 @@ Steps:
     (binding [wheel w]
       (apply f args))))
 
-;; color.pie_picker.init(canvas, palette, callback, options);
-;; canvas:   canvas to draw on
-;; palette:  ral palatte (crossover from clojure)
-;; callback: callback to call when a color is selected
-;; options:  optional map to override defaults options
-(defn ^:export init [canvas, palette, callback, options]
-  (log "initializing")
+(defn ^:export init [container, palette, callback]
+  (log "initializing ral color wheel")
   ;;(c2/centerZ canvas)
-  (let [options (util.map/deep-merge-with identity defaults options)]
+  (let [options (util.map/deep-merge-with identity defaults {})
+        canvas (node [:canvas {:width 195 :height 195}])
+        color-label (node [:span {:style {:display "table-cell" :vertical-align "middle" :max-width "90px"}}])]
     (binding [wheel {:opts options}]
       ;; Make the graph data structure representing the color wheel.
       (let [margin  (+ (:focus-bar-width options) 1)
@@ -449,9 +418,28 @@ Steps:
                       :band band
                       :callback callback
                       :canvas canvas
+                      :color-label color-label
                       :ctx (c/get-context canvas "2d")
                       :center (c2/center canvas)
                       :state (atom {:cursor {:outer nil :inner nil}})))
+
+        ;; Add DOM elements to conatiner.
+        (let [;; wrapper needs position relative so that color label div and be positioned absolutely
+              wrapper [:div {:style {:position "relative"}}
+                       canvas
+                       ;; wrapper div to center color label in wheel
+                       ;; note: z-index of -1 so that canvas doesn't get mouseout events when mouse is over label
+                       [:div {:style {:position "absolute" :left "53px" :top "72px"
+                                      :width "90px" :height "50px"
+                                      :font-weight "bold"
+                                      :font-size "12px"
+                                      :color "#AAA"
+                                      :display "table"
+                                      :text-align "center"
+                                      :overflow "hidden"
+                                      :z-index "-1"}}
+                        color-label]]]
+          (d/append! (sel1 (keyword container)) wrapper))
 
         ;; Draw the outer band of the wheel.
         (redraw)
