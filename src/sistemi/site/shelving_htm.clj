@@ -57,7 +57,6 @@
 
         ;; color picker
         [:script {:type "text/javascript" :src "js/main.js"}]
-        [:link {:rel "stylesheet" :href "pie-picker/piepick.css" :type "text/css"}]
 
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
@@ -137,8 +136,15 @@
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
-        (f/text :color {:tabindex 1})]]
-      [:canvas#colorwheel {:width "195" :height "195"}]
+        (f/text :color {:tabindex 1})
+        ]]
+
+      ;; TODO: Pull request for hiccup to handle style as map.
+      ;; TODO: Factor this out?
+      [:div {:style {:position :relative :height "195px" :width "195px"} #_ "position: relative; height: 195px; width: 195px;"}
+       [:div#wheel-ral {:style "position: absolute; top: 0px; left: 0px;"}]
+       [:div#wheel-val {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]
+       [:div#wheel-val-oiled {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]]
 
       [:div {:style "text-align: right"}
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
@@ -158,6 +164,25 @@
          // Hookup the form controls.
          $('.chzn-select').chosen();
          $('.customStyleSelectBox').customSelect();
+
+         // Handler - When the finish is changed, update the color wheel.
+         $('#finish').change(function() {
+           var finish = $(this).val();
+           $('#wheel-ral').css('visibility', 'hidden');
+           $('#wheel-val').css('visibility', 'hidden');
+           $('#wheel-val-oiled').css('visibility', 'hidden');
+           switch (finish) {
+             case ':laquer-matte':
+               $('#wheel-ral').css('visibility', 'visible');
+               break;
+             case ':valchromat-raw':
+               $('#wheel-val').css('visibility', 'visible');
+               break;
+             case ':valchromat-oiled':
+               $('#wheel-val-oiled').css('visibility', 'visible');
+           }
+           
+         });
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {
@@ -180,9 +205,13 @@
          // --------------------
          // Setup the color picker.
          function onColor(color) {
-           // Update background color of color select box.
            var e = $('#color');
            var rgb = color.rgb;
+
+           // TODO: Update hidden form field w/ EDN value.
+
+           // Update background color of color select box.
+           // TODO: Use texture if available.
            e.css('background-color', rgb);
 
            // Update text of color select box.
@@ -200,11 +229,10 @@
            }
          }
 
-         var canvas = $('#colorwheel').get(0);
-         var palette = color.ral.palette;
          var callback = onColor;
-         var options = null;
-         color.pie_picker.init(canvas, palette, callback, options);
+         color.ral_picker.init('#wheel-ral', color.ral.palette, callback);
+         color.val_picker.init('#wheel-val', 'raw', callback);
+         color.val_picker.init('#wheel-val-oiled', 'oiled', callback);
          // --------------------
 
          // Toggle background button handler.

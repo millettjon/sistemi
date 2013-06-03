@@ -14,10 +14,19 @@
   (merge cart-item-id
          {:quantity {:type :bounded-number :min 0 :max 100 :default 1}}))
 
+;; update finish options
+;;   laquer - matte
+;;   laquer - satin
+;;   laquer - glossy
+;;   valchromat - unfinished
+;;   valchromat - oiled
+;; ? what should the default finish be?
+;; background of color wheel should be adjustable
+
 (def shelf-params
   {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120 :format fmt/cm}
    :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30 :format fmt/cm}
-   :finish {:type :set :options [:matte :satin {:disabled true} :glossy {:disabled true}] :default :matte
+   :finish {:type :set :options [:laquer-matte :laquer-satin {:disabled true} :laquer-glossy {:disabled true} :valchromat-raw :valchromat-oiled] :default :laquer-matte
              :format (get-in fmt/parameter-formats [:shelf :finish])}
    :color {:type :rgb :default "#AB003B"}})
 

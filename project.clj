@@ -34,7 +34,7 @@
 
                      ;; ring core
                      [ring/ring-core "1.1.8"]
-                     [ring/ring-devel "1.1.8"]
+                     [ring/ring-devel "1.1.8" :exclusions [hiccup]]
                      [ring/ring-jetty-adapter "1.1.8"]
 
                      ;; ring handlers and middleware
@@ -42,7 +42,7 @@
                      [ring-persistent-cookies "0.1.0"]
 
                      ;; html
-                     [hiccup "1.0.2"]
+                     [hiccup "1.0.3"]
                      [sistemi/gdata-core-minimal "1.0"] ; CUSTOM: stripped down gdata client
 
                      ;; web client

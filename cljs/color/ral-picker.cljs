@@ -431,7 +431,7 @@ Steps:
                        ;; note: z-index of -1 so that canvas doesn't get mouseout events when mouse is over label
                        [:div {:style {:position "absolute" :left "53px" :top "72px"
                                       :width "90px" :height "50px"
-                                      :font-weight "bold"
+                                      ;;:font-weight "bold"
                                       :font-size "12px"
                                       :color "#AAA"
                                       :display "table"

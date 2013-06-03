@@ -9,7 +9,8 @@
   {:en {:shelf {:name "Custom Shelf"
                 :width "width"
                 :depth "depth"
-                :finish {:_ "finish" :matte "matte" :satin "satin" :glossy "glossy"}
+                :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin" :laquer-glossy "laquer - glossy"
+                         :valchromat-raw "valchromat - unfinished" :valchromat-oiled "valchromat - oiled"}
                 :color "color"
                 }
         :shelving {:name "Custom Shelving Unit"
@@ -19,7 +20,6 @@
                    ;:finish "finish"
                    :color "color"
                    :cutout {:_ "cutout" :semplice "none" :ovale "oval" :quadro "rectangle"}
-                   :finish {:_ "finish" :matte "matte" :satin "satin" :glossy "glossy"}
                    }
         :params {:depth "depth"}}
 
