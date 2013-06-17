@@ -1,6 +1,6 @@
 (ns color.ral-picker
   (:require [monet.canvas :as c]
-            [canvas :as c2]
+            [html.canvas :as c2]
             [dommy.core :as d]
             util.map)
   (:use [jayq.util :only [log]])

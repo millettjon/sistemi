@@ -1,7 +1,7 @@
 (ns color.val-picker
   (:require [color.valchromat :as v]
             [monet.canvas :as c]
-            [canvas :as c2]
+            [html.canvas :as c2]
             [dommy.core :as d]
             util.map
             [image :as img])
@@ -154,7 +154,7 @@
   [e]
   (let [{:keys [ctx center cursor]} wheel
         index (bucket-index e)]
-    #_ (log "set-focus: index: " index)
+    ;;(log "set-focus: index: " index)
     (focus-swatch index true)
     (set-color-label! :color index)
     (swap! cursor (constantly index))))

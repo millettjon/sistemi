@@ -1,4 +1,4 @@
-(ns canvas
+(ns html.canvas
   (:require [monet.canvas :as c])
   (:use [jayq.util :only [log]]))
 
