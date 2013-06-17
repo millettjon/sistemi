@@ -30,7 +30,7 @@
 
       oiled (map #(assoc %
                     :finish :oiled
-                    :rgb (-> :name % rgb-oiled)))]
+                    :rgb (-> :name % rgb-oiled)) raw)]
 
   (def palettes
     {:raw   {:colors raw
