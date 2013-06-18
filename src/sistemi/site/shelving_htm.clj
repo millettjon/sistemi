@@ -75,7 +75,7 @@
         [:style "#shelf-form select {height: 23px; line-height: 24px;}"]
 
         [:style "#shelf-form #color {width: 90px;}"]
-        [:style "#shelf-form #submit {margin-top: 20px;}"]
+        [:style "#shelf-form #submit {margin-top: 31px;}"]
         ]))
 
 (defn body
@@ -100,11 +100,12 @@
      ]]
 
    [:div.span3
-    
+
     [:form#shelf-form.form-horizontal {:method "get" :action "cart/add"}
      (f/hidden :id)
      (f/hidden :quantity)
      (f/hidden {:type :shelving})
+     (f/hidden :color)
 
      [:fieldset
 
@@ -136,18 +137,23 @@
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
-        (f/text :color {:tabindex 1})
-        ]]
+        [:div {:style {:height "25px"}}
+         [:div#color-swatch {:style {:width "25px" :height "100%" :background-color "blue" :display "inline-block" :border-radius "5px" :vertical-align "middle"}}]
+         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle" :padding-top "4px" :color "white"}}
+         "RAL 8098"
+          ]]]]
 
       ;; TODO: Pull request for hiccup to handle style as map.
       ;; TODO: Factor this out?
-      [:div {:style {:position :relative :height "195px" :width "195px"} #_ "position: relative; height: 195px; width: 195px;"}
+      [:div {:style {:position :relative
+                     :height "195px"        ; manual height since children are absolute
+                     :margin-left "25px"}}  ; manual margin to right align wheels with other fields
        [:div#wheel-ral {:style "position: absolute; top: 0px; left: 0px;"}]
        [:div#wheel-val {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]
        [:div#wheel-val-oiled {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]]
 
       [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
+       #_[:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
                                                                       (tr/translate :cart :update))]]]]
 
     [:script {:type "text/javascript"}
@@ -158,7 +164,7 @@
      "shelving.width=" (f/default :width) ";\n"
      "shelving.depth=" (f/default :depth) ";\n"
      "shelving.cutout='" (str (f/default :cutout)) "';\n"
-     "shelving.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
+     ;;"shelving.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.
@@ -166,22 +172,35 @@
          $('.customStyleSelectBox').customSelect();
 
          // Handler - When the finish is changed, update the color wheel.
+         var lastRAL;
+         var lastVAL;
          $('#finish').change(function() {
+           var clr;
            var finish = $(this).val();
            $('#wheel-ral').css('visibility', 'hidden');
            $('#wheel-val').css('visibility', 'hidden');
            $('#wheel-val-oiled').css('visibility', 'hidden');
            switch (finish) {
              case ':laquer-matte':
+             case ':laquer-satin':
+               c = typeof lastRAL == 'undefined' ? defaultRAL : lastRAL;
+               onColor(c);
                $('#wheel-ral').css('visibility', 'visible');
                break;
              case ':valchromat-raw':
+               c = typeof lastVAL == 'undefined' ? defaultVALraw : lastVAL;
+               console.log(c);
+               c = color.valchromat.get_by_name_js('raw', c.name);
+               onColor(c);
                $('#wheel-val').css('visibility', 'visible');
                break;
              case ':valchromat-oiled':
+               c = typeof lastVAL == 'undefined' ? defaultVALoiled : lastVAL;
+               c = color.valchromat.get_by_name_js('oiled', c.name);
+               onColor(c);
                $('#wheel-val-oiled').css('visibility', 'visible');
            }
-           
+
          });
 
          // Hookup on change events to update the model.
@@ -205,29 +224,48 @@
          // --------------------
          // Setup the color picker.
          function onColor(color) {
-           var e = $('#color');
-           var rgb = color.rgb;
+           pack = function(rgb) {
+             var r = rgb[0];
+             var g = rgb[1];
+             var b = rgb[2];
+             return '#' + (r < 16 ? '0' : '') + r.toString(16) +
+                          (g < 16 ? '0' : '') + g.toString(16) +
+                          (b < 16 ? '0' : '') + b.toString(16);
+           }
 
            // TODO: Update hidden form field w/ EDN value.
-
-           // Update background color of color select box.
-           // TODO: Use texture if available.
-           e.css('background-color', rgb);
+           var rgb;
+           var text;
+           var t = color.type;
+           if (t == 'ral') {
+             text = t.toUpperCase() + ' ' + color[t];
+             rgb = color.rgb;
+             lastRAL = color;
+           }
+           else {
+             lastVAL = color;
+             text = color.name;
+             rgb = pack(color.rgb);
+           }
 
            // Update text of color select box.
-           var t = color.type
-           e.val(t.toUpperCase() + ' ' + color[t]);           
+           $('#color-text').text(text);
+
+           // Update background color of color swatch.
+           // TODO: Use texture if available.
+           $('#color-swatch').css('background-color', rgb);
 
            // Update the model.
            var hex = rgbHexToInt(rgb);
            if (shelving.color != hex) {
-             shelving.color = hex; // why is this an int?
-             // For dark colors, use a gray background.
-             //var bg = luminence(hex) > 0.1 ? '#000' : '#DDD';
-             //$('#model').css({'background-color': bg});
+             shelving.color = hex;
              updateAnimation(shelving);
            }
          }
+
+         var defaultRAL = color.ral.default_color;
+         var defaultVALraw = color.valchromat.default_raw_color;
+         var defaultVALoiled = color.valchromat.default_oiled_color;
 
          var callback = onColor;
          color.ral_picker.init('#wheel-ral', color.ral.palette, callback);
@@ -255,6 +293,7 @@
 
          // Start animating.
          drawShelving(shelving, model[0]);
+         onColor(defaultRAL);
          startAnimation();
      });"
      ]]

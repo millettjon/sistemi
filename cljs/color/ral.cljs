@@ -216,3 +216,21 @@
         {:ral 9018, :rgb "#D7D7D7"}
         {:ral 9022, :rgb "#9C9C9C"}
         {:ral 9023, :rgb "#828282"}]))
+
+(defn ^:private get-color
+  "Lookup a color by RAL number."
+  [ral]
+  (->> palette
+       (filter #(= ral (:ral %)))
+       first))
+
+(def ^:export default-color
+  (-> (get-color 3027)
+      clj->js))
+
+
+
+
+
+
+

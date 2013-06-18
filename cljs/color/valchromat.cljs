@@ -22,7 +22,7 @@
                  :violet [71 52 74]
                  :orange [171 82 45]
                  :green [25 44 40]
-                 :dark [44 44 44]
+                 :grey [44 44 44]
                  :brown [105 65 51]
                  :blue [26 35 43]
                  :light-grey [101 101 101]
@@ -40,3 +40,35 @@
      :oiled {:colors oiled
              :textures-src "/raw/pie-picker/valchromat-oiled-palette-64.jpg"
              :label "Oiled Valchromat"}}))
+
+(defn ^:private get-by-name
+  "Gets a color object by name."
+  [palette name]
+  (->> palette
+       :colors
+       (filter #(= name (:name %)))
+       first))
+
+(defn ^:export get-by-name-js
+  "Gets a color object by name."
+  [palette name]
+  (-> palette
+      keyword
+      palettes
+      (get-by-name (keyword name))
+      clj->js))
+
+(def ^:export default-raw-color
+  (-> palettes
+      :raw
+      (get-by-name :red)
+       clj->js))
+
+(def ^:export default-oiled-color
+  (-> palettes
+      :oiled
+      (get-by-name :red)
+       clj->js))
+
+
+

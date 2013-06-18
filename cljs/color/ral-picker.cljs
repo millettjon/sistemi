@@ -425,7 +425,7 @@ Steps:
 
         ;; Add DOM elements to conatiner.
         (let [;; wrapper needs position relative so that color label div and be positioned absolutely
-              wrapper [:div {:style {:position "relative"}}
+              wrapper [:div {:style {:position "relative" :height "195px" :width "195px"}}
                        canvas
                        ;; wrapper div to center color label in wheel
                        ;; note: z-index of -1 so that canvas doesn't get mouseout events when mouse is over label
