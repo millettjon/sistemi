@@ -338,7 +338,8 @@ function drawShelving(shelving, container) {
 
   // Add subtle ambient lighting.
   if (useWebGL) {
-    var ambientLight = new THREE.AmbientLight(0x222222);
+    //var ambientLight = new THREE.AmbientLight(0x222222);
+    var ambientLight = new THREE.AmbientLight(0x111111);
     scene.add(ambientLight);
   }
 
