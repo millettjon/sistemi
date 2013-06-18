@@ -1,0 +1,3 @@
+[submodule "checkouts/hiccup"]
+	path = checkouts/hiccup
+	url = git@github.com:silence/hiccup.git
