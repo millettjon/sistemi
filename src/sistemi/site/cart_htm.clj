@@ -16,10 +16,22 @@
   {})
 
 (def strings
-  {:en {:title "SistemiModerni: Cart"}
+  {:en {:title "SistemiModerni: Cart"
+        :cart_contents "Your shopping cart contains the following items."
+        :subtotal "Subtotal"
+        :item "Item"
+        :quantity "Quantity"
+        :total_price "Price"
+        :unit_price "Unit Price"}
    :es {:title ""}
    :fr {:title ""}
-   :it {:title ""}
+   :it {:title ""
+        :cart_contents "Il suo carrello contiene gli articoli seguenti"
+        :subtotal "Totale parziale"
+        :item "Articolo"
+        :quantity "Quantità"
+        :total_price "Prezzo"
+        :unit_price "Prezzo Unitario"}
    })
 
 (defn format-param
@@ -62,14 +74,14 @@
         total (fmt/format-eur (total items))]
     [:div.text_content
 
-     [:p "Your shopping cart contains the following items."]
+     [:p (tr/translate :cart_contents)]
 
      [:table.cart
       [:tr
-       [:th {:style "text-align:left;"} "Item"]
-       [:th {:style "text-align:right"} "Unit Price"]
-       [:th {:style "text-align:right"} "Quantity"]
-       [:th {:style "text-align:right"} "Price"]]
+       [:th {:style "text-align:left;"} (tr/translate :item)]
+       [:th {:style "text-align:right"} (tr/translate :unit_price)]
+       [:th {:style "text-align:right"} (tr/translate :quantity)]
+       [:th {:style "text-align:right"} (tr/translate :total_price)]]
       (for [{:keys [type id quantity] :as item} (sort #(compare (:id %2) (:id %1)) items)]
         [:tr.item
          [:td
@@ -122,7 +134,7 @@
            [:span.white {:style "font-size: 16px;" } (-> item :price fmt/format-eur)]]]])
 
       [:tr.total
-       [:td {:style "padding-top: 10px;" :colspan "3"} "Subtotal"] [:td {:style "text-align:right; padding-top:10px;"} total]]]
+       [:td {:style "padding-top: 10px;" :colspan "3"} (tr/translate :subtotal)] [:td {:style "text-align:right; padding-top:10px;"} total]]]
 
      [:script {:type "text/javascript"}
       "jQuery(document).ready(function() {"

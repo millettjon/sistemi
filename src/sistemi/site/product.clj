@@ -25,7 +25,8 @@
 
    :es {}
 
-   :it {:shelf {:width "Lunghezza"
+   :it {:shelf {:name ""
+                :width "Lunghezza"
                 :depth "Profondità"
                 :color "Colore"
                 :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
