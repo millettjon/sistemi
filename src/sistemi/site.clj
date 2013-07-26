@@ -63,10 +63,10 @@
         :cart {:_ "Panier"
                :add "Ajouter au panier"}
 
-        :header {:signup "S’abonner aux emails"
-                 :contact "Contactez Nous"
-                 :careers "Carrières"
-                 :team "Équipe Exécutif"}
+        :header {:signup "S’abonner"
+                 :contact "Nous contacter"
+                 :careers "Jobs"
+                 :team "Qui sommes nous"}
         :menu {
                :home "Accueil"
                :vision "Notre Vision"

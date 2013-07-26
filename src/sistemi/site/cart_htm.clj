@@ -21,17 +21,33 @@
         :subtotal "Subtotal"
         :item "Item"
         :quantity "Quantity"
-        :total_price "Price"
-        :unit_price "Unit Price"}
+        :price "Price"
+        :unit_price "Unit Price"
+        :copy "Copy"
+        :edit "Edit"
+        :delete "Delete"}
    :es {:title ""}
-   :fr {:title ""}
+   :fr {:title ""
+        :cart_contents "Votre panier contient les articles suivants"
+        :subtotal "Sous-total"
+        :item "Article"
+        :quantity "Quantité"
+        :price "Prix"
+        :unit_price "Prix Unitaire"
+        :copy "Copier"
+        :edit "Modifier"
+        :delete "Supprimer"
+        }
    :it {:title ""
         :cart_contents "Il suo carrello contiene gli articoli seguenti"
         :subtotal "Totale parziale"
         :item "Articolo"
         :quantity "Quantità"
-        :total_price "Prezzo"
-        :unit_price "Prezzo Unitario"}
+        :price "Prezzo"
+        :unit_price "Prezzo Unitario"
+        :edit "Modifica"
+        :copy "Copia"
+        :delete "Annulla"}
    })
 
 (defn format-param
@@ -81,7 +97,7 @@
        [:th {:style "text-align:left;"} (tr/translate :item)]
        [:th {:style "text-align:right"} (tr/translate :unit_price)]
        [:th {:style "text-align:right"} (tr/translate :quantity)]
-       [:th {:style "text-align:right"} (tr/translate :total_price)]]
+       [:th {:style "text-align:right"} (tr/translate :price)]]
       (for [{:keys [type id quantity] :as item} (sort #(compare (:id %2) (:id %1)) items)]
         [:tr.item
          [:td
@@ -92,20 +108,20 @@
           ;; - quantity should be included, but not type
           [:form {:method "get" :action (tr/localize (p/urls type)) :style "display:inline;"}
            (f/hidden (assoc (model/to-params item) :quantity quantity))
-           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 20px;"} "Edit"]]
+           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 20px;"} (tr/translate :edit) ]]
           
           ;; copy button (should this only be for customizable items?)
           ;; - clear the id
           ;; - add cart params back in
-          ;; where does finish come from? :matte instead of ::matte
-          [:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
-           (f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
-           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} "Copy"]]
+          ;; Per Eric's French friend who thought copy was redundant
+          ;;[:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
+           ;;(f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
+           ;;[:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :copy)]]
 
           ;; delete button
           [:form {:method "post" :action (tr/localize "/cart/delete") :style "display: inline;"}
            (f/hidden (select-keys item [:id]))
-           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} "Delete"]]
+           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :delete) ]]
 
           ;; product specs
           ;; ? macro with-type?

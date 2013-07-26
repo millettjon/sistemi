@@ -160,18 +160,6 @@
          $('#colorpicker').farbtastic('#color');
          $('.chzn-select').chosen();
          $('.customStyleSelectBox').customSelect();
-//         $('#color1').colorPicker({colors: ['BEBD7F', 'C2B078', 'C6A664', 'E5BE01', 'CDA434', 'A98307']});
-//         $('#color2').simpleColor({
-//           //colors: ['BEBD7F', 'C2B078', 'C6A664', 'E5BE01', 'CDA434', 'A98307'],
-//           boxWidth: '100px',
-//           boxHeight: '23px',
-//           columns: 3,
-//           cellWidth: 30,
-//           cellHeight: 11,
-//           //displayColorCode: true,
-//           //insert: 'before',
-//           buttonClass: 'input'
-//         });
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {

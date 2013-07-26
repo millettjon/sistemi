@@ -31,7 +31,7 @@
                 :color "Colore"
                 :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
                ;; Not working with form.clj and
-                :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
+                :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"}
                 }
         :shelving {:width "Lunghezza"
                    :depth "Profondità"
@@ -41,16 +41,18 @@
                    :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
                    }}
 
-   :fr {:shelf {:width "Largeur"
+   :fr {:shelf {:name "Etagère personnalisée"
+                :width "Largeur"
                 :depth "Profondeur"
-                :finish "Finition"
+                :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
+                         :valchromat-raw "Valchromat – brut" :valchromat-oiled "Valchromat – huilé"}
                 :color "Couleur"}
         :shelving {:width "Longeur"
                    :depth "Profondeur"
                    :height "Hauteur"
                    :finish "Finition"
                    :color "Couleur"
-                   :cutout {:_ nil :semplice "semplice" :ovale "ovale" :quadro "quadro"}}}})
+                   :cutout {:_ "Découpe" :semplice "semplice" :ovale "ovale" :quadro "quadro"}}}})
 
 (def urls
   "design urls"
