@@ -31,7 +31,8 @@
                 :color "Colore"
                 :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
                ;; Not working with form.clj and
-                :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"}
+                :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
+                         :valchromat-raw "Valchromat - naturale" :valchromat-oiled "Valchromat - oliato"}
                 }
         :shelving {:width "Lunghezza"
                    :depth "Profondità"
