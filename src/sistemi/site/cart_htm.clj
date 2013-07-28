@@ -114,9 +114,9 @@
           ;; - clear the id
           ;; - add cart params back in
           ;; Per Eric's French friend who thought copy was redundant
-          ;;[:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
-           ;;(f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
-           ;;[:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :copy)]]
+          [:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
+           (f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
+           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :copy)]]
 
           ;; delete button
           [:form {:method "post" :action (tr/localize "/cart/delete") :style "display: inline;"}
