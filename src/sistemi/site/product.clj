@@ -39,7 +39,8 @@
                    :height "Altezza"
                    :color "Colore"
                    :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
-                   :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
+                   :finish "Finitura"
+                   ;:finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
                    }}
 
    :fr {:shelf {:name "Etagère personnalisée"

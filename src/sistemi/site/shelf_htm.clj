@@ -26,8 +26,7 @@
         :width "Lunghezza"
         :depth "Profondità"
         :height "Altezza"
-        ;:finish "Finitura"
-        :finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
+        :finish "Finitura"
         :color "Colore"
         :quantity "Quantità"}
 
@@ -115,19 +114,6 @@
        [:label.control-label {:for "finish"} (tr/translate :finish)]
        [:div.controls
         (f/select :finish {:class "customStyleSelectBox" :style "width: 100px" :tabindex 1})]]
-
-      ;; experiment with jquery-simple-color
-      ;[:div.control-group
-       ;[:label.control-label {:for "color2"} (tr/translate :color)]
-        ;[:div.controls
-         ;(f/text :color2 {:tabindex 1})]]
-         ;(f/text :color2 {:class "simpleColorContainer" :style "boxWidth: 50px;" :tabindex 1})]]
-
-      ;; experiment with simple-color-picker
-      ;[:div.control-group
-      ;[:label.control-label {:for "color1"} (tr/translate :color)]
-       ;[:div.controls
-        ;(f/text :color1 {:tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
