@@ -68,6 +68,37 @@
                                       ici.")}
                }
         }
+   :it {:title "Sistemi Moderni:"
+        :team {:eric {:name "E.M. Romeo" :position "Amministratore Delegato e Direttore Creativo"
+                      :description (stru/join-lines
+                                     "I suoi 12 anni di progettazione e di direzione sono il fondamento per
+                                     SistemiModerni. L'eleganza, la semplicità d'uso e, soprattutto,la
+                                     personalizzazione sono al cuore di ogni prodotto che trovate qui. Se volete
+                                     saperne di più o volete semplicemente porre delle domande, è possibile
+                                     ottenere una linea diretta, semplicemente cliccando qui.")}
+               :jon {:name "Jon Millett" :position "Chief Technical Officer"
+                     :description (stru/join-lines
+                                    "Jon è l'uomo dietro il nostro sito web. La sua conoscenza della programmazione,
+                                    maturata in15 anni d'esperienza, vi rende possibile ottenere le forme che volete,
+                                    come le volete, con la massima facilità. Jon e' ricco di grandi idee. Perché non
+                                    contattarlo con le vostre?  Basta cliccare qui.")}
+
+               :einat {:name "Einat Grinbaum" :position "Chief Design Officer"
+                       :description (stru/join-lines
+                                      "Einat ha trascorso gli ultimi 15 anni unendo artisticamente desideri e
+                                      necessità per creare ambienti privati ​​e pubblici mozzafiato. L'esame di ogni
+                                      dettaglio è fondamentale per offrirvi un design unico!  Perché non contattare
+                                      Einat con i vostri desideri, cliccando qui?")}
+
+               :david {:name "David Millett" :position "Developer"
+                       :description (stru/join-lines
+                                      "David è il nostro ingegnere aerospaziale trasformato in guru del software.
+                                      Da oltre 10 anni concepisce con precisione ed ingegno delle soluzioni a
+                                      problemi delicati.  Ora David applica il suo genio allo sviluppo disoluzioni
+                                      software per il mondo del design. Quale tipo di problemi interessanti David
+                                      potrebbe risolvere per voi? Fateglielo sapere cliccando qui.")}
+               }
+        }
    })
 
 (defn body
