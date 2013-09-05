@@ -17,7 +17,8 @@
                    :width "width"
                    :depth "depth"
                    :height "height"
-                   ;:finish "finish"
+                   :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin" :laquer-glossy "laquer - glossy"
+                            :valchromat-raw "valchromat - unfinished" :valchromat-oiled "valchromat - oiled"}
                    :color "color"
                    :cutout {:_ "cutout" :semplice "none" :ovale "oval" :quadro "rectangle"}
                    }
@@ -30,7 +31,6 @@
                 :depth "Profondità"
                 :color "Colore"
                 :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
-               ;; Not working with form.clj and
                 :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
                          :valchromat-raw "Valchromat - naturale" :valchromat-oiled "Valchromat - oliato"}
                 }
@@ -39,8 +39,8 @@
                    :height "Altezza"
                    :color "Colore"
                    :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
-                   :finish "Finitura"
-                   ;:finish {:_ "Finitura" :matte "Opaco" :satin "Satinato" :glossy "Lucido"}
+                   :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
+                            :valchromat-raw "Valchromat - naturale" :valchromat-oiled "Valchromat - oliato"}
                    }}
 
    :fr {:shelf {:name "Etagère personnalisée"
@@ -52,7 +52,8 @@
         :shelving {:width "Longeur"
                    :depth "Profondeur"
                    :height "Hauteur"
-                   :finish "Finition"
+                   :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
+                            :valchromat-raw "Valchromat – brut" :valchromat-oiled "Valchromat – huilé"}
                    :color "Couleur"
                    :cutout {:_ "Découpe" :semplice "semplice" :ovale "ovale" :quadro "quadro"}}}})
 

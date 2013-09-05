@@ -15,7 +15,7 @@
           ;; item customization attributes
           :attributes {:width 120 ; should this be a frinj #?
                        :depth 30
-                       :finish ::matte
+                       :finish :laquer-matte
                        :color "#AB003B"}}]
  :count 1  ;; counter that increments for each line item added to the cart
  }

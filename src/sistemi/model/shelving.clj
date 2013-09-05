@@ -19,7 +19,7 @@
    :cut {:slot      (fj  3.60 :EUR)
          :cutout    (fj  3.60 :EUR)
          :perimeter (fj  6.80 :EUR :per :m :per :m)}
-   :finish {:matte  (fj 50.00 :EUR :per :m :per :m)}})
+   :finish {:laquer-matte  (fj 50.00 :EUR :per :m :per :m)}})
 
 (def ^:private margin
   0.2)
@@ -62,7 +62,7 @@
 
 ;;        type         price keys
 (add-cost ::material   :material :mdf-ecological)
-(add-cost ::finish     :finish :matte)
+(add-cost ::finish     :finish :laquer-matte)
 (add-cost ::perimeter  :cut :perimeter)
 (add-cost ::slot       :cut :slot)
 (add-cost ::cutout     :cut :cutout)
@@ -181,7 +181,7 @@
                  :width (fj (:width params) :cm)
                  :depth (fj (:depth params) :cm)
                  :cutout (keyword (:cutout params))
-                 :finish :matte
+                 :finish :laquer-matte
                  :material :mdf-ecological}))
 
 ;; TODO refactor this as it is common with shelf

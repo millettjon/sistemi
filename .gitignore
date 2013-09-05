@@ -4,3 +4,6 @@ pom.xml
 *.iml
 .lein-repl-history
 target
+lib/
+.lein-plugins
+.lein-deps-sum

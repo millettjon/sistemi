@@ -18,7 +18,7 @@
    {:mdf-ecological (fj 16.00 :EUR :per :m :per :m)
     :plywood-fsc    (fj 37.25 :EUR :per :m :per :m)}
    :cut {:perimeter (fj  6.80 :EUR :per :m :per :m)}
-   :finish {:matte  (fj 50.00 :EUR :per :m :per :m)}})
+   :finish {:laquer-matte  (fj 50.00 :EUR :per :m :per :m)}})
 
 (def ^:private margin
   0.2)
@@ -33,7 +33,7 @@
 
 ;;        type         price keys
 (add-cost ::material   :material :mdf-ecological)
-(add-cost ::finish     :finish :matte)
+(add-cost ::finish     :finish :laquer-matte)
 (add-cost ::perimeter  :cut :perimeter)
 
 ;; ----------- RECTANGULAR COMPONENTS ---------------------
@@ -117,11 +117,12 @@
 
 ;; ----------- FORM HELPERS ---------------------
 
+;; Displayed in cart_htm
 (defmethod from-params :shelf
   [params]
   (merge params {:width (fj (:width params) :cm)
                  :depth (fj (:depth params) :cm)
-                 :finish :matte
+                 :finish :laquer-matte
                  :material :mdf-ecological}))
 
 #_ (price (from-params {:type :shelf :width 120, :depth 30, :color "#00FF00"}))

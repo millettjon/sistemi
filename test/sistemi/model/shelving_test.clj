@@ -20,7 +20,7 @@
    :width  (fj 120 :cm)
    :depth  (fj 39 :cm)
    :cutout :ovale
-   :finish :matte
+   :finish :laquer-matte
    :material :mdf-ecological
    :color 0xAB003B})
 
