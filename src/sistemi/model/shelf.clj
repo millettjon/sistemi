@@ -122,7 +122,7 @@
   [params]
   (merge params {:width (fj (:width params) :cm)
                  :depth (fj (:depth params) :cm)
-                 :finish :laquer-matte
+                 :finish (keyword (:finish params))
                  :material :mdf-ecological}))
 
 #_ (price (from-params {:type :shelf :width 120, :depth 30, :color "#00FF00"}))

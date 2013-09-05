@@ -181,7 +181,7 @@
                  :width (fj (:width params) :cm)
                  :depth (fj (:depth params) :cm)
                  :cutout (keyword (:cutout params))
-                 :finish :laquer-matte
+                 :finish (keyword (:finish params))
                  :material :mdf-ecological}))
 
 ;; TODO refactor this as it is common with shelf
