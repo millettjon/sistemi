@@ -14,7 +14,16 @@
                        bring you high design and high quality for a reasonable price. We believe that
                        the world must stop creating low quality disposable goods. We also believe that
                        you can and should have things your way. That is why we empower you to
-                       personalize all of our offerings.")}}
+                       personalize all of our offerings.
+                       <p/>
+                       Through the use of today’s latest technologies, we are changing the very nature of online
+                       commerce. Automation, interface and service are the driving forces that allow us to
+                       provide you with personalized solutions in your home and office.  Whether you are searching
+                       for that one item that fits just right in your client’s home or your own, Sistemi Moderni
+                       will automatically set fabrication in motion from the nearest facility to your chosen
+                       delivery destination.  Our extensive network of artisans will ensure that your order is
+                       created with the greatest precision and care.  As our name implies, we will always use
+                       the most modern of systems to deliver your personalized products to your doorstep.")}}
    :es {}
    :fr {:vision {:title "NOTRE VISION"
                  :text (stru/join-lines "<span class=\"company_name\">SistemiModerni</span> a été créée
