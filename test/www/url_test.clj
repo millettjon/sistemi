@@ -49,8 +49,13 @@
        {:scheme :https :server-name "foo"} "https://foo"
        {:scheme :https :server-name "foo" :server-port 8118} "https://foo:8118"
        {:scheme :https :server-name "foo" :server-port 8118 :uri "/bar"} "https://foo:8118/bar"
-       {:scheme :https :server-name "foo" :server-port 8118 :uri "/bar" :query-params {:baz "qux"}}
-       "https://foo:8118/bar?baz=qux"))
+       {:scheme :https :server-name "foo" :server-port 8118 :uri "/bar" :query-params {:baz "qux"}} "https://foo:8118/bar?baz=qux"
+
+       ;; The header x-forwarded-proto should be used instead of :scheme when behind a reverse proxy.
+       {:scheme :http, :server-name "foo", :uri "/bar", :headers {"x-forwarded-proto" "https"}, :server-port 443} "https://foo/bar"
+       ))
+
+;; {:ssl-client-cert nil, :remote-addr "127.0.0.1", :scheme :http, :query-params {}, :session {}, :form-params {}, :request-method :get, :query-string nil, :content-type nil, :cookies {"locale" {:value "en"}}, :uri "/nivo/images/loading.gif", :server-name "www.sistemimoderni.com", :params {}, :headers {"user-agent" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:23.0) Gecko/20100101 Firefox/23.0", "cookie" "locale=en", "accept" "image/png,image/*;q=0.8,*/*;q=0.5", "host" "www.sistemimoderni.com", "dnt" "1", "x-forwarded-proto" "https", "x-forwarded-for" "190.95.83.124", "referer" "https://www.sistemimoderni.com/nivo/nivo-slider.css", "accept-encoding" "gzip, deflate", "accept-language" "en-us,en;q=0.7,es-cl;q=0.3", "connection" "close"}, :content-length nil, :server-port 80, :character-encoding nil, :body #<HttpInput org.eclipse.jetty.server.HttpInput@10b3697>}
 
 (deftest new-URL-path-test
   (are [a] (= (url/new-URL (path/new-path a)) (url/new-URL a))

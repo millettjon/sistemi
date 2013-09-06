@@ -161,7 +161,11 @@
   [m]
   (let [m (if (:server-name m)
             ;; Coerce from a ring request map.
-            (normalize (URL. (:scheme m) (:server-name m) (:server-port m) (or (:uri m) "") (:query-params m) (:fragment m)))
+            (let [;; Get scheme from x-forwarded-proto when behind reverse proxy.
+                  scheme (or (keyword (get-in m [:headers "x-forwarded-proto"]))
+                             (:scheme m))]
+              (normalize (URL. scheme (:server-name m) (:server-port m) (or (:uri m) "") (:query-params m) (:fragment m))))
+
             ;; Create directly from a map.
             (merge (URL. nil nil nil nil nil nil) m))]
     m))
