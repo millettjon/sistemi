@@ -56,10 +56,12 @@
       [:link {:href "/bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/css/layout.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
+
       [:script {:src (if (and (conf :offline-enabled) (net/offline?))
                        "/js/jquery-1.7.1.min.js"
-                       "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+                       (www.url/match-scheme "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" req/*req*))
                 :type "text/javascript"}]
+
       [:script {:src "/bootstrap/js/bootstrap.js", :type "text/javascript"}]
       [:script {:type "text/javascript" :src "/3d/detector.js"}]
       [:link {:href "/fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]

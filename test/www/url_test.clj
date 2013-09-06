@@ -97,3 +97,6 @@
        "baz" "http://foo/bar" "http://foo/bar/baz"
        "baz" "https://foo:8118/bar" "https://foo:8118/bar/baz"))
 
+(deftest match-scheme-test
+  (are [a b c] (= (str (url/match-scheme a b)) c)
+       "http://www.google.com" "https://foo/bar" "https://www.google.com"))

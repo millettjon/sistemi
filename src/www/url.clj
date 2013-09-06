@@ -198,3 +198,11 @@
       :port (some :port urls)
       :path (path/qualify (:path rurl) (:path aurl)))))
 
+(defn match-scheme
+  "Sets the scheme of a url to match that of a request. Intended for
+use building urls for 3rd party sites that use the same scheme as the
+original request."
+  [url req]
+  (assoc (new-URL url)
+    :scheme
+    (:scheme (new-URL req))))
