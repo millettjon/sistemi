@@ -7,9 +7,6 @@
                         ;; page or url handler.
                         :require-url-translations false}
 
- :paypal {:site "sandbox"
-          :version "88.0"}
-
  ;; The mail account used to send internal mail notifications.
  ;; (See http://en.wikipedia.org/wiki/Edwin_Jarvis).
  :jarvis {:host "smtp.gmail.com"
