@@ -52,7 +52,7 @@
                      [com.draines/postal "1.9.2"]
 
                      ;; configuration
-                     [fidjet "0.0.1"]
+                     [fidjet "0.0.2"]
 
                      ;; user agent detection
                      [bitwalker/UserAgentUtils "1.8"]
@@ -60,6 +60,9 @@
                      ;; calculation
                      [dgraph "1.2.2"]
                      [frinj "0.1.4"]
+
+                     ;; payment
+                     [com.braintreepayments.gateway/braintree-java "2.24.0"]
 
                      ;; misc
                      [org.clojure/core.memoize "0.5.3"]
