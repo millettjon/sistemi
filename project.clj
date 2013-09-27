@@ -73,10 +73,12 @@
                  ]
 
   :plugins [[lein-cljsbuild "0.3.0"]
-            [codox "0.6.1"]
+            [lein-marginalia "0.7.1"]
             ;; [lein-outdated "1.0.0"]  ; hangs
             ;; [lein-cloverage "1.0.2"] ; runs but no output is produced
             ]
+
+  :aliases {"marg" ["marg" "--dir" "var/doc"]}
 
   :cljsbuild {:crossovers []
               :crossover-path "var/target/crossovers"
