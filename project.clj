@@ -67,7 +67,7 @@
                  [rm-hull/monet "0.1.8"]   ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
 
-                 ;; for internationalized urls
+                 ;; For proper handling of internationalized chars in url path segments.
                  [com.google.gdata/core "1.47.1"]
                  ]
 
@@ -75,8 +75,7 @@
             [lein-marginalia "0.7.1"]
             [lein-ancient "0.4.4"]
             [lein-libdir "0.1.1"]
-            ;; [lein-cloverage "1.0.2"] ; runs but no output is produced
-            ]
+            [lein-cloverage "1.0.2"]]
 
   :aliases {"marg" ["marg" "--dir" "var/doc"]}
 
