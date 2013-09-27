@@ -95,7 +95,7 @@
 
   ;; Launch a browser if configured.
   (when (conf :launch-browser)
-    (browse-url  (<< "file://~(System/getProperty \"user.dir\")/docs/uberdoc.html"))
+    (browse-url  (<< "file://~(System/getProperty \"user.dir\")/var/doc/uberdoc.html"))
     (browse-url  (<< "http://localhost:~{(conf :port)}")))
 
   ;; Start jetty.
