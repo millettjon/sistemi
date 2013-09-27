@@ -74,7 +74,7 @@
 
   :plugins [[lein-cljsbuild "0.3.0"]
             [lein-marginalia "0.7.1"]
-            ;; [lein-outdated "1.0.0"]  ; hangs
+            [lein-ancient "0.4.4"]
             ;; [lein-cloverage "1.0.2"] ; runs but no output is produced
             ]
 
