@@ -4,10 +4,10 @@
             [clojure.tools.logging :as log])
   (:use sistemi.model
         sistemi.model.format
-        frinj.calc))
+        frinj.ops))
 
 ;; Keep this here to prevent a weird interaction between frinj and clojure-test-mode.
-(frinj-init!)
+;;(frinj-init!)
 
 ;; --------- CONSTANTS ---------------
 

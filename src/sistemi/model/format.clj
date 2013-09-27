@@ -1,6 +1,6 @@
 (ns sistemi.model.format
   (:require [sistemi.translate :as tr])
-  (:use [frinj core calc]))
+  (:use [frinj ops]))
 
 (defn format-area
   [v unit]
@@ -78,7 +78,7 @@
 (defn cm
   [v]
   (let [v (if (instance? frinj.core.fjv v)
-            (:v (frinj.calc/to v :cm))
+            (:v (frinj.ops/to v :cm))
             v)]
     (str v " cm")))
 

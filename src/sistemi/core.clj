@@ -10,7 +10,7 @@
   (:require [clojure.tools.logging :as log]
             [www.id :as id]
             sistemi.config
-            frinj.calc
+            frinj.jvm
             [sistemi.registry :as registry]
             [sistemi.routes :as routes]
             git)
@@ -68,7 +68,7 @@
     (set-default-territories! (m :default-territories)))
 
   ;; ===== UNIT CALCULATIONS =====
-  (frinj.calc/frinj-init!)
+  (frinj.jvm/frinj-init!)
 
   ;; ===== HANDLERS =====
   ;; Register request handlers and build routes after localization

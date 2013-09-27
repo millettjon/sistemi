@@ -60,7 +60,7 @@
 (defn total
   "Calculates the total price of all cart items."
   [items]
-  (apply frinj.calc/fj+ (map :price items)))
+  (apply frinj.ops/fj+ (map :price items)))
 
 (defn head
   []

@@ -1,7 +1,7 @@
 (ns sistemi.model
   "Functions for working with models of nested components."
   (:require [sistemi.model.format :as format])
-  (:use frinj.calc))
+  (:use frinj.ops))
 
 ;; ---------- COMPONENT AND TREE RELATED ----------
 (defmulti from-params
