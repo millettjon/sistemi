@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# Heroku custom build script to disable aot compilation.
-lein deps
