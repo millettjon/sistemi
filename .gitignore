@@ -3,6 +3,5 @@ pom.xml
 .idea
 *.iml
 .lein-repl-history
-target
 .lein-plugins
 .lein-deps-sum

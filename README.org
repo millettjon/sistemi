@@ -1,15 +1,177 @@
+* SCRATCH
+bin
+checkouts
+cljs               move to src
+cljs-externs       move to src
+etc
+lib
+Procfile           remove
+project.clj
+README.org
+src
+test
+textures           move to src
+var
+www
+
+bin
+checkouts
+etc
+lib
+project.clj
+README.org
+src/
+  clj
+  cljs
+  cljs-externs
+  textures
+  calc/
+    <product-id>/<factory-id>/price.calc
+      - one product per document
+      - how to localize?
+        - standard conventions
+        - override w/ mapping file
+      - template as example
+
+calc/<product-id>/<factory-id>/price.calc
+calc/
+  .shelf -> 1
+  1/
+    .name -> shelf
+    .stephan -> 1
+    1/
+      .name -> stephan
+      price.calc
+
+base 36 ids
+
+
+test
+var
+www
+
+- don't use foreman
+- directory reorg
+  - move cljs to src/
+  - move cljs-exerns to src/
+  - move textures to src/
+- fix server deployment
+  - integrate with bootstrap
+  - start from upstart
+  - run as a dedicated user
+  - save logs in var/log
+  - cronjob to roll logs
+
+* BUGS
+** TODO website - on review page when clicking edit specifications, on return to design page, cutout selection is lost
+** TODO france - fix formatting of currencies french locale e.g.,: "1 234,56€"
+Note: Bux formats based on currency, but not locale.
+** TODO france - validate addresses
 * TASKS
+** ops - staging site
+  - secret key should not have to be loaded in gpg agent manually
+  - .gnupg dir needs 0700 mode
+  - install as a service
+  - run as user/group sm-www
+  ? use ansible to push deployments?
+    - does it support branches?
+    - run in local mode to fix perms? or just use a shell script pull hook?
+  - use production and staging branches
+
+** website - admin interface
+** refactor - remove paypal
+** refactor - remove fidjet
+** pricing - integrate website with stephan's latest spreadsheets
+https://github.com/cgrand/spreadmap/commits/master
+(require '[net.cgrand.spreadmap :as evil])
+(def m (evil/spreadmap "shelf-price.xls"))
+(defn price [depth width num] (-> m (assoc "B2" depth) (assoc "B3" width) (assoc "B4" num) (select-keys ["G2" "G5"])))
+(price 30 120 6)
+(time (dotimes [i 1] (price 30 120 6)))
+
+locking:  http://clojuredocs.org/clojure_core/1.2.0/clojure.core/locking
+
+** pricing - create standard template for spreadsheets
+** pricing - display pricing on design page
+** website - fix shopping cart to handle multiple color types
+;; use hidden form parameter to transmit color
+;;   - still requires validation
+;;   - use edn? how to read safely?
+;; update color fields to handle other color spaces
+;;   - RAL
+;;   - Valchromat
+;;   - Valchromat oiled
+;; colors attributes
+;;   :type
+;;   :code
+;;   :name
+;;   :rgb (used if no texture (rgb, ral, pantone))
+;;   :texture (loaded from file)
+;; color functions
+;;   validate
+;;   edit
+;;   display
+;;
+;; update finish options
+;;   laquer - matte
+;;   laquer - satin
+;;   laquer - glossy
+;;   valchromat - unfinished
+;;   valchromat - oiled
+;; hook up to datomic
+;; deploy staging site to digital ocean
+;;
+;; update translations
+
 ** website - simple checkout flow
+eric would like to call the initial users
+  - require phone number
 ** website - order status
     1) account login (future)
     2) shortcut link from email
     3) combo of email address and zipcode
+** website - bookcase page - italian,french - dropdown for dimensions is too long
+** website - shelf page - finish dropdown - lengthen dropdown menu for laquer matte
 ** website - careers page
 http://www.codinghorror.com/blog/2012/03/how-to-hire-a-programmer.html
 ** website - add search
+** website, design page - make click to drag more obvious
+beatrice
+  - click and drag the shelves
+    - when the mouse, drags over the shelf window? it turns into an
+      icon like the orbit 
+  ? move the "click to drag" message to the top?
+  ? orbit icon?
+  ? change mouse to orbit icon on mouseover?
+  ? self animate to indicate that it can spin?
+  ? play pause icon?
+  - should work on both
+** website - prototype single page app using pedestal
+http://pedestal.io/
+** website - pro interface
+- exclusive designs
+http://www.fermobusa.com/to-the-trade/trade-application
+http://www.zanotta.it/#/en/
+- collect info
+- create user
+- can get trade discounts
+- accounting
+
+** feedback - spam mitigation
+  - http://www.sitepoint.com/captcha-alternatives/
+  - https://github.com/itang/clj-captcha
+  - track timing of input
+    - note, may fail if browser fills out standard form fields
+  - add hidden honeypot field
+  - server side spam checking
+  - check for valid HTTP_REFERER (and possibly USER_AGENT)
+  - have javacript checksum fields and autofill a checksum hidden field
+  ? how to defeat humans?
+
 ** order - order confirmation email
   - with shortcut link to order status
 
+** order - referral code
 ** customer service - create a faq
 ** assembly instructions - add generic instructions to website
 ** assembly instructions - create customized instructions based on order
@@ -18,12 +180,31 @@ http://www.codinghorror.com/blog/2012/03/how-to-hire-a-programmer.html
 ** website - user accounts
 ** website - contact us page
 ** website - spanish translations
+** marketing - privacy
+http://www.schneier.com/blog/archives/2013/03/changes_to_the.html
 ** marketing - googlebot & keywords
 ** marketing - pinterest
 ** marketing - twitter
+** marketing - google analytics
+** usability - a/b testing
 ** datomic - user accounts
 ** datomic - frinj integration
 - frinj w/ datomic: https://gist.github.com/1980351
+** datomic - try datomicism: https://github.com/shaunxcode/datomicism
+
+** feedback, colorwheel - hard to select black or white
+eric's sister in-law
+** clojure - try typed clojure
+** clojure - try schemas
+- http://blog.getprismatic.com/blog/2013/9/4/schema-for-clojurescript-data-shape-declaration-and-validation
+- https://github.com/runa-dev/clj-schema
+** clojure - try exploding-fish for url handling
+https://github.com/wtetzner/exploding-fish
+** clojure - try nipping as reader replacement
+https://github.com/ptaoussanis/nippy/blob/master/src/taoensso/nippy/encryption.clj
+** clojure - try validations
+http://clojurevalidations.info/
+** testing - get cloverage working
 ** ops - ansible deployments
 ** ops - CI server
 ** ops - vpn
@@ -32,16 +213,59 @@ http://www.codinghorror.com/blog/2012/03/how-to-hire-a-programmer.html
 ** ops - tarsnap
 ** ops - syslog
 ** ops - docker
+** ops - btsync server
 ** ops - vagrant dev vm
+** ops - pki
+** ops - noc
+** ops - graphite
+** ops - dns for c1.sm1.in
+** ops - scaling plan
+** ops - tarsnap
+** ops - sync org docs with searchable online wiki
+** ops - monitoring
+** ops - deployment diagram
+** ops - firewall
+** ops - hids
+fail2ban
+ossce
+** sharing - hiccup pull request
 ** sharing - open harpocrates
 ** sharing - open upu
 ** sharing - open datomic free
+** refactor - see if there are any good money libraries
+Money: http://blog.clojurewerkz.org/blog/2013/08/22/money-1-dot-4-0-is-released/
+** refactor - see if there are any good localization libraries
+** refactor - clojurescript modules
+Break clojurescript js code into parts.
+  https://groups.google.com/forum/#!topic/clojurescript/PNlFCl_kwZY
+  http://www.mail-archive.com/clojure@googlegroups.com/msg73452.html
+** refactor - use timbre for logging
+  ? Does it support thread local context? no, but it does using
+    bindings for some stuff.
+  ? What is the right approach?
+    - store thread context as a map (cdata)
+    - provide with-cdata macro
+    - update formatter to handle insertion of map as edn
+    ? should it be done as middleware? (see end of timber.clj)
+  ? can it log in edn?
+  ? what would an edn based log look like?
+    - timestamp
+    - level
+    - source
+      - host
+      - service
+      - service boot-id
+      - namespace
+    - context data
+    - data
+  ? riemann appender?
+  ? datomic appender?
+  ? compressed format for readability?
 ** refactor - should :sistemi.form/{ovale,semplice,quadro} be in a different namespace?
   ? how would this work with datomic?
   ? how would this work with clojurescript?
     - avoid converting enum values with javascript
-* BUGS
-** TODO website - on review page when clicking edit specifications, on return to design page, cutout selection is lost
-** TODO france - fix formatting of currencies french locale e.g.,: "1 234,56€"
-Note: Bux formats based on currency, but not locale.
-** TODO france - validate addresses
+** refactor - use edn with safe reader for configuration
+** update - jquery 2.0
+** update - three.js
+** update - bootstrap
