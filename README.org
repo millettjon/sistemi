@@ -1,2 +1,47 @@
-Sistemi Moderni website.
+* TASKS
+** website - simple checkout flow
+** website - order status
+    1) account login (future)
+    2) shortcut link from email
+    3) combo of email address and zipcode
+** website - careers page
+http://www.codinghorror.com/blog/2012/03/how-to-hire-a-programmer.html
+** website - add search
+** order - order confirmation email
+  - with shortcut link to order status
 
+** customer service - create a faq
+** assembly instructions - add generic instructions to website
+** assembly instructions - create customized instructions based on order
+** assembly instructions - create explodable iteractive instrutions
+** datomic - orders
+** website - user accounts
+** website - contact us page
+** website - spanish translations
+** marketing - googlebot & keywords
+** marketing - pinterest
+** marketing - twitter
+** datomic - user accounts
+** datomic - frinj integration
+- frinj w/ datomic: https://gist.github.com/1980351
+** ops - ansible deployments
+** ops - CI server
+** ops - vpn
+** ops - gitlab
+** ops - riemann
+** ops - tarsnap
+** ops - syslog
+** ops - docker
+** ops - vagrant dev vm
+** sharing - open harpocrates
+** sharing - open upu
+** sharing - open datomic free
+** refactor - should :sistemi.form/{ovale,semplice,quadro} be in a different namespace?
+  ? how would this work with datomic?
+  ? how would this work with clojurescript?
+    - avoid converting enum values with javascript
+* BUGS
+** TODO website - on review page when clicking edit specifications, on return to design page, cutout selection is lost
+** TODO france - fix formatting of currencies french locale e.g.,: "1 234,56€"
+Note: Bux formats based on currency, but not locale.
+** TODO france - validate addresses
