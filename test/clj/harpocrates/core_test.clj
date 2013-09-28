@@ -20,7 +20,7 @@
        ))
 
 (deftest decrypt-test
-  (let [dir "test/harpocrates/test/"
+  (let [dir "test/clj/harpocrates/test/"
         m (-> (str dir "credentials.clj.gpg")
               (decrypt :passphrase "xyzzy" :home (str dir ".gnupg")))]
     (is (= m {:user "adventurer" :password "plover"}))

@@ -2,12 +2,12 @@
   (:use clojure.test
         sistemi.model
         sistemi.model.shelving
-        frinj.calc))
+        frinj.ops))
 
 ;; Note: There is some unknown interaction between frinj and
 ;; clojure-test-mode. Calling frinj-init! here and in the associated
 ;; source namespace fixes it.
-(frinj-init!)
+;;(frinj-init!)
 ;;
 ;; This works fine and converts to meters before running tests.
 #_ (fj 120 :cm)

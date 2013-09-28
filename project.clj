@@ -7,9 +7,13 @@
   :min-lein-version "2.0.0" ; needed for heroku
 
   ;; Use var/ for generated files.
+  :source-paths ["src/clj"]
+  :test-paths ["test/clj"]
   :target-path "var/target"
   :compile-path "var/target/classes" 
   :resource-paths ["etc/resources"]
+
+  :clean-targets [:target-path :compile-path "var/doc" "var/log" "lib"]
 
   ;;:jvm-opts ["-Dlog4j.debug=true"]
 
@@ -82,15 +86,15 @@
   :cljsbuild {:crossovers []
               :crossover-path "var/target/crossovers"
               :builds
-              {:dev {:source-paths ["cljs"]
+              {:dev {:source-paths ["src/cljs"]
                      :compiler
                      {:output-to "www/raw/js/main.js"
                       :output-dir "var/target/cljsbuild/dev"}}
 
-               :prod {:source-paths ["cljs"]
+               :prod {:source-paths ["src/cljs"]
                       :compiler
                       {:optimizations :advanced
-                       :externs ["cljs-externs/jquery-1.9.js"]
+                       :externs ["src/cljs-externs/jquery-1.9.js"]
                        :pretty-print false
                        :output-to "www/raw/js/main.min.js"
                        :output-dir "var/target/cljsbuild/prod"}}}}
