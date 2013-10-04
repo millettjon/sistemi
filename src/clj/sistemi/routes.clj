@@ -67,9 +67,6 @@
       (wrap-file "www/raw")       ; Serve static files.
       [&] pass)
 
-     ;; Handle requests for viewing raw templates.
-     ["raw" &] [(wrap-file "www") [&] pass]
-
      ;; Redirect the main home page to a localized version.
      [""] [wrap-detect-locale
            [&] locale-redirect]

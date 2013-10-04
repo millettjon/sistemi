@@ -34,11 +34,11 @@
 
   (def palettes
     {:raw   {:colors raw
-             :textures-src "/raw/pie-picker/valchromat-raw-palette-64.jpg"
+             :textures-src "/pie-picker/valchromat-raw-palette-64.jpg"
              :label "Valchromat"}
 
      :oiled {:colors oiled
-             :textures-src "/raw/pie-picker/valchromat-oiled-palette-64.jpg"
+             :textures-src "/pie-picker/valchromat-oiled-palette-64.jpg"
              :label "Oiled Valchromat"}}))
 
 (defn ^:private get-by-name

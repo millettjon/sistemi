@@ -67,6 +67,7 @@
                  [org.clojure/tools.namespace "0.2.4"]
 
                  ;; cljs
+                 [org.clojure/clojurescript "0.0-1859"]
                  [jayq "2.4.0"]            ;; jquery wrapper
                  [rm-hull/monet "0.1.8"]   ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
