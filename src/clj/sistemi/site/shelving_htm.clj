@@ -228,28 +228,17 @@
          // --------------------
          // Setup the color picker.
          function onColor(color) {
-           pack = function(rgb) {
-             var r = rgb[0];
-             var g = rgb[1];
-             var b = rgb[2];
-             return '#' + (r < 16 ? '0' : '') + r.toString(16) +
-                          (g < 16 ? '0' : '') + g.toString(16) +
-                          (b < 16 ? '0' : '') + b.toString(16);
-           }
-
            // TODO: Update hidden form field w/ EDN value.
-           var rgb;
            var text;
+           var rgb = color.rgb;
            var t = color.type;
            if (t == 'ral') {
              text = t.toUpperCase() + ' ' + color.code;
-             rgb = color.rgb;
              lastRAL = color;
            }
            else {
              lastVAL = color;
              text = color.name;
-             rgb = pack(color.rgb);
            }
 
            // Update text of color select box.

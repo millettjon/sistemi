@@ -4,29 +4,29 @@
 ;; Official list of colors - http://www.valchromat.pt/gama.aspx?menuid=963&eid=3058
 
 (let [raw (map #(assoc % :type :valchromat)
-               [{:name :light-grey :code :SLG :rgb [143 143 143]}
-                {:name :grey :code :SCZ :rgb [90 90 90]}
-                {:name :black :code :SBL :rgb [89 88 93]}
-                {:name :chocolate-brown :code :SCB :rgb [92 65 54]}
-                {:name :brown :code :SBR :rgb [159 119 105]}
-                {:name :red :code :SSC :rgb [207 78 97]}
-                {:name :orange :code :SOR :rgb [223 120 77]}
-                {:name :yellow :code :SYW :rgb [203 160 71]}
-                {:name :green :code :SGR :rgb [84 145 133]}
-                {:name :blue :code :SRB :rgb [78 101 126]}
-                {:name :violet :code :SVI :rgb [101 78 106]}])
+               [{:name :light-grey :code :SLG :rgb "#8F8F8F"}
+                {:name :grey :code :SCZ :rgb "#5A5A5A"}
+                {:name :black :code :SBL :rgb "#595853"}
+                {:name :chocolate-brown :code :SCB :rgb "#5C4136"}
+                {:name :brown :code :SBR :rgb "#9F7769"}
+                {:name :red :code :SSC :rgb "#CF4E61"}
+                {:name :orange :code :SOR :rgb "#DF784D"}
+                {:name :yellow :code :SYW :rgb "#CBA047"}
+                {:name :green :code :SGR :rgb "#549185"}
+                {:name :blue :code :SRB :rgb "#4E657E"}
+                {:name :violet :code :SVI :rgb "#654E6A"}])
 
-      rgb-oiled {:chocolate-brown [45 32 26]
-                 :yellow [167 116 47]
-                 :red [160 46 62]
-                 :violet [71 52 74]
-                 :orange [171 82 45]
-                 :green [25 44 40]
-                 :grey [44 44 44]
-                 :brown [105 65 51]
-                 :blue [26 35 43]
-                 :light-grey [101 101 101]
-                 :black [21 21 22]}
+      rgb-oiled {:chocolate-brown "#2D201A"
+                 :yellow "#A7742F"
+                 :red    "#A02E3E"
+                 :violet "#47344A"
+                 :orange "#AB522D"
+                 :green "#192C28"
+                 :grey "#2C2C2C"
+                 :brown "#694133"
+                 :blue "#1A232B"
+                 :light-grey "#656565"
+                 :black "#151516"}
 
       oiled (map #(assoc %
                     :finish :oiled
