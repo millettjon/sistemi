@@ -499,6 +499,19 @@ goog.base = function(me, opt_methodName, var_args) {
 goog.scope = function(fn) {
   fn.call(goog.global)
 };
+goog.provide("goog.debug.Error");
+goog.debug.Error = function(opt_msg) {
+  if(Error.captureStackTrace) {
+    Error.captureStackTrace(this, goog.debug.Error)
+  }else {
+    this.stack = (new Error).stack || ""
+  }
+  if(opt_msg) {
+    this.message = String(opt_msg)
+  }
+};
+goog.inherits(goog.debug.Error, Error);
+goog.debug.Error.prototype.name = "CustomError";
 goog.provide("goog.string");
 goog.provide("goog.string.Unicode");
 goog.string.Unicode = {NBSP:"\u00a0"};
@@ -939,19 +952,6 @@ goog.string.parseInt = function(value) {
   }
   return NaN
 };
-goog.provide("goog.debug.Error");
-goog.debug.Error = function(opt_msg) {
-  if(Error.captureStackTrace) {
-    Error.captureStackTrace(this, goog.debug.Error)
-  }else {
-    this.stack = (new Error).stack || ""
-  }
-  if(opt_msg) {
-    this.message = String(opt_msg)
-  }
-};
-goog.inherits(goog.debug.Error, Error);
-goog.debug.Error.prototype.name = "CustomError";
 goog.provide("goog.asserts");
 goog.provide("goog.asserts.AssertionError");
 goog.require("goog.debug.Error");
@@ -26740,12 +26740,12 @@ color.ral_picker.defaults = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:oute
 false], true), "\ufdd0:inner-band", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:sort", false], true), "\ufdd0:focus-bar-width", 2], true);
 color.ral_picker.bucketize = function bucketize(items, num_buckets) {
   var bucket_size = cljs.core.count.call(null, items) / num_buckets;
-  return cljs.core.map.call(null, function(p1__4484_SHARP_) {
-    return cljs.core.map.call(null, cljs.core.second, p1__4484_SHARP_)
-  }, cljs.core.partition_by.call(null, function(p__4487) {
-    var vec__4488 = p__4487;
-    var idx = cljs.core.nth.call(null, vec__4488, 0, null);
-    var elm = cljs.core.nth.call(null, vec__4488, 1, null);
+  return cljs.core.map.call(null, function(p1__4404_SHARP_) {
+    return cljs.core.map.call(null, cljs.core.second, p1__4404_SHARP_)
+  }, cljs.core.partition_by.call(null, function(p__4407) {
+    var vec__4408 = p__4407;
+    var idx = cljs.core.nth.call(null, vec__4408, 0, null);
+    var elm = cljs.core.nth.call(null, vec__4408, 1, null);
     return Math.floor.call(null, idx / bucket_size)
   }, cljs.core.map.call(null, cljs.core.vector, cljs.core.range.call(null), items)))
 };
@@ -26757,17 +26757,17 @@ color.ral_picker.make_simple_swatch = function make_simple_swatch(color__$1) {
 };
 color.ral_picker.swatch_color = function swatch_color(palette) {
   var color_fn = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0:opts", "\ufdd0:outer-band", "\ufdd0:color-fn"], true));
-  var G__4490 = color_fn;
-  if(cljs.core._EQ_.call(null, "\ufdd0:default", G__4490)) {
+  var G__4410 = color_fn;
+  if(cljs.core._EQ_.call(null, "\ufdd0:default", G__4410)) {
     throw[cljs.core.str("bad color-fn: "), cljs.core.str(color_fn)].join("");
   }else {
-    if(cljs.core._EQ_.call(null, "\ufdd0:average", G__4490)) {
+    if(cljs.core._EQ_.call(null, "\ufdd0:average", G__4410)) {
       return color.average.call(null, palette)
     }else {
-      if(cljs.core._EQ_.call(null, "\ufdd0:median", G__4490)) {
+      if(cljs.core._EQ_.call(null, "\ufdd0:median", G__4410)) {
         return cljs.core.nth.call(null, palette, Math.floor.call(null, cljs.core.count.call(null, palette) / 2))
       }else {
-        if(cljs.core._EQ_.call(null, "\ufdd0:first", G__4490)) {
+        if(cljs.core._EQ_.call(null, "\ufdd0:first", G__4410)) {
           return cljs.core.first.call(null, palette)
         }else {
           if("\ufdd0:else") {
@@ -26781,11 +26781,11 @@ color.ral_picker.swatch_color = function swatch_color(palette) {
   }
 };
 color.ral_picker.sort_by_saturation_and_brightness = function sort_by_saturation_and_brightness(palette) {
-  var f = function(p1__4491_SHARP_) {
-    var vec__4493 = color.hsl.call(null, (new cljs.core.Keyword("\ufdd0:rgb")).call(null, p1__4491_SHARP_));
-    var _ = cljs.core.nth.call(null, vec__4493, 0, null);
-    var s = cljs.core.nth.call(null, vec__4493, 1, null);
-    var l = cljs.core.nth.call(null, vec__4493, 2, null);
+  var f = function(p1__4411_SHARP_) {
+    var vec__4413 = color.hsl.call(null, (new cljs.core.Keyword("\ufdd0:rgb")).call(null, p1__4411_SHARP_));
+    var _ = cljs.core.nth.call(null, vec__4413, 0, null);
+    var s = cljs.core.nth.call(null, vec__4413, 1, null);
+    var l = cljs.core.nth.call(null, vec__4413, 2, null);
     return Math.atan2.call(null, l - 0.5, s - 0.5)
   };
   return cljs.core.sort_by.call(null, f, palette)
@@ -26807,86 +26807,86 @@ color.ral_picker.make_band = function make_band(radius, width, palette) {
   var max_swatches = color.ral_picker.max_swatches.call(null, radius);
   var band = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:type", "\ufdd0:band", "\ufdd0:radius", radius, "\ufdd0:width", width], true);
   var swatch = len <= max_swatches ? cljs.core.map.call(null, color.ral_picker.make_simple_swatch, palette) : cljs.core.map.call(null, function(len, max_swatches, band) {
-    return function(p1__4494_SHARP_) {
-      return color.ral_picker.make_complex_swatch.call(null, p1__4494_SHARP_, band)
+    return function(p1__4414_SHARP_) {
+      return color.ral_picker.make_complex_swatch.call(null, p1__4414_SHARP_, band)
     }
   }(len, max_swatches, band), color.ral_picker.bucketize.call(null, palette, max_swatches));
   return cljs.core.assoc.call(null, band, "\ufdd0:swatches", swatch)
 };
 color.ral_picker.draw_color_band = function draw_color_band(band) {
-  var map__4501 = color.ral_picker.wheel;
-  var map__4501__$1 = cljs.core.seq_QMARK_.call(null, map__4501) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4501) : map__4501;
-  var center = cljs.core.get.call(null, map__4501__$1, "\ufdd0:center");
-  var ctx = cljs.core.get.call(null, map__4501__$1, "\ufdd0:ctx");
+  var map__4421 = color.ral_picker.wheel;
+  var map__4421__$1 = cljs.core.seq_QMARK_.call(null, map__4421) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4421) : map__4421;
+  var center = cljs.core.get.call(null, map__4421__$1, "\ufdd0:center");
+  var ctx = cljs.core.get.call(null, map__4421__$1, "\ufdd0:ctx");
   var inner_radius = (new cljs.core.Keyword("\ufdd0:radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0:width")).call(null, band);
   var palette = cljs.core.map.call(null, "\ufdd0:color", (new cljs.core.Keyword("\ufdd0:swatches")).call(null, band));
   var len = cljs.core.count.call(null, palette);
-  var angle_fn = function(map__4501, map__4501__$1, center, ctx, inner_radius, palette, len) {
-    return function(p1__4495_SHARP_) {
-      return p1__4495_SHARP_ / len * 2 * Math.PI
+  var angle_fn = function(map__4421, map__4421__$1, center, ctx, inner_radius, palette, len) {
+    return function(p1__4415_SHARP_) {
+      return p1__4415_SHARP_ / len * 2 * Math.PI
     }
-  }(map__4501, map__4501__$1, center, ctx, inner_radius, palette, len);
-  var seq__4502 = cljs.core.seq.call(null, cljs.core.range.call(null, len));
-  var chunk__4503 = null;
-  var count__4504 = 0;
-  var i__4505 = 0;
+  }(map__4421, map__4421__$1, center, ctx, inner_radius, palette, len);
+  var seq__4422 = cljs.core.seq.call(null, cljs.core.range.call(null, len));
+  var chunk__4423 = null;
+  var count__4424 = 0;
+  var i__4425 = 0;
   while(true) {
-    if(i__4505 < count__4504) {
-      var i = cljs.core._nth.call(null, chunk__4503, i__4505);
-      var start_angle_4506 = angle_fn.call(null, i);
-      var end_angle_4507 = angle_fn.call(null, i + 1);
-      var start_4508 = html.canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_4506) + (new cljs.core.Keyword("\ufdd0:x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_4506) + (new cljs.core.Keyword("\ufdd0:y")).call(null, center));
-      monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, html.canvas.line_to.call(null, html.canvas.arc.call(null, html.canvas.arc.call(null, html.canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_4508), center, inner_radius, start_angle_4506, end_angle_4507, "\ufdd0:cw"), center, (new cljs.core.Keyword("\ufdd0:radius")).call(null, band), end_angle_4507, start_angle_4506, "\ufdd0:ccw"), start_4508), (new cljs.core.Keyword("\ufdd0:rgb")).call(null, cljs.core.nth.call(null, 
+    if(i__4425 < count__4424) {
+      var i = cljs.core._nth.call(null, chunk__4423, i__4425);
+      var start_angle_4426 = angle_fn.call(null, i);
+      var end_angle_4427 = angle_fn.call(null, i + 1);
+      var start_4428 = html.canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_4426) + (new cljs.core.Keyword("\ufdd0:x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_4426) + (new cljs.core.Keyword("\ufdd0:y")).call(null, center));
+      monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, html.canvas.line_to.call(null, html.canvas.arc.call(null, html.canvas.arc.call(null, html.canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_4428), center, inner_radius, start_angle_4426, end_angle_4427, "\ufdd0:cw"), center, (new cljs.core.Keyword("\ufdd0:radius")).call(null, band), end_angle_4427, start_angle_4426, "\ufdd0:ccw"), start_4428), (new cljs.core.Keyword("\ufdd0:rgb")).call(null, cljs.core.nth.call(null, 
       palette, i))));
-      var bw_4509 = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0:opts", "\ufdd0:swatch", "\ufdd0:border-width"], true));
-      if(bw_4509 > 0) {
-        monet.canvas.stroke.call(null, monet.canvas.stroke_width.call(null, ctx, bw_4509))
+      var bw_4429 = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0:opts", "\ufdd0:swatch", "\ufdd0:border-width"], true));
+      if(bw_4429 > 0) {
+        monet.canvas.stroke.call(null, monet.canvas.stroke_width.call(null, ctx, bw_4429))
       }else {
       }
-      var G__4510 = seq__4502;
-      var G__4511 = chunk__4503;
-      var G__4512 = count__4504;
-      var G__4513 = i__4505 + 1;
-      seq__4502 = G__4510;
-      chunk__4503 = G__4511;
-      count__4504 = G__4512;
-      i__4505 = G__4513;
+      var G__4430 = seq__4422;
+      var G__4431 = chunk__4423;
+      var G__4432 = count__4424;
+      var G__4433 = i__4425 + 1;
+      seq__4422 = G__4430;
+      chunk__4423 = G__4431;
+      count__4424 = G__4432;
+      i__4425 = G__4433;
       continue
     }else {
-      var temp__4092__auto__ = cljs.core.seq.call(null, seq__4502);
+      var temp__4092__auto__ = cljs.core.seq.call(null, seq__4422);
       if(temp__4092__auto__) {
-        var seq__4502__$1 = temp__4092__auto__;
-        if(cljs.core.chunked_seq_QMARK_.call(null, seq__4502__$1)) {
-          var c__3503__auto__ = cljs.core.chunk_first.call(null, seq__4502__$1);
-          var G__4514 = cljs.core.chunk_rest.call(null, seq__4502__$1);
-          var G__4515 = c__3503__auto__;
-          var G__4516 = cljs.core.count.call(null, c__3503__auto__);
-          var G__4517 = 0;
-          seq__4502 = G__4514;
-          chunk__4503 = G__4515;
-          count__4504 = G__4516;
-          i__4505 = G__4517;
+        var seq__4422__$1 = temp__4092__auto__;
+        if(cljs.core.chunked_seq_QMARK_.call(null, seq__4422__$1)) {
+          var c__3503__auto__ = cljs.core.chunk_first.call(null, seq__4422__$1);
+          var G__4434 = cljs.core.chunk_rest.call(null, seq__4422__$1);
+          var G__4435 = c__3503__auto__;
+          var G__4436 = cljs.core.count.call(null, c__3503__auto__);
+          var G__4437 = 0;
+          seq__4422 = G__4434;
+          chunk__4423 = G__4435;
+          count__4424 = G__4436;
+          i__4425 = G__4437;
           continue
         }else {
-          var i = cljs.core.first.call(null, seq__4502__$1);
-          var start_angle_4518 = angle_fn.call(null, i);
-          var end_angle_4519 = angle_fn.call(null, i + 1);
-          var start_4520 = html.canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_4518) + (new cljs.core.Keyword("\ufdd0:x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_4518) + (new cljs.core.Keyword("\ufdd0:y")).call(null, center));
-          monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, html.canvas.line_to.call(null, html.canvas.arc.call(null, html.canvas.arc.call(null, html.canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_4520), center, inner_radius, start_angle_4518, end_angle_4519, "\ufdd0:cw"), center, (new cljs.core.Keyword("\ufdd0:radius")).call(null, band), end_angle_4519, start_angle_4518, "\ufdd0:ccw"), start_4520), (new cljs.core.Keyword("\ufdd0:rgb")).call(null, cljs.core.nth.call(null, 
+          var i = cljs.core.first.call(null, seq__4422__$1);
+          var start_angle_4438 = angle_fn.call(null, i);
+          var end_angle_4439 = angle_fn.call(null, i + 1);
+          var start_4440 = html.canvas.point.call(null, inner_radius * Math.cos.call(null, start_angle_4438) + (new cljs.core.Keyword("\ufdd0:x")).call(null, center), inner_radius * Math.sin.call(null, start_angle_4438) + (new cljs.core.Keyword("\ufdd0:y")).call(null, center));
+          monet.canvas.fill.call(null, monet.canvas.fill_style.call(null, html.canvas.line_to.call(null, html.canvas.arc.call(null, html.canvas.arc.call(null, html.canvas.move_to.call(null, monet.canvas.begin_path.call(null, ctx), start_4440), center, inner_radius, start_angle_4438, end_angle_4439, "\ufdd0:cw"), center, (new cljs.core.Keyword("\ufdd0:radius")).call(null, band), end_angle_4439, start_angle_4438, "\ufdd0:ccw"), start_4440), (new cljs.core.Keyword("\ufdd0:rgb")).call(null, cljs.core.nth.call(null, 
           palette, i))));
-          var bw_4521 = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0:opts", "\ufdd0:swatch", "\ufdd0:border-width"], true));
-          if(bw_4521 > 0) {
-            monet.canvas.stroke.call(null, monet.canvas.stroke_width.call(null, ctx, bw_4521))
+          var bw_4441 = cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0:opts", "\ufdd0:swatch", "\ufdd0:border-width"], true));
+          if(bw_4441 > 0) {
+            monet.canvas.stroke.call(null, monet.canvas.stroke_width.call(null, ctx, bw_4441))
           }else {
           }
-          var G__4522 = cljs.core.next.call(null, seq__4502__$1);
-          var G__4523 = null;
-          var G__4524 = 0;
-          var G__4525 = 0;
-          seq__4502 = G__4522;
-          chunk__4503 = G__4523;
-          count__4504 = G__4524;
-          i__4505 = G__4525;
+          var G__4442 = cljs.core.next.call(null, seq__4422__$1);
+          var G__4443 = null;
+          var G__4444 = 0;
+          var G__4445 = 0;
+          seq__4422 = G__4442;
+          chunk__4423 = G__4443;
+          count__4424 = G__4444;
+          i__4425 = G__4445;
           continue
         }
       }else {
@@ -26897,10 +26897,10 @@ color.ral_picker.draw_color_band = function draw_color_band(band) {
   }
 };
 color.ral_picker.in_inner_band_QMARK_ = function in_inner_band_QMARK_(e) {
-  var map__4527 = color.ral_picker.wheel;
-  var map__4527__$1 = cljs.core.seq_QMARK_.call(null, map__4527) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4527) : map__4527;
-  var center = cljs.core.get.call(null, map__4527__$1, "\ufdd0:center");
-  var band = cljs.core.get.call(null, map__4527__$1, "\ufdd0:band");
+  var map__4447 = color.ral_picker.wheel;
+  var map__4447__$1 = cljs.core.seq_QMARK_.call(null, map__4447) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4447) : map__4447;
+  var center = cljs.core.get.call(null, map__4447__$1, "\ufdd0:center");
+  var band = cljs.core.get.call(null, map__4447__$1, "\ufdd0:band");
   var offset = html.canvas.offset.call(null, e);
   var distance = html.canvas.distance.call(null, center, offset);
   var radius = (new cljs.core.Keyword("\ufdd0:radius")).call(null, band) - (new cljs.core.Keyword("\ufdd0:width")).call(null, band) - cljs.core.get_in.call(null, color.ral_picker.wheel, cljs.core.PersistentVector.fromArray(["\ufdd0:opts", "\ufdd0:band", "\ufdd0:margin"], true));
@@ -26930,15 +26930,15 @@ color.ral_picker.outer_index = function outer_index() {
   return(new cljs.core.Keyword("\ufdd0:outer")).call(null, color.ral_picker.cursor.call(null))
 };
 color.ral_picker.set_cursor_BANG_ = function set_cursor_BANG_(k, v) {
-  return cljs.core.swap_BANG_.call(null, (new cljs.core.Keyword("\ufdd0:state")).call(null, color.ral_picker.wheel), function(p1__4528_SHARP_) {
-    return cljs.core.assoc_in.call(null, p1__4528_SHARP_, cljs.core.PersistentVector.fromArray(["\ufdd0:cursor", k], true), v)
+  return cljs.core.swap_BANG_.call(null, (new cljs.core.Keyword("\ufdd0:state")).call(null, color.ral_picker.wheel), function(p1__4448_SHARP_) {
+    return cljs.core.assoc_in.call(null, p1__4448_SHARP_, cljs.core.PersistentVector.fromArray(["\ufdd0:cursor", k], true), v)
   })
 };
 color.ral_picker.focus_swatch = function focus_swatch(band, index, focus_QMARK_, inner_QMARK_) {
-  var map__4530 = color.ral_picker.wheel;
-  var map__4530__$1 = cljs.core.seq_QMARK_.call(null, map__4530) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4530) : map__4530;
-  var center = cljs.core.get.call(null, map__4530__$1, "\ufdd0:center");
-  var ctx = cljs.core.get.call(null, map__4530__$1, "\ufdd0:ctx");
+  var map__4450 = color.ral_picker.wheel;
+  var map__4450__$1 = cljs.core.seq_QMARK_.call(null, map__4450) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4450) : map__4450;
+  var center = cljs.core.get.call(null, map__4450__$1, "\ufdd0:center");
+  var ctx = cljs.core.get.call(null, map__4450__$1, "\ufdd0:ctx");
   var radius = (new cljs.core.Keyword("\ufdd0:radius")).call(null, band);
   var radius__$1 = cljs.core.truth_(inner_QMARK_) ? radius - (new cljs.core.Keyword("\ufdd0:width")).call(null, band) - 2 : radius + 2;
   var palette_length = cljs.core.count.call(null, (new cljs.core.Keyword("\ufdd0:swatches")).call(null, band));
@@ -26970,18 +26970,18 @@ color.ral_picker.get_color = function get_color(e) {
   }
 };
 color.ral_picker.set_color_label_BANG_ = function() {
-  var set_color_label_BANG___delegate = function(state, p__4531) {
-    var vec__4534 = p__4531;
-    var color__$1 = cljs.core.nth.call(null, vec__4534, 0, null);
+  var set_color_label_BANG___delegate = function(state, p__4451) {
+    var vec__4454 = p__4451;
+    var color__$1 = cljs.core.nth.call(null, vec__4454, 0, null);
     var text = function() {
-      var G__4535 = state;
-      if(cljs.core._EQ_.call(null, "\ufdd0:color", G__4535)) {
-        return(new cljs.core.Keyword("\ufdd0:ral")).call(null, color__$1)
+      var G__4455 = state;
+      if(cljs.core._EQ_.call(null, "\ufdd0:color", G__4455)) {
+        return(new cljs.core.Keyword("\ufdd0:code")).call(null, color__$1)
       }else {
-        if(cljs.core._EQ_.call(null, "\ufdd0:palette", G__4535)) {
+        if(cljs.core._EQ_.call(null, "\ufdd0:palette", G__4455)) {
           return"RAL"
         }else {
-          if(cljs.core._EQ_.call(null, "\ufdd0:empty", G__4535)) {
+          if(cljs.core._EQ_.call(null, "\ufdd0:empty", G__4455)) {
             return""
           }else {
             if("\ufdd0:else") {
@@ -26996,17 +26996,17 @@ color.ral_picker.set_color_label_BANG_ = function() {
     return dommy.core.set_text_BANG_.call(null, (new cljs.core.Keyword("\ufdd0:color-label")).call(null, color.ral_picker.wheel), text)
   };
   var set_color_label_BANG_ = function(state, var_args) {
-    var p__4531 = null;
+    var p__4451 = null;
     if(arguments.length > 1) {
-      p__4531 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 1), 0)
+      p__4451 = cljs.core.array_seq(Array.prototype.slice.call(arguments, 1), 0)
     }
-    return set_color_label_BANG___delegate.call(this, state, p__4531)
+    return set_color_label_BANG___delegate.call(this, state, p__4451)
   };
   set_color_label_BANG_.cljs$lang$maxFixedArity = 1;
-  set_color_label_BANG_.cljs$lang$applyTo = function(arglist__4536) {
-    var state = cljs.core.first(arglist__4536);
-    var p__4531 = cljs.core.rest(arglist__4536);
-    return set_color_label_BANG___delegate(state, p__4531)
+  set_color_label_BANG_.cljs$lang$applyTo = function(arglist__4456) {
+    var state = cljs.core.first(arglist__4456);
+    var p__4451 = cljs.core.rest(arglist__4456);
+    return set_color_label_BANG___delegate(state, p__4451)
   };
   set_color_label_BANG_.cljs$core$IFn$_invoke$arity$variadic = set_color_label_BANG___delegate;
   return set_color_label_BANG_
@@ -27015,12 +27015,12 @@ color.ral_picker.clear_outer_focus = function clear_outer_focus() {
   var temp__4092__auto__ = color.ral_picker.outer_index.call(null);
   if(cljs.core.truth_(temp__4092__auto__)) {
     var outer_index = temp__4092__auto__;
-    var map__4538_4539 = color.ral_picker.wheel;
-    var map__4538_4540__$1 = cljs.core.seq_QMARK_.call(null, map__4538_4539) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4538_4539) : map__4538_4539;
-    var band_4541 = cljs.core.get.call(null, map__4538_4540__$1, "\ufdd0:band");
-    var center_4542 = cljs.core.get.call(null, map__4538_4540__$1, "\ufdd0:center");
-    var ctx_4543 = cljs.core.get.call(null, map__4538_4540__$1, "\ufdd0:ctx");
-    color.ral_picker.focus_swatch.call(null, band_4541, outer_index, false, false);
+    var map__4458_4459 = color.ral_picker.wheel;
+    var map__4458_4460__$1 = cljs.core.seq_QMARK_.call(null, map__4458_4459) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4458_4459) : map__4458_4459;
+    var band_4461 = cljs.core.get.call(null, map__4458_4460__$1, "\ufdd0:band");
+    var center_4462 = cljs.core.get.call(null, map__4458_4460__$1, "\ufdd0:center");
+    var ctx_4463 = cljs.core.get.call(null, map__4458_4460__$1, "\ufdd0:ctx");
+    color.ral_picker.focus_swatch.call(null, band_4461, outer_index, false, false);
     return color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0:outer", null)
   }else {
     return null
@@ -27028,11 +27028,11 @@ color.ral_picker.clear_outer_focus = function clear_outer_focus() {
 };
 color.ral_picker.set_outer_focus = function set_outer_focus(e) {
   color.ral_picker.set_color_label_BANG_.call(null, "\ufdd0:empty");
-  var map__4545 = color.ral_picker.wheel;
-  var map__4545__$1 = cljs.core.seq_QMARK_.call(null, map__4545) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4545) : map__4545;
-  var band = cljs.core.get.call(null, map__4545__$1, "\ufdd0:band");
-  var center = cljs.core.get.call(null, map__4545__$1, "\ufdd0:center");
-  var ctx = cljs.core.get.call(null, map__4545__$1, "\ufdd0:ctx");
+  var map__4465 = color.ral_picker.wheel;
+  var map__4465__$1 = cljs.core.seq_QMARK_.call(null, map__4465) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4465) : map__4465;
+  var band = cljs.core.get.call(null, map__4465__$1, "\ufdd0:band");
+  var center = cljs.core.get.call(null, map__4465__$1, "\ufdd0:center");
+  var ctx = cljs.core.get.call(null, map__4465__$1, "\ufdd0:ctx");
   var outer_bucket_index = color.ral_picker.bucket_index.call(null, e, band);
   color.ral_picker.focus_swatch.call(null, band, outer_bucket_index, true, false);
   return color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0:outer", outer_bucket_index)
@@ -27044,11 +27044,11 @@ color.ral_picker.clear_inner_focus = function clear_inner_focus() {
     var temp__4092__auto____$1 = color.ral_picker.inner_index.call(null);
     if(cljs.core.truth_(temp__4092__auto____$1)) {
       var inner_index = temp__4092__auto____$1;
-      var map__4547 = color.ral_picker.wheel;
-      var map__4547__$1 = cljs.core.seq_QMARK_.call(null, map__4547) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4547) : map__4547;
-      var center = cljs.core.get.call(null, map__4547__$1, "\ufdd0:center");
-      var ctx = cljs.core.get.call(null, map__4547__$1, "\ufdd0:ctx");
-      var band = cljs.core.get.call(null, map__4547__$1, "\ufdd0:band");
+      var map__4467 = color.ral_picker.wheel;
+      var map__4467__$1 = cljs.core.seq_QMARK_.call(null, map__4467) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4467) : map__4467;
+      var center = cljs.core.get.call(null, map__4467__$1, "\ufdd0:center");
+      var ctx = cljs.core.get.call(null, map__4467__$1, "\ufdd0:ctx");
+      var band = cljs.core.get.call(null, map__4467__$1, "\ufdd0:band");
       var inner_band = (new cljs.core.Keyword("\ufdd0:band")).call(null, cljs.core.nth.call(null, (new cljs.core.Keyword("\ufdd0:swatches")).call(null, band), outer_index));
       color.ral_picker.focus_swatch.call(null, inner_band, inner_index, false, true);
       color.ral_picker.set_cursor_BANG_.call(null, "\ufdd0:inner", null);
@@ -27061,11 +27061,11 @@ color.ral_picker.clear_inner_focus = function clear_inner_focus() {
   }
 };
 color.ral_picker.set_inner_focus = function set_inner_focus(e) {
-  var map__4549 = color.ral_picker.wheel;
-  var map__4549__$1 = cljs.core.seq_QMARK_.call(null, map__4549) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4549) : map__4549;
-  var center = cljs.core.get.call(null, map__4549__$1, "\ufdd0:center");
-  var ctx = cljs.core.get.call(null, map__4549__$1, "\ufdd0:ctx");
-  var band = cljs.core.get.call(null, map__4549__$1, "\ufdd0:band");
+  var map__4469 = color.ral_picker.wheel;
+  var map__4469__$1 = cljs.core.seq_QMARK_.call(null, map__4469) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4469) : map__4469;
+  var center = cljs.core.get.call(null, map__4469__$1, "\ufdd0:center");
+  var ctx = cljs.core.get.call(null, map__4469__$1, "\ufdd0:ctx");
+  var band = cljs.core.get.call(null, map__4469__$1, "\ufdd0:band");
   var temp__4092__auto__ = color.ral_picker.outer_index.call(null);
   if(cljs.core.truth_(temp__4092__auto__)) {
     var outer_index = temp__4092__auto__;
@@ -27079,21 +27079,21 @@ color.ral_picker.set_inner_focus = function set_inner_focus(e) {
   }
 };
 color.ral_picker.redraw = function redraw() {
-  var map__4551 = color.ral_picker.wheel;
-  var map__4551__$1 = cljs.core.seq_QMARK_.call(null, map__4551) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4551) : map__4551;
-  var center = cljs.core.get.call(null, map__4551__$1, "\ufdd0:center");
-  var band = cljs.core.get.call(null, map__4551__$1, "\ufdd0:band");
-  var ctx = cljs.core.get.call(null, map__4551__$1, "\ufdd0:ctx");
-  var canvas = cljs.core.get.call(null, map__4551__$1, "\ufdd0:canvas");
+  var map__4471 = color.ral_picker.wheel;
+  var map__4471__$1 = cljs.core.seq_QMARK_.call(null, map__4471) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4471) : map__4471;
+  var center = cljs.core.get.call(null, map__4471__$1, "\ufdd0:center");
+  var band = cljs.core.get.call(null, map__4471__$1, "\ufdd0:band");
+  var ctx = cljs.core.get.call(null, map__4471__$1, "\ufdd0:ctx");
+  var canvas = cljs.core.get.call(null, map__4471__$1, "\ufdd0:canvas");
   html.canvas.clear.call(null, ctx);
   color.ral_picker.draw_color_band.call(null, (new cljs.core.Keyword("\ufdd0:band")).call(null, color.ral_picker.wheel));
   return color.ral_picker.set_color_label_BANG_.call(null, "\ufdd0:palette")
 };
 color.ral_picker.on_mousemove = function on_mousemove(e) {
-  var map__4553 = color.ral_picker.wheel;
-  var map__4553__$1 = cljs.core.seq_QMARK_.call(null, map__4553) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4553) : map__4553;
-  var center = cljs.core.get.call(null, map__4553__$1, "\ufdd0:center");
-  var band = cljs.core.get.call(null, map__4553__$1, "\ufdd0:band");
+  var map__4473 = color.ral_picker.wheel;
+  var map__4473__$1 = cljs.core.seq_QMARK_.call(null, map__4473) ? cljs.core.apply.call(null, cljs.core.hash_map, map__4473) : map__4473;
+  var center = cljs.core.get.call(null, map__4473__$1, "\ufdd0:center");
+  var band = cljs.core.get.call(null, map__4473__$1, "\ufdd0:band");
   var offset = html.canvas.offset.call(null, e);
   var distance = html.canvas.distance.call(null, center, offset);
   var radius = (new cljs.core.Keyword("\ufdd0:radius")).call(null, band);
@@ -27193,55 +27193,55 @@ color.ral_picker.on_mouseout = function on_mouseout(e) {
 };
 color.ral_picker.wheel_fn = function wheel_fn(w, f) {
   return function() {
-    var G__4558__delegate = function(args) {
-      var wheel4556 = color.ral_picker.wheel;
+    var G__4478__delegate = function(args) {
+      var wheel4476 = color.ral_picker.wheel;
       try {
         color.ral_picker.wheel = w;
         return cljs.core.apply.call(null, f, args)
       }finally {
-        color.ral_picker.wheel = wheel4556
+        color.ral_picker.wheel = wheel4476
       }
     };
-    var G__4558 = function(var_args) {
+    var G__4478 = function(var_args) {
       var args = null;
       if(arguments.length > 0) {
         args = cljs.core.array_seq(Array.prototype.slice.call(arguments, 0), 0)
       }
-      return G__4558__delegate.call(this, args)
+      return G__4478__delegate.call(this, args)
     };
-    G__4558.cljs$lang$maxFixedArity = 0;
-    G__4558.cljs$lang$applyTo = function(arglist__4559) {
-      var args = cljs.core.seq(arglist__4559);
-      return G__4558__delegate(args)
+    G__4478.cljs$lang$maxFixedArity = 0;
+    G__4478.cljs$lang$applyTo = function(arglist__4479) {
+      var args = cljs.core.seq(arglist__4479);
+      return G__4478__delegate(args)
     };
-    G__4558.cljs$core$IFn$_invoke$arity$variadic = G__4558__delegate;
-    return G__4558
+    G__4478.cljs$core$IFn$_invoke$arity$variadic = G__4478__delegate;
+    return G__4478
   }()
 };
 color.ral_picker.init = function init(container, palette, callback) {
   jayq.util.log.call(null, "initializing ral color wheel");
   var options = util.map.deep_merge_with.call(null, cljs.core.identity, color.ral_picker.defaults, cljs.core.PersistentArrayMap.EMPTY);
   var canvas = function() {
-    var dom4564 = document.createElement("canvas");
+    var dom4484 = document.createElement("canvas");
     if(195) {
-      dom4564.setAttribute("width", 195)
+      dom4484.setAttribute("width", 195)
     }else {
     }
     if(195) {
-      dom4564.setAttribute("height", 195)
+      dom4484.setAttribute("height", 195)
     }else {
     }
-    return dom4564
+    return dom4484
   }();
   var color_label = function() {
-    var dom4565 = document.createElement("span");
+    var dom4485 = document.createElement("span");
     if(cljs.core.truth_(cljs.core.PersistentArrayMap.fromArray(["\ufdd0:display", "table-cell", "\ufdd0:vertical-align", "middle", "\ufdd0:max-width", "90px"], true))) {
-      dom4565.setAttribute("style", dommy.core.style_str.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:display", "table-cell", "\ufdd0:vertical-align", "middle", "\ufdd0:max-width", "90px"], true)))
+      dom4485.setAttribute("style", dommy.core.style_str.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:display", "table-cell", "\ufdd0:vertical-align", "middle", "\ufdd0:max-width", "90px"], true)))
     }else {
     }
-    return dom4565
+    return dom4485
   }();
-  var wheel4566 = color.ral_picker.wheel;
+  var wheel4486 = color.ral_picker.wheel;
   try {
     color.ral_picker.wheel = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:opts", options], true);
     var margin = (new cljs.core.Keyword("\ufdd0:focus-bar-width")).call(null, options) + 1;
@@ -27251,9 +27251,9 @@ color.ral_picker.init = function init(container, palette, callback) {
     var band = color.ral_picker.make_band.call(null, radius, width, palette__$1);
     color.ral_picker.wheel = cljs.core.assoc.call(null, color.ral_picker.wheel, "\ufdd0:band", band, "\ufdd0:callback", callback, "\ufdd0:canvas", canvas, "\ufdd0:color-label", color_label, "\ufdd0:ctx", monet.canvas.get_context.call(null, canvas, "2d"), "\ufdd0:center", html.canvas.center.call(null, canvas), "\ufdd0:state", cljs.core.atom.call(null, cljs.core.PersistentArrayMap.fromArray(["\ufdd0:cursor", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:outer", null, "\ufdd0:inner", null], true)], 
     true)));
-    var wrapper_4568 = cljs.core.PersistentVector.fromArray(["\ufdd0:div", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:style", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:position", "relative", "\ufdd0:height", "195px", "\ufdd0:width", "195px"], true)], true), canvas, cljs.core.PersistentVector.fromArray(["\ufdd0:div", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:style", cljs.core.PersistentHashMap.fromArrays(["\ufdd0:position", "\ufdd0:display", "\ufdd0:width", "\ufdd0:color", "\ufdd0:z-index", 
+    var wrapper_4488 = cljs.core.PersistentVector.fromArray(["\ufdd0:div", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:style", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:position", "relative", "\ufdd0:height", "195px", "\ufdd0:width", "195px"], true)], true), canvas, cljs.core.PersistentVector.fromArray(["\ufdd0:div", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:style", cljs.core.PersistentHashMap.fromArrays(["\ufdd0:position", "\ufdd0:display", "\ufdd0:width", "\ufdd0:color", "\ufdd0:z-index", 
     "\ufdd0:font-size", "\ufdd0:text-align", "\ufdd0:overflow", "\ufdd0:top", "\ufdd0:left", "\ufdd0:height"], ["absolute", "table", "90px", "#AAA", "-1", "12px", "center", "hidden", "72px", "53px", "50px"])], true), color_label], true)], true);
-    dommy.core.append_BANG_.call(null, document.querySelector(dommy.core.selector.call(null, cljs.core.keyword.call(null, container))), wrapper_4568);
+    dommy.core.append_BANG_.call(null, document.querySelector(dommy.core.selector.call(null, cljs.core.keyword.call(null, container))), wrapper_4488);
     color.ral_picker.redraw.call(null);
     dommy.core.listen_BANG_.call(null, canvas, "\ufdd0:mousemove", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_mousemove));
     dommy.core.listen_BANG_.call(null, canvas, "\ufdd0:mousedown", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_mousedown));
@@ -27262,57 +27262,57 @@ color.ral_picker.init = function init(container, palette, callback) {
     dommy.core.listen_BANG_.call(null, canvas, "\ufdd0:touchend", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_touchend));
     return dommy.core.listen_BANG_.call(null, canvas, "\ufdd0:mouseout", color.ral_picker.wheel_fn.call(null, color.ral_picker.wheel, color.ral_picker.on_mouseout))
   }finally {
-    color.ral_picker.wheel = wheel4566
+    color.ral_picker.wheel = wheel4486
   }
 };
 goog.exportSymbol("color.ral_picker.init", color.ral_picker.init);
 goog.provide("color.ral");
 goog.require("cljs.core");
-color.ral.palette = cljs.core.map.call(null, function(p1__4683_SHARP_) {
-  return cljs.core.assoc.call(null, p1__4683_SHARP_, "\ufdd0:type", "\ufdd0:ral")
-}, cljs.core.PersistentVector.fromArray([cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1E3, "\ufdd0:rgb", "#BEBD7F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1001, "\ufdd0:rgb", "#C2B078"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1002, "\ufdd0:rgb", "#C6A664"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1003, "\ufdd0:rgb", "#E5BE01"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1004, "\ufdd0:rgb", "#CDA434"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1005, "\ufdd0:rgb", "#A98307"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1006, "\ufdd0:rgb", "#E4A010"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1007, "\ufdd0:rgb", "#DC9D00"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1011, "\ufdd0:rgb", "#8A6642"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1012, "\ufdd0:rgb", "#C7B446"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-1013, "\ufdd0:rgb", "#EAE6CA"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1014, "\ufdd0:rgb", "#E1CC4F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1015, "\ufdd0:rgb", "#E6D690"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1016, "\ufdd0:rgb", "#EDFF21"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1017, "\ufdd0:rgb", "#F5D033"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1018, "\ufdd0:rgb", "#F8F32B"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1019, "\ufdd0:rgb", "#9E9764"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1020, "\ufdd0:rgb", "#999950"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1021, "\ufdd0:rgb", "#F3DA0B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1023, "\ufdd0:rgb", "#FAD201"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1024, "\ufdd0:rgb", "#AEA04B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-1026, "\ufdd0:rgb", "#FFFF00"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1027, "\ufdd0:rgb", "#9D9101"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1028, "\ufdd0:rgb", "#F4A900"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1032, "\ufdd0:rgb", "#D6AE01"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1033, "\ufdd0:rgb", "#F3A505"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1034, "\ufdd0:rgb", "#EFA94A"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1035, "\ufdd0:rgb", "#6A5D4D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1036, "\ufdd0:rgb", "#705335"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 1037, "\ufdd0:rgb", "#F39F18"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2E3, "\ufdd0:rgb", "#ED760E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2001, "\ufdd0:rgb", "#C93C20"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-2002, "\ufdd0:rgb", "#CB2821"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2003, "\ufdd0:rgb", "#FF7514"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2004, "\ufdd0:rgb", "#F44611"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2005, "\ufdd0:rgb", "#FF2301"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2007, "\ufdd0:rgb", "#FFA420"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2008, "\ufdd0:rgb", "#F75E25"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2009, "\ufdd0:rgb", "#F54021"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2010, "\ufdd0:rgb", "#D84B20"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2011, "\ufdd0:rgb", "#EC7C26"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2012, "\ufdd0:rgb", "#E55137"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 2013, "\ufdd0:rgb", "#C35831"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-3E3, "\ufdd0:rgb", "#AF2B1E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3001, "\ufdd0:rgb", "#A52019"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3002, "\ufdd0:rgb", "#A2231D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3003, "\ufdd0:rgb", "#9B111E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3004, "\ufdd0:rgb", "#75151E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3005, "\ufdd0:rgb", "#5E2129"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3007, "\ufdd0:rgb", "#412227"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3009, "\ufdd0:rgb", "#642424"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3011, "\ufdd0:rgb", "#781F19"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3012, "\ufdd0:rgb", "#C1876B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3013, "\ufdd0:rgb", "#A12312"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-3014, "\ufdd0:rgb", "#D36E70"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3015, "\ufdd0:rgb", "#EA899A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3016, "\ufdd0:rgb", "#B32821"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3017, "\ufdd0:rgb", "#E63244"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3018, "\ufdd0:rgb", "#D53032"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3020, "\ufdd0:rgb", "#CC0605"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3022, "\ufdd0:rgb", "#D95030"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3024, "\ufdd0:rgb", "#F80000"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3026, "\ufdd0:rgb", "#FE0000"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3027, "\ufdd0:rgb", "#C51D34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3028, "\ufdd0:rgb", "#CB3234"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-3031, "\ufdd0:rgb", "#B32428"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3032, "\ufdd0:rgb", "#721422"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 3033, "\ufdd0:rgb", "#B44C43"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4001, "\ufdd0:rgb", "#6D3F5B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4002, "\ufdd0:rgb", "#922B3E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4003, "\ufdd0:rgb", "#DE4C8A"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4004, "\ufdd0:rgb", "#641C34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4005, "\ufdd0:rgb", "#6C4675"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4006, "\ufdd0:rgb", "#A03472"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4007, "\ufdd0:rgb", "#4A192C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4008, "\ufdd0:rgb", "#924E7D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-4009, "\ufdd0:rgb", "#A18594"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4010, "\ufdd0:rgb", "#CF3476"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4011, "\ufdd0:rgb", "#8673A1"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 4012, "\ufdd0:rgb", "#6C6874"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5E3, "\ufdd0:rgb", "#354D73"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5001, "\ufdd0:rgb", "#1F3438"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5002, "\ufdd0:rgb", "#20214F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5003, "\ufdd0:rgb", "#1D1E33"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5004, "\ufdd0:rgb", "#18171C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5005, "\ufdd0:rgb", "#1E2460"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5007, "\ufdd0:rgb", "#3E5F8A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-5008, "\ufdd0:rgb", "#26252D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5009, "\ufdd0:rgb", "#025669"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5010, "\ufdd0:rgb", "#0E294B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5011, "\ufdd0:rgb", "#231A24"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5012, "\ufdd0:rgb", "#3B83BD"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5013, "\ufdd0:rgb", "#1E213D"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5014, "\ufdd0:rgb", "#606E8C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5015, "\ufdd0:rgb", "#2271B3"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5017, "\ufdd0:rgb", "#063971"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5018, "\ufdd0:rgb", "#3F888F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5019, "\ufdd0:rgb", "#1B5583"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-5020, "\ufdd0:rgb", "#1D334A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5021, "\ufdd0:rgb", "#256D7B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5022, "\ufdd0:rgb", "#252850"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5023, "\ufdd0:rgb", "#49678D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5024, "\ufdd0:rgb", "#5D9B9B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5025, "\ufdd0:rgb", "#2A6478"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 5026, "\ufdd0:rgb", "#102C54"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6E3, "\ufdd0:rgb", "#316650"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6001, "\ufdd0:rgb", "#287233"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6002, "\ufdd0:rgb", "#2D572C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6003, "\ufdd0:rgb", "#424632"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-6004, "\ufdd0:rgb", "#1F3A3D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6005, "\ufdd0:rgb", "#2F4538"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6006, "\ufdd0:rgb", "#3E3B32"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6007, "\ufdd0:rgb", "#343B29"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6008, "\ufdd0:rgb", "#39352A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6009, "\ufdd0:rgb", "#31372B"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6010, "\ufdd0:rgb", "#35682D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6011, "\ufdd0:rgb", "#587246"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6012, "\ufdd0:rgb", "#343E40"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6013, "\ufdd0:rgb", "#6C7156"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6014, "\ufdd0:rgb", "#47402E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-6015, "\ufdd0:rgb", "#3B3C36"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6016, "\ufdd0:rgb", "#1E5945"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6017, "\ufdd0:rgb", "#4C9141"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6018, "\ufdd0:rgb", "#57A639"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6019, "\ufdd0:rgb", "#BDECB6"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6020, "\ufdd0:rgb", "#2E3A23"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6021, "\ufdd0:rgb", "#89AC76"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6022, "\ufdd0:rgb", "#25221B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6024, "\ufdd0:rgb", "#308446"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6025, "\ufdd0:rgb", "#3D642D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6026, "\ufdd0:rgb", "#015D52"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-6027, "\ufdd0:rgb", "#84C3BE"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6028, "\ufdd0:rgb", "#2C5545"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6029, "\ufdd0:rgb", "#20603D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6032, "\ufdd0:rgb", "#317F43"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6033, "\ufdd0:rgb", "#497E76"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6034, "\ufdd0:rgb", "#7FB5B5"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6035, "\ufdd0:rgb", "#1C542D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6036, "\ufdd0:rgb", "#193737"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6037, "\ufdd0:rgb", "#008F39"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 6038, "\ufdd0:rgb", "#00BB2D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7E3, "\ufdd0:rgb", "#78858B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-7001, "\ufdd0:rgb", "#8A9597"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7002, "\ufdd0:rgb", "#7E7B52"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7003, "\ufdd0:rgb", "#6C7059"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7004, "\ufdd0:rgb", "#969992"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7005, "\ufdd0:rgb", "#646B63"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7006, "\ufdd0:rgb", "#6D6552"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7008, "\ufdd0:rgb", "#6A5F31"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7009, "\ufdd0:rgb", "#4D5645"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7010, "\ufdd0:rgb", "#4C514A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7011, "\ufdd0:rgb", "#434B4D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7012, "\ufdd0:rgb", "#4E5754"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-7013, "\ufdd0:rgb", "#464531"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7015, "\ufdd0:rgb", "#434750"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7016, "\ufdd0:rgb", "#293133"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7021, "\ufdd0:rgb", "#23282B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7022, "\ufdd0:rgb", "#332F2C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7023, "\ufdd0:rgb", "#686C5E"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7024, "\ufdd0:rgb", "#474A51"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7026, "\ufdd0:rgb", "#2F353B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7030, "\ufdd0:rgb", "#8B8C7A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7031, "\ufdd0:rgb", "#474B4E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7032, "\ufdd0:rgb", "#B8B799"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-7033, "\ufdd0:rgb", "#7D8471"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7034, "\ufdd0:rgb", "#8F8B66"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7035, "\ufdd0:rgb", "#D7D7D7"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7036, "\ufdd0:rgb", "#7F7679"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7037, "\ufdd0:rgb", "#7D7F7D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7038, "\ufdd0:rgb", "#B5B8B1"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7039, "\ufdd0:rgb", "#6C6960"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7040, "\ufdd0:rgb", "#9DA1AA"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7042, "\ufdd0:rgb", "#8D948D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7043, "\ufdd0:rgb", "#4E5452"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7044, "\ufdd0:rgb", "#CAC4B0"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-7045, "\ufdd0:rgb", "#909090"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7046, "\ufdd0:rgb", "#82898F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7047, "\ufdd0:rgb", "#D0D0D0"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 7048, "\ufdd0:rgb", "#898176"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8E3, "\ufdd0:rgb", "#826C34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8001, "\ufdd0:rgb", "#955F20"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8002, "\ufdd0:rgb", "#6C3B2A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8003, "\ufdd0:rgb", "#734222"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8004, "\ufdd0:rgb", "#8E402A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8007, "\ufdd0:rgb", "#59351F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8008, "\ufdd0:rgb", "#6F4F28"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-8011, "\ufdd0:rgb", "#5B3A29"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8012, "\ufdd0:rgb", "#592321"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8014, "\ufdd0:rgb", "#382C1E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8015, "\ufdd0:rgb", "#633A34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8016, "\ufdd0:rgb", "#4C2F27"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8017, "\ufdd0:rgb", "#45322E"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8019, "\ufdd0:rgb", "#403A3A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8022, "\ufdd0:rgb", "#212121"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8023, "\ufdd0:rgb", "#A65E2E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8024, "\ufdd0:rgb", "#79553D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8025, "\ufdd0:rgb", "#755C48"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-8028, "\ufdd0:rgb", "#4E3B31"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 8029, "\ufdd0:rgb", "#763C28"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9001, "\ufdd0:rgb", "#FDF4E3"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9002, "\ufdd0:rgb", "#E7EBDA"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9003, "\ufdd0:rgb", "#F4F4F4"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9004, "\ufdd0:rgb", "#282828"], true), 
-cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9005, "\ufdd0:rgb", "#0A0A0A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9006, "\ufdd0:rgb", "#A5A5A5"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9007, "\ufdd0:rgb", "#8F8F8F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9010, "\ufdd0:rgb", "#FFFFFF"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9011, "\ufdd0:rgb", "#1C1C1C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 
-9016, "\ufdd0:rgb", "#F6F6F6"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9017, "\ufdd0:rgb", "#1E1E1E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9018, "\ufdd0:rgb", "#D7D7D7"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9022, "\ufdd0:rgb", "#9C9C9C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:ral", 9023, "\ufdd0:rgb", "#828282"], true)], true));
+color.ral.palette = cljs.core.map.call(null, function(p1__4515_SHARP_) {
+  return cljs.core.assoc.call(null, p1__4515_SHARP_, "\ufdd0:type", "\ufdd0:ral")
+}, cljs.core.PersistentVector.fromArray([cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1E3, "\ufdd0:rgb", "#BEBD7F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1001, "\ufdd0:rgb", "#C2B078"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1002, "\ufdd0:rgb", "#C6A664"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1003, "\ufdd0:rgb", "#E5BE01"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1004, "\ufdd0:rgb", "#CDA434"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1005, "\ufdd0:rgb", "#A98307"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1006, "\ufdd0:rgb", "#E4A010"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1007, "\ufdd0:rgb", "#DC9D00"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1011, "\ufdd0:rgb", "#8A6642"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1012, "\ufdd0:rgb", "#C7B446"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+1013, "\ufdd0:rgb", "#EAE6CA"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1014, "\ufdd0:rgb", "#E1CC4F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1015, "\ufdd0:rgb", "#E6D690"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1016, "\ufdd0:rgb", "#EDFF21"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1017, "\ufdd0:rgb", "#F5D033"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1018, "\ufdd0:rgb", "#F8F32B"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1019, "\ufdd0:rgb", "#9E9764"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1020, "\ufdd0:rgb", "#999950"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1021, "\ufdd0:rgb", "#F3DA0B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1023, "\ufdd0:rgb", "#FAD201"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1024, "\ufdd0:rgb", "#AEA04B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+1026, "\ufdd0:rgb", "#FFFF00"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1027, "\ufdd0:rgb", "#9D9101"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1028, "\ufdd0:rgb", "#F4A900"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1032, "\ufdd0:rgb", "#D6AE01"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1033, "\ufdd0:rgb", "#F3A505"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1034, "\ufdd0:rgb", "#EFA94A"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1035, "\ufdd0:rgb", "#6A5D4D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1036, "\ufdd0:rgb", "#705335"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 1037, "\ufdd0:rgb", "#F39F18"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2E3, "\ufdd0:rgb", "#ED760E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2001, "\ufdd0:rgb", "#C93C20"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+2002, "\ufdd0:rgb", "#CB2821"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2003, "\ufdd0:rgb", "#FF7514"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2004, "\ufdd0:rgb", "#F44611"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2005, "\ufdd0:rgb", "#FF2301"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2007, "\ufdd0:rgb", "#FFA420"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2008, "\ufdd0:rgb", "#F75E25"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2009, "\ufdd0:rgb", "#F54021"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2010, "\ufdd0:rgb", "#D84B20"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2011, "\ufdd0:rgb", "#EC7C26"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2012, "\ufdd0:rgb", "#E55137"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 2013, "\ufdd0:rgb", "#C35831"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+3E3, "\ufdd0:rgb", "#AF2B1E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3001, "\ufdd0:rgb", "#A52019"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3002, "\ufdd0:rgb", "#A2231D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3003, "\ufdd0:rgb", "#9B111E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3004, "\ufdd0:rgb", "#75151E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3005, "\ufdd0:rgb", "#5E2129"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3007, "\ufdd0:rgb", "#412227"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3009, "\ufdd0:rgb", "#642424"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3011, "\ufdd0:rgb", "#781F19"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3012, "\ufdd0:rgb", "#C1876B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3013, "\ufdd0:rgb", "#A12312"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+3014, "\ufdd0:rgb", "#D36E70"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3015, "\ufdd0:rgb", "#EA899A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3016, "\ufdd0:rgb", "#B32821"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3017, "\ufdd0:rgb", "#E63244"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3018, "\ufdd0:rgb", "#D53032"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3020, "\ufdd0:rgb", "#CC0605"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3022, "\ufdd0:rgb", "#D95030"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3024, "\ufdd0:rgb", "#F80000"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3026, "\ufdd0:rgb", "#FE0000"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3027, "\ufdd0:rgb", "#C51D34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3028, "\ufdd0:rgb", "#CB3234"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+3031, "\ufdd0:rgb", "#B32428"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3032, "\ufdd0:rgb", "#721422"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 3033, "\ufdd0:rgb", "#B44C43"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4001, "\ufdd0:rgb", "#6D3F5B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4002, "\ufdd0:rgb", "#922B3E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4003, "\ufdd0:rgb", "#DE4C8A"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4004, "\ufdd0:rgb", "#641C34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4005, "\ufdd0:rgb", "#6C4675"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4006, "\ufdd0:rgb", "#A03472"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4007, "\ufdd0:rgb", "#4A192C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4008, "\ufdd0:rgb", "#924E7D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+4009, "\ufdd0:rgb", "#A18594"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4010, "\ufdd0:rgb", "#CF3476"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4011, "\ufdd0:rgb", "#8673A1"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 4012, "\ufdd0:rgb", "#6C6874"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5E3, "\ufdd0:rgb", "#354D73"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5001, "\ufdd0:rgb", "#1F3438"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5002, "\ufdd0:rgb", "#20214F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5003, "\ufdd0:rgb", "#1D1E33"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5004, "\ufdd0:rgb", "#18171C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5005, "\ufdd0:rgb", "#1E2460"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5007, "\ufdd0:rgb", "#3E5F8A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+5008, "\ufdd0:rgb", "#26252D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5009, "\ufdd0:rgb", "#025669"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5010, "\ufdd0:rgb", "#0E294B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5011, "\ufdd0:rgb", "#231A24"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5012, "\ufdd0:rgb", "#3B83BD"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5013, "\ufdd0:rgb", "#1E213D"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5014, "\ufdd0:rgb", "#606E8C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5015, "\ufdd0:rgb", "#2271B3"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5017, "\ufdd0:rgb", "#063971"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5018, "\ufdd0:rgb", "#3F888F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5019, "\ufdd0:rgb", "#1B5583"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+5020, "\ufdd0:rgb", "#1D334A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5021, "\ufdd0:rgb", "#256D7B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5022, "\ufdd0:rgb", "#252850"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5023, "\ufdd0:rgb", "#49678D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5024, "\ufdd0:rgb", "#5D9B9B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5025, "\ufdd0:rgb", "#2A6478"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 5026, "\ufdd0:rgb", "#102C54"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6E3, "\ufdd0:rgb", "#316650"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6001, "\ufdd0:rgb", "#287233"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6002, "\ufdd0:rgb", "#2D572C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6003, "\ufdd0:rgb", "#424632"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+6004, "\ufdd0:rgb", "#1F3A3D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6005, "\ufdd0:rgb", "#2F4538"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6006, "\ufdd0:rgb", "#3E3B32"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6007, "\ufdd0:rgb", "#343B29"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6008, "\ufdd0:rgb", "#39352A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6009, "\ufdd0:rgb", "#31372B"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6010, "\ufdd0:rgb", "#35682D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6011, "\ufdd0:rgb", "#587246"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6012, "\ufdd0:rgb", "#343E40"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6013, "\ufdd0:rgb", "#6C7156"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6014, "\ufdd0:rgb", "#47402E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+6015, "\ufdd0:rgb", "#3B3C36"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6016, "\ufdd0:rgb", "#1E5945"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6017, "\ufdd0:rgb", "#4C9141"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6018, "\ufdd0:rgb", "#57A639"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6019, "\ufdd0:rgb", "#BDECB6"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6020, "\ufdd0:rgb", "#2E3A23"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6021, "\ufdd0:rgb", "#89AC76"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6022, "\ufdd0:rgb", "#25221B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6024, "\ufdd0:rgb", "#308446"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6025, "\ufdd0:rgb", "#3D642D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6026, "\ufdd0:rgb", "#015D52"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+6027, "\ufdd0:rgb", "#84C3BE"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6028, "\ufdd0:rgb", "#2C5545"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6029, "\ufdd0:rgb", "#20603D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6032, "\ufdd0:rgb", "#317F43"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6033, "\ufdd0:rgb", "#497E76"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6034, "\ufdd0:rgb", "#7FB5B5"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6035, "\ufdd0:rgb", "#1C542D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6036, "\ufdd0:rgb", "#193737"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6037, "\ufdd0:rgb", "#008F39"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 6038, "\ufdd0:rgb", "#00BB2D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7E3, "\ufdd0:rgb", "#78858B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+7001, "\ufdd0:rgb", "#8A9597"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7002, "\ufdd0:rgb", "#7E7B52"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7003, "\ufdd0:rgb", "#6C7059"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7004, "\ufdd0:rgb", "#969992"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7005, "\ufdd0:rgb", "#646B63"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7006, "\ufdd0:rgb", "#6D6552"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7008, "\ufdd0:rgb", "#6A5F31"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7009, "\ufdd0:rgb", "#4D5645"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7010, "\ufdd0:rgb", "#4C514A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7011, "\ufdd0:rgb", "#434B4D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7012, "\ufdd0:rgb", "#4E5754"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+7013, "\ufdd0:rgb", "#464531"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7015, "\ufdd0:rgb", "#434750"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7016, "\ufdd0:rgb", "#293133"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7021, "\ufdd0:rgb", "#23282B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7022, "\ufdd0:rgb", "#332F2C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7023, "\ufdd0:rgb", "#686C5E"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7024, "\ufdd0:rgb", "#474A51"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7026, "\ufdd0:rgb", "#2F353B"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7030, "\ufdd0:rgb", "#8B8C7A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7031, "\ufdd0:rgb", "#474B4E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7032, "\ufdd0:rgb", "#B8B799"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+7033, "\ufdd0:rgb", "#7D8471"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7034, "\ufdd0:rgb", "#8F8B66"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7035, "\ufdd0:rgb", "#D7D7D7"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7036, "\ufdd0:rgb", "#7F7679"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7037, "\ufdd0:rgb", "#7D7F7D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7038, "\ufdd0:rgb", "#B5B8B1"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7039, "\ufdd0:rgb", "#6C6960"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7040, "\ufdd0:rgb", "#9DA1AA"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7042, "\ufdd0:rgb", "#8D948D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7043, "\ufdd0:rgb", "#4E5452"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7044, "\ufdd0:rgb", "#CAC4B0"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+7045, "\ufdd0:rgb", "#909090"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7046, "\ufdd0:rgb", "#82898F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7047, "\ufdd0:rgb", "#D0D0D0"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 7048, "\ufdd0:rgb", "#898176"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8E3, "\ufdd0:rgb", "#826C34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8001, "\ufdd0:rgb", "#955F20"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8002, "\ufdd0:rgb", "#6C3B2A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8003, "\ufdd0:rgb", "#734222"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8004, "\ufdd0:rgb", "#8E402A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8007, "\ufdd0:rgb", "#59351F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8008, "\ufdd0:rgb", "#6F4F28"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+8011, "\ufdd0:rgb", "#5B3A29"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8012, "\ufdd0:rgb", "#592321"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8014, "\ufdd0:rgb", "#382C1E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8015, "\ufdd0:rgb", "#633A34"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8016, "\ufdd0:rgb", "#4C2F27"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8017, "\ufdd0:rgb", "#45322E"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8019, "\ufdd0:rgb", "#403A3A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8022, "\ufdd0:rgb", "#212121"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8023, "\ufdd0:rgb", "#A65E2E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8024, "\ufdd0:rgb", "#79553D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8025, "\ufdd0:rgb", "#755C48"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+8028, "\ufdd0:rgb", "#4E3B31"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 8029, "\ufdd0:rgb", "#763C28"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9001, "\ufdd0:rgb", "#FDF4E3"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9002, "\ufdd0:rgb", "#E7EBDA"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9003, "\ufdd0:rgb", "#F4F4F4"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9004, "\ufdd0:rgb", "#282828"], 
+true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9005, "\ufdd0:rgb", "#0A0A0A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9006, "\ufdd0:rgb", "#A5A5A5"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9007, "\ufdd0:rgb", "#8F8F8F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9010, "\ufdd0:rgb", "#FFFFFF"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9011, "\ufdd0:rgb", "#1C1C1C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 
+9016, "\ufdd0:rgb", "#F6F6F6"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9017, "\ufdd0:rgb", "#1E1E1E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9018, "\ufdd0:rgb", "#D7D7D7"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9022, "\ufdd0:rgb", "#9C9C9C"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:code", 9023, "\ufdd0:rgb", "#828282"], true)], true));
 goog.exportSymbol("color.ral.palette", color.ral.palette);
 color.ral.get_color = function get_color(ral) {
-  return cljs.core.first.call(null, cljs.core.filter.call(null, function(p1__4684_SHARP_) {
-    return cljs.core._EQ_.call(null, ral, (new cljs.core.Keyword("\ufdd0:ral")).call(null, p1__4684_SHARP_))
+  return cljs.core.first.call(null, cljs.core.filter.call(null, function(p1__4516_SHARP_) {
+    return cljs.core._EQ_.call(null, ral, (new cljs.core.Keyword("\ufdd0:code")).call(null, p1__4516_SHARP_))
   }, color.ral.palette))
 };
 color.ral.default_color = cljs.core.clj__GT_js.call(null, color.ral.get_color.call(null, 3027));

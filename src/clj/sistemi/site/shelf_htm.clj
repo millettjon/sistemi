@@ -213,7 +213,7 @@
            var text;
            var t = color.type;
            if (t == 'ral') {
-             text = t.toUpperCase() + ' ' + color[t];
+             text = t.toUpperCase() + ' ' + color.code;
              rgb = color.rgb;
              lastRAL = color;
            }
@@ -272,54 +272,6 @@
          startAnimation();
      });"
 
-;     "jQuery(document).ready(function() {
-;         // Hookup the form controls.
-;         $('#colorpicker').farbtastic('#color');
-;         $('.chzn-select').chosen();
-;         $('.customStyleSelectBox').customSelect();
-;
-;         // Hookup on change events to update the model.
-;         $('#width').chosen().change(function() {
-;           shelf.width = $(this).val();
-;           updateAnimation(shelf);
-;         });
-;         $('#depth').chosen().change(function() {
-;           shelf.depth = $(this).val();
-;           updateAnimation(shelf);
-;         });
-;         $('#quantity').chosen().change(function() {
-;           shelf.quantity = $(this).val();
-;           updateAnimation(shelf);
-;         });
-;
-;         // Set the container div height to match the width.
-;         var model = $('#model');
-;         var height = model.width();
-;         model.css({height: height.toString() + 'px'});
-;
-;         // Start animating.
-;         drawShelf(shelf, model[0]);
-;         startAnimation();
-;
-;         // The color picker doesn't have a way to supply a callback in addition
-;         // to the synched form field. So, periodically check the background color
-;         // of the synched form field and re-render when it changes.
-;         function checkColor() {
-;           var color = $('#color').css('background-color');
-;           color = rgb2hex(color);
-;           if (shelf.color != color) {
-;             shelf.color = color;
-;             // For dark colors, use a gray background.
-;             var bg = luminence(color) > 0.1 ? '#000' : '#666';
-;             $('#model').css({'background-color': bg});
-;             updateAnimation(shelf);
-;           }
-;           // Rate limit model updates since the color picker spews events rapidly
-;           // and can cause slowness and/or webgl crashes.
-;           setTimeout(function() {requestAnimFrame(checkColor);}, 1000);
-;         }
-;         checkColor();
-;     });"
      ]]
    ])
 

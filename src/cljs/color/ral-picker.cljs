@@ -261,7 +261,7 @@ Steps:
   (let [text (case state
                :empty ""
                :palette "RAL"
-               :color (:ral color))]
+               :color (:code color))]
     (-> wheel :color-label (d/set-text! text))))
 
 (defn- clear-outer-focus

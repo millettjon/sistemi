@@ -242,7 +242,7 @@
            var text;
            var t = color.type;
            if (t == 'ral') {
-             text = t.toUpperCase() + ' ' + color[t];
+             text = t.toUpperCase() + ' ' + color.code;
              rgb = color.rgb;
              lastRAL = color;
            }
