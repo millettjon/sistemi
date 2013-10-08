@@ -23728,28 +23728,28 @@ goog.require("cljs.core");
 goog.require("jayq.util");
 goog.require("jayq.util");
 color.pack_rgb = function pack_rgb(rgb) {
-  return cljs.core.apply.call(null, cljs.core.str, "#", cljs.core.map.call(null, function(p1__3964_SHARP_) {
-    if(cljs.core.count.call(null, p1__3964_SHARP_) < 2) {
-      return[cljs.core.str("0"), cljs.core.str(p1__3964_SHARP_)].join("")
+  return cljs.core.apply.call(null, cljs.core.str, "#", cljs.core.map.call(null, function(p1__105489_SHARP_) {
+    if(cljs.core.count.call(null, p1__105489_SHARP_) < 2) {
+      return[cljs.core.str("0"), cljs.core.str(p1__105489_SHARP_)].join("")
     }else {
-      return p1__3964_SHARP_
+      return p1__105489_SHARP_
     }
-  }, cljs.core.map.call(null, function(p1__3963_SHARP_) {
-    return p1__3963_SHARP_.toString(16)
-  }, cljs.core.map.call(null, function(p1__3962_SHARP_) {
-    return Math.round.call(null, p1__3962_SHARP_ * 255)
+  }, cljs.core.map.call(null, function(p1__105488_SHARP_) {
+    return p1__105488_SHARP_.toString(16)
+  }, cljs.core.map.call(null, function(p1__105487_SHARP_) {
+    return Math.round.call(null, p1__105487_SHARP_ * 255)
   }, rgb))))
 };
 color.unpack_rgb = function unpack_rgb(rgb) {
-  return cljs.core.map.call(null, function(p1__3965_SHARP_) {
-    return parseInt(cljs.core.apply.call(null, cljs.core.str, "0x", p1__3965_SHARP_)) / 255
+  return cljs.core.map.call(null, function(p1__105490_SHARP_) {
+    return parseInt(cljs.core.apply.call(null, cljs.core.str, "0x", p1__105490_SHARP_)) / 255
   }, cljs.core.partition.call(null, 2, cljs.core.rest.call(null, rgb)))
 };
 color.rgb_to_hsl = function rgb_to_hsl(rgb) {
-  var vec__3967 = color.unpack_rgb.call(null, rgb);
-  var r = cljs.core.nth.call(null, vec__3967, 0, null);
-  var g = cljs.core.nth.call(null, vec__3967, 1, null);
-  var b = cljs.core.nth.call(null, vec__3967, 2, null);
+  var vec__105492 = color.unpack_rgb.call(null, rgb);
+  var r = cljs.core.nth.call(null, vec__105492, 0, null);
+  var g = cljs.core.nth.call(null, vec__105492, 1, null);
+  var b = cljs.core.nth.call(null, vec__105492, 2, null);
   var min = function() {
     var x__3101__auto__ = function() {
       var x__3101__auto__ = r;
@@ -23822,16 +23822,16 @@ color.hue_to_rgb = function hue_to_rgb(m1, m2, h) {
     }
   }
 };
-color.hsl_to_rgb = function hsl_to_rgb(p__3969) {
-  var vec__3971 = p__3969;
-  var h = cljs.core.nth.call(null, vec__3971, 0, null);
-  var s = cljs.core.nth.call(null, vec__3971, 1, null);
-  var l = cljs.core.nth.call(null, vec__3971, 2, null);
+color.hsl_to_rgb = function hsl_to_rgb(p__105494) {
+  var vec__105496 = p__105494;
+  var h = cljs.core.nth.call(null, vec__105496, 0, null);
+  var s = cljs.core.nth.call(null, vec__105496, 1, null);
+  var l = cljs.core.nth.call(null, vec__105496, 2, null);
   var m2 = l <= 0.5 ? l * (s + 1) : l + s - l * s;
   var m1 = l * 2 - m2;
   var f = function(m2, m1) {
-    return function(p1__3968_SHARP_) {
-      return color.hue_to_rgb.call(null, m1, m2, h + p1__3968_SHARP_)
+    return function(p1__105493_SHARP_) {
+      return color.hue_to_rgb.call(null, m1, m2, h + p1__105493_SHARP_)
     }
   }(m2, m1);
   return cljs.core.map.call(null, f, cljs.core.PersistentVector.fromArray([0.33333, 0, -0.33333], true))
@@ -23844,10 +23844,10 @@ color.hue = function hue(color__$1) {
 };
 color.average = function average(colors) {
   var len = cljs.core.count.call(null, colors);
-  return cljs.core.assoc.call(null, cljs.core.PersistentArrayMap.EMPTY, "\ufdd0:rgb", color.pack_rgb.call(null, cljs.core.map.call(null, function(p1__3974_SHARP_) {
-    return p1__3974_SHARP_ / len
-  }, cljs.core.reduce.call(null, function(p1__3972_SHARP_, p2__3973_SHARP_) {
-    return cljs.core.map.call(null, cljs.core._PLUS_, p1__3972_SHARP_, p2__3973_SHARP_)
+  return cljs.core.assoc.call(null, cljs.core.PersistentArrayMap.EMPTY, "\ufdd0:rgb", color.pack_rgb.call(null, cljs.core.map.call(null, function(p1__105499_SHARP_) {
+    return p1__105499_SHARP_ / len
+  }, cljs.core.reduce.call(null, function(p1__105497_SHARP_, p2__105498_SHARP_) {
+    return cljs.core.map.call(null, cljs.core._PLUS_, p1__105497_SHARP_, p2__105498_SHARP_)
   }, cljs.core.PersistentVector.fromArray([0, 0, 0], true), cljs.core.map.call(null, color.unpack_rgb, cljs.core.map.call(null, "\ufdd0:rgb", colors))))))
 };
 goog.provide("monet.core");
@@ -24649,23 +24649,123 @@ image.get_img = function get_img(src_img, size, index) {
   monet.canvas.get_context.call(null, canvas, "2d").drawImage(src_img, col * size, row * size, size, size, 0, 0, size, size);
   return canvas
 };
+goog.provide("clojure.walk");
+goog.require("cljs.core");
+clojure.walk.walk = function walk(inner, outer, form) {
+  if(cljs.core.seq_QMARK_.call(null, form)) {
+    return outer.call(null, cljs.core.doall.call(null, cljs.core.map.call(null, inner, form)))
+  }else {
+    if(cljs.core.coll_QMARK_.call(null, form)) {
+      return outer.call(null, cljs.core.into.call(null, cljs.core.empty.call(null, form), cljs.core.map.call(null, inner, form)))
+    }else {
+      if("\ufdd0:else") {
+        return outer.call(null, form)
+      }else {
+        return null
+      }
+    }
+  }
+};
+clojure.walk.postwalk = function postwalk(f, form) {
+  return clojure.walk.walk.call(null, cljs.core.partial.call(null, postwalk, f), f, form)
+};
+clojure.walk.prewalk = function prewalk(f, form) {
+  return clojure.walk.walk.call(null, cljs.core.partial.call(null, prewalk, f), cljs.core.identity, f.call(null, form))
+};
+clojure.walk.keywordize_keys = function keywordize_keys(m) {
+  var f = function(p__29914) {
+    var vec__29915 = p__29914;
+    var k = cljs.core.nth.call(null, vec__29915, 0, null);
+    var v = cljs.core.nth.call(null, vec__29915, 1, null);
+    if(cljs.core.string_QMARK_.call(null, k)) {
+      return cljs.core.PersistentVector.fromArray([cljs.core.keyword.call(null, k), v], true)
+    }else {
+      return cljs.core.PersistentVector.fromArray([k, v], true)
+    }
+  };
+  return clojure.walk.postwalk.call(null, function(x) {
+    if(cljs.core.map_QMARK_.call(null, x)) {
+      return cljs.core.into.call(null, cljs.core.PersistentArrayMap.EMPTY, cljs.core.map.call(null, f, x))
+    }else {
+      return x
+    }
+  }, m)
+};
+clojure.walk.stringify_keys = function stringify_keys(m) {
+  var f = function(p__29918) {
+    var vec__29919 = p__29918;
+    var k = cljs.core.nth.call(null, vec__29919, 0, null);
+    var v = cljs.core.nth.call(null, vec__29919, 1, null);
+    if(cljs.core.keyword_QMARK_.call(null, k)) {
+      return cljs.core.PersistentVector.fromArray([cljs.core.name.call(null, k), v], true)
+    }else {
+      return cljs.core.PersistentVector.fromArray([k, v], true)
+    }
+  };
+  return clojure.walk.postwalk.call(null, function(x) {
+    if(cljs.core.map_QMARK_.call(null, x)) {
+      return cljs.core.into.call(null, cljs.core.PersistentArrayMap.EMPTY, cljs.core.map.call(null, f, x))
+    }else {
+      return x
+    }
+  }, m)
+};
+clojure.walk.prewalk_replace = function prewalk_replace(smap, form) {
+  return clojure.walk.prewalk.call(null, function(x) {
+    if(cljs.core.contains_QMARK_.call(null, smap, x)) {
+      return smap.call(null, x)
+    }else {
+      return x
+    }
+  }, form)
+};
+clojure.walk.postwalk_replace = function postwalk_replace(smap, form) {
+  return clojure.walk.postwalk.call(null, function(x) {
+    if(cljs.core.contains_QMARK_.call(null, smap, x)) {
+      return smap.call(null, x)
+    }else {
+      return x
+    }
+  }, form)
+};
+goog.provide("edn");
+goog.require("cljs.core");
+goog.require("clojure.walk");
+edn.keywordize_vals = function() {
+  var method_table__3560__auto__ = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY);
+  var prefer_table__3561__auto__ = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY);
+  var method_cache__3562__auto__ = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY);
+  var cached_hierarchy__3563__auto__ = cljs.core.atom.call(null, cljs.core.PersistentArrayMap.EMPTY);
+  var hierarchy__3564__auto__ = cljs.core.get.call(null, cljs.core.PersistentArrayMap.EMPTY, "\ufdd0:hierarchy", cljs.core.get_global_hierarchy.call(null));
+  return new cljs.core.MultiFn("keywordize-vals", "\ufdd0:type", "\ufdd0:default", hierarchy__3564__auto__, method_table__3560__auto__, prefer_table__3561__auto__, method_cache__3562__auto__, cached_hierarchy__3563__auto__)
+}();
+cljs.core._add_method.call(null, edn.keywordize_vals, "\ufdd0:default", function(m) {
+  return m
+});
+edn.stringify = function stringify(object) {
+  return cljs.core.pr_str.call(null, edn.keywordize_vals.call(null, function(p1__101919_SHARP_) {
+    return cljs.core.assoc.call(null, p1__101919_SHARP_, "\ufdd0:type", cljs.core.keyword.call(null, (new cljs.core.Keyword("\ufdd0:type")).call(null, p1__101919_SHARP_)))
+  }.call(null, clojure.walk.keywordize_keys.call(null, cljs.core.js__GT_clj.call(null, object)))))
+};
+goog.exportSymbol("edn.stringify", edn.stringify);
 goog.provide("color.valchromat");
 goog.require("cljs.core");
-var raw_4432 = cljs.core.map.call(null, function(p1__4430_SHARP_) {
-  return cljs.core.assoc.call(null, p1__4430_SHARP_, "\ufdd0:type", "\ufdd0:valchromat")
+goog.require("edn");
+var raw_104500 = cljs.core.map.call(null, function(p1__104498_SHARP_) {
+  return cljs.core.assoc.call(null, p1__104498_SHARP_, "\ufdd0:type", "\ufdd0:valchromat")
 }, cljs.core.PersistentVector.fromArray([cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:light-grey", "\ufdd0:code", "\ufdd0:SLG", "\ufdd0:rgb", "#8F8F8F"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:grey", "\ufdd0:code", "\ufdd0:SCZ", "\ufdd0:rgb", "#5A5A5A"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:black", "\ufdd0:code", "\ufdd0:SBL", "\ufdd0:rgb", "#595853"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:chocolate-brown", 
 "\ufdd0:code", "\ufdd0:SCB", "\ufdd0:rgb", "#5C4136"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:brown", "\ufdd0:code", "\ufdd0:SBR", "\ufdd0:rgb", "#9F7769"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:red", "\ufdd0:code", "\ufdd0:SSC", "\ufdd0:rgb", "#CF4E61"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:orange", "\ufdd0:code", "\ufdd0:SOR", "\ufdd0:rgb", "#DF784D"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", 
 "\ufdd0:yellow", "\ufdd0:code", "\ufdd0:SYW", "\ufdd0:rgb", "#CBA047"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:green", "\ufdd0:code", "\ufdd0:SGR", "\ufdd0:rgb", "#549185"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:blue", "\ufdd0:code", "\ufdd0:SRB", "\ufdd0:rgb", "#4E657E"], true), cljs.core.PersistentArrayMap.fromArray(["\ufdd0:name", "\ufdd0:violet", "\ufdd0:code", "\ufdd0:SVI", "\ufdd0:rgb", "#654E6A"], true)], true));
-var rgb_oiled_4433 = cljs.core.PersistentHashMap.fromArrays(["\ufdd0:black", "\ufdd0:violet", "\ufdd0:orange", "\ufdd0:red", "\ufdd0:grey", "\ufdd0:brown", "\ufdd0:light-grey", "\ufdd0:blue", "\ufdd0:chocolate-brown", "\ufdd0:green", "\ufdd0:yellow"], ["#151516", "#47344A", "#AB522D", "#A02E3E", "#2C2C2C", "#694133", "#656565", "#1A232B", "#2D201A", "#192C28", "#A7742F"]);
-var oiled_4434 = cljs.core.map.call(null, function(raw_4432, rgb_oiled_4433) {
-  return function(p1__4431_SHARP_) {
-    return cljs.core.assoc.call(null, p1__4431_SHARP_, "\ufdd0:finish", "\ufdd0:oiled", "\ufdd0:rgb", rgb_oiled_4433.call(null, p1__4431_SHARP_.call(null, "\ufdd0:name")))
+var rgb_oiled_104501 = cljs.core.PersistentHashMap.fromArrays(["\ufdd0:black", "\ufdd0:violet", "\ufdd0:orange", "\ufdd0:red", "\ufdd0:grey", "\ufdd0:brown", "\ufdd0:light-grey", "\ufdd0:blue", "\ufdd0:chocolate-brown", "\ufdd0:green", "\ufdd0:yellow"], ["#151516", "#47344A", "#AB522D", "#A02E3E", "#2C2C2C", "#694133", "#656565", "#1A232B", "#2D201A", "#192C28", "#A7742F"]);
+var oiled_104502 = cljs.core.map.call(null, function(raw_104500, rgb_oiled_104501) {
+  return function(p1__104499_SHARP_) {
+    return cljs.core.assoc.call(null, p1__104499_SHARP_, "\ufdd0:finish", "\ufdd0:oiled", "\ufdd0:rgb", rgb_oiled_104501.call(null, p1__104499_SHARP_.call(null, "\ufdd0:name")))
   }
-}(raw_4432, rgb_oiled_4433), raw_4432);
-color.valchromat.palettes = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:raw", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:colors", raw_4432, "\ufdd0:textures-src", "/pie-picker/valchromat-raw-palette-64.jpg", "\ufdd0:label", "Valchromat"], true), "\ufdd0:oiled", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:colors", oiled_4434, "\ufdd0:textures-src", "/pie-picker/valchromat-oiled-palette-64.jpg", "\ufdd0:label", "Oiled Valchromat"], true)], true);
+}(raw_104500, rgb_oiled_104501), raw_104500);
+color.valchromat.palettes = cljs.core.PersistentArrayMap.fromArray(["\ufdd0:raw", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:colors", raw_104500, "\ufdd0:textures-src", "/pie-picker/valchromat-raw-palette-64.jpg", "\ufdd0:label", "Valchromat"], true), "\ufdd0:oiled", cljs.core.PersistentArrayMap.fromArray(["\ufdd0:colors", oiled_104502, "\ufdd0:textures-src", "/pie-picker/valchromat-oiled-palette-64.jpg", "\ufdd0:label", "Oiled Valchromat"], true)], true);
 color.valchromat.get_by_name = function get_by_name(palette, name) {
-  return cljs.core.first.call(null, cljs.core.filter.call(null, function(p1__4435_SHARP_) {
-    return cljs.core._EQ_.call(null, name, (new cljs.core.Keyword("\ufdd0:name")).call(null, p1__4435_SHARP_))
+  return cljs.core.first.call(null, cljs.core.filter.call(null, function(p1__104503_SHARP_) {
+    return cljs.core._EQ_.call(null, name, (new cljs.core.Keyword("\ufdd0:name")).call(null, p1__104503_SHARP_))
   }, (new cljs.core.Keyword("\ufdd0:colors")).call(null, palette)))
 };
 color.valchromat.get_by_name_js = function get_by_name_js(palette, name) {
@@ -24676,6 +24776,17 @@ color.valchromat.default_raw_color = cljs.core.clj__GT_js.call(null, color.valch
 goog.exportSymbol("color.valchromat.default_raw_color", color.valchromat.default_raw_color);
 color.valchromat.default_oiled_color = cljs.core.clj__GT_js.call(null, color.valchromat.get_by_name.call(null, (new cljs.core.Keyword("\ufdd0:oiled")).call(null, color.valchromat.palettes), "\ufdd0:red"));
 goog.exportSymbol("color.valchromat.default_oiled_color", color.valchromat.default_oiled_color);
+cljs.core._add_method.call(null, edn.keywordize_vals, "\ufdd0:valchromat", function(m) {
+  return cljs.core.reduce.call(null, function(m__$1, k) {
+    var temp__4090__auto__ = m__$1.call(null, k);
+    if(cljs.core.truth_(temp__4090__auto__)) {
+      var v = temp__4090__auto__;
+      return cljs.core.assoc.call(null, m__$1, k, cljs.core.keyword.call(null, v))
+    }else {
+      return m__$1
+    }
+  }, m, cljs.core.PersistentVector.fromArray(["\ufdd0:finish", "\ufdd0:code", "\ufdd0:name"], true))
+});
 goog.provide("dommy.template");
 goog.require("cljs.core");
 goog.require("dommy.attrs");

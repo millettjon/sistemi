@@ -19,7 +19,8 @@
    :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30 :format fmt/cm}
    :finish {:type :set :options [:laquer-matte :laquer-satin :laquer-glossy {:disabled true} :valchromat-raw :valchromat-oiled] :default :laquer-matte
              :format (get-in fmt/parameter-formats [:shelf :finish])}
-   :color {:type :rgb :default "#AB003B"}})
+   :color {:type :color :default ""}
+   })
 
 (def items
   "Map of all items and their design paramters."

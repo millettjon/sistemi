@@ -90,6 +90,7 @@
     [:form#shelf-form.form-horizontal {:method "post" :action "cart/add"}
      (f/hidden :id)
      (f/hidden {:type :shelf})
+     (f/hidden :color)
 
      [:fieldset
 
@@ -145,7 +146,6 @@
      "var shelf = {};\n"
      "shelf.width=" (f/default :width) ";\n"
      "shelf.depth=" (f/default :depth) ";\n"
-     "shelf.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
      "shelf.quantity=" (f/default :quantity) ";\n"
 
      "jQuery(document).ready(function() {
@@ -199,7 +199,6 @@
          // --------------------
          // Setup the color picker.
          function onColor(color) {
-           // TODO: Update hidden form field w/ EDN value.
            var text;
            var rgb = color.rgb;
            var t = color.type;
@@ -218,6 +217,9 @@
            // Update background color of color swatch.
            // TODO: Use texture if available.
            $('#color-swatch').css('background-color', rgb);
+
+           // Update hidden form field.
+           $('#shelf-form input[name=color]').val(edn.stringify(color));
 
            // Update the model.
            var hex = rgbHexToInt(rgb);

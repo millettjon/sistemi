@@ -1,7 +1,10 @@
 (ns www.form
   "Functions for validating and rendering forms."
-  (:require [clojure.string :as s]
-            [clojure.tools.logging :as log])
+  (:require [color.ral :as ral] 
+            [color.valchromat :as valchromat]
+            [clojure.string :as s]
+            [clojure.tools.logging :as log]
+            [clojure.edn :as edn])
   (:use ordered.map))
 
 ;; Parse errors derive from this symbol.
@@ -101,6 +104,27 @@
   (if-let [rgb (second (re-matches #"#?([\dA-Fa-f]{6})" value))]
     (str "#" (s/upper-case rgb))
     ::invalid-rgb))
+
+;; ===== color =====
+(derive ::invalid-color ::parse-error)
+(defmethod parse :color
+  [field value]
+  (try
+    (let [v (edn/read-string value)]
+      (if (map? v) v ::invalid-color))
+    (catch Exception e
+      ::invalid-color)))
+
+;; TODO: Add multi field validation capability since color must match finish for shelves.
+;; TODO: Add multi field default determination since color must match finish for shelves.
+(defmethod invalid? :color
+  [field {:keys [type code finish]}]
+  (let [color (case type
+                :ral (ral/get-color code)
+                :valchromat (valchromat/get-color code finish)
+                :else nil)]
+    (if-not color ::invalid-color)))
+
 
 ;; ===== string =====
 (defmethod invalid? :string

@@ -1,6 +1,5 @@
 (ns color.valchromat
-  "Valchromat colors."
-  (:require edn))
+  "Valchromat colors.")
 
 ;; Official list of colors - http://www.valchromat.pt/gama.aspx?menuid=963&eid=3058
 
@@ -42,40 +41,11 @@
              :textures-src "/pie-picker/valchromat-oiled-palette-64.jpg"
              :label "Oiled Valchromat"}}))
 
-(defn ^:private get-by-name
-  "Gets a color object by name."
-  [palette name]
-  (->> palette
+(defn get-color
+  "Gets a color object by code and finish"
+  [code finish]
+  (->> ((or finish :raw) palettes)
        :colors
-       (filter #(= name (:name %)))
+       (filter #(= code (:code %)))
        first))
-
-(defn ^:export get-by-name-js
-  "Gets a color object by name."
-  [palette name]
-  (-> palette
-      keyword
-      palettes
-      (get-by-name (keyword name))
-      clj->js))
-
-(def ^:export default-raw-color
-  (-> palettes
-      :raw
-      (get-by-name :red)
-       clj->js))
-
-(def ^:export default-oiled-color
-  (-> palettes
-      :oiled
-      (get-by-name :red)
-       clj->js))
-
-(defmethod edn/keywordize-vals :valchromat
-  [m]
-  (reduce (fn [m k] (if-let [v (m k)]
-                     (assoc m k (keyword v))
-                     m))
-          m
-          [:finish :code :name]))
 
