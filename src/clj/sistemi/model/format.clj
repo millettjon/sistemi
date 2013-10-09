@@ -1,5 +1,6 @@
 (ns sistemi.model.format
-  (:require [sistemi.translate :as tr])
+  (:require color 
+            [sistemi.translate :as tr])
   (:use [frinj ops]))
 
 (defn format-area
@@ -82,10 +83,6 @@
             v)]
     (str v " cm")))
 
-(defn color
-  [v]
-  [:span v "&nbsp;&nbsp" [:span.label {:style (str "background-color: " v ";")} "&nbsp;&nbsp"]])
-
 (def parameter-orders
   "display order of design paramters"
   {:shelf [:width :depth :finish :color]
@@ -97,12 +94,12 @@
               :width #(cm %)
               :depth #(cm %)
               :cutout #(tr/translate "/product" :shelving :cutout %)
-              :color #(color %)
+              :color #(color/format-html %)
               :finish #(tr/translate "/product" :shelving :finish %)
               }
    :shelf {:width #(cm %)
            :depth #(cm %)
-           :color #(color %)
+           :color #(color/format-html %)
            :finish #(tr/translate "/product" :shelf :finish %)
            }})
 

@@ -223,3 +223,7 @@
   (->> palette
        (filter #(= code (:code %)))
        first))
+
+(defmethod color/format-name :ral
+  [{:keys [code]}]
+  (str  "RAL" "&nbsp;" code))

@@ -1,5 +1,6 @@
 (ns color.valchromat
-  "Valchromat colors.")
+  "Valchromat colors."
+  (:require [sistemi.translate :as tr]))
 
 ;; Official list of colors - http://www.valchromat.pt/gama.aspx?menuid=963&eid=3058
 
@@ -49,3 +50,6 @@
        (filter #(= code (:code %)))
        first))
 
+(defmethod color/format-name :valchromat
+  [{:keys [name]}]
+  [:span (tr/translate "/valchromat" name) #_"&nbsp;" #_[:span {:style {:color "grey"}} "Valchromat"]])

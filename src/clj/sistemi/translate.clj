@@ -29,6 +29,11 @@
 ;; (tr/translate /product :shelf :description)
 ;; (tr/translate /product :params :width)
 ;; (tr/translate :product :shelf :name)
+;;
+;; ? lookup strings from a symbol or namespace?
+;; How do the strings get loaded?
+;; Nesting is not necessary related to the pages.
+;; (tr/translate color.valchromat/strings)
 
 (defn mangle-text-to-kw
   "Converts a text string to a mangled keyword to use to lookup a string translation."

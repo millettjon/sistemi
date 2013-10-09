@@ -9,8 +9,8 @@
   {:en {:shelf {:name "Custom Shelf"
                 :width "width"
                 :depth "depth"
-                :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin" :laquer-glossy "laquer - glossy"
-                         :valchromat-raw "valchromat - unfinished" :valchromat-oiled "valchromat - oiled"}
+                :finish {:_ "finish" :laquer-matte "matte" :laquer-satin "satin" :laquer-glossy "glossy"
+                         :valchromat-raw "Valchromat – unfinished" :valchromat-oiled "Valchromat – oiled"}
                 :color "color"
                 }
         :shelving {:name "Custom Shelving Unit"
@@ -18,7 +18,7 @@
                    :depth "depth"
                    :height "height"
                    :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin" :laquer-glossy "laquer - glossy"
-                            :valchromat-raw "valchromat - unfinished" :valchromat-oiled "valchromat - oiled"}
+                            :valchromat-raw "Valchromat – unfinished" :valchromat-oiled "Valchromat – oiled"}
                    :color "color"
                    :cutout {:_ "cutout" :semplice "none" :ovale "oval" :quadro "rectangle"}
                    }
@@ -32,7 +32,7 @@
                 :color "Colore"
                 :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
                 :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
-                         :valchromat-raw "Valchromat - naturale" :valchromat-oiled "Valchromat - oliato"}
+                         :valchromat-raw "Valchromat – naturale" :valchromat-oiled "Valchromat – oliato"}
                 }
         :shelving {:width "Lunghezza"
                    :depth "Profondità"
@@ -40,7 +40,7 @@
                    :color "Colore"
                    :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
                    :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
-                            :valchromat-raw "Valchromat - naturale" :valchromat-oiled "Valchromat - oliato"}
+                            :valchromat-raw "Valchromat – naturale" :valchromat-oiled "Valchromat – oliato"}
                    }}
 
    :fr {:shelf {:name "Etagère personnalisée"
