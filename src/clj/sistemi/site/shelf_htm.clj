@@ -164,6 +164,11 @@
            updateAnimation(shelf);
          });
 
+         $('#quantity').chosen().change(function() {
+           shelf.quantity = $(this).val();
+           updateAnimation(shelf);
+         });
+
          // Handler - When the finish is changed, update the color wheel.
          var lastRAL;
          var lastVAL;
