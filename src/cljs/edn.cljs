@@ -1,5 +1,6 @@
 (ns edn
-  (:require [clojure.walk :as walk]))
+  (:require [cljs.reader]
+            [clojure.walk :as walk]))
 
 (defmulti keywordize-vals :type)
 
@@ -18,3 +19,10 @@ dispatch fn for the multi-method keywordize-vals."
       (#(assoc % :type (-> % :type keyword)))
       keywordize-vals
       pr-str))
+
+(defn ^:export objectify
+  "Reads an edn string and converts it to a javascript object."
+  [s]
+  (-> s
+      cljs.reader/read-string
+      clj->js))

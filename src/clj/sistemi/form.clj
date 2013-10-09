@@ -1,5 +1,6 @@
 (ns sistemi.form
-  (:require [sistemi.model.format :as fmt]))
+  (:require [sistemi.model.format :as fmt]
+            [color.ral :as ral]))
 
 (def feedback
   "A customer feedback message."
@@ -19,7 +20,7 @@
    :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30 :format fmt/cm}
    :finish {:type :set :options [:laquer-matte :laquer-satin :laquer-glossy {:disabled true} :valchromat-raw :valchromat-oiled] :default :laquer-matte
              :format (get-in fmt/parameter-formats [:shelf :finish])}
-   :color {:type :color :default ""}
+   :color {:type :color :default (ral/get-color 3027)}
    })
 
 (def items

@@ -113,10 +113,8 @@
        [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
         [:div {:style {:height "25px"}}
-         [:div#color-swatch {:style {:width "25px" :height "100%" :background-color "blue" :display "inline-block" :border-radius "5px" :vertical-align "middle"}}]
-         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle" :padding-top "4px" :color "white"}}
-          "RAL 8098"
-          ]]]]
+         [:div#color-swatch {:style {:width "25px" :height "100%" :display "inline-block" :border-radius "5px" :vertical-align "middle"}}]
+         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle" :padding-top "4px" :color "white"}}]]]]
 
       ;; TODO: Pull request for hiccup to handle style as map.
       ;; TODO: Factor this out?
@@ -198,7 +196,6 @@
                onColor(c);
                $('#wheel-val-oiled').css('visibility', 'visible');
            }
-
          });
 
          // --------------------
@@ -262,9 +259,16 @@
          var height = model.width();
          model.css({height: height.toString() + 'px'});
 
-         // Start animating.
+         // Create three.js model.
          drawShelf(shelf, model[0]);
-         onColor(defaultRAL);
+
+         // Call the color change handler to make sure the right color name and code are displayed.
+         onColor(edn.objectify($('#shelf-form input[name=color]').val()));
+
+         // Call finish change handler to make sure the proper color wheel is displayed.
+         $('#finish').change();
+
+         // Start animating.
          startAnimation();
      });"
 
