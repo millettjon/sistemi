@@ -158,8 +158,8 @@
           [:img {:src "/img/facebook.jpg", :border "0" :alt "facebook"}]]
          [:a { :href "#"}
           [:img {:src "/img/twitter.jpg", :border "0" :alt "twitter"}]]
-         ;; TODO: Why is google +1 not working?
-         [:g:plusone {:size "small" :annotation "none"}]
+         ;; commenting this out for now for privacy
+         ;; [:g:plusone {:size "small" :annotation "none"}]
          ]]
 
        ;; ----- ADDRESS AND COPYRIGHT -----
