@@ -227,3 +227,7 @@
 (def ^:export default-color
   (-> (get-color 3027)
       clj->js))
+
+(defmethod color/format-name :ral
+  [{:keys [code]}]
+  (str  "RAL" " " code))

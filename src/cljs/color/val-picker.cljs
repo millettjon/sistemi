@@ -4,7 +4,8 @@
             [html.canvas :as c2]
             [dommy.core :as d]
             util.map
-            [image :as img])
+            [image :as img]
+            [translate :as tr])
   (:use [jayq.util :only [log]])
   (:use-macros [dommy.macros :only [sel sel1 node]]
                [image.macros :only [onload-let]]))
@@ -70,8 +71,8 @@
   [state & [index]]
   (let [text (case state
                :empty ""
-               :palette (:label wheel)
-               :color (->> index (nth (:palette wheel)) :name name))]
+               :palette (tr/translate v/palette-strings (:label wheel))
+               :color (->> index (nth (:palette wheel)) color/format-name))]
     (-> (:color-label wheel)
         (d/set-text! text))))
 

@@ -72,3 +72,12 @@
          (map #(/ % len))
          pack-rgb
          (assoc {} :rgb))))
+
+(defmulti format-name
+  "Returns a html formatted color name."
+  :type)
+
+(defn ^:export formatName
+  [color]
+  (-> color edn/convert format-name))
+

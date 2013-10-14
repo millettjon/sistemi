@@ -200,18 +200,18 @@
 
          // --------------------
          // Setup the color picker.
+         clr = color;
          function onColor(color) {
            var text;
            var rgb = color.rgb;
            var t = color.type;
            if (t == 'ral') {
-             text = t.toUpperCase() + ' ' + color.code;
               lastRAL = color;
            }
            else {
              lastVAL = color;
-             text = color.name;
            }
+           text = clr.formatName(color);
 
            // Update text of color select box.
            $('#color-text').text(text);

@@ -1,6 +1,7 @@
 (ns color.valchromat
   "Valchromat colors."
-  (:require edn))
+  (:require edn
+            [translate :as tr]))
 
 ;; Official list of colors - http://www.valchromat.pt/gama.aspx?menuid=963&eid=3058
 
@@ -36,11 +37,18 @@
   (def palettes
     {:raw   {:colors raw
              :textures-src "/pie-picker/valchromat-raw-palette-64.jpg"
-             :label "Valchromat"}
+             :label :valchromat}
 
      :oiled {:colors oiled
              :textures-src "/pie-picker/valchromat-oiled-palette-64.jpg"
-             :label "Oiled Valchromat"}}))
+             :label :valchromat-oiled}}))
+
+(def palette-strings
+  {:en {:valchromat "Valchromat"
+        :valchromat-oiled "Oiled Valchromat"}
+
+   :fr {:valchromat "Valchromat"
+        :valchromat-oiled "Valchromat Huilé"}})
 
 (defn ^:private get-by-name
   "Gets a color object by name."
@@ -79,3 +87,31 @@
           m
           [:finish :code :name]))
 
+(def color-strings
+  {:en {:light-grey "light grey"
+        :grey "grey"
+        :black "black"
+        :chocolate-brown "chocolate brown"
+        :brown "brown"
+        :red "red"
+        :orange "orange"
+        :yellow "yellow"
+        :green "green"
+        :blue "blue"
+        :violet "violet"}
+
+   :fr {:light-grey "gris clair"
+        :grey "gris"
+        :black "noir"
+        :chocolate-brown "marron chocolat"
+        :brown "marron"
+        :red "rouge"
+        :orange "orange"
+        :yellow "jaune"
+        :green "vert"
+        :blue "bleu"
+        :violet "violet"}})
+
+(defmethod color/format-name :valchromat
+  [{:keys [name]}]
+  (tr/translate color-strings name))

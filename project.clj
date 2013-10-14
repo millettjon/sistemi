@@ -59,12 +59,20 @@
                  ;; payment
                  [com.braintreepayments.gateway/braintree-java "2.24.1"]
 
+                 ;; validation
+                 [bouncer "0.3.0-alpha1"]
+
                  ;; misc
                  [org.clojure/core.memoize "0.5.6"]
-
                  [ordered "1.3.2"]
                  [com.google.guava/guava "15.0"]
                  [org.clojure/tools.namespace "0.2.4"]
+
+                 ;; url/path handling
+                 ;;[com.cemerick/url "0.1.0" :exclusions [pathetic]]
+                 [pathetic "0.5.1"]     ; manually specify as dep of url
+                                        ; since version 0.5.0 includes clojurescript as
+                                        ; regular instead of a dev dependency
 
                  ;; cljs
                  [org.clojure/clojurescript "0.0-1859"]
