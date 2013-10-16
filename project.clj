@@ -63,6 +63,9 @@
                  ;; validation
                  [bouncer "0.3.0-alpha1"]
 
+                 ;; xml for UPS
+                 [org.clojure/data.xml "0.0.7"]
+
                  ;; misc
                  [org.clojure/core.memoize "0.5.6"]
                  [ordered "1.3.2"]
