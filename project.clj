@@ -53,6 +53,7 @@
                  [bitwalker/UserAgentUtils "1.10"]
                  
                  ;; calculation
+                 [net.cgrand/spreadmap "0.1.2"]
                  [dgraph "1.2.2"]
                  [frinj "0.2.5"]
 
@@ -87,7 +88,6 @@
   :plugins [[lein-cljsbuild "0.3.3"]
             [lein-marginalia "0.7.1"]
             [lein-ancient "0.4.4"]
-            [lein-libdir "0.1.1"]
             [lein-cloverage "1.0.2"]]
 
   :aliases {"marg" ["marg" "--dir" "var/doc"]}
