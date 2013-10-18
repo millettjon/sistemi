@@ -1,9 +1,5 @@
 (ns color)
 
-(defmulti to-rgb
-  "Returns the rgb value of a color."
-  :type)
-
 (defmulti format-swatch
   "Returns an html formatted color swatch."
   :type)

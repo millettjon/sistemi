@@ -1,5 +1,6 @@
 (ns color.ral
-  "RAL color palette.")
+  "RAL color palette."
+  (:require color))
 
 (def ^:export palette
   (map #(assoc % :type :ral)
