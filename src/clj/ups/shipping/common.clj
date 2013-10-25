@@ -75,7 +75,7 @@
 ;; </Shipper>
 (def shipper-keys [:name :attention_name :phone :shipper_number :address])
 
-(defn sistemi-shipper-xx
+(defn sistemi-shipper-xx-info
   "Shipping from a specific Sistemi fabricator."
   [shipper_data]
   (xml/element :Shipper {}
@@ -101,13 +101,14 @@
 ;; </ShipTo>
 (def shipto-keys [:company :attention_name :phone :address])
 
-(defn ship-to-xx
+(defn ship-to-xx-info
   "Ship to a Customer"
   [ship_to_data]
-  (xml/element :CompanyName {} (ship_to_data :company))
-  (xml/element :AttentionName {} (ship_to_data :attention_name))
-  (xml/element :PhoneNumber {} (ship_to_data :phone))
-  (address-info (ship_to_data :address)) )
+  (xml/element :ShipTo {}
+    (xml/element :CompanyName {} (ship_to_data :company))
+    (xml/element :AttentionName {} (ship_to_data :attention_name))
+    (xml/element :PhoneNumber {} (ship_to_data :phone))
+    (address-info (ship_to_data :address)) ) )
 
 ;; <Service>
 ;;   <Code>14</Code>
@@ -115,11 +116,12 @@
 ;; </Service>
 (def service-keys [:code :description])
 
-(defn shipping-service
+(defn shipping-service-info
   "The type of shipping service required"
   [service_data]
-  (xml/element {} (service_data :code))
-  (xml/element {} (service_data :description)) )
+  (xml/element :Service {}
+    (xml/element :Code {} (service_data :code))
+    (xml/element :Description {} (service_data :description)) ) )
 
 ;; <PaymentInformation>
 ;;   <Prepaid>
@@ -175,9 +177,10 @@
 (defn label-spec-info
   "Label information."
   [label_spec_data]
-  (xml/element :LabelSpecifications {}
+  (xml/element :LabelSpecification {}
     (xml/element :LabelPrintMethod {}
-      (xml/element :Code (label_spec_data :label_print_code)) )
+      (xml/element :Code {} (label_spec_data :label_print_code)) )
     (xml/element :HTTPUserAgent {} (label_spec_data :http_user_agent))
-    (xml/element :LabelImageFormat {} (label_spec_data :label_image_code))
+    (xml/element :LabelImageFormat {}
+      (xml/element :Code {} (label_spec_data :label_image_code)) )
   ) )

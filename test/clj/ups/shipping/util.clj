@@ -3,5 +3,5 @@
 
 (defn strip-newlines
   "Strip newline characters from text -- "
-  [text]
-  (s/replace text "\n" ""))
+  [& text]
+  (s/replace (apply str text) "\n" ""))
