@@ -1,6 +1,6 @@
 (ns ups.shipping.package
    (:require [clojure.data.xml :as xml]
-             [ups-shipping.common :as c]))
+             [ups.shipping.common :as c]))
 
 ;; <Dimensions>
 ;;   <UnitOfMeasurement>
@@ -17,10 +17,10 @@
   [dimension_data]
   (xml/element :Dimensions {}
     (xml/element :UnitOfMeasurement {}
-      (xml/element :Code (dimension_data :unit_code)) )
-    (xml/element :Length (dimension_data :length))
-    (xml/element :Width (dimension_data :width))
-    (xml/element :Height (dimension_data :height))
+      (xml/element :Code {} (dimension_data :unit_code)) )
+    (xml/element :Length {} (dimension_data :length))
+    (xml/element :Width {} (dimension_data :width))
+    (xml/element :Height {} (dimension_data :height))
     ) )
 
 ;; <PackageWeight>
@@ -69,9 +69,12 @@
 
 ;; todo: pass data onto
 (defn service-option-info
-  "The service options for each package in a Shipment"
-  [option_data options]
-  (for [opt options]
+  "The service options for each package in a Shipment like
+  'InsuredValue' and 'VerbalConfirmation'"
+  [option_data & options]
+;  (reduce (fn [result option] (conj result (option option_data))) '() options))
+;  (map option_data (list options)) )
+  (for [option options]
     (option option_data)) )
 
 (defn shipping-package
