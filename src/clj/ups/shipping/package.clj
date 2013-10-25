@@ -71,11 +71,14 @@
 (defn service-option-info
   "The service options for each package in a Shipment like
   'InsuredValue' and 'VerbalConfirmation'"
-  [option_data & options]
+  [option_data options]
+  (xml/element :PackageServiceOptions {}
 ;  (reduce (fn [result option] (conj result (option option_data))) '() options))
 ;  (map option_data (list options)) )
+;  (apply option_data (comp options)) )
   (for [option options]
-    (option option_data)) )
+    (option option_data) )
+  ) )
 
 (defn shipping-package
   "Package information for shipping."

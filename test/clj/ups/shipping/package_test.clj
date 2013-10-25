@@ -70,8 +70,8 @@
 
 (deftest test-service-option-info
   (let [data1 (p/service-option-info service-options-data
-                p/insurance-option-info p/verbal-conf-option-info)]
-    (println data1)
+                (list p/insurance-option-info p/verbal-conf-option-info))]
+    ;(println (realized? data1) (count data1) (count (comp data1)) )
     (println (xml/emit-str data1))
-    ;(is (= ("" (xml/emit-str data1)) ) )
+    (is (= ("" (apply str map xml/emit-str data1))) )
     ) )
