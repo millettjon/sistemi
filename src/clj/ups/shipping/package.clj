@@ -45,10 +45,11 @@
 (defn insurance-option-info
   "If the package is insured."
   [insurance_data]
-  (xml/element :InsuredValue {}
-    (xml/element :CurrencyCode {} (insurance_data :currency_code))
-    (xml/element :MonetaryValue {} (insurance_data :value))
-    ) )
+  (xml/sexp-as-element
+    [:InsuredValue
+    [:CurrencyCode (insurance_data :currency_code)]
+    [:MonetaryValue (insurance_data :value)]
+    ] ) )
 
 ;; <VerbalConfirmation>
 ;;   <Name>Sidney Smith</Name>
@@ -57,11 +58,12 @@
 (def verbal-conf-keys [:name :phone])
 
 (defn verbal-conf-option-info
-  "The required verbal confirmation for delivery."
+  "A Shipping option for each package."
   [verbal_conf_data]
-  (xml/element :VerbalConfirmation {}
-    (xml/element :Name {} (verbal_conf_data :name))
-    (xml/element :PhoneNumber {} (verbal_conf_data :phone))
+  (xml/sexp-as-element
+    [:VerbalConfirmation
+     [:Name (verbal_conf_data :name)]
+     [:PhoneNumber (verbal_conf_data :phone)]]
     ) )
 
 ;; Not really necessary for use, other than to provide map depth {:insurance {:currency_code :value}}
@@ -72,13 +74,14 @@
   "The service options for each package in a Shipment like
   'InsuredValue' and 'VerbalConfirmation'"
   [option_data options]
-  (xml/element :PackageServiceOptions {}
-;  (reduce (fn [result option] (conj result (option option_data))) '() options))
-;  (map option_data (list options)) )
-;  (apply option_data (comp options)) )
-  (for [option options]
-    (option option_data) )
-  ) )
+  (xml/sexp-as-element
+    [:PackageServiceOptions
+    ;  (reduce (fn [result option] (conj result (option option_data))) '() options)
+    ;  (map option_data (list options))
+    ;  (apply option_data (comp options))
+      (for [option options]
+        (option option_data) )
+  ] ) )
 
 (defn shipping-package
   "Package information for shipping."

@@ -1,4 +1,4 @@
-(ns ups.shipping.shipping-request
+(ns ups.shipping.request
   (:require [clojure.data.xml :as xml]
             [ups-shipping.common :as c]
             [ups-shipping.package :as pkg]))
