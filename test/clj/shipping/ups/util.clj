@@ -1,4 +1,4 @@
-(ns ups.shipping.util
+(ns shipping.ups.util
   (:require [clojure.string :as s]) )
 
 (defn strip-newlines

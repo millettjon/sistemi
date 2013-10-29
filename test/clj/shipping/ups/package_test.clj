@@ -1,8 +1,8 @@
-(ns ups.shipping.package_test
-  (:require [ups.shipping.package :as p]
+(ns shipping.ups.package_test
+  (:require [shipping.ups.package :as p]
             [clojure.data.xml :as xml]
-            [ups.shipping.util :as u]
-            [ups.shipping.common_test :as ct])
+            [shipping.ups.util :as u]
+            [shipping.ups.common_test :as ct])
   (:use [clojure.test]) )
 
 
@@ -72,6 +72,6 @@
   (let [data1 (p/service-option-info service-options-data
                 (list p/insurance-option-info p/verbal-conf-option-info))]
     ;(println (realized? data1) (count data1) (count (comp data1)) )
-    (println (map xml/emit-str data1))
+    (println data1)
     ;(is (= ("" (apply str map xml/emit-str data1))) )
     ) )

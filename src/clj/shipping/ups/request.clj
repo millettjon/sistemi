@@ -1,7 +1,7 @@
-(ns ups.shipping.request
+(ns shipping.ups.request
   (:require [clojure.data.xml :as xml]
-            [ups-shipping.common :as c]
-            [ups-shipping.package :as pkg]))
+            [shipping.ups.common :as c]
+            [shipping.ups.package :as pkg]))
 
 ;; Reference vectors of keys below when looking up information for the order.
 ;; Use (zipmap) or equivalent to combine keys with order data and then pass

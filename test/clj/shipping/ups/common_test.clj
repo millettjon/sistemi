@@ -1,7 +1,7 @@
-(ns ups.shipping.common_test
-  (:require [ups.shipping.common :as c]
+(ns shipping.ups.common_test
+  (:require [shipping.ups.common :as c]
             [clojure.data.xml :as xml]
-            [ups.shipping.util :as u])
+            [shipping.ups.util :as u])
   (:use [clojure.test]) )
 
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
@@ -18,7 +18,7 @@
 
 (deftest test-access-request-info
   (let [data1 (c/access-request-info access-request-data)]
-    (is (= (str xml-header access-request-xml) (xml/emit-str data1)))
+    (is (= (str xml-header access-request-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 
@@ -33,7 +33,7 @@
 
 (deftest test-transaction-reference-info
   (let [data1 (c/transaction-reference-info txn-reference-data)]
-    (is (= (str xml-header txn-reference-xml) (xml/emit-str data1)))
+    (is (= (str xml-header txn-reference-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def address-xml
@@ -52,7 +52,7 @@
 
 (deftest test-address-info
   (let [data1 (c/address-info address-data)]
-    (is (= (str xml-header address-xml) (xml/emit-str data1)))
+    (is (= (str xml-header address-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def shipper-xml
@@ -70,7 +70,7 @@ address-xml
 
 (deftest test-shipper-xx-info
   (let [data1 (c/sistemi-shipper-xx-info shipper-data)]
-    (is (= (str xml-header shipper-xml) (xml/emit-str data1)))
+    (is (= (str xml-header shipper-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def ship-to-xml
@@ -87,7 +87,7 @@ address-xml
 
 (deftest test-ship-to-xx-info
   (let [data1 (c/ship-to-xx-info ship-to-data)]
-    (is (= (str xml-header ship-to-xml) (xml/emit-str data1)))
+    (is (= (str xml-header ship-to-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def service-xml
@@ -101,7 +101,7 @@ address-xml
 
 (deftest test-shipping-service-info
   (let [data1 (c/shipping-service-info service-data)]
-    (is (= (str xml-header service-xml) (xml/emit-str data1)))
+    (is (= (str xml-header service-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def payment-xml
@@ -121,7 +121,7 @@ address-xml
 
 (deftest test-payment-info
   (let [data1 (c/payement-info payment-data)]
-    (is (= (str xml-header payment-xml) (xml/emit-str data1)))
+    (is (= (str xml-header payment-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def reference-number-xml
@@ -135,7 +135,7 @@ address-xml
 
 (deftest test-reference-number-info
   (let [data1 (c/reference-number-info reference-number-data)]
-    (is (= (str xml-header reference-number-xml) (xml/emit-str data1)))
+    (is (= (str xml-header reference-number-xml) (xml/emit-str (c/xml data1)) ))
     ) )
 
 (def label-spec-xml
@@ -154,5 +154,5 @@ address-xml
 
 (deftest test-label-spec-info
   (let [data1 (c/label-spec-info label-spec-data)]
-    (is (= (str xml-header label-spec-xml) (xml/emit-str data1)))
+    (is (= (str xml-header label-spec-xml) (xml/emit-str (c/xml data1)) ))
     ) )

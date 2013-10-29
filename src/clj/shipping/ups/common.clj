@@ -1,5 +1,7 @@
-(ns ups.shipping.common
-  (:require [clojure.data.xml :as xml]) )
+(ns shipping.ups.common
+  (:require [clojure.data.xml :as x]) )
+
+(def xml x/sexp-as-element)
 
 ;; Used to sign into UPS as a Customer
 ;;
@@ -15,11 +17,11 @@
 (defn access-request-info
   "Pull access request information from secure location?"
   [access-data]
-  (xml/element :AccessRequest {:xml:lang (access-data :lang_locale)}
-    (xml/element :AccessLicenseNumber {} (access-data :license_number))
-    (xml/element :UserId {} (access-data :user_id))
-    (xml/element :Password {} (access-data :password))
-    ) )
+  [:AccessRequest {:xml:lang (access-data :lang_locale)}
+    [:AccessLicenseNumber {} (access-data :license_number)]
+    [:UserId {} (access-data :user_id)]
+    [:Password {} (access-data :password)] ]
+  )
 
 ;;   <TransactionReference>
 ;;     <CustomerContext>guidlikesubstance</CustomerContext>
@@ -29,10 +31,10 @@
 
 (defn transaction-reference-info
   [txn_reference_data]
-  (xml/element :TransactionReference {}
-    (xml/element :CustomerContext {} (txn_reference_data :customer_context_id))
-    (xml/element :XpciVersion {} (txn_reference_data :xpci_version))
-    ) )
+  [:TransactionReference
+    [:CustomerContext (txn_reference_data :customer_context_id)]
+    [:XpciVersion (txn_reference_data :xpci_version)] ]
+  )
 
 ;; <Address>
 ;;   <AddressLine1>201 York Rd</AddressLine1>
@@ -47,18 +49,19 @@
 (defn address-info
   "A UPS Address block"
   [address_data]
-  (xml/element :Address {}
-    (xml/element :AddressLine1 {} (address_data :address1))
-    (when-not (nil? (address_data :address2)) (xml/element :AddressLine2 {} (address_data :address2)) )
-    (xml/element :City {} (address_data :city))
-    (xml/element :StateProvinceCode {} (address_data :state_province))
-    (xml/element :CountryCode {} (address_data :country_code))
-    (xml/element :PostalCode {} (address_data :postal))
+  [:Address
+    [:AddressLine1 (address_data :address1)]
+    (when-not (nil? (address_data :address2))
+      [:AddressLine2 (address_data :address2)])
+    [:City (address_data :city)]
+    [:StateProvinceCode (address_data :state_province)]
+    [:CountryCode (address_data :country_code)]
+    [:PostalCode (address_data :postal)]
     ;; todo: ugly and this won't render like <ResidentialAddress/> when empty
     (if (nil? (address_data :residential))
-      (xml/element :ResidentialAddress {})
-      (xml/element :ResidentialAddress{} (address_data :residential)))
-    ) )
+      [:ResidentialAddress]
+      [:ResidentialAddress (address_data :residential)]) ]
+  )
 
 ;; <Shipper>
 ;;   <Name>Joe's Garage</Name>
@@ -78,13 +81,13 @@
 (defn sistemi-shipper-xx-info
   "Shipping from a specific Sistemi fabricator."
   [shipper_data]
-  (xml/element :Shipper {}
-    (xml/element :Name {} (shipper_data :name))
-    (xml/element :AttentionName {} (shipper_data :attention_name))
-    (xml/element :PhoneNumber {} (shipper_data :phone))
-    (xml/element :ShipperNumber {} (shipper_data :shipper_number))
-    (address-info (shipper_data :address))
-    ) )
+  [:Shipper
+    [:Name (shipper_data :name)]
+    [:AttentionName (shipper_data :attention_name)]
+    [:PhoneNumber (shipper_data :phone)]
+    [:ShipperNumber (shipper_data :shipper_number)]
+    (address-info (shipper_data :address)) ]
+  )
 
 ;; <ShipTo>
 ;;   <CompanyName>Pep Boys</CompanyName>
@@ -104,11 +107,12 @@
 (defn ship-to-xx-info
   "Ship to a Customer"
   [ship_to_data]
-  (xml/element :ShipTo {}
-    (xml/element :CompanyName {} (ship_to_data :company))
-    (xml/element :AttentionName {} (ship_to_data :attention_name))
-    (xml/element :PhoneNumber {} (ship_to_data :phone))
-    (address-info (ship_to_data :address)) ) )
+  [:ShipTo
+    [:CompanyName (ship_to_data :company)]
+    [:AttentionName (ship_to_data :attention_name)]
+    [:PhoneNumber (ship_to_data :phone)]
+    (address-info (ship_to_data :address))]
+  )
 
 ;; <Service>
 ;;   <Code>14</Code>
@@ -119,9 +123,10 @@
 (defn shipping-service-info
   "The type of shipping service required"
   [service_data]
-  (xml/element :Service {}
-    (xml/element :Code {} (service_data :code))
-    (xml/element :Description {} (service_data :description)) ) )
+  [:Service
+    [:Code (service_data :code)]
+    [:Description (service_data :description)] ]
+  )
 
 ;; <PaymentInformation>
 ;;   <Prepaid>
@@ -139,15 +144,15 @@
 (defn payement-info
   "Customer payment information details."
   [payment_info_data]
-  (xml/element :PaymentInformation {}
-    (xml/element :Prepaid {}
-      (xml/element :BillShipper {}
-        (xml/element :CreditCard {}
-          (xml/element :Type {} (payment_info_data :type))
-          (xml/element :Number {} (payment_info_data :card_number))
-          (xml/element :ExpirationDate {} (payment_info_data :expiration_date))
-          ) ) )
-    ) )
+  [:PaymentInformation
+    [:Prepaid
+      [:BillShipper
+        [:CreditCard
+          [:Type (payment_info_data :type)]
+          [:Number (payment_info_data :card_number)]
+          [:ExpirationDate (payment_info_data :expiration_date)] ]
+        ] ] ]
+  )
 
 ;; <ReferenceNumber>
 ;;   <Code>02</Code>
@@ -158,10 +163,10 @@
 (defn reference-number-info
   "The reference number for the shipping package"
   [reference_number_data]
-  (xml/element :ReferenceNumber {}
-    (xml/element :Code {} (reference_number_data :code))
-    (xml/element :Value {} (reference_number_data :value))
-    ) )
+  [:ReferenceNumber
+    [:Code (reference_number_data :code)]
+    [:Value (reference_number_data :value)] ]
+  )
 
 ;; <LabelSpecification>
 ;;   <LabelPrintMethod>
@@ -177,10 +182,10 @@
 (defn label-spec-info
   "Label information."
   [label_spec_data]
-  (xml/element :LabelSpecification {}
-    (xml/element :LabelPrintMethod {}
-      (xml/element :Code {} (label_spec_data :label_print_code)) )
-    (xml/element :HTTPUserAgent {} (label_spec_data :http_user_agent))
-    (xml/element :LabelImageFormat {}
-      (xml/element :Code {} (label_spec_data :label_image_code)) )
-  ) )
+  [:LabelSpecification
+    [:LabelPrintMethod
+      [:Code (label_spec_data :label_print_code)] ]
+    [:HTTPUserAgent (label_spec_data :http_user_agent)]
+    [:LabelImageFormat
+      [:Code (label_spec_data :label_image_code)] ] ]
+  )

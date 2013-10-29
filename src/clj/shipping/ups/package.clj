@@ -1,6 +1,8 @@
-(ns ups.shipping.package
-   (:require [clojure.data.xml :as xml]
-             [ups.shipping.common :as c]))
+(ns shipping.ups.package
+   (:require [clojure.data.xml :as x]
+             [shipping.ups.common :as c]))
+
+(def xml x/sexp-as-element)
 
 ;; <Dimensions>
 ;;   <UnitOfMeasurement>
@@ -15,13 +17,14 @@
 (defn dimension-info
   "The physical dimensions for the package (excludes weight)"
   [dimension_data]
-  (xml/element :Dimensions {}
-    (xml/element :UnitOfMeasurement {}
-      (xml/element :Code {} (dimension_data :unit_code)) )
-    (xml/element :Length {} (dimension_data :length))
-    (xml/element :Width {} (dimension_data :width))
-    (xml/element :Height {} (dimension_data :height))
-    ) )
+  (xml
+    [:Dimensions
+      [:UnitOfMeasurement
+        [:Code (dimension_data :unit_code)]]
+      [:Length (dimension_data :length)]
+      [:Width (dimension_data :width)]
+      [:Height (dimension_data :height)]
+    ]) )
 
 ;; <PackageWeight>
 ;;   <Weight>14.1</Weight>
@@ -31,9 +34,10 @@
 (defn weight-info
   "How much the package weighs -- lbs or SI?????"
   [weight_data]
-  (xml/element :PackageWeight {}
-    (xml/element :Weight {} (weight_data :weight))
-    ) )
+  (xml
+    [:PackageWeight
+      [:Weight (weight_data :weight)]
+    ] ) )
 
 ;; <InsuredValue>
 ;;   <CurrencyCode>USD</CurrencyCode>
@@ -45,10 +49,10 @@
 (defn insurance-option-info
   "If the package is insured."
   [insurance_data]
-  (xml/sexp-as-element
+  (xml
     [:InsuredValue
-    [:CurrencyCode (insurance_data :currency_code)]
-    [:MonetaryValue (insurance_data :value)]
+      [:CurrencyCode (insurance_data :currency_code)]
+      [:MonetaryValue (insurance_data :value)]
     ] ) )
 
 ;; <VerbalConfirmation>
@@ -60,7 +64,7 @@
 (defn verbal-conf-option-info
   "A Shipping option for each package."
   [verbal_conf_data]
-  (xml/sexp-as-element
+  (xml
     [:VerbalConfirmation
      [:Name (verbal_conf_data :name)]
      [:PhoneNumber (verbal_conf_data :phone)]]
@@ -74,21 +78,21 @@
   "The service options for each package in a Shipment like
   'InsuredValue' and 'VerbalConfirmation'"
   [option_data options]
-  (xml/sexp-as-element
+  (xml
     [:PackageServiceOptions
     ;  (reduce (fn [result option] (conj result (option option_data))) '() options)
     ;  (map option_data (list options))
     ;  (apply option_data (comp options))
-      (for [option options]
-        (option option_data) )
+    (comp (for [option options]
+        (option option_data) ) )
   ] ) )
 
 (defn shipping-package
   "Package information for shipping."
   [package_data packages]
-  (xml/element :Package {}
-    (xml/element :PackagingType {}
-      (xml/element :Code {}) )
+  (x/element :Package {}
+    (x/element :PackagingType {}
+      (x/element :Code {}) )
     (dimension-info {})
     (weight-info {})
     (c/reference-number-info {})
