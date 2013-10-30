@@ -1,7 +1,4 @@
-(ns shipping.ups.common
-  (:require [clojure.data.xml :as x]) )
-
-(def xml x/sexp-as-element)
+(ns shipping.ups.common)
 
 ;; Used to sign into UPS as a Customer
 ;;
@@ -78,7 +75,7 @@
 ;; </Shipper>
 (def shipper-keys [:name :attention_name :phone :shipper_number :address])
 
-(defn sistemi-shipper-xx-info
+(defn sistemi-shipper-info
   "Shipping from a specific Sistemi fabricator."
   [shipper_data]
   [:Shipper
@@ -104,7 +101,7 @@
 ;; </ShipTo>
 (def shipto-keys [:company :attention_name :phone :address])
 
-(defn ship-to-xx-info
+(defn ship-to-info
   "Ship to a Customer"
   [ship_to_data]
   [:ShipTo

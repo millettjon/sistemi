@@ -1,8 +1,5 @@
 (ns shipping.ups.package
-   (:require [clojure.data.xml :as x]
-             [shipping.ups.common :as c]))
-
-(def xml x/sexp-as-element)
+   (:require [shipping.ups.common :as c]))
 
 ;; <Dimensions>
 ;;   <UnitOfMeasurement>

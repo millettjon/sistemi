@@ -5,6 +5,7 @@
             [shipping.ups.common_test :as ct])
   (:use [clojure.test]) )
 
+(def xml x/sexp-as-element)
 
 (def dimension-xml
   (u/strip-newlines 
@@ -22,7 +23,7 @@
 
 (deftest test-dimension-info
   (let [data1 (p/dimension-info dimension-data)]
-    (is (= (str ct/xml-header dimension-xml) (x/emit-str (p/xml data1)) ))
+    (is (= (str ct/xml-header dimension-xml) (x/emit-str (xml data1)) ))
     ) )
 
 (def weight-xml
@@ -35,7 +36,7 @@
 
 (deftest test-weight-info
   (let [data1 (p/weight-info weight-data)]
-    (is (= (str ct/xml-header weight-xml) (x/emit-str (p/xml data1)) ))
+    (is (= (str ct/xml-header weight-xml) (x/emit-str (xml data1)) ))
     ) )
 
 (def insurance-xml
@@ -49,7 +50,7 @@
 
 (deftest test-insurance-option-info
   (let [data1 (p/insurance-option-info insurance-data)]
-    (is (= (str ct/xml-header insurance-xml) (x/emit-str (p/xml data1)) ))
+    (is (= (str ct/xml-header insurance-xml) (x/emit-str (xml data1)) ))
     ) )
 
 (def verbal-conf-xml
@@ -63,7 +64,7 @@
 
 (deftest test-verbal-conf-option-info
   (let [data1 (p/verbal-conf-option-info verbal-conf-data)]
-    (is (= (str ct/xml-header verbal-conf-xml) (x/emit-str (p/xml data1)) ))
+    (is (= (str ct/xml-header verbal-conf-xml) (x/emit-str (xml data1)) ))
     ) )
 
 (def service-options-xml
@@ -84,7 +85,7 @@
 
 (deftest test-service-option-info
   (let [data1 (p/service-option-info service-options-data service-options-multi)]
-    (is (= (str ct/xml-header service-options-xml) (x/emit-str (p/xml data1)) ))
+    (is (= (str ct/xml-header service-options-xml) (x/emit-str (xml data1)) ))
     ) )
 
 (def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
@@ -126,7 +127,7 @@
 
 (deftest test-shipping-package-info
   (let [data1 (p/shipping-package-info shipping-package-data-1)]
-    (is (= (str ct/xml-header shipping-package-1) (x/emit-str (p/xml data1)) ))
+    (is (= (str ct/xml-header shipping-package-1) (x/emit-str (xml data1)) ))
     ) )
 
 (def shipping-package-2
@@ -148,5 +149,5 @@
 
 (deftest test-shipping-packages-info
   (let [data1 (p/shipping-packages-info (list shipping-package-data-1 shipping-package-data-1))]
-    (is (= (str ct/xml-header shipping-package-2) (x/emit-str (map p/xml data1)) ))
+    (is (= (str ct/xml-header shipping-package-2) (x/emit-str (map xml data1)) ))
     ) )
