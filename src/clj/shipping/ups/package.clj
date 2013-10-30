@@ -17,14 +17,13 @@
 (defn dimension-info
   "The physical dimensions for the package (excludes weight)"
   [dimension_data]
-  (xml
-    [:Dimensions
-      [:UnitOfMeasurement
-        [:Code (dimension_data :unit_code)]]
-      [:Length (dimension_data :length)]
-      [:Width (dimension_data :width)]
-      [:Height (dimension_data :height)]
-    ]) )
+  [:Dimensions
+    [:UnitOfMeasurement
+      [:Code (dimension_data :unit_code)]]
+    [:Length (dimension_data :length)]
+    [:Width (dimension_data :width)]
+    [:Height (dimension_data :height)]
+  ])
 
 ;; <PackageWeight>
 ;;   <Weight>14.1</Weight>
@@ -34,10 +33,9 @@
 (defn weight-info
   "How much the package weighs -- lbs or SI?????"
   [weight_data]
-  (xml
-    [:PackageWeight
-      [:Weight (weight_data :weight)]
-    ] ) )
+  [:PackageWeight
+    [:Weight (weight_data :weight)]
+  ])
 
 ;; <InsuredValue>
 ;;   <CurrencyCode>USD</CurrencyCode>
@@ -49,11 +47,10 @@
 (defn insurance-option-info
   "If the package is insured."
   [insurance_data]
-  (xml
-    [:InsuredValue
-      [:CurrencyCode (insurance_data :currency_code)]
-      [:MonetaryValue (insurance_data :value)]
-    ] ) )
+  [:InsuredValue
+    [:CurrencyCode (insurance_data :currency_code)]
+    [:MonetaryValue (insurance_data :value)]
+  ])
 
 ;; <VerbalConfirmation>
 ;;   <Name>Sidney Smith</Name>
@@ -64,11 +61,10 @@
 (defn verbal-conf-option-info
   "A Shipping option for each package."
   [verbal_conf_data]
-  (xml
-    [:VerbalConfirmation
-     [:Name (verbal_conf_data :name)]
-     [:PhoneNumber (verbal_conf_data :phone)]]
-    ) )
+  [:VerbalConfirmation
+   [:Name (verbal_conf_data :name)]
+   [:PhoneNumber (verbal_conf_data :phone)]
+  ])
 
 ;; Not really necessary for use, other than to provide map depth {:insurance {:currency_code :value}}
 (def service-option-keys [:insurance :verbal_conf])
@@ -78,27 +74,27 @@
   "The service options for each package in a Shipment like
   'InsuredValue' and 'VerbalConfirmation'"
   [option_data options]
-  (xml
-    [:PackageServiceOptions
-    ;  (reduce (fn [result option] (conj result (option option_data))) '() options)
-    ;  (map option_data (list options))
-    ;  (apply option_data (comp options))
-    (comp (for [option options]
-        (option option_data) ) )
-  ] ) )
+  [:PackageServiceOptions
+    (for [option options]
+      (option option_data) )
+  ])
 
-(defn shipping-package
+(def package-keys [:type_code :dimension_data :weight_data :reference_data :service_data :service_options])
+
+(defn shipping-package-info
   "Package information for shipping."
-  [package_data packages]
-  (x/element :Package {}
-    (x/element :PackagingType {}
-      (x/element :Code {}) )
-    (dimension-info {})
-    (weight-info {})
-    (c/reference-number-info {})
-    (service-option-info {}) ) )
+  [package_data]
+  [:Package
+    [:PackagingType
+      [:Code (package_data :type_code)] ]
+    (dimension-info (package_data :dimension_data))
+    (weight-info (package_data :weight_data))
+    (c/reference-number-info (package_data :reference_data))
+    (service-option-info (package_data :service_data) (package_data :service_options))
+    ])
 
-(defn shipping-packages
-  "The information for each package to be shipped."
-  [package_data packages]
-  (apply package_data packages) )
+(defn shipping-packages-info
+  "The information for each package to be shipped. Dump xml with
+  (map p/xml result), otherwise it's just a collection of vectors."
+  [packages_data]
+  (for [data packages_data] (shipping-package-info data)) )
