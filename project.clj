@@ -79,8 +79,9 @@
                                         ; since version 0.5.0 includes clojurescript as
                                         ; regular instead of a dev dependency
 
-                 ;; cljs
-                 [org.clojure/clojurescript "0.0-2030"]
+                 ;; Clojurescript
+                 ;; Note: Dommy 0.1.2 doesn't work with 0.0-2030.
+                 [org.clojure/clojurescript "0.0-1859" #_ "0.0-2030"]
                  [jayq "2.5.0"]            ;; jquery wrapper
                  [rm-hull/monet "0.1.9" :exclusions [org.clojure/tools.reader]] ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
