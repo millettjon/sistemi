@@ -29,9 +29,9 @@
                  [log4j "1.2.17"]
 
                  ;; ring core
-                 [ring/ring-core "1.2.0"]
-                 [ring/ring-devel "1.2.0" :exclusions [hiccup]]
-                 [ring/ring-jetty-adapter "1.2.0"]
+                 [ring/ring-core "1.2.1"]
+                 [ring/ring-devel "1.2.1" :exclusions [hiccup]]
+                 [ring/ring-jetty-adapter "1.2.1"]
 
                  ;; ring handlers and middleware
                  [net.cgrand/moustache "1.1.0"]
@@ -44,21 +44,22 @@
                  [clj-http "0.7.7"]
 
                  ;; email
-                 [com.draines/postal "1.11.0"]
+                 [com.draines/postal "1.11.1"]
 
                  ;; configuration
                  [fidjet "0.0.2"]
 
                  ;; user agent detection
-                 [bitwalker/UserAgentUtils "1.10"]
+                 [bitwalker/UserAgentUtils "1.11"]
                  
                  ;; calculation
-                 [net.cgrand/spreadmap "0.1.2"]
+                 [net.cgrand/spreadmap "0.1.4"]
                  [dgraph "1.2.2"]
                  [frinj "0.2.5"]
 
                  ;; payment
-                 [com.braintreepayments.gateway/braintree-java "2.24.1"]
+                 [clojurewerkz/money "1.4.0"]
+                 [com.braintreepayments.gateway/braintree-java "2.25.1"]
 
                  ;; validation
                  [bouncer "0.3.0-alpha1"]
@@ -79,18 +80,18 @@
                                         ; regular instead of a dev dependency
 
                  ;; cljs
-                 [org.clojure/clojurescript "0.0-1859"]
-                 [jayq "2.4.0"]            ;; jquery wrapper
-                 [rm-hull/monet "0.1.8"]   ;; html5 canvas
+                 [org.clojure/clojurescript "0.0-2030"]
+                 [jayq "2.5.0"]            ;; jquery wrapper
+                 [rm-hull/monet "0.1.9"]   ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
 
                  ;; For proper handling of internationalized chars in url path segments.
                  [com.google.gdata/core "1.47.1"]
                  ]
 
-  :plugins [[lein-cljsbuild "0.3.3"]
+  :plugins [[lein-cljsbuild "0.3.4"]
             [lein-marginalia "0.7.1"]
-            [lein-ancient "0.4.4"]
+            [lein-ancient "0.5.3"]
             [lein-cloverage "1.0.2"]]
 
   :aliases {"marg" ["marg" "--dir" "var/doc"]}
