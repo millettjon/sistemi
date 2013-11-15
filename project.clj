@@ -29,8 +29,8 @@
                  [log4j "1.2.17"]
 
                  ;; ring core
-                 [ring/ring-core "1.2.1"]
-                 [ring/ring-devel "1.2.1" :exclusions [hiccup]]
+                 [ring/ring-core "1.2.1" :exclusions [org.clojure/tools.reader]]
+                 [ring/ring-devel "1.2.1"]
                  [ring/ring-jetty-adapter "1.2.1"]
 
                  ;; ring handlers and middleware
@@ -41,7 +41,7 @@
                  [hiccup "1.0.4"]
 
                  ;; web client
-                 [clj-http "0.7.7"]
+                 [clj-http "0.7.7" :exclusions [org.clojure/tools.reader]]
 
                  ;; email
                  [com.draines/postal "1.11.1"]
@@ -82,11 +82,11 @@
                  ;; cljs
                  [org.clojure/clojurescript "0.0-2030"]
                  [jayq "2.5.0"]            ;; jquery wrapper
-                 [rm-hull/monet "0.1.9"]   ;; html5 canvas
+                 [rm-hull/monet "0.1.9" :exclusions [org.clojure/tools.reader]] ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
 
                  ;; For proper handling of internationalized chars in url path segments.
-                 [com.google.gdata/core "1.47.1"]
+                 [com.google.gdata/core "1.47.1" :exclusions [com.google.code.findbugs/jsr305]]
                  ]
 
   :plugins [[lein-cljsbuild "0.3.4"]
