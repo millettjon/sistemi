@@ -21,5 +21,4 @@
   (conf/set-config!
    (dir-map "etc/default")
    (dir-map (path/join "etc" (name run-level)))
-   {:git {:commit-hash (git/sha)}}
    (conf/environment "PORT" "LAUNCH_BROWSER" "HOST" "OFFLINE_ENABLED")))
