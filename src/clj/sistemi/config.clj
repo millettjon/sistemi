@@ -1,7 +1,8 @@
 (ns sistemi.config
   (:require [app.config.core :as conf]
             [util.environment :as env]
-            [util.path :as path])
+            [util.path :as path]
+            [git])
   (:use app.run-level))
 
 (defn- dir-map
@@ -20,4 +21,5 @@
   (conf/set-config!
    (dir-map "etc/default")
    (dir-map (path/join "etc" (name run-level)))
+   {:git {:commit-hash (git/sha)}}
    (conf/environment "PORT" "LAUNCH_BROWSER" "HOST" "OFFLINE_ENABLED")))

@@ -8,3 +8,9 @@
   [& keys]
   (let [result (sh "git" "config" "--get" (apply str (map name (interpose "." keys))))]
     (str/trim-newline (:out result))))
+
+(defn sha
+  "Returns the SHA-1 hash of the current commit."
+  []
+  (let [result (sh "git" "rev-parse" "HEAD")]
+    (str/trim-newline (:out result))))
