@@ -51,10 +51,10 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
 
 (deftest test-get-content-for-tag
   (let [sample (str xml-header sample-xml)
-        data (x/parse (java.io.StringReader. sample))
-        results (rsp/get-content-for-tag data :ShipmentConfirmResponse)]
+        data (x/parse (java.io.StringReader. sample))]
+        ;results (rsp/get-content-for-tag data :ShipmentConfirmResponse)]
 
-    (println results)
+    ;(println results)
     ) )
 
 (deftest test-get-response-status
