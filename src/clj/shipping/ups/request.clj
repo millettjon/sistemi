@@ -1,6 +1,5 @@
 (ns shipping.ups.request
-  (:require [clojure.data.xml :as x]
-            [shipping.ups.common :as c]
+  (:require [shipping.ups.common :as c]
             [shipping.ups.package :as p]))
 
 ;; Reference vectors of keys below when looking up information for the order.
