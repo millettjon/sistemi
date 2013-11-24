@@ -44,6 +44,7 @@
   ;; ===== BOOT ID =====
   (id/init!)
   (log/info (<< "Using boot-id '~{www.id/boot-id}'."))
+  (log/info (<< "Git SHA ~{(git/sha)}."))
 
   ;; ===== RUN LEVEL =====
   (init-run-level!)
