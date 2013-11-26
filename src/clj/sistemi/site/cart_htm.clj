@@ -86,13 +86,8 @@
 (defn body
   [cart]
   ;; Calculate item prices.
-  ;; TODO: calculate price
   ;; TODO: format prices based on locale
-  ;; TODO: how to know price units?
-  (prn "ITEMS" (:items cart))
   (let [items (map cost/assoc-prices (vals (:items cart)))
-        ;;items (map #(-> % model/from-params model/calc-price) (vals (:items cart)))
-        _ (prn "ITEMS2" items)
         total (fmt/format-eur (total items))]
     [:div.text_content
 
@@ -157,24 +152,6 @@
 
       [:tr.total
        [:td {:style "padding-top: 10px;"} (tr/translate :subtotal)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
-
-     [:script {:type "text/javascript"}
-      "jQuery(document).ready(function() {"
-      (for [[idx {:keys [id quantity] :as item}] (:items cart)]
-        (let [detail (model/html-price-report (model/from-params item))]
-          (str
-           "sm.cart.quantities['" id  "'] = " quantity ";"
-           "$('#quantity" id "').keypress(sm.cart.quantity_keypress);"
-           "$('#quantity" id "').keyup(sm.cart.quantity_keyup);"
-           "$('#price" id "').tooltip({
-              bodyHandler: function() {
-                return '" (h/html detail) "'
-              },
-              delay: 3000,
-              left: -400,
-              showURL: false
-          });")))
-      "});"]
      ]))
 
 ;; ajax quanity update

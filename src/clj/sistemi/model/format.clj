@@ -27,6 +27,11 @@
     (assoc number :v (.setScale (bigdec v) places BigDecimal/ROUND_HALF_EVEN))))
 #_ (fj-round (fj 50.1234 :EUR) 2)
 
+;; WTF? joda money has the wrong format for france... the € should be
+;; a postfix not a prefix
+;; java appears to do it right http://stackoverflow.com/questions/9777689/how-to-get-numberformat-instance-from-currency-code
+;; Note: this is locale dependent
+;; Note: the use of comma, period, and space can differ by locale. 
 (defn format-eur
   [v]
   (format "%.2f€"
