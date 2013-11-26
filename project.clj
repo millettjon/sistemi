@@ -68,6 +68,7 @@
                  [org.clojure/data.xml "0.0.7"]
 
                  ;; misc
+                 [org.clojure/core.cache "0.6.3"]
                  [org.clojure/core.memoize "0.5.6"]
                  [ordered "1.3.2"]
                  [com.google.guava/guava "15.0"]

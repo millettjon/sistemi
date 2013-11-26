@@ -8,7 +8,7 @@
             [sistemi.translate :as tr]
             [hiccup.core :as h]
             [clojure.tools.logging :as log]
-            )
+            [sistemi.cost :as cost])
   (:use [ring.util.response :only (response)]
         [sistemi layout]))
 
@@ -86,7 +86,13 @@
 (defn body
   [cart]
   ;; Calculate item prices.
-  (let [items (map #(-> % model/from-params model/calc-price) (vals (:items cart)))
+  ;; TODO: calculate price
+  ;; TODO: format prices based on locale
+  ;; TODO: how to know price units?
+  (prn "ITEMS" (:items cart))
+  (let [items (map cost/assoc-prices (vals (:items cart)))
+        ;;items (map #(-> % model/from-params model/calc-price) (vals (:items cart)))
+        _ (prn "ITEMS2" items)
         total (fmt/format-eur (total items))]
     [:div.text_content
 
@@ -113,10 +119,10 @@
           ;; copy button (should this only be for customizable items?)
           ;; - clear the id
           ;; - add cart params back in
-          ;; Per Eric's French friend who thought copy was redundant
-          [:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
-           (f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
-           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :copy)]]
+          ;; Commenting out for now:
+          #_ [:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
+              (f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
+              [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :copy)]]
 
           ;; delete button
           [:form {:method "post" :action (tr/localize "/cart/delete") :style "display: inline;"}
@@ -150,7 +156,7 @@
            [:span.white {:style "font-size: 16px;" } (-> item :price fmt/format-eur)]]]])
 
       [:tr.total
-       [:td {:style "padding-top: 10px;" :colspan "3"} (tr/translate :subtotal)] [:td {:style "text-align:right; padding-top:10px;"} total]]]
+       [:td {:style "padding-top: 10px;"} (tr/translate :subtotal)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
 
      [:script {:type "text/javascript"}
       "jQuery(document).ready(function() {"
