@@ -1,12 +1,9 @@
-(ns sistemi.model.shelving
-  "Modular shelving model."
-  (:require clojure.walk
-            [clojure.tools.logging :as log])
-  (:use sistemi.model
-        sistemi.model.format
+(ns sistemi.product.bookcase
+  "Modular bookcase."
+  (:use sistemi.product
         frinj.ops))
 
-(defmethod from-params :shelving
+(defmethod from-params :bookcase
   [params]
   (merge params {:height (fj (:height params) :cm)
                  :width (fj (:width params) :cm)
@@ -15,7 +12,7 @@
                  :finish (keyword (:finish params))}))
 
 ;; TODO refactor this as it is common with shelf
-(defmethod to-params :shelving
+(defmethod to-params :bookcase
   [shelving]
   (reduce (fn [m [k v]]
             (let [v (if (instance? frinj.core.fjv v)

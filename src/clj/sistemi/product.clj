@@ -1,6 +1,5 @@
-(ns sistemi.model
-  "Functions for working with models of nested components."
-  (:require [sistemi.model.format :as format])
+(ns sistemi.product
+  "Functions for working with sistemi products."
   (:use frinj.ops))
 
 (defmulti from-params

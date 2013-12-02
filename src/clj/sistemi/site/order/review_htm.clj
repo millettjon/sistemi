@@ -1,7 +1,7 @@
 (ns sistemi.site.order.review-htm
   (:require [clojure.tools.logging :as log]
             [ring.util.response :as resp]
-            [sistemi.model.shelving :as shelving]
+            [sistemi.product.bookcase :as shelving]
             [sistemi.translate :as tr]
             [sistemi.layout :as layout]
             [sistemi.form :as sf]

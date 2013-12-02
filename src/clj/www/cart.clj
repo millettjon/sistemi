@@ -8,7 +8,7 @@
 
 ;; What does the data look like?
 ;; - should preserve order of addtion (for sorting on cart page)
-{:items [{:id -1                  ; unique id for line item within the cart
+{:items [{:id -1                ; unique id for line item within the cart
           :item ::shelf         ; item type (must be a valid product id)
           :quantity 1
 
@@ -24,7 +24,8 @@
   "Returns a new empty shopping cart."
   []
   {:items (ordered-map)
-   :counter -1})
+   :counter -1
+   :status :cart})
 
 (defn get
   "Gets the cart from the current request."
@@ -71,3 +72,10 @@ core.swap!."
   (apply sess/swap resp req :cart f args))
 
 #_ (cart/swap resp req cart/add (f/values))
+
+(defn total-items
+  "Returns the total number of items in the cart."
+  [cart]
+  (->> (:items cart)
+       (map (fn [[_ m]] (:quantity m)))
+       (reduce +)))

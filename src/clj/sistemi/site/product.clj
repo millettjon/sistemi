@@ -1,7 +1,5 @@
 (ns sistemi.site.product
-  "Product related string translations and configuration."
-  (:require [sistemi.translate :as tr]
-            [sistemi.model.format :as fmt]))
+  "Product related string translations and configuration.")
 
 ;; TODO: Can some of these be bumped up to the top level as general terms?
 (def strings

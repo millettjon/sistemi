@@ -142,12 +142,9 @@
        [:label.control-label {:for "color"} (tr/translate :color)]
        [:div.controls
         [:div {:style {:height "25px"}}
-         [:div#color-swatch {:style {:width "25px" :height "100%" :background-color "blue" :display "inline-block" :border-radius "5px" :vertical-align "middle"}}]
-         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle" :padding-top "4px" :color "white"}}
-         "RAL 8098"
-          ]]]]
+         [:div#color-swatch {:style {:width "25px" :height "100%" :display "inline-block" :border-radius "5px" :vertical-align "middle"}}]
+         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle" :padding-top "4px" :color "white"}}]]]]
 
-      ;; TODO: Pull request for hiccup to handle style as map.
       ;; TODO: Factor this out?
       [:div {:style {:position :relative
                      :height "195px"        ; manual height since children are absolute
@@ -168,7 +165,6 @@
      "shelving.width=" (f/default :width) ";\n"
      "shelving.depth=" (f/default :depth) ";\n"
      "shelving.cutout='" (str (f/default :cutout)) "';\n"
-     ;;"shelving.color=parseInt('0x'+'" (f/default :color) "'.substring(1));\n"
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.

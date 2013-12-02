@@ -1,14 +1,14 @@
 (ns sistemi.site.cart-htm
   (:require [sistemi.site.product :as p]
             [sistemi.form :as sf]
-            [sistemi.model :as model]
-            [sistemi.model.format :as fmt]
+            [sistemi.product :as product]
+            [sistemi.format :as fmt]
             [www.form :as f]
             [www.cart :as cart]
             [sistemi.translate :as tr]
             [hiccup.core :as h]
             [clojure.tools.logging :as log]
-            [sistemi.cost :as cost])
+            [sistemi.order :as order])
   (:use [ring.util.response :only (response)]
         [sistemi layout]))
 
@@ -60,7 +60,7 @@
 (defn total
   "Calculates the total price of all cart items."
   [items]
-  (apply frinj.ops/fj+ (map :price items)))
+  (apply frinj.ops/fj+ (map #(get-in % [:price :total]) items)))
 
 (defn head
   []
@@ -87,7 +87,7 @@
   [cart]
   ;; Calculate item prices.
   ;; TODO: format prices based on locale
-  (let [items (map cost/assoc-prices (vals (:items cart)))
+  (let [items (map order/assoc-price (vals (:items cart)))
         total (fmt/format-eur (total items))]
     [:div.text_content
 
@@ -108,7 +108,7 @@
           ;; edit button
           ;; - quantity should be included, but not type
           [:form {:method "get" :action (tr/localize (p/urls type)) :style "display:inline;"}
-           (f/hidden (assoc (model/to-params item) :quantity quantity))
+           (f/hidden (assoc (product/to-params item) :quantity quantity))
            [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 20px;"} (tr/translate :edit) ]]
           
           ;; copy button (should this only be for customizable items?)
@@ -116,7 +116,7 @@
           ;; - add cart params back in
           ;; Commenting out for now:
           #_ [:form {:method "post" :action (tr/localize "/cart/add") :style "display:inline;"}
-              (f/hidden (assoc (model/to-params item) :type type :quantity quantity :id -1))
+              (f/hidden (assoc (product/to-params item) :type type :quantity quantity :id -1))
               [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :copy)]]
 
           ;; delete button
@@ -134,7 +134,7 @@
 
           ;; unit price
           [:td {:style "text-align: right; padding-top: 13px;"}
-           [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :unit-price fmt/format-eur)]]
+           [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :price :unit fmt/format-eur)]]
 
           ;; quantity
           [:td 
@@ -148,10 +148,31 @@
 
           ;; price
           [:td {:style "text-align: right; padding-top: 13px;"}
-           [:span.white {:style "font-size: 16px;" } (-> item :price fmt/format-eur)]]]])
+           [:span.white {:style "font-size: 16px;" } (-> item :price :total fmt/format-eur)]]]])
 
       [:tr.total
        [:td {:style "padding-top: 10px;"} (tr/translate :subtotal)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
+
+     [:script {:type "text/javascript"}
+      "jQuery(document).ready(function() {"
+      (
+       ;;for [[idx {:keys [id quantity] :as item}] (:items cart)]
+       for [{:keys [id quantity] :as item} items]
+        (let [detail (-> item :price order/detail-report) #_ (product/html-price-report (product/from-params item))]
+          (str
+           "sm.cart.quantities['" id  "'] = " quantity ";"
+           "$('#quantity" id "').keypress(sm.cart.quantity_keypress);"
+           "$('#quantity" id "').keyup(sm.cart.quantity_keyup);"
+           "$('#price" id "').tooltip({
+              bodyHandler: function() {
+                return '" (h/html detail) "'
+              },
+              delay: 3000,
+              left: -400,
+              showURL: false
+          });")))
+      "});"]
+
      ]))
 
 ;; ajax quanity update

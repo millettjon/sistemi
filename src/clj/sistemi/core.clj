@@ -77,12 +77,11 @@
   (log/info "Loading request handlers.")
   (registry/load-handlers 'sistemi.site "src")
 
-  ;; ===== MODELS =====
-  ;; Make sure model namespaces are loaded. This is needed for generic
+  ;; ===== PRODUCTS =====
+  ;; Make sure product namespaces are loaded. This is needed for generic
   ;; pages e.g., cart.htm that work with any item type.
-  (require 'sistemi.model)
-  (require 'sistemi.model.shelf)
-  ;;(require 'sistemi.model.shelving)
+  (require 'sistemi.product)
+  (require 'sistemi.product.shelf)
 
   ;; ===== ROUTES =====
   (log/info "Bulding routes.")

@@ -6,6 +6,7 @@
             [sistemi.translate :as tr]
             [www.request :as req]
             [www.user-agent :as ua]
+            [www.cart :as cart]
             [util.net :as net])
   (:use app.config))
 
@@ -56,6 +57,7 @@
       [:link {:href "/bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/css/layout.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
+      [:link {:href "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" :rel "stylesheet"}]
 
       [:script {:src (if (and (conf :offline-enabled) (net/offline?))
                        "/js/jquery-1.7.1.min.js"
@@ -119,7 +121,7 @@
 
            [:img {:src "/img/block-logo.gif" :alt "logo" :style "margin-bottom: 7px;"}]]]]
 
-        [:div.span6
+        #_ [:div.span6
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
           [:ul {:style "padding-top: 28px;"}
            [:li 
@@ -130,6 +132,40 @@
             [:a { :href (tr/localize "/team.htm")} (tr/translate :header :team)]]
            [:li 
             [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
+
+        [:div.span3
+         [:div#shortcuts.greyborder_b {:style "height: 135px"}
+          [:ul {:style "padding-top: 28px;"}
+           [:li 
+            [:a { :href "#"} (tr/translate :header :signup)]]
+           [:li 
+            [:a { :href "#"} (tr/translate :header :contact)]]
+           [:li 
+            [:a { :href (tr/localize "/team.htm")} (tr/translate :header :team)]]
+           [:li 
+            [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
+
+        ;; TODO: hide cart status if cart is empty
+        ;; TODO; hide cart status if on cart page (what about in checkout pages?)
+        ;; TODO: factor out code to generate cart snippet
+        [:div.span3
+         [:div#shortcuts.greyborder_br {:style "height: 135px"}
+          [:ul {:style "padding-top: 28px;"}
+           [:li 
+            ;; TODO: ? Where does the cart layout snippet live? snippet/partial/fragment/component/block/module
+            ;; (cart/layout-snippet)
+            ;; TODO: ? Where does the price calculation code live?
+            ;; ? do calculated prices get stored with the cart?
+            ;; ? where should the cart total function live?
+            ;;   ? cost?
+            ;; ? pass price fn to www.cart fns?
+            [:a { :href (tr/localize "/cart.htm")}
+             [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (cart/total-items (cart/get req/*req*)) ") 133€"
+             [:br]
+             [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " Dec 14"
+
+             #_ (tr/translate :cart)]]]]]
+
 
         [:div.span3
          [:div.greyborder_b {:style "height: 135px"}

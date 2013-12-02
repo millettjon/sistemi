@@ -1,7 +1,5 @@
 (ns sistemi.site.valchromat
-  "Valchromat translation strings."
-  (:require [sistemi.translate :as tr]
-            [sistemi.model.format :as fmt]))
+  "Valchromat translation strings.")
 
 (def strings
   {:en {:light-grey "light grey"
@@ -15,7 +13,6 @@
         :green "green"
         :blue "blue"
         :violet "violet"}
-
 
    :fr {:light-grey "gris clair"
         :grey "gris"

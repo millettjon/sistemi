@@ -1,4 +1,4 @@
-(ns sistemi.model.format
+(ns sistemi.format
   (:require color 
             [sistemi.translate :as tr])
   (:use [frinj ops]))
@@ -32,11 +32,12 @@
 ;; java appears to do it right http://stackoverflow.com/questions/9777689/how-to-get-numberformat-instance-from-currency-code
 ;; Note: this is locale dependent
 ;; Note: the use of comma, period, and space can differ by locale. 
+;; TODO: Handle converting from USD.
 (defn format-eur
   [v]
   (format "%.2f€"
           (-> v
-              (to :EUR)
+              ;; (to :EUR)
               :v
               bigdec)))
 #_ (format-eur (fj 50 :EUR))

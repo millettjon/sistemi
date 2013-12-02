@@ -1,5 +1,5 @@
 (ns sistemi.form
-  (:require [sistemi.model.format :as fmt]
+  (:require [sistemi.format :as fmt]
             [color.ral :as ral]))
 
 (def feedback
@@ -15,6 +15,7 @@
   (merge cart-item-id
          {:quantity {:type :bounded-number :min 0 :max 100 :default 1}}))
 
+;; TODO: Move to product.shelf ns.
 (def shelf-params
   {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120 :format fmt/cm}
    :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30 :format fmt/cm}
@@ -23,9 +24,11 @@
    :color {:type :color :default (ral/get-color 3027)}
    })
 
+;; TODO: Should this go somewhere else? sistemi.product.catalog?
 (def items
   "Map of all items and their design paramters."
   {:shelf shelf-params
+   ;; TODO: factor out as own def? move to product.bookcase ns?
    :shelving (merge shelf-params
                     {:height {:type :bounded-number :units "cm" :min 60 :max 240 :default 120 :format fmt/cm}
                      :cutout {:type :set :options [:semplice :ovale :quadro] :default :semplice
