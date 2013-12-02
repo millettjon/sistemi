@@ -21,12 +21,12 @@
   [amount]
   (format "%1.2f" amount))
 
- "Custom Shelving: 150x100x30; Modern; Green."
+ "Custom Bookcase: 150x100x30; Modern; Green."
 (defn make-description
-  "Makes a one line description of the shelving specifications."
+  "Makes a one line description of the bookcase specifications."
   [req]
   (let [m (:params req)]
-    (str "Shelving: " (:width m) "x" (:height m) "x" (:depth m) "cm; " (:cutout m) "; " (str/upper-case (:color m)))))
+    (str "Bookcase: " (:width m) "x" (:height m) "x" (:depth m) "cm; " (:cutout m) "; " (str/upper-case (:color m)))))
 
 (defn make-paypal-order
   [req amount]
@@ -34,7 +34,7 @@
         sale-data {:paymentrequest_0_paymentaction "Sale"
                    :paymentrequest_0_currencycode "EUR"
                    :paymentrequest_0_amt amount
-                   :l_paymentrequest_0_name0 "Custom Shelving"
+                   :l_paymentrequest_0_name0 "Custom Bookcase"
                    :l_paymentrequest_0_desc0 (make-description req)
                    :l_paymentrequest_0_amt0 amount
                    :l_paymentrequest_0_qty0 "1"

@@ -34,7 +34,7 @@
                :vision "our vision"
                :boutique  {:_ "on-line boutique"
                            :shelves "shelves"
-                           :shelving-units "Bookcases"
+                           :bookcases "Bookcases"
                            ;; TODO: How to indicate forthcoming products??
                            :tables "tables"
                            :lamps "lamps"
@@ -72,7 +72,7 @@
                :vision "Notre Vision"
                :boutique {:_ "Boutique En Ligne"
                           :shelves "Etagères"
-                          :shelving-units "Bibliothèques"
+                          :bookcases "Bibliothèques"
                           :tables "Tables"
                           :lamps "Eclairage"
                           :chairs "Chaises"
@@ -105,7 +105,7 @@
                :vision "La nostra visione"
                :boutique {:_ "Boutique online"
                           :shelves "Scaffali"
-                          :shelving-units "Libreria"}
+                          :bookcases "Libreria"}
                :service ""
                :system "Il Sistema"
                :gallery ""
@@ -127,7 +127,7 @@
         :menu {:home "hogar"
                :vision "nuestro visión"
                :boutique {:_ "boutique en línea"
-                          :shelving "estantaría"
+                          :bookcase "estantaría"
                           :tables "mesas"
                           :lamps "lámparas"
                           :chairs "sillas"

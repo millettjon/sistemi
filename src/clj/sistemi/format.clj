@@ -92,16 +92,16 @@
 (def parameter-orders
   "display order of design paramters"
   {:shelf [:width :depth :finish :color]
-   :shelving [:width :height :depth :cutout :finish :color]})
+   :bookcase [:width :height :depth :cutout :finish :color]})
 
 (def parameter-formats
   "Formatting functions for parameters."
-  {:shelving {:height #(cm %)
+  {:bookcase {:height #(cm %)
               :width #(cm %)
               :depth #(cm %)
-              :cutout #(tr/translate "/product" :shelving :cutout %)
+              :cutout #(tr/translate "/product" :bookcase :cutout %)
               :color #(color/format-html %)
-              :finish #(tr/translate "/product" :shelving :finish %)
+              :finish #(tr/translate "/product" :bookcase :finish %)
               }
    :shelf {:width #(cm %)
            :depth #(cm %)

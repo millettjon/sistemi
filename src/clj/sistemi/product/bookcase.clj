@@ -13,11 +13,11 @@
 
 ;; TODO refactor this as it is common with shelf
 (defmethod to-params :bookcase
-  [shelving]
+  [bookcase]
   (reduce (fn [m [k v]]
             (let [v (if (instance? frinj.core.fjv v)
                       (-> (to v :cm) :v str)
                       v)]
               (assoc m k v)))
           {}
-          (select-keys shelving [:id :height :width :depth :cutout :color :finish])))
+          (select-keys bookcase [:id :height :width :depth :cutout :color :finish])))

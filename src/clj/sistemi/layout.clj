@@ -15,7 +15,7 @@
    :vision
    [:boutique
     {:label :shelves :page "/shelf.htm"}
-    {:label :shelving-units :page "/shelving.htm"}]
+    {:label :bookcases :page "/bookcase.htm"}]
    :system
    :feedback])
 

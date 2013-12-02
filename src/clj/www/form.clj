@@ -220,7 +220,7 @@
               (assoc m k errors)
               m))
           {} *fields*))
-;; {:quantity {:default 1, :max 100, :errors [:nil], :type :bounded-number, :min 0}, :type {:errors [:nil], :type :set, :options [:shelf :shelving]}, :id {:default -1, :parsed-value -1, :max 100, :type :bounded-number, :min -1, :value -1}}
+;; {:quantity {:default 1, :max 100, :errors [:nil], :type :bounded-number, :min 0}, :type {:errors [:nil], :type :set, :options [:shelf :bookcase]}, :id {:default -1, :parsed-value -1, :max 100, :type :bounded-number, :min -1, :value -1}}
 
 ;; ===== values =====
 (defn default

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>shelving - three.js</title>
+    <title>bookcase - three.js</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
@@ -14,7 +14,7 @@
     </style>
     <script src="jquery.min.js"></script>
     <script src="Three.js"></script>
-    <script src="shelving.js"></script>
+    <script src="bookcase.js"></script>
   </head>
   <body>
     <p>Some text before div</p>
@@ -34,29 +34,29 @@
     </form>
 
     <script type='text/javascript'>
-      // Define the shelving unit.
-      var shelving = {height: 200, width: 150, depth: 50, color: 0xab003b, cutout: 'quaddro'};
-      shelving.color = 0x00FF00;
-      //shelving.cutout = 'none';
-      //shelving.cutout = 'ovale';
-      //shelving.width = 240;
-      //shelving.height = 70;
-      //shelving.depth = 25;
+      // Define the bookcase unit.
+      var bookcase = {height: 200, width: 150, depth: 50, color: 0xab003b, cutout: 'quaddro'};
+      bookcase.color = 0x00FF00;
+      //bookcase.cutout = 'none';
+      //bookcase.cutout = 'ovale';
+      //bookcase.width = 240;
+      //bookcase.height = 70;
+      //bookcase.depth = 25;
 
-      //drawShelving(shelving, $("#model")[0]);
-      drawShelving(shelving, document.getElementById("model"));
+      //drawBookcase(bookcase, $("#model")[0]);
+      drawBookcase(bookcase, document.getElementById("model"));
       startAnimation();
 
       $('#color').change(function() {
         // Get the color to change to.
         var value = $(this).val();
-        shelving.color = parseInt(value);
+        bookcase.color = parseInt(value);
 
         // Set the background color to maintain contrast.
-        //var bg = luminence(shelving.color) > 0.2 ? '#000' : '#fff';
+        //var bg = luminence(bookcase.color) > 0.2 ? '#000' : '#fff';
         //$("#model").css({'background-color': bg});
 
-        updateAnimation(shelving);
+        updateAnimation(bookcase);
       });
 
     </script>

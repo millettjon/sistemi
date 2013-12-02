@@ -1,4 +1,4 @@
-(ns sistemi.site.shelving-htm
+(ns sistemi.site.bookcase-htm
   (:require [util.string :as stru]
             [sistemi.form :as sf]
             [www.request :as r]
@@ -65,7 +65,7 @@
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
         [:script {:type "text/javascript" :src "/3d/frame.js"}]
-        [:script {:type "text/javascript" :src "/3d/shelving.js"}]
+        [:script {:type "text/javascript" :src "/3d/bookcase.js"}]
 
         ;; styles
         [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
@@ -108,7 +108,7 @@
     [:form#shelf-form.form-horizontal {:method "get" :action "cart/add"}
      (f/hidden :id)
      (f/hidden :quantity)
-     (f/hidden {:type :shelving})
+     (f/hidden {:type :bookcase})
      (f/hidden :color)
 
      [:fieldset
@@ -158,13 +158,13 @@
                                                                       (tr/translate :cart :update))]]]]
 
     [:script {:type "text/javascript"}
-     ;; Initialize shelving from defaults.
+     ;; Initialize bookcase from defaults.
      "\n"
-     "var shelving = {};\n"
-     "shelving.height=" (f/default :height) ";\n"
-     "shelving.width=" (f/default :width) ";\n"
-     "shelving.depth=" (f/default :depth) ";\n"
-     "shelving.cutout='" (str (f/default :cutout)) "';\n"
+     "var bookcase = {};\n"
+     "bookcase.height=" (f/default :height) ";\n"
+     "bookcase.width=" (f/default :width) ";\n"
+     "bookcase.depth=" (f/default :depth) ";\n"
+     "bookcase.cutout='" (str (f/default :cutout)) "';\n"
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.
@@ -205,20 +205,20 @@
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {
-           shelving.width = $(this).val();
-           updateAnimation(shelving);
+           bookcase.width = $(this).val();
+           updateAnimation(bookcase);
          });
          $('#height').chosen().change(function() {
-           shelving.height = $(this).val();
-           updateAnimation(shelving);
+           bookcase.height = $(this).val();
+           updateAnimation(bookcase);
          });
          $('#depth').chosen().change(function() {
-           shelving.depth = $(this).val();
-           updateAnimation(shelving);
+           bookcase.depth = $(this).val();
+           updateAnimation(bookcase);
          });
          $('#cutout').change(function() {
-           shelving.cutout = $(this).val();
-           updateAnimation(shelving);
+           bookcase.cutout = $(this).val();
+           updateAnimation(bookcase);
          });
 
          // --------------------
@@ -246,9 +246,9 @@
 
            // Update the model.
            var hex = rgbHexToInt(rgb);
-           if (shelving.color != hex) {
-             shelving.color = hex;
-             updateAnimation(shelving);
+           if (bookcase.color != hex) {
+             bookcase.color = hex;
+             updateAnimation(bookcase);
            }
          }
 
@@ -281,7 +281,7 @@
          model.css({height: height.toString() + 'px'});
 
          // Start animating.
-         drawShelving(shelving, model[0]);
+         drawBookcase(bookcase, model[0]);
          onColor(defaultRAL);
          startAnimation();
      });"
@@ -290,4 +290,4 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form (:shelving sf/cart-items) (:params req) (body)) 520)))
+  (response (standard-page (head) (f/with-form (:bookcase sf/cart-items) (:params req) (body)) 520)))

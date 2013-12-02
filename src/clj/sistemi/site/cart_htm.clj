@@ -189,12 +189,12 @@
 ;;   ? does there need to be an update button for editing quantity?
 ;; calculate: price
 ;;   ? how is the price calculated for each line item?
-;;     - fn saved in item meta-data? price-fn model.shelving/price or model.shelf/price
+;;     - fn saved in item meta-data? price-fn model.bookcase/price or model.shelf/price
 ;;       ? use lookup table?
 ;;       ? use multi-method with dispatch on :type? (how does that scale?)
 ;;
 ;; ? how to build action links?
-;;   - edit item-id     ? how to get edit page link? (/shelf.htm, /shelving.htm)
+;;   - edit item-id     ? how to get edit page link? (/shelf.htm, /bookcase.htm)
 ;;                        ? save edit url in cart as meta-data?
 ;;                          ? what if they change languages?
 ;;                            store canonical url and translate

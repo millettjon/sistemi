@@ -47,10 +47,10 @@
 
 // Namespace
 var sm = sm || {};
-sm.shelving = sm.shelving || {};
+sm.bookcase = sm.bookcase || {};
 
 // Configuration
-sm.shelving = {
+sm.bookcase = {
   // Model Parameters.
   vertical: {inset: 15},          // distance vertical member is inset from each end
   lateral: {width: 9,
@@ -59,24 +59,24 @@ sm.shelving = {
 };
 
 // Extrusion settings.
-sm.shelving.extrusion = {
-  amount: sm.shelving.thickness,
+sm.bookcase.extrusion = {
+  amount: sm.bookcase.thickness,
   steps: 1,
   bevelEnabled: false,
   curveSegments: 1};
 
-// Returns the number of vertical members in a shelving unit.
-sm.shelving.numVerticals = function(shelving) {
-  var d = shelving.width;
+// Returns the number of vertical members in a bookcase.
+sm.bookcase.numVerticals = function(bookcase) {
+  var d = bookcase.width;
   var n = 2;
   if (d > 120) n++;
   if (d > 195) n++;
   return n;
 }
 
-// Returns the number of horizontal members in a shelving unit.
-sm.shelving.numHorizontals = function(shelving) {
-  var d = shelving.height;
+// Returns the number of horizontal members in a bookcase.
+sm.bookcase.numHorizontals = function(bookcase) {
+  var d = bookcase.height;
   var n = 2;
   if (d > 70) n++;
   if (d > 93) n++;
@@ -210,9 +210,9 @@ function cutoutOval(shape, bbox) {
   shape.holes.push( path );
 }
 
-function addVerticalMembers(shelving, addGeometry) {
-  var s = shelving;
-  var ns = sm.shelving;
+function addVerticalMembers(bookcase, addGeometry) {
+  var s = bookcase;
+  var ns = sm.bookcase;
 
   // Draw a vertical member.
   var shape = new THREE.Shape();
@@ -252,9 +252,9 @@ function addVerticalMembers(shelving, addGeometry) {
   }
 }
 
-function addLateralMembers(shelving, addGeometry) {
-  var s = shelving;
-  var ns = sm.shelving;
+function addLateralMembers(bookcase, addGeometry) {
+  var s = bookcase;
+  var ns = sm.bookcase;
 
   // Draw a lateral member.
   var Shape = new THREE.Shape();
@@ -270,9 +270,9 @@ function addLateralMembers(shelving, addGeometry) {
                                  0, 0, 0,  1);
 }
 
-function layoutHorizontal(shelving) {
-  var s = shelving;
-  var ns = sm.shelving;
+function layoutHorizontal(bookcase) {
+  var s = bookcase;
+  var ns = sm.bookcase;
 
   num = ns.numHorizontals(s);
   var offset = ns.lateral.width;
@@ -287,9 +287,9 @@ function layoutHorizontal(shelving) {
   return positions;
 }
 
-function addHorizontalMembers(shelving, addGeometry) {
-  var s = shelving;
-  var ns = sm.shelving;
+function addHorizontalMembers(bookcase, addGeometry) {
+  var s = bookcase;
+  var ns = sm.bookcase;
 
   // Draw a horizontal member.
   var shape = new THREE.Shape();
@@ -310,7 +310,7 @@ function addHorizontalMembers(shelving, addGeometry) {
   }
 }
 
-function drawShelving(shelving, container) {
+function drawBookcase(bookcase, container) {
 
   // Create the scene and camera.
   scene = new THREE.Scene();
@@ -319,11 +319,11 @@ function drawShelving(shelving, container) {
   var fov = 30;
   camera = new THREE.PerspectiveCamera( fov, rWidth / rHeight, 1, 1000 );
 
-  // Set the camera at the point where the shelving just fits in the container.
+  // Set the camera at the point where the bookcase just fits in the container.
   // TODO: handle not square aspect ratio.
-  var dist = (Math.max(shelving.height, shelving.width) / 2) /
+  var dist = (Math.max(bookcase.height, bookcase.width) / 2) /
              Math.tan(fov/2*2*Math.PI/360) +
-             shelving.depth / 2;
+             bookcase.depth / 2;
   dist *= 1.2;
   camera.position.set( 0, 0, dist);
   scene.add( camera );
@@ -368,16 +368,16 @@ function drawShelving(shelving, container) {
   }
 
   // Build components.
-  addVerticalMembers(shelving, addGeometry);
-  addLateralMembers(shelving, addGeometry);
-  addHorizontalMembers(shelving, addGeometry);
+  addVerticalMembers(bookcase, addGeometry);
+  addLateralMembers(bookcase, addGeometry);
+  addHorizontalMembers(bookcase, addGeometry);
 
   // Center.
   // Use a dummy object so that rotation happens around the center of the bounding box
-  // instead of the shelving unit's origin. See: https://github.com/mrdoob/three.js/issues/1593
+  // instead of the bookcase's origin. See: https://github.com/mrdoob/three.js/issues/1593
   dummy = new THREE.Object3D();
   scene.add( dummy );
-  parent.position.set( - shelving.width/2, -shelving.height/2, -shelving.depth/2 );  // half width, height, depth
+  parent.position.set( - bookcase.width/2, -bookcase.height/2, -bookcase.depth/2 );  // half width, height, depth
   dummy.add( parent );
 
   // Setup renderer.
@@ -395,12 +395,12 @@ function drawShelving(shelving, container) {
   g_container.addEventListener( 'touchmove', onDocumentTouchMove, false );
 }
 
-function updateAnimation(shelving) {
+function updateAnimation(bookcase) {
   // Stop the animation and clear the model.
   stopAnimation();
   $(g_container).empty();
 
   // Redraw the model and start animating.
-  drawShelving(shelving, g_container);
+  drawBookcase(bookcase, g_container);
   startAnimation();
 }

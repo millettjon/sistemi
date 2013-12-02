@@ -5,7 +5,7 @@
   (:use [clojure.test]))
 
 
-(def shelving
+(def bookcase
   {:cutout {:type :set :options [:semplice :ovale :quadro] :default :semplice}})
 
 (def string-select
@@ -20,13 +20,13 @@
 
 (deftest test-set
   (are [cutout]
-       (f/with-form shelving {:cutout (str cutout)}
+       (f/with-form bookcase {:cutout (str cutout)}
          (is (not (f/errors?))))
        :semplice
        :ovale
        :quadro)
   (are [cutout]
-       (f/with-form shelving {:cutout (str cutout)}
+       (f/with-form bookcase {:cutout (str cutout)}
          (is (f/errors?)))
        :semplicez
        "bogus"
@@ -47,7 +47,7 @@
       (is (= text "A"))))
 
   ;; else if the key is a keyword, use it's name for the text
-  (f/with-form shelving {:cutout :semplice}
+  (f/with-form bookcase {:cutout :semplice}
     (let [[_ _ [[_ {value :value} text]]] (f/select :cutout {})]
       (is (= value ":semplice"))
       (is (= text "semplice"))))

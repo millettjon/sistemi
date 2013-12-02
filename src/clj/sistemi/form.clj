@@ -29,10 +29,10 @@
   "Map of all items and their design paramters."
   {:shelf shelf-params
    ;; TODO: factor out as own def? move to product.bookcase ns?
-   :shelving (merge shelf-params
+   :bookcase (merge shelf-params
                     {:height {:type :bounded-number :units "cm" :min 60 :max 240 :default 120 :format fmt/cm}
                      :cutout {:type :set :options [:semplice :ovale :quadro] :default :semplice
-                              :format (get-in fmt/parameter-formats [:shelving :cutout])}})})
+                              :format (get-in fmt/parameter-formats [:bookcase :cutout])}})})
 
 (def cart-item
   "Generic item, type, and quantity in a shopping cart."

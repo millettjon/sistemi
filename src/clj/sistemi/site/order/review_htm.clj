@@ -1,7 +1,7 @@
 (ns sistemi.site.order.review-htm
   (:require [clojure.tools.logging :as log]
             [ring.util.response :as resp]
-            [sistemi.product.bookcase :as shelving]
+            [sistemi.product.bookcase :as bookcase]
             [sistemi.translate :as tr]
             [sistemi.layout :as layout]
             [sistemi.form :as sf]
@@ -21,12 +21,12 @@
 
 (defn body
   [params]
-  (let [shelving nil #_ (shelving/from-params params) ; FIXME
-        price nil #_ (shelving/price shelving) ; FIXME
-        detail nil #_ (shelving/html-price-report shelving)] ; FIXME
+  (let [bookcase nil #_ (bookcase/from-params params) ; FIXME
+        price nil #_ (bookcase/price bookcase) ; FIXME
+        detail nil #_ (bookcase/html-price-report bookcase)] ; FIXME
     [:div.text_content
      [:p.title "REVIEW DESIGN"]
-     [:p "Please review your shelving specifications."]
+     [:p "Please review your bookcase specifications."]
      [:table.twocol
       [:tr [:td "Width"] [:td.white (str (:width params) " cm")]]
       [:tr [:td "Height"] [:td.white (str (:height params) " cm")]]
@@ -36,7 +36,7 @@
                           "&nbsp;&nbsp" [:span.label {:style (str "background-color: " (:color params) ";")} "&nbsp;&nbsp"]]]]
 
      ;; TODO: Use standard/localized currency formatting
-     [:p {:style "margin-top: 10px;"} "The price of your custom shelving is " [:span#price.white (str "&euro;" (:v price))] " before taxes and shipping."]
+     [:p {:style "margin-top: 10px;"} "The price of your custom bookcase is " [:span#price.white (str "&euro;" (:v price))] " before taxes and shipping."]
 
      [:p {:style "margin-top: 18px;"} "If the specifications are correct you can checkout using PayPal."]
 
@@ -48,7 +48,7 @@
 
      [:p {:style "margin-top: 18px;"} "If the specifications are incorrect you can return to the previous page to edit them."]
 
-     [:form {:action (tr/localize "/shelving.htm") :method "GET"}
+     [:form {:action (tr/localize "/bookcase.htm") :method "GET"}
       (f/hidden params)
       [:button#submit.btn.btn-inverse {:type "submit"} "Edit Specifications"]]
 
@@ -68,7 +68,7 @@
 
 (defn handle
   [req]
-  (f/with-form nil #_ sf/shelving (:params req) ; FIXME
+  (f/with-form nil #_ sf/bookcase (:params req) ; FIXME
     (if (f/errors?)
-      (resp/redirect (tr/localize "/shelving.htm" {:query (:params req)}))
+      (resp/redirect (tr/localize "/bookcase.htm" {:query (:params req)}))
       (response (layout/standard-page (head) (body (f/values)) 544)))))

@@ -11,7 +11,7 @@
                          :valchromat-raw "Valchromat – unfinished" :valchromat-oiled "Valchromat – oiled"}
                 :color "color"
                 }
-        :shelving {:name "Custom Shelving Unit"
+        :bookcase {:name "Custom Bookcase"
                    :width "width"
                    :depth "depth"
                    :height "height"
@@ -32,7 +32,7 @@
                 :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
                          :valchromat-raw "Valchromat – naturale" :valchromat-oiled "Valchromat – oliato"}
                 }
-        :shelving {:width "Lunghezza"
+        :bookcase {:width "Lunghezza"
                    :depth "Profondità"
                    :height "Altezza"
                    :color "Colore"
@@ -47,7 +47,7 @@
                 :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
                          :valchromat-raw "Valchromat – brut" :valchromat-oiled "Valchromat – huilé"}
                 :color "Couleur"}
-        :shelving {:width "Longeur"
+        :bookcase {:width "Longeur"
                    :depth "Profondeur"
                    :height "Hauteur"
                    :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
@@ -58,4 +58,4 @@
 (def urls
   "design urls"
   {:shelf "/shelf.htm"
-   :shelving "/shelving.htm"})
+   :bookcase "/bookcase.htm"})
