@@ -55,7 +55,7 @@
 
                      ;; read outputs
                      (select-keys ["fab_stephane_total"
-                                   "C17" ; finishing cost
+                                   "order_finishing_marques"
                                    "packaging_box_total"
                                    "order_subtotal"
                                    "total_margin"
@@ -77,7 +77,7 @@
      ;;:unit (fj_ (-> total :v .doubleValue) quantity)
      :unit (fj-bd_ total quantity 2)
      :parts {:fabrication-stephane (prices "fab_stephane_total")
-             :finishing-marques (prices "C17")
+             :finishing-marques (prices "order_finishing_marques")
              :packaging-box (prices "packaging_box_total")
              :subtotal (prices "order_subtotal")
              :margin (prices "total_margin")
