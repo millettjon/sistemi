@@ -54,7 +54,6 @@
                  
                  ;; calculation
                  [net.cgrand/spreadmap "0.1.4"]
-                 [dgraph "1.2.2"]
                  [frinj "0.2.5"]
 
                  ;; payment
@@ -66,6 +65,10 @@
 
                  ;; xml for UPS
                  [org.clojure/data.xml "0.0.7"]
+
+                 ;; Date related.
+                 [net.objectlab.kit/datecalc-common "1.2.0"]
+                 [net.objectlab.kit/datecalc-joda "1.2.0" :exclusions [joda-time]]
 
                  ;; misc
                  [org.clojure/core.cache "0.6.3"]

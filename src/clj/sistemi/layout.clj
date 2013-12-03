@@ -9,7 +9,8 @@
             [www.user-agent :as ua]
             [www.cart :as cart]
             [sistemi.order :as order]
-            [util.net :as net])
+            [util.net :as net]
+            [util.calendar :as cal])
   (:use app.config))
 
 (def menu-data
@@ -54,9 +55,12 @@
         [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (order/total-items cart) ") "
         (-> cart :price :total fmt/eur-short)
         [:br]
-        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " Dec 14"
+        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] (-> 10 cal/business-days cal/format-france)
 
         #_ (tr/translate :cart)]])))
+;; TODO: Display date in locale of request.
+;; TODO: Calculate date in locale of fabrication chain.
+;; TODO: Calculate date when cart changes or shipping address changes.
 
 (defn doctype-html5
  [html]
