@@ -38,7 +38,7 @@
     :valchromat-raw "raw"))
 
 (defmethod get-price :shelf
-  [{:keys [finish width depth quantity]}]
+  [{:keys [finish width depth quantity]} {:keys [taxable]}]
   (let [workbook "shelf/shelf-chain-france.xls"
         m (sheet/get (str "opt/costs/products/" workbook))
 
@@ -47,35 +47,49 @@
         prices (locking m
                  (-> m
                      ;; set inputs
-                     (assoc "C3" (cm->mm width))
-                     (assoc "C4" (cm->mm depth))
-                     (assoc "C5" (convert-finish finish))
-                     (assoc "C6" quantity)
+                     (assoc "order_length" (cm->mm width))
+                     (assoc "order_width" (cm->mm depth))
+                     (assoc "order_finish" (convert-finish finish))
+                     (assoc "order_quantity" quantity)
+                     (assoc "order_taxable" (if taxable "yes" "no"))
 
                      ;; read outputs
-                     (select-keys ["C13" "C16" "C19" "C22"])
+                     (select-keys ["fab_stephane_total"
+                                   "C17" ; finishing cost
+                                   "packaging_box_total"
+                                   "order_subtotal"
+                                   "total_margin"
+                                   "total_tax"
+                                   "total_adjustment"
+                                   "total_total"])
 
                      ;; return a normal hash
                      (->> (into {}))))
 
         ;; Add units.
         prices (->> prices
-                    (map (fn [[k v]] [k (fj-eur v)]))
+                    (map (fn [[k v]] [k (-> v fj-eur (fj-round 2))]))
                     (into {}))
-        total (prices "C22")]
+        total (prices "total_total")]
 
     {:workbook workbook
      :total total
-     :unit (fj_ total quantity)
-     :parts {:fabrication-stephane (prices "C13")
-             :finishing-marques (prices "C16")
-             :packaging-box (prices "C19")}}))
+     ;;:unit (fj_ (-> total :v .doubleValue) quantity)
+     :unit (fj-bd_ total quantity 2)
+     :parts {:fabrication-stephane (prices "fab_stephane_total")
+             :finishing-marques (prices "C17")
+             :packaging-box (prices "packaging_box_total")
+             :subtotal (prices "order_subtotal")
+             :margin (prices "total_margin")
+             :tax (prices "total_tax")
+             :adjustment (prices "total_adjustment")}}))
 
 #_ (let [shelf {:type :shelf
                 :color {:rgb "#C51D34", :type :ral, :code 3027},
-                :quantity 20
+                :quantity 3
                 :finish :laquer-matte
                 :width 120
                 :depth 30
+                :taxable true
                 }]
      (get-price shelf))

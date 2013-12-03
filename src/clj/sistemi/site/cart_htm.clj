@@ -57,11 +57,6 @@
    [:td {:style "text-transform: capitalize;"} (fmt/translate-param item param)]
    [:td.white {:style "padding-left: 10px;"} (fmt/format-value item param)]])
 
-(defn total
-  "Calculates the total price of all cart items."
-  [items]
-  (apply frinj.ops/fj+ (map #(get-in % [:price :total]) items)))
-
 (defn head
   []
   (seq [;; jquery tooltips for pricing
@@ -87,8 +82,8 @@
   [cart]
   ;; Calculate item prices.
   ;; TODO: format prices based on locale
-  (let [items (map order/assoc-price (vals (:items cart)))
-        total (fmt/format-eur (total items))]
+  (let [items (-> cart :items vals)
+        total (-> cart :price :total fmt/eur-short)]
     [:div.text_content
 
      [:p (tr/translate :cart_contents)]
@@ -134,7 +129,7 @@
 
           ;; unit price
           [:td {:style "text-align: right; padding-top: 13px;"}
-           [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :price :unit fmt/format-eur)]]
+           [:span {:id (str "price" id) :style "font-size: 16px;" } (-> item :price :unit fmt/eur-short)]]
 
           ;; quantity
           [:td 
@@ -148,7 +143,7 @@
 
           ;; price
           [:td {:style "text-align: right; padding-top: 13px;"}
-           [:span.white {:style "font-size: 16px;" } (-> item :price :total fmt/format-eur)]]]])
+           [:span.white {:style "font-size: 16px;" } (-> item :price :total fmt/eur-short)]]]])
 
       [:tr.total
        [:td {:style "padding-top: 10px;"} (tr/translate :subtotal)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
@@ -168,7 +163,7 @@
                 return '" (h/html detail) "'
               },
               delay: 3000,
-              left: -400,
+              left: -50,
               showURL: false
           });")))
       "});"]

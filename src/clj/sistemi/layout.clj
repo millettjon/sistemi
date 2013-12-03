@@ -4,9 +4,11 @@
             [locale.core :as l]
             [util.path :as path]
             [sistemi.translate :as tr]
+            [sistemi.format :as fmt]
             [www.request :as req]
             [www.user-agent :as ua]
             [www.cart :as cart]
+            [sistemi.order :as order]
             [util.net :as net])
   (:use app.config))
 
@@ -41,6 +43,20 @@
           [:li.menui
            [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page)} label]]
           )))))
+
+(defn cart-block
+  []
+  (let [cart (-> req/*req* cart/get)]
+    (if (cart/empty? cart)
+      [:li [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (0)"]
+      [:li 
+       [:a { :href (tr/localize "/cart.htm")}
+        [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (order/total-items cart) ") "
+        (-> cart :price :total fmt/eur-short)
+        [:br]
+        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " Dec 14"
+
+        #_ (tr/translate :cart)]])))
 
 (defn doctype-html5
  [html]
@@ -145,27 +161,10 @@
            [:li 
             [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
 
-        ;; TODO: hide cart status if cart is empty
-        ;; TODO; hide cart status if on cart page (what about in checkout pages?)
-        ;; TODO: factor out code to generate cart snippet
         [:div.span3
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
           [:ul {:style "padding-top: 28px;"}
-           [:li 
-            ;; TODO: ? Where does the cart layout snippet live? snippet/partial/fragment/component/block/module
-            ;; (cart/layout-snippet)
-            ;; TODO: ? Where does the price calculation code live?
-            ;; ? do calculated prices get stored with the cart?
-            ;; ? where should the cart total function live?
-            ;;   ? cost?
-            ;; ? pass price fn to www.cart fns?
-            [:a { :href (tr/localize "/cart.htm")}
-             [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (cart/total-items (cart/get req/*req*)) ") 133€"
-             [:br]
-             [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " Dec 14"
-
-             #_ (tr/translate :cart)]]]]]
-
+           (cart-block)]]]
 
         [:div.span3
          [:div.greyborder_b {:style "height: 135px"}
