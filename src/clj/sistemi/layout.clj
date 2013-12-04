@@ -55,7 +55,7 @@
         [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (order/total-items cart) ") "
         (-> cart :price :total fmt/eur-short)
         [:br]
-        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] (-> 10 cal/business-days cal/format-france)
+        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " " (-> 15 cal/business-days cal/format-france)
 
         #_ (tr/translate :cart)]])))
 ;; TODO: Display date in locale of request.
