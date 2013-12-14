@@ -8,6 +8,7 @@
             [www.request :as req]
             [www.user-agent :as ua]
             [www.cart :as cart]
+            [www.google :as g]
             [sistemi.order :as order]
             [util.net :as net]
             [util.calendar :as cal])
@@ -90,6 +91,9 @@
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
       [:meta {:name "description", :content "Modern shelving in Europe."}]
 
+      ;; Google analytics.
+      (g/analytics)
+      
       ;; Plus One Button
       ;; TODO: Internationalize?
       ;; Note: The popup text is truncated in languages other than english.

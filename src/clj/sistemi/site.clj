@@ -5,7 +5,8 @@
             [sistemi.registry :as registry]
             [sistemi.translate :as tr]
             [www.request :as req]
-            [www.user-agent :as ua])
+            [www.user-agent :as ua]
+            [www.google :as g])
   (:use [ring.util.response :only (response content-type)]
         [hiccup page])
   (:import java.io.File))
@@ -192,7 +193,10 @@
      ]
     [:meta {:name "keywords" :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
     [:meta {:name "description" :content "Modern shelves and shelving systems by Sistemi Moderni in France, serving modern furniture design addicts throughout Europe."}]
-    [:meta {:http-equiv "refresh" :content (str "16;URL=" (tr/localize "/home.htm"))}]]
+    [:meta {:http-equiv "refresh" :content (str "16;URL=" (tr/localize "/home.htm"))}]
+
+    ;; Google analytics
+    (g/analytics)]
    
    [:body
     [:div#wrapper
