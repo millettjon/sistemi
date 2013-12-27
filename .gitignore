@@ -5,3 +5,5 @@ pom.xml
 .lein-repl-history
 .lein-plugins
 .lein-deps-sum
+.lein
+.m2
