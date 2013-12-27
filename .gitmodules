@@ -1,3 +1,6 @@
 [submodule "opt/bootstrap"]
 	path = opt/bootstrap
 	url = git@github.com:silence/bootstrap
+[submodule "checkouts/hiccup"]
+	path = checkouts/hiccup
+	url = git@github.com:silence/hiccup
