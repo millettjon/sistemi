@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Configures base configuration and code.
+# Keep actions idempotent so that re-running the installer won't break things.
+
+# ---------------------------------------------------
+# Change to the project root directory.
+# ---------------------------------------------------
+PROJECT_HOME="$(cd $(dirname $BASH_SOURCE)/..; pwd)"
+cd $PROJECT_HOME
+
+# ---------------------------------------------------
+# Install submodules if missing.
+# ---------------------------------------------------
+if [[ ! -e opt/bootstrap/.git ]] ; then
+    git submodule init
+    git submodule update
+fi
+
+# ---------------------------------------------------
+# Source bootstrap utilities.
+# ---------------------------------------------------
+source "$(dirname $BASH_SOURCE)/../opt/bootstrap/bootstrap.bash"
+
+# ---------------------------------------------------
+# Java
+ensure_package openjdk-7-jdk
+
+# ---------------------------------------------------
+# Create daemon user.
+ensure_daemon_user_with_home sm-www
+ensure_clones_in_group sm-www
+
+# ---------------------------------------------------
+# Leiningen
+wget -c -O bin/lein https://raw.github.com/technomancy/leiningen/stable/bin/lein
+chmod +x bin/lein
+
+# ---------------------------------------------------
+# File permissions
+for DIR in .lein .m2 var/target; do
+    mkdir -p $DIR
+    sudo chown sm-www:sm-www $DIR
+done
+
+# ---------------------------------------------------
+# Ruby gems
+ensure_gem foreman
+
+# ---------------------------------------------------
+# Nginx
+ensure_package nginx
+#ensure_link etc/nginx/sm-www.conf /etc/nginx/sites-available/sm-www
+#ensure_link etc/nginx/sm-www.conf /etc/nginx/sites-enabled/sm-www
+#sudo service nginx restart
+
+# ---------------------------------------------------
+# Cron
+#ensure_crontab etc/cron.d/member /etc/cron.d/member
+
+# ---------------------------------------------------
+# Miscellaneous
+
+# bash aliases
+#ensure_link .bashrc ~admin/.bash.d/member
+
+# prompt integration
+#ensure_link .prompt /opt/eway/etc/prompt.d/member
