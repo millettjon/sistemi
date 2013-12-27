@@ -1,6 +1,0 @@
-[submodule "checkouts/hiccup"]
-	path = checkouts/hiccup
-	url = git@github.com:silence/hiccup.git
-[submodule "opt/costs"]
-	path = opt/costs
-	url = git@git.sm1.in:costs
