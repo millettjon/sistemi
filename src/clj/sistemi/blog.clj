@@ -2,18 +2,35 @@
   "Scrapes the wordpress blog."
   (:require [net.cgrand.enlive-html :as html]
             [clojure.contrib.core :as contrib]
+            [clojure.core.cache :as cache]
             [www.url :as u]
-            [util.path :as p])
-  (:refer-clojure :exclude [proxy]))
+            [util.path :as p]))
 
 (def base-url
   (-> "https://blog.sm1.in"
       u/new-URL))
 
 (defn fetch-url [url]
+  (prn "fetching" url)
   (html/html-resource (java.net.URL. url)))
 
-(def fetch-url (memoize fetch-url))
+;; (def fetch-url (memoize fetch-url))
+
+(def ^:private cache
+  "Cache urls for 1 minute."
+  (atom (cache/ttl-cache-factory {} :ttl (* 1                ; min
+                                            60               ; sec/min
+                                            1000             ; ms/sec
+                                            ))))
+
+(defn fetch-cached-url
+  "Returns a cached url object by path creating a new one if necessary."
+  [url]
+  (let [C @cache
+        C (if (cache/has? C url)
+            (cache/hit C url)
+            (swap! cache #(cache/miss % url (fetch-url url))))]
+    (clojure.core/get C url)))
 
 (defn strip-comment-links
   "Strips the leave a comment links."
@@ -103,7 +120,7 @@
   [url]
   (-> url
       str
-      fetch-url
+      fetch-cached-url
       (html/select [:div#content])
       strip-comment-links
       fix-urls
@@ -117,7 +134,7 @@
   [url]
   (-> url
       str
-      fetch-url
+      fetch-cached-url
       (html/select [:div#content])
       strip-comment-links
       strip-respond
@@ -140,7 +157,7 @@
   [url]
   (-> url
       str
-      fetch-url
+      fetch-cached-url
       (html/select [:div#primary-sidebar])
       (html/at [:aside#icl_lang_sel_widget] nil
                [:aside#search-2] nil
