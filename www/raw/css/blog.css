@@ -1,0 +1,136 @@
+/* border around main content */
+div#content {
+    /* margin-top: 25px; */
+    margin-left: 25px;
+}
+
+/* category link */
+.cat-links a {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 900;
+    color: #8C8C8C;
+}
+.cat-links a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
+
+/* title */
+.entry-title {
+    text-transform: uppercase;
+    font-size: 33px;
+    font-weight: 300;
+    color: #8C8C8C;
+}
+.entry-title a {
+    color: #8C8C8C;
+}
+.entry-title a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
+
+/* date link */
+.entry-date a {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8C8C8C;
+}
+.entry-date a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
+
+/* author link */
+span.byline {
+    margin-left: 15px;
+}
+.author.vcard a {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8C8C8C;
+}
+.author.vcard a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
+
+/* article */
+div#content article:first-child {
+    padding-top: 45px;
+    border-top-width: 0px;
+}
+
+article {
+    padding-top: 48px;
+    margin-bottom: 48px;
+    border-top-color: #3B3B3B;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+/* article content */
+div.entry-content {
+    margin-top: 20px;
+}
+
+/* article footer */
+footer.entry-meta {
+    margin-top: 20px;
+}
+
+/* article nav */
+.nav-links {
+    margin-bottom: 25px;
+}
+span.meta-nav {
+    display: block;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8C8C8C;
+}
+.nav-links a {
+    display: block;
+    padding-top: 11px;
+    padding-bottom: 12px;
+    /* border-top-color: #3B3B3B; */
+    /* border-top-width: 1px; */
+    /* border-top-style: solid; */
+    line-height: 24px;
+    vertical-align: baseline;
+    font-size: 14px;
+    font-weight: 400;
+    color: #8C8C8C;
+}
+.nav-links a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
+
+/* tag link */
+.tag-links a {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8C8C8C;
+}
+.tag-links a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
+
+/* category page */
+.archive-title {
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 24px;
+    vertical-align: baseline;
+    color: #CCC;
+    margin-top: 40px;
+    margin-bottom: 25px;
+}
+

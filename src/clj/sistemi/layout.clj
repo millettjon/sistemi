@@ -21,7 +21,7 @@
     {:label :shelves :page "/shelf.htm"}
     {:label :bookcases :page "/bookcase.htm"}]
    :system
-;;   :blog
+   :blog
    :feedback])
 
 (defn menu

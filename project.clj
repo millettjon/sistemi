@@ -39,6 +39,7 @@
 
                  ;; html
                  [hiccup "1.0.4"]
+                 [enlive "1.1.1"]
 
                  ;; web client
                  [clj-http "0.7.7" :exclusions [org.clojure/tools.reader]]
@@ -77,12 +78,6 @@
                  [com.google.guava/guava "15.0"]
                  [org.clojure/tools.namespace "0.2.4"]
 
-                 ;; url/path handling
-                 ;;[com.cemerick/url "0.1.0" :exclusions [pathetic]]
-                 [pathetic "0.5.1"]     ; manually specify as dep of url
-                                        ; since version 0.5.0 includes clojurescript as
-                                        ; regular instead of a dev dependency
-
                  ;; Clojurescript
                  ;; Note: Dommy 0.1.2 doesn't work with 0.0-2030.
                  [org.clojure/clojurescript "0.0-1859" #_ "0.0-2030"]
@@ -97,7 +92,8 @@
   :plugins [[lein-cljsbuild "0.3.4"]
             [lein-marginalia "0.7.1"]
             [lein-ancient "0.5.3"]
-            [lein-cloverage "1.0.2"]]
+            [lein-cloverage "1.0.2"]
+            [slamhound "RELEASE"]]
 
   :aliases {"marg" ["marg" "--dir" "var/doc"]}
 
