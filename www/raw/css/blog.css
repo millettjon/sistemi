@@ -75,6 +75,7 @@ article {
 /* article content */
 div.entry-content {
     margin-top: 20px;
+    text-align: justify;
 }
 
 /* article footer */
