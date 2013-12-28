@@ -21,8 +21,9 @@
     {:label :shelves :page "/shelf.htm"}
     {:label :bookcases :page "/bookcase.htm"}]
    :system
+   :feedback
    :blog
-   :feedback])
+   ])
 
 (defn menu
   []
@@ -69,7 +70,7 @@
  (str "<!doctype html>" html))
 
 (defn standard-page
-  [head body height]
+  [head body sidebar]
   (doctype-html5
    (hcp/html
     [:html {:lang (req/*req* :locale)}
@@ -185,7 +186,12 @@
        [:tr
         ;; Menu
         [:td.greybox.greyborder_r {:width "225" :style {:height "100%;" :vertical-align "top"}}
-         [:ul.menu.menum (menu)]]
+         [:ul.menu.menum (menu)]
+         ;; Hack since the sidebar parameter used to be height.
+         (when-not (number? sidebar)
+           [:div {:style {:clear "left" :width "225px" :border-top "1px solid #3B3B3B" :padding-top "20px"}}
+            [:div {:style {:margin-left "32px"}}
+             sidebar]])]
 
         ;; ----- CONTENT -----
         [:td {:colspan "3" :width "675"}

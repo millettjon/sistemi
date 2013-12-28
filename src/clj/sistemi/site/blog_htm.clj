@@ -17,11 +17,6 @@
 (def head
   [:link {:rel "stylesheet" :href "css/blog.css" :type "text/css"}])
 
-(defn body
-  [req]
-  (b/proxy req)
-  )
-
 (defn handle
   [req]
-  (response (standard-page head (body req) 544)))
+  (response (standard-page head (b/body req) (b/sidebar req))))

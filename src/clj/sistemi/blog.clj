@@ -129,9 +129,30 @@
       render
       ))
 
-(defn proxy
-  "Proxies a request to the blog."
+(defn body
+  "Returns the body portion of a blog page."
   [req]
   (-> req
       url-from-site-to-blog
       convert-content))
+
+(defn convert-sidebar
+  [url]
+  (-> url
+      str
+      fetch-url
+      (html/select [:div#primary-sidebar])
+      (html/at [:aside#icl_lang_sel_widget] nil
+               [:aside#search-2] nil
+               [:aside#recent-comments-2] nil
+               [:aside#meta-2] nil
+               [:li :a] fix-link
+               )
+      render))
+
+(defn sidebar
+  "Returns the sidebar potion of a blog page."
+  [req]
+  (-> req
+      url-from-site-to-blog
+      convert-sidebar))

@@ -134,3 +134,26 @@ span.meta-nav {
     margin-bottom: 25px;
 }
 
+/* sidebar */
+h1.widget-title {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 900;
+    color: #8C8C8C;
+}
+aside ul  {
+    margin: 0 0 9px 0;
+}
+aside li {
+    list-style: none outside none;
+    font-size: 12px;
+    font-weight: 400;
+    color: #8C8C8C;
+}
+aside li a {
+    color: #8C8C8C;
+}
+aside li a:hover {
+    color: #AD0039;
+    text-decoration: none;
+}
