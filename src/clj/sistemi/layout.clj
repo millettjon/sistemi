@@ -88,7 +88,7 @@
                        (www.url/match-scheme "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" req/*req*))
                 :type "text/javascript"}]
 
-      [:script {:src "/bootstrap/js/bootstrap.min.js", :type "text/javascript"}]
+      [:script {:src "/bootstrap/js/bootstrap.js", :type "text/javascript"}]
       [:script {:type "text/javascript" :src "/3d/detector.js"}]
       [:link {:href "/fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
