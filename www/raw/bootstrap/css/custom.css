@@ -1,0 +1,8 @@
+/* Customizations to bootstrap.
+  Source this after bootstrap to override vanilla settings. */
+body {
+    background-color: #000;
+    line-height: 18px;
+    color: #999;
+    font-family: Ubuntu,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}

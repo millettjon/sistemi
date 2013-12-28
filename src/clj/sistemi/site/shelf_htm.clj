@@ -63,11 +63,11 @@
         [:script {:type "text/javascript" :src "/3d/shelf.js"}]
 
         ;; styles
-        [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
+        [:style "#shelf-form {margin-left: 0px; margin-top: 10px;}"]
 
         [:style "#shelf-form .control-group {margin-bottom: 12px}"]
-        [:style "#shelf-form .control-label {width: 100px; color: #FFF; padding-top: 4px}"]
-        [:style "#shelf-form .controls {margin-left: 115px;}"]
+        [:style "#shelf-form .control-label {width: 55px; color: #FFF; padding-top: 4px}"]
+        [:style "#shelf-form .controls {margin-left: 65px;}"]
 
         [:style "#shelf-form .chzn-select {width: 100px;}"]
         [:style "#shelf-form input {border-radius: 5px;}"]
@@ -79,13 +79,14 @@
 
 (defn body
   []
-  [:div.row
-   [:div#design-box.span6  {:style "background-color: #000;"}
-    [:div#model]
+  [:table {:cellspacing "0" :cellpadding "0" :width "675"}
+   [:tr
+    [:td#design-box {:style {:vertical-align "top" :background-color "#000"}}
+    [:div#model {:style {:width "450px"}}]
 
     [:div {:style "text-align: center;"} (tr/translate :spin)]]
 
-   [:div.span3
+   [:td {:width "225" :style {:height "225px"}}
     
     [:form#shelf-form.form-horizontal {:method "post" :action "cart/add"}
      (f/hidden :id)
@@ -96,18 +97,18 @@
 
       [:div.control-group
        [:label.control-label {:for "width"} (tr/translate :width)]
-       [:div.controls
-        (f/select :width {:class "chzn-select" :style "width: 160px" :tabindex 1})]]
+       [:div.controls {:style {:margin-left "80px"}}
+        (f/select :width {:class "chzn-select" :style "width: 145px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "depth"} (tr/translate :depth)]
-       [:div.controls
-        (f/select :depth {:class "chzn-select" :style "width: 160px" :tabindex 1})]]
+       [:div.controls {:style {:margin-left "80px"}}
+        (f/select :depth {:class "chzn-select" :style {:width "145px"} :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "finish"} (tr/translate :finish)]
        [:div.controls
-        (f/select :finish {:class "customStyleSelectBox" :style "width: 165px" :tabindex 1})]]
+        (f/select :finish {:class "customStyleSelectBox" :style "width: 160px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
@@ -136,7 +137,7 @@
       [:div {:style "text-align: center"}
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
                                                                       (tr/translate :cart :update) )]]
-      ] ]
+      ]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelf from defaults.
@@ -272,7 +273,7 @@
          startAnimation();
      });"
 
-     ]]
+     ]]]
    ])
 
 (defn handle
