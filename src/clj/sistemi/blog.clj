@@ -11,7 +11,6 @@
       u/new-URL))
 
 (defn fetch-url [url]
-  (prn "fetching" url)
   (html/html-resource (java.net.URL. url)))
 
 ;; (def fetch-url (memoize fetch-url))
