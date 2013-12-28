@@ -32,19 +32,19 @@
         ;; submenu
         (let [key (first item)
               label (tr/translate :menu key)]
-          [:li.menui [:a.menui {:href "#"} [:span label]]
+          [:li.menui [:a.menui {:href "#" :style {:height "20px"}} [:span label]]
            [:ul.menum.submenu
             (for [item (rest item)]
               (let [page (if (map? item) (:page item)  (str "/" (name item) ".htm"))
                     label (tr/translate :menu key (if (map? item) (:label item) item))]
                 [:li.menui
-                 [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page)} label]]
+                 [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :style {:height "20px"}} label]]
                 ))]])
         ;; regular item
         (let [page (str "/" (name item) ".htm")
               label (tr/translate :menu item)]
           [:li.menui
-           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page)} label]]
+           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :style {:height "20px"}} label]]
           )))))
 
 (defn cart-block
@@ -76,7 +76,8 @@
      [:head
       [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
       [:title  (tr/translate :title)]
-      [:link {:href "/bootstrap/css/bootstrap.css", :rel "stylesheet", :type "text/css"}]
+      [:link {:href "/bootstrap/css/bootstrap.min.css", :rel "stylesheet", :type "text/css"}]
+      [:link {:href "/bootstrap/css/custom.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/css/layout.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" :rel "stylesheet"}]
@@ -86,7 +87,7 @@
                        (www.url/match-scheme "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" req/*req*))
                 :type "text/javascript"}]
 
-      [:script {:src "/bootstrap/js/bootstrap.js", :type "text/javascript"}]
+      [:script {:src "/bootstrap/js/bootstrap.min.js", :type "text/javascript"}]
       [:script {:type "text/javascript" :src "/3d/detector.js"}]
       [:link {:href "/fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
@@ -105,34 +106,33 @@
 
      [:body
       ;; standard centered layout
-      [:div.container
+      [:table {:cellpadding "0" :cellspacing "0" :width "900" :style {:margin "auto"}}
 
        ;; ----- TOP BORDER ROW -----
-       [:div.row
-        [:div.span9.col-wrap.greyborder_b
-         [:div.span3.greybox.col 
-          [:div.greyborder_r.col] "&nbsp;"]
+       [:tr
+        [:td.greybox.greyborder_br {:width "225"}]
 
-         ;; SITE MESSAGE AREA
-         [:div.span6.col
-          [:div.greyborder_r
-           {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
-           [:noscript {:style "color: #F00;"} (tr/translate :javascript_required)]
-           [:span#under_construction {:style "display: none;"} (tr/translate :construction)]
-           [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)
-            ;; Recommend firefox/chrome for non firefox/chrome users.
-            (case (:browser_group (ua/req->features req/*req*))
-              "Firefox" ""
-              "Chrome" ""
-              [:span"&nbsp;" (tr/translate :recommended_browsers)])]
-           [:span#canvas_recommended {:style "display: none; font-size: 16px; color: #F00"}
-            (tr/translate :canvas_required) "&nbsp;" (tr/translate :recommended_browsers)]
-           ]]]]
+        ;; SITE MESSAGE AREA
+        [:td.greyborder_br {:colspan "2" :width "450"}
+         [:div
+          {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
+          [:noscript {:style "color: #F00;"} (tr/translate :javascript_required)]
+          [:span#under_construction {:style "display: none;"} (tr/translate :construction)]
+          [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)
+           ;; Recommend firefox/chrome for non firefox/chrome users.
+           (case (:browser_group (ua/req->features req/*req*))
+             "Firefox" ""
+             "Chrome" ""
+             [:span"&nbsp;" (tr/translate :recommended_browsers)])]
+          [:span#canvas_recommended {:style "display: none; font-size: 16px; color: #F00"}
+           (tr/translate :canvas_required) "&nbsp;" (tr/translate :recommended_browsers)]
+          ]]
+        [:td {:width "225"}]]
 
        ;; ----- HEADER ROW -----
-       [:div.row {:style "height: 136px"}
+       [:tr {:style "height: 136px"}
         ;; locale menu
-        [:div.span3.greybox
+        [:td.greybox {:width "225"}
          [:div.greyborder_br {:style "height: 135px"}
           [:div {:style "padding-left: 30px; padding-top: 25px;"}
            [:div#lang 
@@ -158,9 +158,9 @@
            [:li 
             [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
 
-        [:div.span3
+        [:td {:width "225"}
          [:div#shortcuts.greyborder_b {:style "height: 135px"}
-          [:ul {:style "padding-top: 28px;"}
+          [:ul {:style {:padding-top "28px" :margin-left "25px" :padding-left "0px"}}
            [:li 
             [:a { :href "#"} (tr/translate :header :signup)]]
            [:li 
@@ -170,34 +170,30 @@
            [:li 
             [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
 
-        [:div.span3
+        [:td
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
-          [:ul {:style "padding-top: 28px;"}
+          [:ul {:style {:padding-top "28px" :margin-left "25px" :padding-left "0px"}}
            (cart-block)]]]
 
-        [:div.span3
+        [:td
          [:div.greyborder_b {:style "height: 135px"}
           [:a {:href (tr/localize "home.htm")}
            [:img {:src "/img/sistemi-moderni-systems.jpg", :width "206", :height "119" :alt "logo" :style "margin-left: 19px;"}]]]]]
 
        ;; ----- MENU AND CONTENT ROW -----
        ;; TODO: Find a way to not have to pass the height.
-       [:div.row {:style (str "height: " height "px;")}
+       [:tr
         ;; Menu
-        [:div.span3.greybox {:style "height: 100%;"}
-         [:div.greyborder_r {:style "height: 100%;"}
-          [:ul.menu.menum
-           (menu)] 
-          ]]
+        [:td.greybox.greyborder_r {:width "225" :style {:height "100%;" :vertical-align "top"}}
+         [:ul.menu.menum (menu)]]
 
         ;; ----- CONTENT -----
-        ;; TODO: The content height must be passed in dynamically.
-        [:div.span9
+        [:td {:colspan "3" :width "675"}
          body]]
 
        ;; ----- RED BAR -----
-       [:div.row
-        [:div#redbar.span12
+       [:tr
+        [:td#redbar {:colspan "4"}
          [:a.first {:href "#"}
           [:img {:src "/img/facebook.jpg", :border "0" :alt "facebook"}]]
          [:a { :href "#"}
@@ -207,8 +203,8 @@
          ]]
 
        ;; ----- ADDRESS AND COPYRIGHT -----
-       [:div.row
-        [:div.span3.greybox
+       [:tr
+        [:td.greybox
          [:div#footer.greyborder_r
           [:div#address "SISTEMI MODERNI"
            [:br] "St. Martin d&rsquo;Uriage, France"

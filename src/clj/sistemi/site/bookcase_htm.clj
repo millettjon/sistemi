@@ -84,10 +84,11 @@
 
 (defn body
   []
-  [:div.row
-   [:div#design-box.span6  {:style "background-color: #000;"}
+  [:table {:cellspacing "0" :cellpadding "0" :width "675"}
+   [:tr
+    [:td#design-box {:style {:vertical-align "top" :background-color "#000"}}
     ;; 3d model
-    [:div#model]
+    [:div#model {:style {:width "450px"}}]
 
     ;; Toolbar
     ;; Note: This must be position: relative to allow the spin text to be positioned relative to it.
@@ -103,7 +104,7 @@
 
      ]]
 
-   [:div.span3
+   [:td {:width "225" :style {:height "225px"}}
 
     [:form#shelf-form.form-horizontal {:method "get" :action "cart/add"}
      (f/hidden :id)
@@ -285,7 +286,7 @@
          onColor(defaultRAL);
          startAnimation();
      });"
-     ]]
+     ]]]
    ])
 
 (defn handle
