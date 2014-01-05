@@ -16,4 +16,4 @@
 
 (defn rand [length]
   "Returns a cryptographically secure base62 string of the given length."
-  (apply str (repeatedly length #(char (nth digits (.nextInt (SecureRandom/getInstance "SHA1PRNG") 62))))))
+  (apply str (repeatedly length #(char (nth digits (.nextInt (SecureRandom.) 62))))))
