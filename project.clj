@@ -1,12 +1,11 @@
 (defproject sistemi "0.1"
   :description "Sistemi Moderni Website"
-  :repositories {"bitwalker.user-agent-utils.mvn.repo" {:url "https://raw.github.com/HaraldWalker/user-agent-utils/mvn-repo/"
+  :repositories {"project" "file:opt/m2"
+                 "bitwalker.user-agent-utils.mvn.repo" {:url "https://raw.github.com/HaraldWalker/user-agent-utils/mvn-repo/"
                                                         :snapshots false
                                                         :releases {:checksum :ignore :update :always}}}
 
-  :min-lein-version "2.0.0" ; needed for heroku
-
-  ;; Use var/ for generated files.
+    ;; Use var/ for generated files.
   :source-paths ["src/clj"]
   :test-paths ["test/clj"]
   :target-path "var/target"
@@ -42,7 +41,7 @@
                  [enlive "1.1.1"]
 
                  ;; web client
-                 [clj-http "0.7.7" :exclusions [org.clojure/tools.reader]]
+                 [clj-http "0.7.7" :exclusions [org.clojure/tools.reader #_ commons-logging]]
 
                  ;; email
                  [com.draines/postal "1.11.1"]
@@ -52,7 +51,7 @@
 
                  ;; user agent detection
                  [bitwalker/UserAgentUtils "1.11"]
-                 
+
                  ;; calculation
                  [net.cgrand/spreadmap "0.1.4"]
                  [frinj "0.2.5"]
@@ -70,6 +69,15 @@
                  ;; Date related.
                  [net.objectlab.kit/datecalc-common "1.2.0"]
                  [net.objectlab.kit/datecalc-joda "1.2.0" :exclusions [joda-time]]
+
+                 ;; Datomic
+                 [com.datomic/datomic-pro "0.9.4384"
+                  :exclusions [
+                               ;; Exclude these since using log4j for logging.
+                               ;; See: http://docs.datomic.com/configuring-logging.html
+                               org.slf4j/slf4j-nop
+                               org.slf4j/log4j-over-slf4j ; note: causes an IncompatibleClassChangeError if included
+                               ]]
 
                  ;; misc
                  [org.clojure/core.cache "0.6.3"]

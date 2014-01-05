@@ -9,6 +9,7 @@
             [www.user-agent :as ua]
             [www.cart :as cart]
             [www.google :as g]
+            [www.event :as e]
             [sistemi.order :as order]
             [util.net :as net]
             [util.calendar :as cal])
@@ -83,6 +84,8 @@
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" :rel "stylesheet"}]
 
+      (e/script req/*req*)
+
       [:script {:src (if (and (conf :offline-enabled) (net/offline?))
                        "/js/jquery-1.7.1.min.js"
                        (www.url/match-scheme "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" req/*req*))
@@ -100,8 +103,7 @@
       ;; Plus One Button
       ;; TODO: Internationalize?
       ;; Note: The popup text is truncated in languages other than english.
-      [:script {:type "text/javascript" :src "https://apis.google.com/js/plusone.js"}
-       #_ "{lang: 'fr'}"]
+      ;;[:script {:type "text/javascript" :src "https://apis.google.com/js/plusone.js"} #_ "{lang: 'fr'}"]
 
       head]
 

@@ -1,6 +1,8 @@
 (ns sistemi.routes
   (:require [sistemi.registry :as registry]
-            [util.string :as str])
+            [util.string :as str]
+            [sistemi.datomic :as sd]
+            [www.event :as e])
   (:use net.cgrand.moustache
         (ring.middleware file file-info params keyword-params content-type session)
         (ring.middleware stacktrace lint cookies) ; dev items
@@ -20,7 +22,8 @@
 
 (defn build-routes
   []
-  (let [code-root "src/sistemi/site"]
+  (let [code-root "src/sistemi/site"
+        conn (sd/get-conn)]
     (app
      ;; TODO: Add a 500 wrapper (like wrap-stacktrace bug logs)
      ;; TODO: Log POST params?
@@ -38,9 +41,17 @@
      ;; TODO: cache control (http://groups.google.com/group/ring-clojure/browse_thread/thread/cc8f72a15ae7fbc3)
      wrap-params              ; parse form and query string params
      wrap-keyword-params      ; keywordize the params map
-     wrap-session             ; reads/writes session data from/to session store
+
+     (wrap-session            ; reads/writes session data from/to session store
+      {:cookie-name "session-id"
+       :cookie-attrs {:secure true
+                      :http-only true}})
+
      ;;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
-     ;;spy
+
+     ;; manages browser-id cookie used for javascript event tracking
+     (e/wrap-event "event" conn)
+     ;; spy
 
      wrap-file-info
      ;; TODO: make an easier way to set the charset
