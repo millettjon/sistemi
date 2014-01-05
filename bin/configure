@@ -24,20 +24,24 @@ source "$(dirname $BASH_SOURCE)/../opt/bootstrap/bootstrap.bash"
 
 # ---------------------------------------------------
 # Java
+# ---------------------------------------------------
 ensure_package openjdk-7-jdk
 
 # ---------------------------------------------------
 # Create daemon user.
+# ---------------------------------------------------
 ensure_daemon_user_with_home sm-www
 ensure_clones_in_group sm-www
 
 # ---------------------------------------------------
 # Leiningen
+# ---------------------------------------------------
 wget -c -O bin/lein https://raw.github.com/technomancy/leiningen/stable/bin/lein
 chmod +x bin/lein
 
 # ---------------------------------------------------
 # File permissions
+# ---------------------------------------------------
 for DIR in .lein .m2 var/target; do
     mkdir -p $DIR
     sudo chown sm-www:sm-www $DIR
@@ -45,10 +49,12 @@ done
 
 # ---------------------------------------------------
 # Ruby gems
+# ---------------------------------------------------
 ensure_gem foreman
 
 # ---------------------------------------------------
 # Nginx
+# ---------------------------------------------------
 ensure_package nginx
 ensure_link etc/nginx/conf.d/base.conf /etc/nginx/conf.d/base.conf
 ensure_link etc/nginx/www.sistemimoderni.com.conf /etc/nginx/sites-available/www.sistemimoderni.com.conf
@@ -59,13 +65,15 @@ sudo service nginx restart
 
 # ---------------------------------------------------
 # Cron
-#ensure_crontab etc/cron.d/member /etc/cron.d/member
+# ---------------------------------------------------
+#ensure_crontab etc/cron.d/www /etc/cron.d/www
 
 # ---------------------------------------------------
 # Miscellaneous
+# ---------------------------------------------------
 
 # bash aliases
-#ensure_link .bashrc ~admin/.bash.d/member
+#ensure_link .bashrc ~admin/.bash.d/www
 
 # prompt integration
-#ensure_link .prompt /opt/eway/etc/prompt.d/member
+#ensure_link .prompt /opt/eway/etc/prompt.d/www
