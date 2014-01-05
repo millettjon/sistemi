@@ -7,3 +7,6 @@
 [submodule "opt/costs"]
 	path = opt/costs
 	url = git@git.sm1.in:costs
+[submodule "opt/m2"]
+	path = opt/m2
+	url = git@git.sm1.in:m2
