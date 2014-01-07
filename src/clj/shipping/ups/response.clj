@@ -41,3 +41,24 @@
       :xpci_version (first (xml-> data :XpciVersion text))
     ) ) )
 
+(defn get-response-packages
+  [data]
+  (let [pkgs_xml (xml-> data :ShipmentResults :PackageResults)
+        pkgs '()]
+    (println pkgs_xml)
+    ) )
+
+(defn get-shipment-accept-response
+  "A response to the 2nd of 2 requests for UPS shipping."
+  [sa_response]
+  (let [input (xm/parse (text-in-bytestream sa_response))
+        data (zip/xml-zip input)]
+    (assoc {}
+      :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
+      :response_status (first (xml-> data :Response :ResponseStatus text))
+      :response_status_description (first (xml-> data :Response :responseStatusDescription text))
+      :transportation_charges (first (xml-> data :ShipmentResults :ShipmentCharges :TransportCharges :MonetaryValue text))
+      :service_options_charges (first (xml-> data :ShipmentResults :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
+      :total_charges  (first (xml-> data :ShipmentResults :ShipmentCharges :TotalCharges :MonetaryValue text))
+      :billing_weight (first (xml-> data :ShipmentResults :BillingWeight text))
+      ) ) )

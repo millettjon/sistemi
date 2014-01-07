@@ -72,3 +72,82 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
     (is (= '("1Z123X670299567041") result))
     ) )
 
+(def shipment-accept-response-xml
+  (u/strip-newlines
+"<ShipmentAcceptResponse>
+<Response>
+<TransactionReference>
+<CustomerContext>guidlikesubstance</CustomerContext>
+<XpciVersion>1.0001</XpciVersion>
+</TransactionReference>
+<ResponseStatus>0</ResponseStatus>
+<ResponseStatusDescription>success</ResponseStatusDescription>
+</Response>
+<ShipmentResults>
+<ShipmentCharges>
+<TransportationCharges>
+<MonetaryValue>19.60</MonetaryValue>
+</TransportationCharges>
+<ServiceOptionsCharges>
+<MonetaryValue>3.40</MonetaryValue>
+</ServiceOptionsCharges>
+<TotalCharges>
+<MonetaryValue>23.00</MonetaryValue>
+</TotalCharges>
+</ShipmentCharges>
+<BillingWeight>
+<Weight>36.0</Weight>
+</BillingWeight>
+<ShipmentIdentificationNumber>
+1Z123X670299567041
+</ShipmentIdentificationNumber>
+<PackageResults>
+<TrackingNumber>1Z123X670299567041</TrackingNumber>
+<ServiceOptionsCharges>
+<MonetaryValue>1.20</MonetaryValue>
+</ServiceOptionsCharges>
+<LabelImage>
+<LabelImageFormat>
+<Code>GIF</Code>
+</LabelImageFormat>
+<GraphicImage>FSDJHSDJHJ3487EHNE9U8DY9VHRFV89SDFHFSDJHFSDIDFH
+SJKDFSJKDFSJIU9GFIUGJIFDUJG9UKGLDJFDKJDGKJDFKGDJLDFKSJGKDFJDKGFDG9E0ER
+IJGE39IWURE9U9ER0UW9R0UR9WEGU9URE9WGUW90U90GRUG90GERUG9REUGWERGJIO
+JGIODFGUIOFDUGIOFUIGRUE090U9TERUT90RUT9EU90ERUT9ERU9EUER9TUT9R0UTE90R
+U9TERU90RTEU9SDKHGJHGDFU</GraphicImage>
+<HTMLImage>SKJJKLHGIGKHGKJHGFJGFJHDFJGHDDJFHFDJHFJHFJKDHJK
+FDHJFJDFHDFJHJDFHGJDHGDFSHJKFSDHSDFJHFJSDHJKDFHFJKSHDSKJHGFDJSJDFSKSK
+JJKLHGIGKHGKJHGFJGFJHDFJGHDDJFHFDJHFJHFJKDHJKFDHJFJDFHDFJHJDFHGJDHGDF
+SHJKFSDHSDFJHFJSDHJKDFHFJKSHDSKJHGFDJSJDFSKHGJKDS</HTMLImage>
+</LabelImage>
+</PackageResults>
+<PackageResults>
+<TrackingNumber>1Z123X670292134678</TrackingNumber>
+<AccessorialCharges>
+<MonetaryValue>2.20</MonetaryValue>
+</AccessorialCharges>
+<LabelImage>
+<LabelImageFormat>
+<Code>GIF</Code>
+</LabelImageFormat>
+<GraphicImage>895UIGJ89XCASDVIGFUISDFNKLFSDANUI43UIT34IONSDFK
+HG89GUKGJNGKDJFKDJDGKJDKFSDU089REUTDRKJOEIOUTERIJREIKGRJIGOWEJIEJIEGJ
+GRIOEJGRIGJIODJGFIODFJSIOUDFIOGDFUGDF890ERUTRIOGTJRDIOOGJGIOSDFJGIOJGIOJ
+IOGFUGJIOGU90E8T9TRFIRWEU90WERU90WU90WTU90WUT09WEUTWRJGKSDFJGIOSDFJ
+GOISDFJGIOSJSD</GraphicImage>
+<HTMLImage>JDFSKAATRIOERHIOEGHNVIXCUIFGJMFDGMAN8Y89H54JM
+N1MK345H8SDHFDHGJKGHFDJKGHDGKSFJAH893YTUITNGDFJSGH8935Y5RTHDDFJKHT89
+HTJETHWER8934Y89534KGNDFOJKKH893RYETFIHTRUIOEY89TY34IHDFUIHGRU9T38934UI
+THDIUJTHEQW89RY8WIERHT9RI</HTMLImage>
+</LabelImage>
+</PackageResults>
+</ShipmentResults>
+</ShipmentAcceptResponse>") )
+
+(deftest test-get-response-packages
+  (let [sample (str xml-header shipment-accept-response-xml)
+        input (xm/parse (rsp/text-in-bytestream sample))
+        data (zip/xml-zip input)
+        result (resp/get-response-packages data)]
+
+    ) )
