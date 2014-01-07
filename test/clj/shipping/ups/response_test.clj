@@ -1,65 +1,74 @@
 (ns shipping.ups.response_test
+  (:import [java.io ByteArrayInputStream])
   (:require [shipping.ups.response :as rsp]
             [shipping.ups.util :as u]
-            [clojure.data.xml :as x])
-  (:use [clojure.test]))
+            [clojure.data.xml :as x]
+            [clojure.xml :as xm]
+            [clojure.zip :as zip])
+  (:use [clojure.test]
+        [clojure.data.zip.xml :only (text xml->)]))
 
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 
 (def sample-xml
   (u/strip-newlines
 "<ShipmentConfirmResponse>
-<Response>
-<TransactionReference>
-<CustomerContext>guidlikesubstance</CustomerContext>
-<XpciVersion>1.0001</XpciVersion>
-</TransactionReference>
-<ResponseStatus>0</ResponseStatus>
-<ResponseStatusDescription>success</ResponseStatusDescription>
-</Response>
-<ShipmentCharges>
-<TransportationCharges>
-<MonetaryValue>19.60</MonetaryValue>
-</TransportationCharges>
-<ServiceOptionsCharges>
-<MonetaryValue>3.40</MonetaryValue>
-</ServiceOptionsCharges>
-<TotalCharges>
-<MonetaryValue>23.00</MonetaryValue>
-</TotalCharges>
-</ShipmentCharges>
-<BillingWeight>
-<Weight>36.0</Weight>
-</BillingWeight>
-<ShipmentIdentificationNumber>1Z123X670299567041</ShipmentIdentificationNumber>
-<ShipmentDigest>FSDJHFSDJSHDJK47873487489KFSDJKQSDFSJDFK9
+  <Response>
+    <TransactionReference>
+      <CustomerContext>guidlikesubstance</CustomerContext>
+      <XpciVersion>1.0001</XpciVersion>
+    </TransactionReference>
+   <ResponseStatus>0</ResponseStatus>
+   <ResponseStatusDescription>success</ResponseStatusDescription>
+  </Response>
+  <ShipmentCharges>
+    <TransportationCharges>
+      <MonetaryValue>19.60</MonetaryValue>
+    </TransportationCharges>
+    <ServiceOptionsCharges>
+      <MonetaryValue>3.40</MonetaryValue>
+    </ServiceOptionsCharges>
+    <TotalCharges>
+      <MonetaryValue>23.00</MonetaryValue>
+    </TotalCharges>
+  </ShipmentCharges>
+  <BillingWeight>
+    <Weight>36.0</Weight>
+  </BillingWeight>
+  <ShipmentIdentificationNumber>1Z123X670299567041</ShipmentIdentificationNumber>
+  <ShipmentDigest>FSDJHFSDJSHDJK47873487489KFSDJKQSDFSJDFK9
 4238093489034KSDFJSDFKLJFDSKFKDJFSDKJFLSDKA923809234893402K
 LSDFJKLSDFJDFKSJFSDKLJFDSKLJFSDKLJ49230843920814309KLSDFJF
 KLSDJFDKLSJSDFKLJDKFLJDSKLJ092348349223098IJKLFJKLFSDJFKLA
 SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
 </ShipmentConfirmResponse>"))
 
-(deftest test-xml-parse
+(deftest test-get-shipment-confirm-response
+  (let [input (str xml-header sample-xml)
+        values (rsp/get-shipment-confirm-response input)]
+    (are [x y] (= x y)
+      "1Z123X670299567041" (values :trackingNumber)
+      "0" (values :responseStatus)
+      "success" (values :responseStatusDescription)
+      "36.0" (values :billingWeight)
+      "19.60" (values :transportationCharges)
+      "3.40" (values :serviceOptionsCharges)
+      "23.00" (values :totalCharges)
+      ) ) )
+
+(defn get-tag-content
+  [values tag]
+  (reduce (fn [data value]
+            (if (= tag (-> value :tag))
+              (conj data (first (-> value :content)))
+              data) )
+    '() values) )
+
+(deftest test-get-tag-content
   (let [sample (str xml-header sample-xml)
-        data (x/parse (java.io.StringReader. sample))]
-    (println data)
-    (println "")
-    ;(println (first (-> (nth (-> (first (-> data :content)) :content) 1) :content)) )
-    ;; Success
-    ;(println (first (-> (nth (-> (first (-> data :content)) :content) 2) :content)) )
+        data (x/parse (java.io.StringReader. sample))
+        result (get-tag-content (-> data :content) :ShipmentIdentificationNumber)]
+
+    (is (= '("1Z123X670299567041") result))
     ) )
 
-(deftest test-get-content-for-tag
-  (let [sample (str xml-header sample-xml)
-        data (x/parse (java.io.StringReader. sample))]
-        ;results (rsp/get-content-for-tag data :ShipmentConfirmResponse)]
-
-    ;(println results)
-    ) )
-
-(deftest test-get-response-status
-  (let [sample (str xml-header sample-xml)
-        response (u/parse-xml-into-structure sample)
-        status (rsp/get-response-status response)]
-    (println status)
-    ) )

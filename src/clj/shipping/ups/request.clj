@@ -42,4 +42,18 @@
       (c/label-spec-info (request_data :label)) ]
     ] )
 
-;(def shipment-accept-request)
+(defn shipment-accept-request
+  "After receiving a successful 'Shipment Confirm Response' build this request
+  and send to UPS."
+  [request_accept_data]
+  [:AccessRequest
+    [:AccessLicenseNumber (request_accept_data :sistemi_license_no)]
+    [:UserId (request_accept_data :user_id)]
+    [:Password (request_accept_data :password)] ]
+  [:ShipmentAcceptRequest
+    [:Request
+      [:TransactionReference
+        [:CustomerContext (request_accept_data :customer_context_id)]
+        [:XpciVersion (request_accept_data :xpci_version)] ]
+      [:RequestAction (request_accept_data :request_action)] ]
+    [:ShipmentDigest (request_accept_data :shipment_digest)] ] )

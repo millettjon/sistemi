@@ -1,44 +1,43 @@
 (ns shipping.ups.response
-  (:require [shipping.ups.util :as u]))
+  (:import [java.io ByteArrayInputStream])
+  (:require [clojure.string :as str]
+            [shipping.ups.util :as u]
+            [clojure.xml :as xm]
+            [clojure.zip :as zip])
+  (:use [clojure.data.zip.xml :only (text xml->)]))
 
- (defn is-xml-element
+(defn is-xml-element
   "Is the current object an XML Element defrecord?"
   [object]
   (if (nil? object)
     false
     (= clojure.data.xml.Element (class object)) ) )
 
-; loop / recur through xml
-;   -- reduce for each list of content at each element
+(defn text-in-bytestream
+  "Turn text into ByteArrayInputStream (trimmed text)"
+  [text]
+  (ByteArrayInputStream. (.getBytes (str/trim text))) )
 
-; Element {:tag tag_name :content '()}
+;; todo: was hoping to refactor extraction calls to this
+(defn- get-xml-value
+  [data & tags]
+  (first (xml-> data tags)) )
 
-(defn get-content-for-tag
-  [response tag]
-  (loop [results '()
-         current response]
-    (let [current_tag (-> response :tag )
-          content (-> response :content)
-          first_value (first content)]
-      (println "tag: " tag ", current_tag: " current_tag)
-      (if (= current_tag tag)
-        (if (not (is-xml-element first_value))
-          (results conj content)
-          ;(println "first_value: " first_value) )) )
-          (recur results first_value)) ) )
-          ;(println "Not another xml element")
-          ;(println "It is another xml element"))
-          ;(conj results content))
-        ;(recur results first_value) ) )
-    ) )
+(defn get-shipment-confirm-response
+  "Map xml response data to internal map for common usage."
+  [sc_response]
+  (let [input (xm/parse (text-in-bytestream sc_response))
+        data (zip/xml-zip input)]
+    (assoc {}
+      :tracking_number (first (xml-> data :ShipmentIdentificationNumber text))
+      :response_status (first (xml-> data :Response :ResponseStatus text))
+      :response_status_description (first (xml-> data :Response :ResponseStatusDescription text))
+      :billing_weight (first (xml-> data :BillingWeight text))
+      :transportation_charges (first (xml-> data :ShipmentCharges :TransportationCharges :MonetaryValue text))
+      :service_options_charges (first (xml-> data :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
+      :total_charges (first (xml-> data :ShipmentCharges :TotalCharges :MonetaryValue text))
+      :shipment_digest (first (xml-> data :ShipmentDigest text))
+      :customer_context_id (first (xml-> data :CustomerContext text))
+      :xpci_version (first (xml-> data :XpciVersion text))
+    ) ) )
 
-(defn get-response-status
-  "Get the response status from a ShipmentConfirmResponse"
-  [response]
-  (when-not (nil? response)
-    (-> response :ShipmentConfirmResponse :Response :ResponseStatus) ) )
-
-(defn shipment-confirm-response
-  "Build a map of results from a parsed XML response."
-  [response]
-  {:TransactionReference (-> response :TransactionReference)})

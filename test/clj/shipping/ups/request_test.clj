@@ -49,3 +49,31 @@
   (let [data (sr/shipment-confirm-request shipment-confirm-data)]
     (is (= (str xml-header shipment-confirm-xml) (x/emit-str (xml data)) ))
     ) )
+
+(def shipment-accept-xml
+  (u/strip-newlines
+    "<ShipmentAcceptRequest>
+<Request>
+<TransactionReference>
+<CustomerContext>guidlikesubstance</CustomerContext>
+<XpciVersion>1.0001</XpciVersion>
+</TransactionReference>
+<RequestAction>ShipAccept</RequestAction>
+</Request>
+<ShipmentDigest>SistemiModerniABC</ShipmentDigest>
+</ShipmentAcceptRequest>
+") )
+
+(def shipment-accept-data
+  {:sistemi_license_no "SistemiLicenseNo"
+   :user_id "SistemiModerni"
+   :password "SomePassword"
+   :customer_context_id "guidlikesubstance"
+   :xpci_version "1.0001"
+   :request_action "ShipAccept"
+   :shipment_digest "SistemiModerniABC"})
+
+(deftest test-shipment-accept-request
+  (let [data (sr/shipment-accept-request shipment-accept-data)]
+    (is (= (str xml-header shipment-accept-xml) (x/emit-str (xml data)) ))
+    ) )
