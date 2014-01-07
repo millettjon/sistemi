@@ -65,6 +65,7 @@
 
                  ;; xml for UPS
                  [org.clojure/data.xml "0.0.7"]
+                 [org.clojure/data.zip "0.1.1"]
 
                  ;; Date related.
                  [net.objectlab.kit/datecalc-common "1.2.0"]

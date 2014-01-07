@@ -47,13 +47,13 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
   (let [input (str xml-header sample-xml)
         values (rsp/get-shipment-confirm-response input)]
     (are [x y] (= x y)
-      "1Z123X670299567041" (values :trackingNumber)
-      "0" (values :responseStatus)
-      "success" (values :responseStatusDescription)
-      "36.0" (values :billingWeight)
-      "19.60" (values :transportationCharges)
-      "3.40" (values :serviceOptionsCharges)
-      "23.00" (values :totalCharges)
+      "1Z123X670299567041" (values :tracking_number)
+      "0" (values :response_status)
+      "success" (values :response_status_description)
+      "36.0" (values :billing_weight)
+      "19.60" (values :transportation_charges)
+      "3.40" (values :service_options_charges)
+      "23.00" (values :total_charges)
       ) ) )
 
 (defn get-tag-content
