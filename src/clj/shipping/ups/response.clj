@@ -42,10 +42,19 @@
     ) ) )
 
 (defn get-response-packages
+  "Get the tracking, image, etc information for each package."
   [data]
-  (let [pkgs_xml (xml-> data :ShipmentResults :PackageResults)
-        pkgs '()]
-    (println pkgs_xml)
+  (let [pkgs_xml (xml-> data :ShipmentResults :PackageResults)]
+    (reduce (fn [pkgs package]
+              (conj pkgs
+                (assoc {}
+                :tracking_number (first (xml-> package :TrackingNumber text))
+                :service_options_charges (first (xml-> package :ServiceOptionsCharges :MonetaryValue text))
+                :accessory_charges (first (xml-> package :AccessorialCharges :MonetaryValue text))
+                :label_image_code (first (xml-> package :LabelImage :LabelImageFormat :Code text))
+                :label_image (first (xml-> package :LabelImage :GraphicImage text))
+                ) ) )
+      '() pkgs_xml)
     ) )
 
 (defn get-shipment-accept-response
@@ -57,8 +66,9 @@
       :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
       :response_status (first (xml-> data :Response :ResponseStatus text))
       :response_status_description (first (xml-> data :Response :responseStatusDescription text))
-      :transportation_charges (first (xml-> data :ShipmentResults :ShipmentCharges :TransportCharges :MonetaryValue text))
+      :transportation_charges (first (xml-> data :ShipmentResults :ShipmentCharges :TransportationCharges :MonetaryValue text))
       :service_options_charges (first (xml-> data :ShipmentResults :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
       :total_charges  (first (xml-> data :ShipmentResults :ShipmentCharges :TotalCharges :MonetaryValue text))
       :billing_weight (first (xml-> data :ShipmentResults :BillingWeight text))
+      :packages (get-response-packages data)
       ) ) )
