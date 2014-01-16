@@ -18,11 +18,7 @@
   [text]
   (ByteArrayInputStream. (.getBytes (str/trim text))) )
 
-;; todo: was hoping to refactor extraction calls to this
-(defn- get-xml-value
-  [data & tags]
-  (first (xml-> data tags)) )
-
+; Could refactor the (first (xml-> data)) to something like (foo data [& tags])
 (defn get-shipment-confirm-response
   "Map xml response data to internal map for common usage."
   [sc_response]
@@ -45,15 +41,16 @@
   "Get the tracking, image, etc information for each package."
   [data]
   (let [pkgs_xml (xml-> data :ShipmentResults :PackageResults)]
-    (reduce (fn [pkgs package]
-              (conj pkgs
-                (assoc {}
-                :tracking_number (first (xml-> package :TrackingNumber text))
-                :service_options_charges (first (xml-> package :ServiceOptionsCharges :MonetaryValue text))
-                :accessory_charges (first (xml-> package :AccessorialCharges :MonetaryValue text))
-                :label_image_code (first (xml-> package :LabelImage :LabelImageFormat :Code text))
-                :label_image (first (xml-> package :LabelImage :GraphicImage text))
-                ) ) )
+    (reduce
+      (fn [pkgs package]
+        (conj pkgs
+          (assoc {}
+          :tracking_number (first (xml-> package :TrackingNumber text))
+          :service_options_charges (first (xml-> package :ServiceOptionsCharges :MonetaryValue text))
+          :accessory_charges (first (xml-> package :AccessorialCharges :MonetaryValue text))
+          :label_image_code (first (xml-> package :LabelImage :LabelImageFormat :Code text))
+          :label_image (first (xml-> package :LabelImage :GraphicImage text))
+          ) ) )
       '() pkgs_xml)
     ) )
 
