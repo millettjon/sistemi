@@ -34,8 +34,10 @@ Useful for converting environment variable names to clojure map keys."
    keys specifies the list of environment variables to include."
   [& keys]
   (reduce (fn [m kv]
-            (let [[k v] kv]
-              (assoc m (normalize-key k) (read-string-safely v))))
+            (let [[k v] kv
+                  v (read-string-safely v)
+                  v (if (symbol? v) (name v) v)]
+              (assoc m (normalize-key k) v)))
           {}
           (select-keys env/environment keys)))
 
