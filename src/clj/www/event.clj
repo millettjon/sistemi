@@ -1,6 +1,7 @@
 (ns www.event
   "Browser event tracking for analytics."
   (:require [util.base62 :as b62]
+            [www.request :as req]
             [ring.util.response :as rsp]
             [datomic.api :as d]
             [sistemi.datomic :as sd]
@@ -44,7 +45,7 @@
 
 (defn- handle-event
   [req]
-  (log/info "EVENT" req)
+  ;; (log/info "EVENT" req)
   ;; TODO: Call any event handlers e.g., logging, mixpanel.
   ;; TODO: Should this filter out events from localhost?
   )
@@ -66,35 +67,28 @@
        empty?
        not))
 
-;; TODO: Add some tests.
-(defn- local-request?
-  "Returns true if the request is a local request not passing through a load balancer."
-  [req]
-  (and (= "127.0.0.1" (req :remote-addr))
-       (not (get-in req [:headers "x-forwarded-for"]))))
-
 (defn- handle-event-request
   ""
   [req conn]
   (let [bid         (get-in req [:cookies cookie-name :value])
         event-path  (:uri req)]
     (cond
-     ;; no id was passed: generate one, call handlers, set cookie, return response
+     ;; no id was passed: generate one, call handlers, set a response cookie
      (not bid) (let [bid (gen-id)]
                  (new-browser-async conn bid)
                  (handle-event (assoc-in req [:cookies cookie-name] bid))
                  (-> event-response
-                     (rsp/set-cookie cookie-name bid {:secure (not (local-request? req))
+                     (rsp/set-cookie cookie-name bid {:secure (not (req/local-request? req))
                                                       :http-only true
                                                       :path "/event"
                                                       :max-age one-year
                                                       })))
 
-     ;; valid id was passed: call handlers, return response
+     ;; valid id was passed: call handlers
      (and (valid? bid) (exists? conn bid)) (do (handle-event req)
                                                event-response)
 
-     ;; invalid id: log an error and ignore it; return response
+     ;; invalid id: log an error and ignore it
      :else (do (log/error "Invalid browser id:" bid)
                event-response))))
 

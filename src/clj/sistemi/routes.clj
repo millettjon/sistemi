@@ -44,14 +44,14 @@
 
      (wrap-session            ; reads/writes session data from/to session store
       {:cookie-name "session-id"
-       :cookie-attrs {:secure true
+       :cookie-attrs {;; :secure true ;; TODO: figure out how to make this work with development mode
                       :http-only true}})
 
      ;;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
 
      ;; manages browser-id cookie used for javascript event tracking
      (e/wrap-event "event" conn)
-     ;; spy
+     spy
 
      wrap-file-info
      ;; TODO: make an easier way to set the charset
@@ -87,4 +87,4 @@
 
 ;; Run this to reload the routes.
 #_ (do (in-ns 'sistemi.core)
-       (def routes (build-routes)))
+       (def routes (sistemi.routes/build-routes)))
