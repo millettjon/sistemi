@@ -16,6 +16,5 @@
  :feedback {:email "info@sistemimoderni.com"}
 
  ;; Datomic transactor uri
- ;; :datomic-uri "datomic:free://localhost:4334"
  :datomic-uri "datomic:dev://localhost:4334"
  }
