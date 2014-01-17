@@ -58,7 +58,6 @@
 
                  ;; payment
                  [clojurewerkz/money "1.4.0"]
-                 [com.braintreepayments.gateway/braintree-java "2.25.1"]
 
                  ;; validation
                  [bouncer "0.3.0-alpha1"]
