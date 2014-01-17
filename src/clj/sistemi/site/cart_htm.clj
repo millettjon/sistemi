@@ -100,6 +100,7 @@
       (for [{:keys [type id quantity] :as item} (sort #(compare (:id %2) (:id %1)) items)]
         [:tr.item
          [:td
+          [:div 
           ;; product name
           [:span {:style "font-size: 16px; color: white;"} (tr/translate "/product" type :name)]
 
@@ -120,13 +121,17 @@
           ;; delete button
           [:form {:method "post" :action (tr/localize "/cart/delete") :style "display: inline;"}
            (f/hidden (select-keys item [:id]))
-           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :delete) ]]
+           [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :delete) ]]]
+
+          ;; placeholder for product image
+          [:div {:style {:width "64px" :height "64px" :background-color "#FF3" :float "left" :margin "8px 10px 0px 0px"}}]
 
           ;; product specs
           ;; ? macro with-type?
           ;; loop through parameters
           ;; translate labels and values
           [:table
+
            (for [param (type fmt/parameter-orders)]
              (format-param item param))]
 
