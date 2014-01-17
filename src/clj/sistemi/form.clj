@@ -44,3 +44,33 @@
   "List of params for all possible types of cart-items."
   (reduce (fn [m [k v]] (assoc m k (merge cart-item v)))
           {} items))
+
+(def order-contact
+  "Fields on the order/contact page."
+  {:first-name {:type :string :max 50}
+   :last-name {:type :string :max 50}
+   :email {:type :string :max 100}
+   :phone {:type :string :max 20}
+   :address1 {:type :string :max 100}
+   :address2 {:type :string :max 100}
+   :city {:type :string :max 50}
+   :region {:type :string :max 50}
+   :code {:type :string :max 20}
+   :country {:type :string :max 5}
+   })
+
+(def order-payment
+  "Fields on the order/payment page."
+  {:first-name {:type :string :max 50}
+   :last-name {:type :string :max 50}
+   :cc-number {:type :string :max 20}
+   :cc-month {:type :string :max 2}
+   :cc-year {:type :string :max 4}
+   :cc-cvc {:type :string :max 3}
+   :address1 {:type :string :max 100}
+   :address2 {:type :string :max 100}
+   :city {:type :string :max 50}
+   :region {:type :string :max 50}
+   :code {:type :string :max 20}
+   :country {:type :string :max 5}
+   })

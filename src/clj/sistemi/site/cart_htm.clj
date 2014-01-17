@@ -10,7 +10,8 @@
             [clojure.tools.logging :as log]
             [sistemi.order :as order])
   (:use [ring.util.response :only (response)]
-        [sistemi layout]))
+        [sistemi layout]
+        [www.wizard :only [wizard]]))
 
 (def names
   {})
@@ -18,6 +19,7 @@
 (def strings
   {:en {:title "SistemiModerni: Cart"
         :cart_contents "Your shopping cart contains the following items."
+        :total "Total"
         :subtotal "Subtotal"
         :item "Item"
         :quantity "Quantity"
@@ -76,7 +78,8 @@
 
 (defn body-empty
   []
-  [:div.text_content "Your shopping cart is empty."])
+  [:div.text_content
+      "Your shopping cart is empty."])
 
 (defn body
   [cart]
@@ -146,7 +149,12 @@
            [:span.white {:style "font-size: 16px;" } (-> item :price :total fmt/eur-short)]]]])
 
       [:tr.total
-       [:td {:style "padding-top: 10px;"} (tr/translate :subtotal)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
+       [:td {:style "padding-top: 10px;"} (tr/translate :total)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
+
+
+     [:div {:style {:text-align "right" :margin-top "20px" :margin-bottom "20px"}}
+      [:a {:href "order/contact.htm"}
+       [:button.btn.btn-inverse {:type "submit" :tabindex 1} "Checkout"]]]
 
      [:script {:type "text/javascript"}
       "jQuery(document).ready(function() {"
@@ -169,47 +177,6 @@
       "});"]
 
      ]))
-
-;; ajax quanity update
-;; [item-id, quantity] -> cart/quantity -> returns [updated subtotal for cart]
-
-;; TODO: thumbnail rendered image
-;; TODO: delivery date (est)
-;; ajax operations require client side calculatons
-;; - quantity update -> recalculate subtotal
-;; - delete -> remove section of display
-;;          -> recalculate subtotal
-
-;; actions edit, delete, increment/decrement/edit quantity
-;;   ? does there need to be an update button for editing quantity?
-;; calculate: price
-;;   ? how is the price calculated for each line item?
-;;     - fn saved in item meta-data? price-fn model.bookcase/price or model.shelf/price
-;;       ? use lookup table?
-;;       ? use multi-method with dispatch on :type? (how does that scale?)
-;;
-;; ? how to build action links?
-;;   - edit item-id     ? how to get edit page link? (/shelf.htm, /bookcase.htm)
-;;                        ? save edit url in cart as meta-data?
-;;                          ? what if they change languages?
-;;                            store canonical url and translate
-;;                          ? use lookup table?
-;;                        ? how to build query string?
-;;                          - include all design parameters
-;;                          - include item-id
-;;                            - if item id is present, design page should "update" instead of "add" to cart.
-;;   - delete item-id   /cart/delete?id=0
-;;   - update quantity  6 +- [update]
-;;     - find +/- icons
-;;     - make a quantity control
-;;
-;; - A lookup table seems better than storing price fn and design url in cart.
-;;   ? how well do multi-methods scale?
-;;
-;; TODO totals
-;; TODO delivery date
-;; TODO shipping cost
-;; TODO VAT
 
 (defn handle
   [req]

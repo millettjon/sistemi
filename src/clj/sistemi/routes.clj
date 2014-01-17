@@ -44,7 +44,7 @@
 
      (wrap-session            ; reads/writes session data from/to session store
       {:cookie-name "session-id"
-       :cookie-attrs {;; :secure true ;; TODO: figure out how to make this work with development mode
+       :cookie-attrs {:secure true
                       :http-only true}})
 
      ;;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
