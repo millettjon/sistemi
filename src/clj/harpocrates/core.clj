@@ -1,5 +1,6 @@
 (ns harpocrates.core
   "Harpocrates the god of silence."
+  (:require [clojure.edn :as edn])
   (:use clojure.walk
         [clojure.java.shell :only [sh]]
         [util.pojometa :only [meta* with-meta*]]))
@@ -27,7 +28,7 @@
   "Decrypts a file using gpg and returns the result.
    The passphrase can be supplied via the :passphrase option and will be passed to gpg on stdin.
    The gpg home directory can be overriden by passing the :home option.
-   The decrypted text is passed to read-string. Classify is then called to tag leaf literals as secret."
+   The decrypted text is read as edn. Classify is then called to tag leaf literals as secret."
   [file & opts]
   (let [opts (merge {:passphrase nil, :home nil}
                     (apply hash-map opts))
@@ -42,5 +43,5 @@
               (and passphrase [:in passphrase])]
         result (apply sh (filter identity (flatten args)))]
     (if (= 0 (:exit result))
-      (-> result :out read-string eval classify)
+      (-> result :out edn/read-string classify)
       (throw (RuntimeException. ^String (:err result))))))

@@ -1,6 +1,7 @@
 (ns app.config.core
   "Global configuration map and related helper functions."
   (:require [clojure.string :as str]
+            [clojure.edn :as edn]
             [util.path :as path]
             [util.string :as str2]
             [harpocrates.core :as gpg]
@@ -18,7 +19,7 @@
   "Reads a string and returns a clojure data structure. If the read fails, the unmodified string
   is returned."
   [s]
-  (safely (eval (read-string s)) s))
+  (safely (edn/read-string s) s))
 
 (defn- normalize-key
   "Normalizes a key by replacing underscore with dash and converting to lowercase and keywordizing.
@@ -46,13 +47,13 @@ Useful for converting environment variable names to clojure map keys."
 (defn file-map
   "Returns a configuration file as a map."
   [path]
-  (eval (read-string (slurp path))))
+  (edn/read-string (slurp path)))
 
 (defn dir-map
   "Reads and deeply merges all configuration files in a directory. Configuration files are expected to contain
-   a single clojure map. If a file default.clj exists, it is read and merged directly into the result map.
-   Files ending in .clj (e.g., foo.clj) are read and merged into the result map under the key of their basename.
-   Files ending in .clj.gpg are first decrypted and then read. Gpg options can be passed in opts under the gpg key."
+   a single clojure map. If a file default.edn exists, it is read and merged directly into the result map.
+   Files ending in .edn (e.g., foo.edn) are read and merged into the result map under the key of their basename.
+   Files ending in .edn.gpg are first decrypted and then read. Gpg options can be passed in opts under the gpg key."
   [dir & opts]
   (let [opts (merge {:gpg nil} (apply hash-map opts))]
     (reduce (fn [m f]
@@ -60,8 +61,8 @@ Useful for converting environment variable names to clojure map keys."
                     basename (path/shortname f)
                     decrypt #(apply gpg/decrypt % (flatten (into [] (:gpg opts))))
                     m2 (cond
-                        (str2/ends-with? name ".clj") (file-map f)
-                        (str2/ends-with? name ".clj.gpg") (decrypt f))]
+                        (str2/ends-with? name ".edn") (file-map f)
+                        (str2/ends-with? name ".edn.gpg") (decrypt f))]
                 (cond
                  (nil? m2) m
                  (= basename "default") (merge-configs m m2)

@@ -8,7 +8,7 @@
 
 ;; TODO: lookup the location of this file...
 (deftest file-map-test
-  (is (= (file-map "test/clj/app/config/test/config.clj") {:foo "bar"})))
+  (is (= (file-map "test/clj/app/config/test/config.edn") {:foo "bar"})))
 
 ;; (defn foo
 ;;   []
