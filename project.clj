@@ -104,7 +104,8 @@
             [lein-cloverage "1.0.2"]
             [slamhound "RELEASE"]]
 
-  :aliases {"marg" ["marg" "--dir" "var/doc"]}
+  :aliases { "init-db" ^{:doc "Initialize the datomic schema."} ["run" "-m" "sistemi.cli/init-db"]
+             "marg" ["marg" "--dir" "var/doc"]}
 
   :cljsbuild {:crossovers []
               :crossover-path "var/target/crossovers"
