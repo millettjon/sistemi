@@ -23,6 +23,13 @@ fi
 source "$(dirname $BASH_SOURCE)/../opt/bootstrap/bootstrap.bash"
 
 # ---------------------------------------------------
+# Determine the active profile. If not set, set it to development.
+# ---------------------------------------------------
+[[ -z "$(get_profile)" ]] && set_profile development
+assert_profile_in development staging production
+export PROFILE=$(get_profile)
+
+# ---------------------------------------------------
 # Java
 # ---------------------------------------------------
 ensure_package openjdk-7-jdk
@@ -51,16 +58,15 @@ done
 # Ruby gems
 # ---------------------------------------------------
 ensure_gem foreman
+ensure_gem edn
 
 # ---------------------------------------------------
 # Nginx
 # ---------------------------------------------------
 ensure_package nginx
 ensure_link etc/nginx/conf.d/base.conf /etc/nginx/conf.d/base.conf
-ensure_link etc/nginx/www.sistemimoderni.com.conf /etc/nginx/sites-available/www.sistemimoderni.com.conf
-ensure_link etc/nginx/www.sistemimoderni.com.conf /etc/nginx/sites-enabled/www.sistemimoderni.com.conf
-ensure_link etc/nginx/www.sm1.in.conf /etc/nginx/sites-available/www.sm1.in.conf
-ensure_link etc/nginx/www.sm1.in.conf /etc/nginx/sites-enabled/www.sm1.in.conf
+erb etc/nginx/site.conf.erb | sudo tee /etc/nginx/sites-available/sistemi-$PROFILE.conf > /dev/null
+sudo ln -sf /etc/nginx/sites-available/sistemi-$PROFILE.conf /etc/nginx/sites-enabled
 sudo service nginx restart
 
 # ---------------------------------------------------

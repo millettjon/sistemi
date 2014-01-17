@@ -1,4 +1,7 @@
-{;; Start an nrepl server.
+{:host "localhost"
+ :domain "sm1.in"
+
+ ;; Start an nrepl server.
  :nrepl true
  
  ;; Launch the website in a browser.
