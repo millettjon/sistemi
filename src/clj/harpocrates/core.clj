@@ -29,12 +29,9 @@
    The passphrase can be supplied via the :passphrase option and will be passed to gpg on stdin.
    The gpg home directory can be overriden by passing the :home option.
    The decrypted text is read as edn. Classify is then called to tag leaf literals as secret."
-  [file & opts]
-  (let [opts (merge {:passphrase nil, :home nil}
-                    (apply hash-map opts))
-        passphrase (:passphrase opts)
-        args ["gpg"
-              (if-let [home (:home opts)] ["--home" home])
+  [file {:keys [passphrase home]}]
+  (let [args ["gpg"
+              (if home ["--home" home])
               "--decrypt"
               (if passphrase "--passphrase-fd=0" "--use-agent")
               "--quiet"

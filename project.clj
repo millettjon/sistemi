@@ -27,6 +27,8 @@
                  [org.slf4j/slf4j-log4j12 "1.7.5"]
                  [log4j "1.2.17"]
 
+                 [com.taoensso/timbre "3.0.0-RC4"]
+
                  ;; ring core
                  [ring/ring-core "1.2.1" :exclusions [org.clojure/tools.reader]]
                  [ring/ring-devel "1.2.1"]
@@ -103,8 +105,9 @@
             [lein-cloverage "1.0.2"]
             [slamhound "RELEASE"]]
 
-  :aliases { "init-db" ^{:doc "Initialize the datomic schema."} ["run" "-m" "sistemi.cli/init-db"]
-             "marg" ["marg" "--dir" "var/doc"]}
+  :aliases {"start" ["trampoline" "run" "-m" "sistemi.core"]
+            "init-db" ^{:doc "Initialize the datomic schema."} ["run" "-m" "sistemi.cli/init-db"]
+            "marg" ["marg" "--dir" "var/doc"]}
 
   :cljsbuild {:crossovers []
               :crossover-path "var/target/crossovers"

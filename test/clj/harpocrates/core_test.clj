@@ -22,7 +22,7 @@
 (deftest decrypt-test
   (let [dir "test/clj/harpocrates/test/"
         m (-> (str dir "credentials.edn.gpg")
-              (decrypt :passphrase "xyzzy" :home (str dir ".gnupg")))]
+              (decrypt {:passphrase "xyzzy" :home (str dir ".gnupg")}))]
     (is (= m {:user "adventurer" :password "plover"}))
     (is (-> m :password secret?))
     (is (= "-redacted-" (-> m redact :password)))

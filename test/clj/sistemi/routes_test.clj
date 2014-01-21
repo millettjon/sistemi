@@ -1,6 +1,5 @@
 (ns sistemi.routes-test
-  (:require [app.run-level]
-            [app.config]
+  (:require [app.config]
             [sistemi.config]
             [sistemi.datomic])
   (:use clojure.test
@@ -14,7 +13,6 @@
               locales #{"en" "es"}]
 
     ;; TODO: Git rid of this and pass in a configuration object.
-    (app.run-level/init-run-level!)
     (sistemi.config/init!)
 
     (let [routes (build-routes)]

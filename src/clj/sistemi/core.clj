@@ -13,13 +13,12 @@
             frinj.jvm
             [sistemi.registry :as registry]
             [sistemi.routes :as routes]
+            [app.config :as cf]
             git)
   (:use [ring.adapter.jetty :only (run-jetty)]
         clj-logging-config.log4j
         clojure.java.browse
         clojure.contrib.strint
-        (app config run-level)
-        [app.config.core :as cfg]
         locale.core))
 
 (defn -main
@@ -47,24 +46,12 @@
   (log/info (<< "git branch ~{(git/branch)}."))
   (log/info (<< "git sha ~{(git/sha)}."))
 
-  ;; ===== RUN LEVEL =====
-  (init-run-level!)
-  (log/info (<< "Entering run level '~{run-level}'."))
-  (log/info (<< "Clojure version: '~(clojure-version)'"))
-  ;; (log/info (str "Classpath: " (seq (.getURLs (java.lang.ClassLoader/getSystemClassLoader)))))
-  ;; java.version
-  ;; user.dir
-  ;; java.vm.version
-  ;; java.vm.name
-  ;; java.runtime.version
-  ;; java.vendor
-
   ;; ===== CONFIGURATION =====
   (sistemi.config/init!)
-  (log/info (<< "Using configuration ~{(harpocrates.core/redact config)}."))
+  (log/info (<< "Using configuration ~{(harpocrates.core/redact cf/config)}."))
 
   ;; ===== LOCALIZATION =====
-  (let [m (conf :internationalization)]
+  (let [m (cf/conf :internationalization)]
     (set-locales! (m :locales))
     (set-default-locale! (m :default-locale))
     (set-default-territories! (m :default-territories)))
@@ -89,15 +76,15 @@
   (def routes (routes/build-routes))
 
   ;; Start nrepl if enabled.
-  (when (conf :nrepl)
+  (when (cf/conf :nrepl)
     (log/info "Starting nrepl server on 127.0.0.1:7888.")
     (require 'clojure.tools.nrepl.server)
     (eval '(clojure.tools.nrepl.server/start-server :port 7888 :bind "127.0.0.1")))
 
   ;; Launch a browser if configured.
-  (when (conf :launch-browser)
+  (when (cf/conf :launch-browser)
     (browse-url  (<< "file://~(System/getProperty \"user.dir\")/var/doc/uberdoc.html"))
-    (browse-url  (<< "http://localhost:~{(conf :port)}")))
+    (browse-url  (<< "http://localhost:~{(cf/conf :port)}")))
 
   ;; Start jetty.
-  (run-jetty #'routes (select-keys cfg/config [:port :host])))
+  (run-jetty #'routes (select-keys cf/config [:port :host])))

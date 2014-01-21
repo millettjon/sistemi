@@ -1,5 +1,7 @@
 (ns sistemi.datomic
-  (:require [datomic.api :as d])
+  (:require [app.config :as cf]
+            [sistemi.config :as scf]
+            [datomic.api :as d])
   (:refer-clojure :exclude [partition]))
 
 (def partition
@@ -20,10 +22,9 @@
 (defn get-uri
   "Builds a dataomic uri based on the current configuration and run level."
   []
-  (str (app.config/conf :datomic-uri)
+  (str (cf/conf :datomic-uri)
        #_ "://" "/"
-       (name app.run-level/run-level)))
-#_ app.run-level/run-level
+       (-> (scf/active-profile) name)))
 #_ (app.config/conf :datomic-uri)
 #_ (get-uri)
 
