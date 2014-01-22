@@ -2,6 +2,7 @@
   (:import [java.io ByteArrayInputStream])
   (:require [shipping.ups.response :as rsp]
             [shipping.ups.util :as u]
+            [shipping.ups.tools :as t]
             [clojure.data.xml :as x]
             [clojure.xml :as xm]
             [clojure.zip :as zip])
@@ -9,6 +10,30 @@
         [clojure.data.zip.xml :only (text xml->)]))
 
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+
+(def error-response-1
+  (u/strip-newlines
+  "<ShipmentConfirmResponse>
+     <Response>
+       <ResponseStatusCode>0</ResponseStatusCode>
+       <ResponseStatusDescription>Failure</ResponseStatusDescription>
+       <Error>
+         <ErrorSeverity>Hard</ErrorSeverity>
+         <ErrorCode>10001</ErrorCode>
+         <ErrorDescription>The XML document is not well formed</ErrorDescription>
+       </Error>
+    </Response>
+  </ShipmentConfirmResponse>") )
+
+(deftest test-get-shipment-confirm-response_error
+  (let [raw (str xml-header error-response-1)
+        input (xm/parse (t/text-in-bytestream raw))
+        data (zip/xml-zip input)
+        error (rsp/failure-info data)]
+
+    (is (not (nil? error)))
+    (is (= "The XML document is not well formed" (error :error_msg)))
+    ) )
 
 (def sample-xml
   (u/strip-newlines
@@ -146,7 +171,7 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
 
 (deftest test-get-response-packages
   (let [sample (str xml-header shipment-accept-response-xml)
-        input (xm/parse (rsp/text-in-bytestream sample))
+        input (xm/parse (t/text-in-bytestream sample))
         data (zip/xml-zip input)
         result (rsp/get-response-packages data)
         one (second result)

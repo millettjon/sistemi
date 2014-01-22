@@ -11,8 +11,6 @@
 
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 
-
-
 (def shipment-confirm-data {:txn_reference ct/txn-reference-data
                             :shipper ct/shipper-data
                             :ship_to ct/ship-to-data
