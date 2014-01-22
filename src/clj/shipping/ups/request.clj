@@ -6,7 +6,6 @@
 ;; Use (zipmap) or equivalent to combine keys with order data and then pass
 ;; into functions below to build XML request/response
 
-
 (def q "'")
 
 (defn sq
