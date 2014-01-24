@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Starts the application using the bundled leiningen.
+$(dirname $(readlink -f $BASH_SOURCE))/lein start
