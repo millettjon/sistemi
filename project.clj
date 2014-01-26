@@ -48,9 +48,6 @@
                  ;; email
                  [com.draines/postal "1.11.1"]
 
-                 ;; configuration
-                 [fidjet "0.0.2"]
-
                  ;; user agent detection
                  [bitwalker/UserAgentUtils "1.11"]
 
