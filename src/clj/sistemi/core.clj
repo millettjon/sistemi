@@ -7,7 +7,8 @@
   "clojure.java.classpath" "clojure.contrib" "ring" "clj-logging-config" "clj-stacktrace" "clojure.tools.logging" "clojure.tools.namespace" "ns-tracker.core" "clj-http" "cheshire.generate" "frinj" "postal")
 
 (ns sistemi.core
-  (:require [clojure.tools.logging :as log]
+  (:require [sistemi.logging]
+            [taoensso.timbre :as log]
             [www.id :as id]
             sistemi.config
             frinj.jvm
@@ -16,7 +17,6 @@
             [app.config :as cf]
             git)
   (:use [ring.adapter.jetty :only (run-jetty)]
-        clj-logging-config.log4j
         clojure.java.browse
         clojure.contrib.strint
         locale.core))
@@ -27,28 +27,17 @@
    out of the top level."
   []
 
-  ;; ===== LOGGING =====
-  ;; See: https://github.com/malcolmsparks/clj-logging-config
-  ;; %p   priority
-  ;; %X   MDC
-  ;; %c   logger name (class)
-  ;; %m   message
-  ;; %t   thread
-  (set-loggers!
-   :root     {:level :info :pattern "%p|%X{id}|%c|%m%n"}
-   "sistemi" {:level :debug}
-   ;; "www" {:level :debug}
-   )
-
-  ;; ===== BOOT ID =====
+  ;; Generate a semi-unique boot id.
   (id/init!)
-  (log/info (<< "Using boot-id '~{www.id/boot-id}'."))
-  (log/info (<< "git branch ~{(git/branch)}."))
-  (log/info (<< "git sha ~{(git/sha)}."))
+
+  ;; Initialize loggers.
+  (sistemi.logging/init! {:boot-id www.id/boot-id})
+
+  (log/info {:event :boot/git :git-branch (git/branch):git-sha (git/sha)})
 
   ;; ===== CONFIGURATION =====
   (sistemi.config/init!)
-  (log/info (<< "Using configuration ~{(harpocrates.core/redact cf/config)}."))
+  (taoensso.timbre/info {:event :boot/config :config (harpocrates.core/redact cf/config)})
 
   ;; ===== LOCALIZATION =====
   (let [m (cf/conf :internationalization)]
