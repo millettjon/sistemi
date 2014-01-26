@@ -1,5 +1,5 @@
 (ns www.middleware
-  (:require [clojure.tools.logging :as log]
+  (:require [taoensso.timbre :as log]
             [clojure.string :as str]
             [ring.util.response :as ring]
             [www.id :as id]
@@ -13,9 +13,8 @@
   "Generates a unique request id and saves it in the logging context."
   [app]
   (fn [req]
-    (with-logging-context {:id (id/next!)}
-      (log/debug "Created new request id.")
-      (app req))))
+    (let [id (id/next!)]
+      (app (assoc req :request-id id)))))
 
 (defn wrap-ping
   "Checks for the url \"/ping\" and returns a simple \"pong\".
@@ -54,13 +53,15 @@
 
 (defnk spy
   "Spies on a request logging it."
-  [app :prefix "spy" :req-keys [] :resp-keys nil]
+  [app :label "_" :req-keys [] :resp-keys nil]
   (fn [req]
     (if req-keys
-      (log/info (str prefix ".request: " (if (empty? req-keys) req (select-keys req req-keys)))))
+      (log/info (assoc (if (empty? req-keys) req (select-keys req req-keys))
+                  :event (keyword "spy.request" label))))
     (let [response (app req)]
       (if resp-keys
-        (log/info (str prefix ".response: " (if (empty? resp-keys) response (select-keys response resp-keys)))))
+        (log/info (assoc (if (empty? resp-keys) response (select-keys response resp-keys))
+                    :event (keyword "spy.response" label))))
       response)))
 
 (defn wrap-request-log

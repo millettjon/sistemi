@@ -22,11 +22,11 @@
                  [slingshot "0.10.3"]
 
                  ;; logging
+                 [org.clojure/tools.logging "0.2.6"]
                  [clj-logging-config "1.9.10"]
                  [org.slf4j/slf4j-api "1.7.5"]
                  [org.slf4j/slf4j-log4j12 "1.7.5"]
                  [log4j "1.2.17"]
-
                  [com.taoensso/timbre "3.0.0-RC4"]
 
                  ;; ring core
