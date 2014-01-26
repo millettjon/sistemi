@@ -123,8 +123,9 @@
            (f/hidden (select-keys item [:id]))
            [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1 :style "margin-left: 10px;"} (tr/translate :delete) ]]]
 
-          ;; placeholder for product image
-          [:div {:style {:width "64px" :height "64px" :background-color "#FF3" :float "left" :margin "8px 10px 0px 0px"}}]
+          ;; product image
+          [:div {:style {:width "64px" :height "64px" :float "left" :margin "8px 10px 0px 0px"}}
+           [:img {:src (str "/img/products/" (name type) "-small.png")}]]
 
           ;; product specs
           ;; ? macro with-type?
