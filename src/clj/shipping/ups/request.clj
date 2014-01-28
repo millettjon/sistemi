@@ -16,6 +16,14 @@
 
 (def shipping-request-keys [:txn_reference :shipper :ship_to :ship_service :payment :packages :label])
 
+;;
+;; <?xml version="1.0" ?>
+;; <AccessRequest xml:lang='en-US'>
+;;   <AccessLicenseNumber>YOURACCESSLICENSENUMBER</AccessLicenseNumber>
+;;   <UserId>YOURUSERID</UserId>
+;;   <Password>YOURPASSWORD</Password>
+;; </AccessRequest>
+;; <?xml version="1.0" ?>
 ;; <Request>
 ;;   <TransactionReference>
 ;;     <CustomerContext>guidlikesubstance</CustomerContext>
