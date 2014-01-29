@@ -79,7 +79,7 @@
   "Shipping from a specific Sistemi fabricator."
   [shipper_data]
   [:Shipper
-    [:Name (shipper_data :name)]
+    [:Name (shipper_data :user_id)]
     [:AttentionName (shipper_data :attention_name)]
     [:PhoneNumber (shipper_data :phone)]
     [:ShipperNumber (shipper_data :shipper_number)]

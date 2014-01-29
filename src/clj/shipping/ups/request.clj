@@ -33,13 +33,18 @@
 ;;   <RequestOption>nonvalidate</RequestOption>
 ;; </Request>
 (defn shipment-confirm-request
-  "Part 1 of a 2 part shipping order."
+  "Part 1 of a 2 part shipping order. General notes:
+  RequestOption
+    'validate' - street level validation only
+    'nonvalidate' - postal code, state validation (no street)
+    '' - defaults to 'validate' option
+    UPS says full address validation is not performed here ($penalty for address correction)"
   [request_data]
   [:ShipmentConfirmRequest
     [:Request
-      (c/transaction-reference-info (request_data :txn_reference)) ]
+      (c/transaction-reference-info (request_data :txn_reference))
     [:RequestAction "ShipConfirm"]
-    [:RequestOption "nonvalidate"]
+    [:RequestOption "nonvalidate"] ]
     [:Shipment
       (c/sistemi-shipper-info (request_data :shipper))
       (c/ship-to-info (request_data :ship_to))
