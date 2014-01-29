@@ -6,6 +6,30 @@
 
 (def xml x/sexp-as-element)
 
+;; Known error cases
+; 1) Setting StateRegionCode for Europe
+; 2) Invalid credit card number (use sample below)
+; 3) Invalid RequestOption
+
+;; Sample working request data required
+(def access-request-data {:lang_locale "en-US" :license_number "Sistemi123" :user_id "Sistemi" :password "foo"})
+(def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
+(def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102016"})
+(def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
+(def service-data {:code "42" :description "The answer to life, etc"})
+(def reference-number-data {:code "02" :value "1234567"})
+
+(def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province ""
+                   :country_code "FR" :postal "12345"})
+
+;;
+(def shipper-data {:user_id "Sistemi" :attention_name "SistemiShipping" :phone "000111222"
+                   :shipper_number "123456" :address address-data})
+
+(def ship-to-data {:company "Sistemi Fans" :attention_name "Big Fan" :phone "123456777"
+                   :address address-data})
+
+
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 
 (def access-request-xml
@@ -16,7 +40,6 @@
 <Password>foo</Password>
 </AccessRequest>"))
 
-(def access-request-data {:lang_locale "en-US" :license_number "Sistemi123" :user_id "Sistemi" :password "foo"})
 
 (deftest test-access-request-info
   (let [data1 (c/access-request-info access-request-data)]
@@ -31,26 +54,24 @@
 <XpciVersion>1.0001</XpciVersion>
 </TransactionReference>"))
 
-(def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
 
 (deftest test-transaction-reference-info
   (let [data1 (c/transaction-reference-info txn-reference-data)]
     (is (= (str xml-header txn-reference-xml) (x/emit-str (xml data1)) ))
     ) )
 
+
 (def address-xml
   (u/strip-newlines
 "<Address>
 <AddressLine1>123 Sistemi Drive</AddressLine1>
 <City>St. Martin D'Uriage</City>
-<StateProvinceCode>Grenoble</StateProvinceCode>
+<StateProvinceCode></StateProvinceCode>
 <CountryCode>FR</CountryCode>
 <PostalCode>12345</PostalCode>
 <ResidentialAddress></ResidentialAddress>
 </Address>") )
 
-(def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province "Grenoble"
-                   :country_code "FR" :postal "12345"})
 
 (deftest test-address-info
   (let [data1 (c/address-info address-data)]
@@ -60,15 +81,13 @@
 (def shipper-xml
   (u/strip-newlines
 "<Shipper>
-<Name>Sistemi Client</Name>
-<AttentionName>Client</AttentionName>
+<Name>Sistemi</Name>
+<AttentionName>SistemiShipping</AttentionName>
 <PhoneNumber>000111222</PhoneNumber>
 <ShipperNumber>123456</ShipperNumber>"
 address-xml
 "</Shipper>") )
 
-(def shipper-data {:name "Sistemi Client" :attention_name "Client" :phone "000111222"
-                   :shipper_number "123456" :address address-data})
 
 (deftest test-shipper-info
   (let [data1 (c/sistemi-shipper-info shipper-data)]
@@ -84,9 +103,6 @@ address-xml
 address-xml
 "</ShipTo>") )
 
-(def ship-to-data {:company "Sistemi Fans" :attention_name "Big Fan" :phone "123456777"
-                   :address address-data})
-
 (deftest test-ship-to-info
   (let [data1 (c/ship-to-info ship-to-data)]
     (is (= (str xml-header ship-to-xml) (x/emit-str (xml data1)) ))
@@ -99,7 +115,6 @@ address-xml
 <Description>The answer to life, etc</Description>
 </Service>") )
 
-(def service-data {:code "42" :description "The answer to life, etc"})
 
 (deftest test-shipping-service-info
   (let [data1 (c/shipping-service-info service-data)]
@@ -112,14 +127,13 @@ address-xml
 <Prepaid>
 <BillShipper>
 <CreditCard><Type>06</Type>
-<Number>1234123412341234</Number>
+<Number>4111111111111111</Number>
 <ExpirationDate>102016</ExpirationDate>
 </CreditCard>
 </BillShipper>
 </Prepaid>
 </PaymentInformation>"))
 
-(def payment-data {:type "06" :card_number "1234123412341234" :expiration_date "102016"})
 
 (deftest test-payment-info
   (let [data1 (c/payement-info payment-data)]
@@ -132,8 +146,6 @@ address-xml
 <Code>02</Code>
 <Value>1234567</Value>
 </ReferenceNumber>") )
-
-(def reference-number-data {:code "02" :value "1234567"})
 
 (deftest test-reference-number-info
   (let [data1 (c/reference-number-info reference-number-data)]
@@ -151,8 +163,6 @@ address-xml
 <Code>GIF</Code>
 </LabelImageFormat>
 </LabelSpecification>"))
-
-(def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
 
 (deftest test-label-spec-info
   (let [data1 (c/label-spec-info label-spec-data)]

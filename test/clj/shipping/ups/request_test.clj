@@ -22,18 +22,18 @@
 (def shipment-confirm-xml
   (u/strip-newlines
 "<ShipmentConfirmRequest><Request><TransactionReference><CustomerContext>SistemiContextID-XX1122</CustomerContext>
-<XpciVersion>1.0001</XpciVersion></TransactionReference></Request><RequestAction>ShipConfirm</RequestAction>
-<RequestOption>nonvalidate</RequestOption><Shipment><Shipper><Name>Sistemi Client</Name>
-<AttentionName>Client</AttentionName><PhoneNumber>000111222</PhoneNumber><ShipperNumber>123456</ShipperNumber>
+<XpciVersion>1.0001</XpciVersion></TransactionReference><RequestAction>ShipConfirm</RequestAction>
+<RequestOption>nonvalidate</RequestOption></Request><Shipment><Shipper><Name>Sistemi</Name>
+<AttentionName>SistemiShipping</AttentionName><PhoneNumber>000111222</PhoneNumber><ShipperNumber>123456</ShipperNumber>
 <Address><AddressLine1>123 Sistemi Drive</AddressLine1><City>St. Martin D'Uriage</City>
-<StateProvinceCode>Grenoble</StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
+<StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
 <ResidentialAddress></ResidentialAddress></Address></Shipper><ShipTo><CompanyName>Sistemi Fans</CompanyName>
 <AttentionName>Big Fan</AttentionName><PhoneNumber>123456777</PhoneNumber><Address>
 <AddressLine1>123 Sistemi Drive</AddressLine1><City>St. Martin D'Uriage</City>
-<StateProvinceCode>Grenoble</StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
+<StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
 <ResidentialAddress></ResidentialAddress></Address></ShipTo><Service><Code>42</Code>
 <Description>The answer to life, etc</Description></Service><PaymentInformation><Prepaid><BillShipper>
-<CreditCard><Type>06</Type><Number>1234123412341234</Number><ExpirationDate>102016</ExpirationDate></CreditCard>
+<CreditCard><Type>06</Type><Number>4111111111111111</Number><ExpirationDate>102016</ExpirationDate></CreditCard>
 </BillShipper></Prepaid></PaymentInformation><Package><PackagingType><Code>02</Code></PackagingType><Dimensions>
 <UnitOfMeasurement><Code>IN</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
 </Dimensions><PackageWeight><Weight>14.1</Weight></PackageWeight><ReferenceNumber><Code>02</Code>
