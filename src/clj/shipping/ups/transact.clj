@@ -15,6 +15,6 @@
   [raw_xml_data]
   (let [ship_confirm_raw (client/post shipping-confirm {:body raw_xml_data :insecure? true})
         ship_confirm_rsp (rsp/get-shipment-confirm-response (ship_confirm_raw :body))]
-    ship_confirm_raw
-    ;ship_confirm_rsp
+    ;ship_confirm_raw
+    ship_confirm_rsp
     ) )

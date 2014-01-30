@@ -22,8 +22,8 @@
 (def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province ""
                    :country_code "FR" :postal "12345"})
 
-;;
-(def shipper-data {:user_id "Sistemi" :attention_name "SistemiShipping" :phone "000111222"
+;; Fabricator UPS account information
+(def shipper-data {:user_id "Sistemi" :attention_name "SistemiFabricator" :phone "000111222"
                    :shipper_number "123456" :address address-data})
 
 (def ship-to-data {:company "Sistemi Fans" :attention_name "Big Fan" :phone "123456777"
@@ -82,7 +82,7 @@
   (u/strip-newlines
 "<Shipper>
 <Name>Sistemi</Name>
-<AttentionName>SistemiShipping</AttentionName>
+<AttentionName>SistemiFabricator</AttentionName>
 <PhoneNumber>000111222</PhoneNumber>
 <ShipperNumber>123456</ShipperNumber>"
 address-xml

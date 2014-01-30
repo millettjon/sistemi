@@ -46,34 +46,34 @@
 
 (def xml x/sexp-as-element)
 
-(def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102014"})
-
-(defn access-data
+(defn access-data-from-config
   "Pulled from our encrypted config"
   [access_info]
   { :user_id (access_info :user-id)
     :password (access_info :password)
     :license_number (access_info :access-key)
-    :shipper_number (access_info :account-number)
-    :lang_locale "en-US"} )
+    :account_number (access_info :account-number)
+    :lang_locale "en-US"
+    } )
 
 (defn shipper-data
-  "Pulled from Sistemi encrypted config -- our shipping data (why required again?)"
-  [access_info]
-  (cmn/sistemi-shipper-info access_info))
+  [access_data]
+  (let [sd1 ct/shipper-data]
+    (assoc-in sd1 [:shipper_number] (access_data :account_number))
+    ) )
 
 (defn access-request
   "Pulled from encrypted config (reuse for all transactions).
   This returns 'header' information for confirmed access."
   [access_info]
-  (let [access_data  (access-data access_info)]
+  (let [access_data (access-data-from-config access_info)]
     (cmn/access-request-info access_data)
     ) )
 
 (defn shipment-confirm-request
   [shipping_data]
   (let [confirm_request {:txn_reference ct/txn-reference-data
-                         :shipper (shipper-data shipping_data)
+                         :shipper (shipping_data :shipper_data)  ;ct/shipper-data
                          :ship_to ct/ship-to-data
                          :ship_service ct/service-data
                          :payment ct/payment-data
@@ -86,15 +86,19 @@
 (defn shipment-confirm-request-xml
   "Combine AccessRequest and ShipmentConfirmRequest xml"
   [access_info]
-  (let [access (xml (access-request access_info))
-        confirm (xml (shipment-confirm-request access_info))]
+  ; This top section should be called "build-data" and return 'req_data'
+  (let [access_data (access-data-from-config access_info)
+        shipper_data (shipper-data access_data)
+        req_data {:access_data access_data :shipper_data shipper_data}
+        access (xml (access-request access_data))
+        confirm (xml (shipment-confirm-request req_data))]
 
     (str (x/emit-str access) (x/emit-str confirm))
     ) )
 
 (deftest test-shipment-confirm-request
   (sistemi.config/init!)
-  (pr c/config)
+  ;(pr c/config)
   (let [ups_access (c/conf :ups)
         req (shipment-confirm-request-xml ups_access)
         rsp (trans/request-shipping req)]
