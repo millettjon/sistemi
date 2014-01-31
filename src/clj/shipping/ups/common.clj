@@ -1,5 +1,14 @@
 (ns shipping.ups.common)
 
+(defn handle-optional
+  "If a value is null, then return the 'default'."
+  [value default]
+  (if (nil? value)
+    default
+    value
+    ) )
+
+
 ;; Used to sign into UPS as a Customer
 ;;
 ;; <?xml version="1.0" ?>
@@ -8,7 +17,6 @@
 ;;   <UserId>YOURUSERID</UserId>
 ;;   <Password>YOURPASSWORD</Password>
 ;; </AccessRequest>
-;; todo: pull from secure location?
 (def access-request-keys [:lang_locale :license_number :user_id :password])
 
 (defn access-request-info
@@ -32,6 +40,7 @@
     [:CustomerContext (txn_reference_data :customer_context_id)]
     [:XpciVersion (txn_reference_data :xpci_version)] ]
   )
+
 
 ;; <Address>
 ;;   <AddressLine1>201 York Rd</AddressLine1>

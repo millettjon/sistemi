@@ -4,6 +4,15 @@
             [shipping.ups.util :as u])
   (:use [clojure.test]) )
 
+(deftest test-handle-optional
+  (let [one (c/handle-optional "a" "")
+        two (c/handle-optional nil "")]
+    (are [x y] (= x y)
+      "a" one
+      "" two
+      ) ) )
+
+
 (def xml x/sexp-as-element)
 
 ;; Known error cases
@@ -18,6 +27,7 @@
 (def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
 (def service-data {:code "42" :description "The answer to life, etc"})
 (def reference-number-data {:code "02" :value "1234567"})
+(def service-attempt-data {:description "Sistemi Test Data" :return_service_code "5" :documents_only ""})
 
 (def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province ""
                    :country_code "FR" :postal "12345"})
@@ -40,7 +50,6 @@
 <Password>foo</Password>
 </AccessRequest>"))
 
-
 (deftest test-access-request-info
   (let [data1 (c/access-request-info access-request-data)]
     (is (= (str xml-header access-request-xml) (x/emit-str (xml data1)) ))
@@ -53,7 +62,6 @@
 <CustomerContext>SistemiContextID-XX1122</CustomerContext>
 <XpciVersion>1.0001</XpciVersion>
 </TransactionReference>"))
-
 
 (deftest test-transaction-reference-info
   (let [data1 (c/transaction-reference-info txn-reference-data)]
@@ -71,7 +79,6 @@
 <PostalCode>12345</PostalCode>
 <ResidentialAddress></ResidentialAddress>
 </Address>") )
-
 
 (deftest test-address-info
   (let [data1 (c/address-info address-data)]

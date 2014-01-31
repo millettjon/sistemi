@@ -66,14 +66,12 @@
   "Pulled from encrypted config (reuse for all transactions).
   This returns 'header' information for confirmed access."
   [access_info]
-  (let [access_data (access-data-from-config access_info)]
-    (cmn/access-request-info access_data)
-    ) )
+  (cmn/access-request-info access_info) )
 
 (defn shipment-confirm-request
   [shipping_data]
   (let [confirm_request {:txn_reference ct/txn-reference-data
-                         :shipper (shipping_data :shipper_data)  ;ct/shipper-data
+                         :shipper (shipping_data :shipper_data)
                          :ship_to ct/ship-to-data
                          :ship_service ct/service-data
                          :payment ct/payment-data
@@ -89,7 +87,7 @@
   ; This top section should be called "build-data" and return 'req_data'
   (let [access_data (access-data-from-config access_info)
         shipper_data (shipper-data access_data)
-        req_data {:access_data access_data :shipper_data shipper_data}
+        req_data {:access_data access_data :shipper_data shipper_data :service_attempt_code "5"}
         access (xml (access-request access_data))
         confirm (xml (shipment-confirm-request req_data))]
 
