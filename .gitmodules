@@ -10,3 +10,6 @@
 [submodule "opt/m2"]
 	path = opt/m2
 	url = git@git.sm1.in:m2
+[submodule "opt/jquery.payment.git"]
+	path = opt/jquery.payment.git
+	url = https://github.com/stripe/jquery.payment.git

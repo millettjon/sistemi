@@ -1,0 +1,1 @@
+../../../opt/jquery.payment.git/lib/jquery.payment.js
