@@ -4,7 +4,6 @@ Detector = {
 }
 
 jQuery(document).ready(function() {
-  console.log("inside");
   // Check for canvas and webgl.
   if (Detector.webgl) {
     $('#under_construction').css('display', 'inline');
