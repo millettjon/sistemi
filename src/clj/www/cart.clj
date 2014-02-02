@@ -20,6 +20,11 @@
   [req]
   (get-in req [:session :cart]))
 
+(defn get-item
+  "Gets the specified item from the cart in the current request."
+  [req id]
+  (get-in req [:session :cart :items id]))
+
 (defn empty?
   "Returns true if the cart is empty."
   [cart]

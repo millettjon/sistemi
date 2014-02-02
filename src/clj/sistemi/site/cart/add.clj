@@ -5,7 +5,8 @@
             [ring.util.response :as resp]
             [sistemi.form :as sf]
             [www.cart :as cart]
-            [www.form :as f]))
+            [www.form :as f]
+            [www.event :as ev]))
 
 (def names {})
 
@@ -18,7 +19,8 @@
     (f/with-valid-form ((f/default :type) sf/cart-items) (:params req)
       
       ;; Add or update cart item.
-      (log/info (f/values))
-      (-> (tr/localize "/cart.htm")
-          resp/redirect
-          (cart/swap req cart/add (f/values))))))
+      (let [vals (f/values)]
+        (ev/send-event :cart/add vals req)
+        (-> (tr/localize "/cart.htm")
+            resp/redirect
+            (cart/swap req cart/add vals))))))

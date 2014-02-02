@@ -43,7 +43,8 @@
 (defn- handle-event
   [event]
   (log/info event)
-  (if (contains? #{:page/load} (:event event))
+  (if (contains? #{:page/load
+                   :cart/add :cart/update :cart/delete} (:event event))
     (mixpanel/send-event event)))
 
 (defn- valid?
@@ -98,6 +99,21 @@
                       (assoc :url (get-in req [:headers "referer"]) ; assumes called via javascript and referer is containing page
                              :req req))))
   event-response)
+
+(defn- make-event
+  "Returns a base event map with standard fields."
+  [event data req]
+  (merge data
+         {:event event
+          :bid (browser-id req)
+          :url (-> req url/new-URL str)
+          :req req}))
+
+(defn send-event
+  "Sends an event to event handlers."
+  [event data req]
+  (-> (make-event event data req)
+      handle-event))
 
 (defn wrap-event
   "Manages events. For normal requests, inserts the event handler path

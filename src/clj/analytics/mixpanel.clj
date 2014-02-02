@@ -54,6 +54,9 @@
                           :time (now)
                           :ip (get-in req [:headers "x-forwarded-for"])))})
 
+;; only add bid if present
+;; only add ip if req is present
+
 (defn send-event
   "Sends an event to mixpanel."
   [event]
