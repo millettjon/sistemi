@@ -70,6 +70,29 @@
  [html]
  (str "<!doctype html>" html))
 
+;; Note: Social icon colors don't work well in the red footer bar so leaving black and white for now.
+;; Share link generator: http://www.sharelinkgenerator.com/
+;; TODO: insert the url of the current product/page
+;; TODO: insert the image of the current product/page
+(defn social
+  []
+  [:span {:style {:letter-spacing "5px" :color "#bbb"}}
+
+   ;; http://business.pinterest.com/widget-builder/#do_pin_it_button
+   [:a.social {:onclick "window.open(this.href,'Pinterest','width=450,height=300',false); return false;" :href "//www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.sistemimoderni.com&media=https%3A%2F%2Fwww.sistemimoderni.com%2Fgraphics%2Fcontemporary-shelving.jpg&description=Modern%20Design"}
+    [:i.fa.fa-pinterest.fa-lg.social]]
+
+   [:a.social {:onclick "window.open(this.href,'Facebook','width=450,height=300',false); return false;" :href "//www.facebook.com/sharer/sharer.php?s=100&p[url]=https://www.sistemimoderni.com&p[images][0]=&p[title]=modern%20design&p[summary]="}
+    [:i.fa.fa-facebook.fa-lg.social]]
+
+   [:a.social {:onclick "window.open(this.href,'Twitter','width=450,height=300',false); return false;" :href "//twitter.com/share?original_referer=https://www.sistemimoderni.com/&text=Modern Design"}
+    [:i.fa.fa-twitter.fa-lg]]
+
+   ;; //developers.google.com/+/web/share/
+   [:a.social {:onclick "window.open(this.href,'GooglePlus','width=450,height=300',false); return false;" :href "//plus.google.com/share?url=https://www.sistemimoderni.com"} 
+    [:i.fa.fa-google-plus.fa-lg.social]]
+   ])
+
 (defn standard-page
   [head body sidebar]
   (doctype-html5
@@ -84,26 +107,19 @@
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" :rel "stylesheet"}]
 
+      ;; social buttons styles
+      [:style "a.social {color: #bbb;} a.social:hover {color: #fff;}"]
+
       (e/script req/*req*)
 
-      [:script {:src (if (and (conf :offline-enabled) (net/offline?))
-                       "/js/jquery-1.7.1.min.js"
-                       (www.url/match-scheme "http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" req/*req*))
-                :type "text/javascript"}]
+      [:script {:src "/js/jquery-1.7.1.min.js" :type "text/javascript"}]
 
       [:script {:src "/bootstrap/js/bootstrap.js", :type "text/javascript"}]
       [:script {:type "text/javascript" :src "/3d/detector.js"}]
+
       [:link {:href "/fonts/stylesheet.css", :rel "stylesheet", :type "text/css"}]
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
       [:meta {:name "description", :content "Modern shelving in Europe."}]
-
-      ;; Google analytics.
-      (g/analytics)
-      
-      ;; Plus One Button
-      ;; TODO: Internationalize?
-      ;; Note: The popup text is truncated in languages other than english.
-      ;;[:script {:type "text/javascript" :src "https://apis.google.com/js/plusone.js"} #_ "{lang: 'fr'}"]
 
       head]
 
@@ -120,7 +136,7 @@
          [:div
           {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
           [:noscript {:style "color: #F00;"} (tr/translate :javascript_required)]
-          [:span#under_construction {:style "display: none;"} (tr/translate :construction)]
+          #_[:span#under_construction {:style "display: none;"} (tr/translate :construction)]
           [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)
            ;; Recommend firefox/chrome for non firefox/chrome users.
            (case (:browser_group (ua/req->features req/*req*))
@@ -148,18 +164,6 @@
              (interpose [:span.line "|"]))]
 
            [:img {:src "/img/block-logo.gif" :alt "logo" :style "margin-bottom: 7px;"}]]]]
-
-        #_ [:div.span6
-         [:div#shortcuts.greyborder_br {:style "height: 135px"}
-          [:ul {:style "padding-top: 28px;"}
-           [:li 
-            [:a { :href "#"} (tr/translate :header :signup)]]
-           [:li 
-            [:a { :href "#"} (tr/translate :header :contact)]]
-           [:li 
-            [:a { :href (tr/localize "/team.htm")} (tr/translate :header :team)]]
-           [:li 
-            [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
 
         [:td {:width "225"}
          [:div#shortcuts.greyborder_b {:style "height: 135px"}
@@ -201,13 +205,8 @@
 
        ;; ----- RED BAR -----
        [:tr
-        [:td#redbar {:colspan "4"}
-         [:a.first {:href "#"}
-          [:img {:src "/img/facebook.jpg", :border "0" :alt "facebook"}]]
-         [:a { :href "#"}
-          [:img {:src "/img/twitter.jpg", :border "0" :alt "twitter"}]]
-         ;; commenting this out for now for privacy
-         ;; [:g:plusone {:size "small" :annotation "none"}]
+        [:td#redbar {:colspan "4" :style {:padding-left "30px"}}
+         (social)
          ]]
 
        ;; ----- ADDRESS AND COPYRIGHT -----
