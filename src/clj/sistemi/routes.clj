@@ -4,7 +4,7 @@
             [sistemi.datomic :as sd]
             [www.event :as e])
   (:use net.cgrand.moustache
-        (ring.middleware file file-info params keyword-params content-type session)
+        (ring.middleware file file-info params keyword-params content-type session json)
         (ring.middleware stacktrace lint cookies) ; dev items
         www.middleware
         [locale.core :only (default-locale locales)]
@@ -49,9 +49,12 @@
 
      ;;wrap-cookies            ; convert cookies to/from a map; included by wrap-session
 
+     ;; converts json requests into maps (required for event logging)
+     (wrap-json-body {:keywords? true})
+
      ;; manages browser-id cookie used for javascript event tracking
      (e/wrap-event "event" conn)
-     spy
+     ;;spy
 
      wrap-file-info
      ;; TODO: make an easier way to set the charset
@@ -75,7 +78,7 @@
       wrap-render                 ; Force realization of response seq while *req* is in scope.
       ;; (spy :prefix "before wrap-handler")
       wrap-handler                ; Call a handler if one is defined for the uri.
-      (wrap-file "www/raw")       ; Serve static files.
+      (wrap-file "www/raw" {:allow-symlinks? true})    ; Serve static files.
       [&] pass)
 
      ;; Redirect the main home page to a localized version.
@@ -83,7 +86,7 @@
            [&] locale-redirect]
 
      ;; For naked URLs, serve static resources out of the raw root.
-     [&] [(wrap-file "www/raw") [&] make-404])))
+     [&] [(wrap-file "www/raw" {:allow-symlinks? true}) [&] make-404])))
 
 ;; Run this to reload the routes.
 #_ (do (in-ns 'sistemi.core)

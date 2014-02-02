@@ -37,10 +37,12 @@
                  ;; ring handlers and middleware
                  [net.cgrand/moustache "1.1.0"]
                  [ring-persistent-cookies "0.1.0"]
+                 [ring/ring-json "0.2.0"]
 
-                 ;; html
+                 ;; templating
                  [hiccup "1.0.4"]
                  [enlive "1.1.1"]
+                 [selmer "0.5.9"]
 
                  ;; web client
                  [clj-http "0.7.7" :exclusions [org.clojure/tools.reader #_ commons-logging]]
@@ -57,6 +59,7 @@
 
                  ;; payment
                  [clojurewerkz/money "1.4.0"]
+                 [abengoa/clj-stripe "1.0.3"]
 
                  ;; validation
                  [bouncer "0.3.0-alpha1"]
@@ -84,6 +87,10 @@
                  [ordered "1.3.2"]
                  [com.google.guava/guava "15.0"]
                  [org.clojure/tools.namespace "0.2.4"]
+
+                 ;; event driven
+                 [http-kit "2.1.16"]
+                 [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
 
                  ;; Clojurescript
                  ;; Note: Dommy 0.1.2 doesn't work with 0.0-2030.
