@@ -70,15 +70,19 @@
   (fn [req]
     (let [started (System/currentTimeMillis)
           response (app req)
-          elapsed (- (System/currentTimeMillis) started)]
-      (log/info (str/join " "
+          elapsed (- (System/currentTimeMillis) started)
+          error? (-> response :status (>= 400))
+          line (str/join " "
                   [(str/upper-case (name (req :request-method)))
                    (str (req :uri)
                         (if-let [qs (req :query-string)]
                           (str "?" qs)
                           ""))
                    (response :status)
-                   (str "(" elapsed ")")]))
+                   (str "(" elapsed ")")])]
+      (if error?
+        (log/error line)
+        (log/info line))
       response)))
 
 (defn wrap-reload
