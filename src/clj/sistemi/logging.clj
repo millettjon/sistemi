@@ -58,13 +58,15 @@
 
 (defmethod format-event :console
   [{:keys [level throwable args timestamp ns] {:keys [meta]} :ap-config :as event} & _]
-  (format "%s %s %s %s %s%s"
-          (fg timestamp 39)
-          (-> level name str/upper-case colorize-level)
-          (fg ns 39)
-          (pr-str (unwrap args))
-          (fg (pr-str (base-event event meta ns)) 39)
-          (or (t/stacktrace throwable "\n") "")))
+  (let [args (unwrap args)
+        event? (and (map? args) (contains? args :event))]
+    (format "%s %s %s %s %s%s"
+            (fg timestamp 39)
+            (-> level name str/upper-case colorize-level)
+            (fg (if event? (:event args) ns) 39)            ; if there is an event name, use that in place of ns
+            (pr-str (if event? (dissoc args :event) args))  ; and remove it from the displayed event data
+            (fg (pr-str (base-event event meta ns)) 39)
+            (or (t/stacktrace throwable "\n") ""))))
 
 (defn- log4j-adapter
   "Adapter to send log4j events to timbre."
@@ -76,8 +78,7 @@
    [message]         ; arguments to log fn
    loggerName        ; ns
    (if throwableInformation (.getThrowable throwableInformation) nil)
-   message)
-  )
+   message))
 
 (defn- datomic-middleware
   "Converts datomic log messages from strings to maps for logging as edn."
