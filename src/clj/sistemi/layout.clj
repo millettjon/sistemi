@@ -72,25 +72,33 @@
 
 ;; Note: Social icon colors don't work well in the red footer bar so leaving black and white for now.
 ;; Share link generator: http://www.sharelinkgenerator.com/
-;; TODO: insert the url of the current product/page
-;; TODO: insert the image of the current product/page
 (defn social
   []
   [:span {:style {:letter-spacing "5px" :color "#bbb"}}
 
    ;; http://business.pinterest.com/widget-builder/#do_pin_it_button
-   [:a.social {:onclick "window.open(this.href,'Pinterest','width=450,height=300',false); return false;" :href "//www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.sistemimoderni.com&media=https%3A%2F%2Fwww.sistemimoderni.com%2Fgraphics%2Fcontemporary-shelving.jpg&description=Modern%20Design"}
+   [:a.social {:onclick "window.open(this.href,'Pinterest','width=450,height=300',false); return false;"
+               :href "//www.pinterest.com/sistemimoderni/"
+               ;;:href "//www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.sistemimoderni.com&media=https%3A%2F%2Fwww.sistemimoderni.com%2Fgraphics%2Fcontemporary-shelving.jpg&description=Modern%20Design"
+               }
     [:i.fa.fa-pinterest.fa-lg.social]]
 
-   [:a.social {:onclick "window.open(this.href,'Facebook','width=450,height=300',false); return false;" :href "//www.facebook.com/sharer/sharer.php?s=100&p[url]=https://www.sistemimoderni.com&p[images][0]=&p[title]=modern%20design&p[summary]="}
+   [:a.social {:onclick "window.open(this.href,'Facebook','width=450,height=300',false); return false;"
+               :href "//www.facebook.com/sistemimoderni.france"
+               ;;:href "//www.facebook.com/sharer/sharer.php?s=100&p[url]=https://www.sistemimoderni.com&p[images][0]=&p[title]=modern%20design&p[summary]="
+               }
     [:i.fa.fa-facebook.fa-lg.social]]
 
-   [:a.social {:onclick "window.open(this.href,'Twitter','width=450,height=300',false); return false;" :href "//twitter.com/share?original_referer=https://www.sistemimoderni.com/&text=Modern Design"}
+   [:a.social {:onclick "window.open(this.href,'Twitter','width=450,height=300',false); return false;"
+               :href "//twitter.com/SistemiModerni"
+               ;;:href "//twitter.com/share?original_referer=https://www.sistemimoderni.com/&text=Modern Design"
+               }
     [:i.fa.fa-twitter.fa-lg]]
 
+   ;; Commenting out since we don't have a google-plus presence yet.
    ;; //developers.google.com/+/web/share/
-   [:a.social {:onclick "window.open(this.href,'GooglePlus','width=450,height=300',false); return false;" :href "//plus.google.com/share?url=https://www.sistemimoderni.com"} 
-    [:i.fa.fa-google-plus.fa-lg.social]]
+   #_ [:a.social {:onclick "window.open(this.href,'GooglePlus','width=450,height=300',false); return false;" :href "//plus.google.com/share?url=https://www.sistemimoderni.com"} 
+       [:i.fa.fa-google-plus.fa-lg.social]]
    ])
 
 (defn standard-page
