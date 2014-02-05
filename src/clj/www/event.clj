@@ -115,6 +115,12 @@
   (-> (make-event event data req)
       handle-event))
 
+;; TODO: make list of locales configurable
+(defn- page-load?
+  [{:keys [uri] :as req}]
+  (or (re-matches #".*\.html?" uri)
+      (re-matches #"/(en|fr|it|es)" uri)))
+
 (defn wrap-event
   "Manages events. For normal requests, inserts the event handler path
 into the request. For event tracking requests, reads the browser id
@@ -126,17 +132,17 @@ response is returned."
     (fn [{:keys [uri] :as req}]
       (cond
        ;; page load
-       (re-matches #".*\.html?" uri) (let [bid (browser-id req)
-                                           new-bid (and (not bid) (new-browser-id conn))
-                                           rsp (app (assoc req :event-path event-path))]
-                                       (handle-event {:event :page/load
-                                                      :bid (or bid new-bid)
-                                                      :url (-> req url/new-URL str)
-                                                      :referrer (get-in req [:headers "referer"])
-                                                      :req req})
-                                       (if new-bid
-                                         (add-cookie rsp new-bid)
-                                         rsp))
+       (page-load? req) (let [bid (browser-id req)
+                              new-bid (and (not bid) (new-browser-id conn))
+                              rsp (app (assoc req :event-path event-path))]
+                          (handle-event {:event :page/load
+                                         :bid (or bid new-bid)
+                                         :url (-> req url/new-URL str)
+                                         :referrer (get-in req [:headers "referer"])
+                                         :req req})
+                          (if new-bid
+                            (add-cookie rsp new-bid)
+                            rsp))
 
        ;; event request
        (= uri event-path) (handle-event-request req)
