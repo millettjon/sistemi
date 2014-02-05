@@ -93,7 +93,7 @@
     position:relative;
     width:618px; /* Change this to your images width */
     height:246px; /* Change this to your images height */
-    background:url(images/loading.gif) no-repeat 50% 50%;
+    /* background:url(images/loading.gif) no-repeat 50% 50%; */
 }
 #slider img {
     position:absolute;
