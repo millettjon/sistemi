@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /en/order/
+Disallow: /en/cart.htm
+Disallow: /en/feedback
+Disallow: /en/profile
+Disallow: /fr/order/
+Disallow: /fr/cart.htm
+Disallow: /fr/feedback
+Disallow: /fr/profile
+Disallow: /it
+Disallow: /es
+Crawl-delay: 10
