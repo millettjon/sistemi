@@ -8,11 +8,12 @@
             [www.request :as req]
             [www.user-agent :as ua]
             [www.cart :as cart]
-            [www.google :as g]
+            [analytics.google :as g]
             [www.event :as e]
             [sistemi.order :as order]
             [util.net :as net]
-            [util.calendar :as cal])
+            [util.calendar :as cal]
+            [app.config :as c])
   (:use app.config))
 
 (def menu-data
@@ -77,19 +78,19 @@
   [:span {:style {:letter-spacing "5px" :color "#bbb"}}
 
    ;; http://business.pinterest.com/widget-builder/#do_pin_it_button
-   [:a.social {:onclick "window.open(this.href,'Pinterest','width=450,height=300',false); return false;"
-               :href "//www.pinterest.com/sistemimoderni/"
+   [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
+               :href "//www.pinterest.com/sistemimoderni"
                ;;:href "//www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.sistemimoderni.com&media=https%3A%2F%2Fwww.sistemimoderni.com%2Fgraphics%2Fcontemporary-shelving.jpg&description=Modern%20Design"
                }
     [:i.fa.fa-pinterest.fa-lg.social]]
 
-   [:a.social {:onclick "window.open(this.href,'Facebook','width=450,height=300',false); return false;"
+   [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
                :href "//www.facebook.com/sistemimoderni.france"
                ;;:href "//www.facebook.com/sharer/sharer.php?s=100&p[url]=https://www.sistemimoderni.com&p[images][0]=&p[title]=modern%20design&p[summary]="
                }
     [:i.fa.fa-facebook.fa-lg.social]]
 
-   [:a.social {:onclick "window.open(this.href,'Twitter','width=450,height=300',false); return false;"
+   [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
                :href "//twitter.com/SistemiModerni"
                ;;:href "//twitter.com/share?original_referer=https://www.sistemimoderni.com/&text=Modern Design"
                }
@@ -129,7 +130,8 @@
       [:meta {:name "keywords", :content "modern furniture, modern shelves, shelving, shelf, book case, mod furniture, contemporary shelf"}]
       [:meta {:name "description", :content "Modern shelving in Europe."}]
 
-      head]
+      head
+      (g/analytics (c/conf :google :analytics :account))]
 
      [:body
       ;; standard centered layout

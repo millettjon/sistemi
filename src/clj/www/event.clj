@@ -146,8 +146,7 @@ response is returned."
 
 (defn script
   "Returns html snippet with javascript that makes a request to the
-event tracking handler. Include this in pages that should log events
-when loaded."
+event tracking handler. Include this in pages that need to log events."
   [req]
   (let [event-path (:event-path req)]
     [:script {:type "text/javascript"}
