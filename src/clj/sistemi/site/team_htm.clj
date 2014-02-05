@@ -28,12 +28,12 @@
                                       to create stunning private and public environments. Consideration of every
                                       detail is key in bringing unique design to you! Why not reach out to her
                                       with your wishes by clicking here.")}
-               :david {:name "David Millett" :position "Developer"
+               :david {:name "Ruff Anderson" :position "Developer"
                        :description (stru/join-lines
-                                     "David is our rocket scientist turned software guru. For over 10 years his
+                                     "Ruff is our rocket scientist turned software guru. For over 10 years his
                                      been customizing solutions to delicate problems with precision and ingenuity.
-                                     David is now applying his genius to developing software solutions for the
-                                     design world.  What sort of cool problems do you think David should solve
+                                     Ruff is now applying his genius to developing software solutions for the
+                                     design world.  What sort of cool problems do you think Ruff should solve
                                      for you?  Let him know by clicking here.")}}
         
         }
@@ -59,12 +59,12 @@
                                       détails apporte à chaque objet un design unique. Partagez votre inspiration
                                       avec Einat. Cliquez simplement ici.")}
 
-               :david {:name "David Millett" :position "Developpeur Logiciel"
+               :david {:name "Ruff Anderson" :position "Developpeur Logiciel"
                        :description (stru/join-lines
-                                      "David est un ingénieur en astronautique reconverti en développeur de
+                                      "Ruff est un ingénieur en astronautique reconverti en développeur de
                                       logiciels avec une expérience de plus de dix ans a créer des solutions sur
                                       mesure, bibliothèques et optimisation de code d’entreprises. Selon vous, 
-                                      sur quels trucs cool David pourrait travailler? Faites lui savoir en cliquant
+                                      sur quels trucs cool Ruff pourrait travailler? Faites lui savoir en cliquant
                                       ici.")}
                }
         }
@@ -90,12 +90,12 @@
                                       dettaglio è fondamentale per offrirvi un design unico!  Perché non contattare
                                       Einat con i vostri desideri, cliccando qui?")}
 
-               :david {:name "David Millett" :position "Developer"
+               :david {:name "Ruff Anderson" :position "Developer"
                        :description (stru/join-lines
-                                      "David è il nostro ingegnere aerospaziale trasformato in guru del software.
+                                      "Ruff è il nostro ingegnere aerospaziale trasformato in guru del software.
                                       Da oltre 10 anni concepisce con precisione ed ingegno delle soluzioni a
-                                      problemi delicati.  Ora David applica il suo genio allo sviluppo disoluzioni
-                                      software per il mondo del design. Quale tipo di problemi interessanti David
+                                      problemi delicati.  Ora Ruff applica il suo genio allo sviluppo disoluzioni
+                                      software per il mondo del design. Quale tipo di problemi interessanti Ruff
                                       potrebbe risolvere per voi? Fateglielo sapere cliccando qui.")}
                }
         }
