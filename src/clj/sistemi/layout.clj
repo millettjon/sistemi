@@ -29,7 +29,7 @@
 
 (defn menu
   []
-  (let [cur-page (path/first (:uri req/*req*))]
+  (let [cur-page (str "/" (path/first (:uri req/*req*)))]
     (for [item menu-data]
       (if (vector? item)
         ;; submenu
@@ -44,7 +44,9 @@
                  [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :style {:height "20px"}} label]]
                 ))]])
         ;; regular item
-        (let [page (str "/" (name item) ".htm")
+        (let [page (if (= item :home)
+                     "/"
+                     (str "/" (name item) ".htm"))
               label (tr/translate :menu item)]
           [:li.menui
            [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :style {:height "20px"}} label]]
@@ -194,7 +196,7 @@
 
         [:td
          [:div.greyborder_b {:style "height: 135px"}
-          [:a {:href (tr/localize "home.htm")}
+          [:a {:href (tr/localize "/" #_"home.htm")}
            [:img {:src "/img/sistemi-moderni-systems.jpg", :width "206", :height "119" :alt "logo" :style "margin-left: 19px;"}]]]]]
 
        ;; ----- MENU AND CONTENT ROW -----
