@@ -22,9 +22,9 @@
                                    makes it possible for you to have everything you want, the way you want it with
                                    the greatest of ease.  He has a lot of great ideas.  Why don't you reach out to
                                    Jon with yours?  Just click here.")}
-               :einat {:name "Einat Grinbaum" :position "Chief Design Officer"
+               :nata {:name "Nata Yevich" :position "Chief Design Officer"
                        :description (stru/join-lines
-                                      "Einat has spent the last 15 years artistically combining desires and needs
+                                      "Nata has spent the last 15 years artistically combining desires and needs
                                       to create stunning private and public environments. Consideration of every
                                       detail is key in bringing unique design to you! Why not reach out to her
                                       with your wishes by clicking here.")}
@@ -52,12 +52,12 @@
                                     de vous offrir facilement touts ce dont vous rêvez. Jon a des tas de bonnes idées.
                                     Pourquoi ne pas lui faire parvenir les vôtres? Cliquez simplement ici.")}
 
-               :einat {:name "Einat Grinbaum" :position "Chef Design"
+               :nata {:name "Nata Yevich" :position "Chef Design"
                        :description (stru/join-lines
-                                      "Einat crée des environnements publics et prives qui marient besoins avec
+                                      "Nata crée des environnements publics et prives qui marient besoins avec
                                       expression artistique depuis plus de 15 ans. La considération des moindres
                                       détails apporte à chaque objet un design unique. Partagez votre inspiration
-                                      avec Einat. Cliquez simplement ici.")}
+                                      avec Nata. Cliquez simplement ici.")}
 
                :david {:name "Ruff Anderson" :position "Developpeur Logiciel"
                        :description (stru/join-lines
@@ -83,12 +83,12 @@
                                     come le volete, con la massima facilità. Jon e' ricco di grandi idee. Perché non
                                     contattarlo con le vostre?  Basta cliccare qui.")}
 
-               :einat {:name "Einat Grinbaum" :position "Chief Design Officer"
+               :nata {:name "Nata Yevich" :position "Chief Design Officer"
                        :description (stru/join-lines
-                                      "Einat ha trascorso gli ultimi 15 anni unendo artisticamente desideri e
+                                      "Nata ha trascorso gli ultimi 15 anni unendo artisticamente desideri e
                                       necessità per creare ambienti privati ​​e pubblici mozzafiato. L'esame di ogni
                                       dettaglio è fondamentale per offrirvi un design unico!  Perché non contattare
-                                      Einat con i vostri desideri, cliccando qui?")}
+                                      Nata con i vostri desideri, cliccando qui?")}
 
                :david {:name "Ruff Anderson" :position "Developer"
                        :description (stru/join-lines
@@ -105,7 +105,7 @@
   []
   [:div.text_content
    ;; Ordered loop that wraps fn in html block
-   (for [person [:eric :jon :einat :david]]
+   (for [person [:eric :jon :nata :david]]
      (let [f #(translate :team person %)]
        (h/html
         [:p.title (f :name) " - " (f :position)]
