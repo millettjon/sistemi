@@ -1,18 +1,17 @@
 (ns sistemi.site.order.wizard
+  (:require [sistemi.translate :as tr])
   (:use [www.wizard :only [wizard]]))
+
+(defn- a-attr
+  "Anchor attributes."
+  [url]
+  {:href (tr/localize url) :tabindex "-1"})
 
 (defn checkout-wizard
   "Multi step checkout wizard."
   [step]
-  (wizard [[:cart [:i.fa.fa-shopping-cart.fa-lg] " Cart"]
-           [:contact [:i.fa.fa-user.fa-lg] " Contact"]
-           ;;[:delivery [:i.fa.fa-truck.fa-lg] " Delivery"]
-           [:payment [:i.fa.fa-credit-card.fa-lg] " Payment"]
-           [:confirm [:i.fa.fa-thumbs-up.fa-lg] " Confirm"]
-           ]
+  (wizard [[:cart (a-attr "/cart.htm") [:i.fa.fa-shopping-cart.fa-lg] " Cart"]
+           [:contact (a-attr "/order/contact.htm") [:i.fa.fa-user.fa-lg] " Contact"]
+           [:shipping (a-attr "/order/shipping.htm") [:i.fa.fa-truck.fa-lg] " Shipping"]
+           [:payment (a-attr "/order/payment.htm") [:i.fa.fa-credit-card.fa-lg] " Payment"]]
           step))
-
-
-;; ? review?
-;; if checkout overlay is used, there is no review page
-;; how about a receipt page?

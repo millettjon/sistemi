@@ -160,7 +160,7 @@
 
      [:div {:style {:text-align "right" :margin-top "20px" :margin-bottom "20px"}}
       [:a {:href "order/contact.htm"}
-       [:button.btn.btn-inverse {:type "submit" :tabindex 1} "Checkout"]]]
+       [:button.btn.btn-inverse.btn-large {:type "submit" :tabindex 1} "Checkout"]]]
 
      [:script {:type "text/javascript"}
       "jQuery(document).ready(function() {"

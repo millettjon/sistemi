@@ -263,7 +263,7 @@
                 [:option m k])))))])))
 
 (defn text
-  [k opts]
+  [k & [{:as opts :or nil}]]
   (let [n (name k)]
     [:input (merge {:type "text" :name n  :id n :value (default k)} opts)]))
 

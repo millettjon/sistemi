@@ -1,5 +1,5 @@
-(ns sistemi.site.order.contact
-  "Receives posted contact information."
+(ns sistemi.site.order.shipping
+  "Receives posted shipping information."
   (:require [sistemi.translate :as tr]
             [ring.util.response :as resp]
             [www.session :as sess]
@@ -9,8 +9,8 @@
 
 (defn handle
   [req]
-  (f/with-valid-form sf/order-contact (:params req)
-    (-> (tr/localize "shipping.htm")
+  (f/with-valid-form sf/order-shipping (:params req)
+    (-> (tr/localize "payment.htm")
         resp/redirect
         (assoc :session
-          (assoc (:session req) :contact (f/values))))))
+          (assoc (:session req) :shipping (f/values))))))

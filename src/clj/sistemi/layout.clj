@@ -35,13 +35,13 @@
         ;; submenu
         (let [key (first item)
               label (tr/translate :menu key)]
-          [:li.menui [:a.menui {:href "#" :style {:height "20px"}} [:span label]]
+          [:li.menui [:a.menui {:href "#" :tabindex "-1" :style {:height "20px"}} [:span label]]
            [:ul.menum.submenu
             (for [item (rest item)]
               (let [page (if (map? item) (:page item)  (str "/" (name item) ".htm"))
                     label (tr/translate :menu key (if (map? item) (:label item) item))]
                 [:li.menui
-                 [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :style {:height "20px"}} label]]
+                 [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :tabindex "-1" :style {:height "20px"}} label]]
                 ))]])
         ;; regular item
         (let [page (if (= item :home)
@@ -49,7 +49,7 @@
                      (str "/" (name item) ".htm"))
               label (tr/translate :menu item)]
           [:li.menui
-           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :style {:height "20px"}} label]]
+           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :tabindex "-1" :style {:height "20px"}} label]]
           )))))
 
 (defn cart-block
@@ -58,7 +58,7 @@
     (if (cart/empty? cart)
       [:li [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (0)"]
       [:li 
-       [:a { :href (tr/localize "/cart.htm")}
+       [:a {:href (tr/localize "/cart.htm") :tabindex "-1"}
         [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (order/total-items cart) ") "
         (-> cart :price :total fmt/eur-short)
         [:br]
@@ -82,20 +82,17 @@
    ;; http://business.pinterest.com/widget-builder/#do_pin_it_button
    [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
                :href "//www.pinterest.com/sistemimoderni"
-               ;;:href "//www.pinterest.com/pin/create/button/?url=https%3A%2F%2Fwww.sistemimoderni.com&media=https%3A%2F%2Fwww.sistemimoderni.com%2Fgraphics%2Fcontemporary-shelving.jpg&description=Modern%20Design"
-               }
+               :tabindex "-1"}
     [:i.fa.fa-pinterest.fa-lg.social]]
 
    [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
                :href "//www.facebook.com/sistemimoderni.france"
-               ;;:href "//www.facebook.com/sharer/sharer.php?s=100&p[url]=https://www.sistemimoderni.com&p[images][0]=&p[title]=modern%20design&p[summary]="
-               }
+               :tabindex "-1"}
     [:i.fa.fa-facebook.fa-lg.social]]
 
    [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
                :href "//twitter.com/SistemiModerni"
-               ;;:href "//twitter.com/share?original_referer=https://www.sistemimoderni.com/&text=Modern Design"
-               }
+               :tabindex "-1"}
     [:i.fa.fa-twitter.fa-lg]]
 
    ;; Commenting out since we don't have a google-plus presence yet.
@@ -171,8 +168,8 @@
              l/locales
              (map (fn [locale]
                     (if (= locale (req/*req* :locale))
-                      [:a.select {:href "#"} locale]
-                      [:a {:href (tr/localize "/profile/locale" :query {:lang locale})} locale])))
+                      [:a.select {:href "#" :tabindex "-1"} locale]
+                      [:a {:href (tr/localize "/profile/locale" :query {:lang locale}) :tabindex "-1"} locale])))
              (interpose [:span.line "|"]))]
 
            [:img {:src "/img/block-logo.gif" :alt "logo" :style "margin-bottom: 7px;"}]]]]
@@ -181,13 +178,13 @@
          [:div#shortcuts.greyborder_b {:style "height: 135px"}
           [:ul {:style {:padding-top "28px" :margin-left "25px" :padding-left "0px"}}
            [:li 
-            [:a { :href "#"} (tr/translate :header :signup)]]
+            [:a {:href "#" :tabindex "-1"} (tr/translate :header :signup)]]
            [:li 
-            [:a { :href "#"} (tr/translate :header :contact)]]
+            [:a {:href "#" :tabindex "-1"} (tr/translate :header :contact)]]
            [:li 
-            [:a { :href (tr/localize "/team.htm")} (tr/translate :header :team)]]
+            [:a {:href (tr/localize "/team.htm") :tabindex "-1"} (tr/translate :header :team)]]
            [:li 
-            [:a { :href (tr/localize "/careers.htm")} (tr/translate :header :careers)]]]]]
+            [:a {:href (tr/localize "/careers.htm") :tabindex "-1"} (tr/translate :header :careers)]]]]]
 
         [:td
          [:div#shortcuts.greyborder_br {:style "height: 135px"}
@@ -196,11 +193,10 @@
 
         [:td
          [:div.greyborder_b {:style "height: 135px"}
-          [:a {:href (tr/localize "/" #_"home.htm")}
+          [:a {:href (tr/localize "/" #_"home.htm") :tabindex "-1"}
            [:img {:src "/img/sistemi-moderni-systems.jpg", :width "206", :height "119" :alt "logo" :style "margin-left: 19px;"}]]]]]
 
        ;; ----- MENU AND CONTENT ROW -----
-       ;; TODO: Find a way to not have to pass the height.
        [:tr
         ;; Menu
         [:td.greybox.greyborder_r {:width "225" :style {:height "100%;" :vertical-align "top"}}
