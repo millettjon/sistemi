@@ -88,4 +88,4 @@
   [req]
   (let [s (:session req)
         params (merge (select-keys (s :contact) [:name]) (s :payment))]
-    (response (layout/standard-page (head req) (f/with-form sf/order-billing params (body (cart/get req))) 0))))
+    (response (layout/standard-page (head req) (f/with-form sf/order-payment params (body (cart/get req))) 0))))
