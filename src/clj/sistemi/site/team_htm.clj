@@ -34,9 +34,15 @@
                                      been customizing solutions to delicate problems with precision and ingenuity.
                                      Ruff is now applying his genius to developing software solutions for the
                                      design world.  What sort of cool problems do you think Ruff should solve
-                                     for you?  Let him know by clicking here.")}}
-        
-        }
+                                     for you?  Let him know by clicking here.")}
+               :antoine {:name "Antoine Gonnot" :position "Communications Director"
+                         :description (stru/join-lines "Antoine is the guardian of Sistemi Moderni's voice.  He
+                                       imagines, develops and broadcasts our vision to our audience in the digital
+                                       universe.  Are you following our story?  Click on your favorite network
+                                       icon at the bottom of the page and let us know what you think!  If you have
+                                       any content ideas that you would like to suggest or if you want to help us
+                                       spread our passion for custom design, please click here to get Antoine's
+                                       undivided attention.")}}}
    :es {}
    :fr {:title "Sistemi Moderni: cadres d'entreprise"
         :team {:eric {:name "E.M. Romeo" :position "PDG et Directeur Créatif"
@@ -66,6 +72,13 @@
                                       mesure, bibliothèques et optimisation de code d’entreprises. Selon vous, 
                                       sur quels trucs cool Ruff pourrait travailler? Faites lui savoir en cliquant
                                       ici.")}
+               :antoine {:name "Antoine Gonnot" :position "Directeur communication"
+                         :description (stru/join-lines "Antoine imagine et développe la présence de l'univers de
+                                     Sistemi Moderni auprès de ses publics, notamment grâce au Web digital. Vous
+                                     ne suivez pas encore la marque sur les médias sociaux? Cliquez sur les icônes
+                                     à gauche en bas de page et faites nous savoir ce que vous aimez ! Si vous avez
+                                     des suggestions pour qu'Antoine puisse vous faire découvrir notre passion pour
+                                     le design sur-mesure, contactez-le en cliquant ici !")}
                }
         }
    :it {:title "Sistemi Moderni:"
@@ -105,7 +118,7 @@
   []
   [:div.text_content
    ;; Ordered loop that wraps fn in html block
-   (for [person [:eric :jon :nata :david]]
+   (for [person [:eric :jon :nata :david :antoine]]
      (let [f #(translate :team person %)]
        (h/html
         [:p.title (f :name) " - " (f :position)]
