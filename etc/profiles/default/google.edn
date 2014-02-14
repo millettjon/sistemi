@@ -1,1 +1,3 @@
-{:analytics {:account "UA-47785997-1"}}
+{:analytics
+ {:account "UA-47785997-1"
+  :enabled? true}}
