@@ -22,7 +22,7 @@
                                    makes it possible for you to have everything you want, the way you want it with
                                    the greatest of ease.  He has a lot of great ideas.  Why don't you reach out to
                                    Jon with yours?  Just click here.")}
-               :nata {:name "Nata Milou" :position "Chief Design Officer"
+               :nata {:name "Nata" :position "Chief Design Officer"
                        :description (stru/join-lines
                                       "Nata has spent the last 15 years artistically combining desires and needs
                                       to create stunning private and public environments. Consideration of every
@@ -58,7 +58,7 @@
                                     de vous offrir facilement touts ce dont vous rêvez. Jon a des tas de bonnes idées.
                                     Pourquoi ne pas lui faire parvenir les vôtres? Cliquez simplement ici.")}
 
-               :nata {:name "Nata Milou" :position "Chef Design"
+               :nata {:name "Nata" :position "Chef Design"
                        :description (stru/join-lines
                                       "Nata crée des environnements publics et prives qui marient besoins avec
                                       expression artistique depuis plus de 15 ans. La considération des moindres
@@ -96,7 +96,7 @@
                                     come le volete, con la massima facilità. Jon e' ricco di grandi idee. Perché non
                                     contattarlo con le vostre?  Basta cliccare qui.")}
 
-               :nata {:name "Nata Milou" :position "Chief Design Officer"
+               :nata {:name "Nata" :position "Chief Design Officer"
                        :description (stru/join-lines
                                       "Nata ha trascorso gli ultimi 15 anni unendo artisticamente desideri e
                                       necessità per creare ambienti privati ​​e pubblici mozzafiato. L'esame di ogni
