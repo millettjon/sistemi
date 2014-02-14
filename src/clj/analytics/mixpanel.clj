@@ -25,7 +25,7 @@
   (apply str (drop-last 3 (str (.getTime (Date.))))))
 
 ;; TODO: If needed for scaling and/or graceful degradation, send batch requests and use a sliding window buffer.
-(defn post
+(defn- post
   [data]
   (log/info {:event :mixpanel/track-request :data data})
   (let [c (as/chan)]
@@ -60,6 +60,7 @@
 (defn send-event
   "Sends an event to mixpanel."
   [event]
-  (-> event
-      make-event
-      post))
+  (if (c/conf :mixpanel :enabled?)
+    (-> event
+        make-event
+        post)))
