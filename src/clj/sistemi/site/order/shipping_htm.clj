@@ -25,7 +25,6 @@
             'name': 'required',
             'address1': 'required',
             'city': 'required',
-            'region': 'required',
             'code': 'required',
             'country': 'required'
         }
@@ -67,7 +66,7 @@
 
         [:div.control-group
          [:label.control-label {:for "region"} "Region"]
-         [:div.controls (f/text :region)]]
+         [:div.controls (f/text :region {:placeholder "(optional)"})]]
 
         [:div.control-group
          [:label.control-label {:for "code"} "Postal Code"]

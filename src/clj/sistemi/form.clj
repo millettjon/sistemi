@@ -51,8 +51,10 @@
    :email {:type :string :max 100}
    :phone {:type :string :max 20}})
 
-(def order-shipping
-  "Fields on the order/shipping page."
+;; Notes:
+;; - region is not required for french address
+(def address
+  "Fields for an address."
   {:name {:type :string :max 50}
    :address1 {:type :string :max 100}
    :address2 {:type :string :max 100}
@@ -61,18 +63,12 @@
    :code {:type :string :max 20}
    :country {:type :string :max 5}})
 
+(def order-shipping
+  "Fields on the order/shipping page."
+  address)
+
 (def order-payment
      "Fields on the order/payment page."
-     {:name {:type :string :max 50}
-      :cc-number {:type :string :max 20}
-      :cc-month {:type :string :max 2}
-      :cc-year {:type :string :max 4}
-      :cc-cvc {:type :string :max 3}
-
-      ;; :address1 {:type :string :max 100}
-      ;; :address2 {:type :string :max 100}
-      ;; :city {:type :string :max 50}
-      ;; :region {:type :string :max 50}
-      ;; :code {:type :string :max 20}
-      ;; :country {:type :string :max 5}
-      })
+     (merge
+      address 
+      {:stripe-token {:type :string :max 50}}))

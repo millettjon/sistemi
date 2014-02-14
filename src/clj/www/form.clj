@@ -287,7 +287,7 @@
   (str v))
 
 (defmulti hidden
-  "Inserts hidden paramters."
+  "Inserts hidden parameters."
   #(type %))
 
 (defmethod hidden clojure.lang.Keyword

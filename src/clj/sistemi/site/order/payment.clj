@@ -57,14 +57,14 @@
        (common/execute
         (charges/create-charge amount customer (common/description "This an test charge.")))))
 
-;; {:invoice nil, :refunded false, :metadata {}, :refunds [], :balance_transaction "txn_103PZY27flN4SizklMe8CQB8", :currency "usd", :card {:country "US", :customer "cus_3PZQOK7KQ23ygs", :exp_month 5, :last4 "4242", :address_zip_check nil, :name nil, :address_line2 nil, :fingerprint "RYdQB7XGFSIvdwRm", :cvc_check nil, :address_line1 nil, :object "card", :address_city nil, :address_zip nil, :address_state nil, :address_line1_check nil, :type "Visa", :exp_year 2014, :address_country nil, :id "card_103PYg27flN4SizkbjtSBpnR"}, :customer "cus_3PZQOK7KQ23ygs", :captured true, :dispute nil, :livemode false, :amount 5000, :object "charge", :failure_code nil, :created 1391186711, :amount_refunded 0, :failure_message nil, :paid true, :id "ch_103PZY27flN4SizkFvAeko0T", :description "This an test charge."}
-
-
-
-;; validate
-;; save it in the session
-;; redirect to review page
-;; make sure to empty the cart
+;; - validate (or, rely on stripe?)
+;; - create txn parameters
+;;   - price, description, etc
+;; ? create a customer object?
+;; save it in the session as order/history
+;; make sure to empty the cart (leave contact, shipping, and billing)
+;; redirect to order confirmation page
+;; send out an order confirmation email
 ;;
 ;; ? how to test a txn?
 ;;   ? web-driver?
@@ -73,7 +73,7 @@
   [req]
   ;; Validate
   (log/info "PAYMENT" (:params req))
-  (-> (tr/localize "../cart.htm")
+  (-> (tr/localize "confirmation.htm")
       resp/redirect)
 
   #_ (f/with-valid-form sf/order-payment (:params req)
@@ -85,4 +85,4 @@
   )
 
 ;; TODO: handler to finalize payment
-;; TODO: thank you/receipt page
+

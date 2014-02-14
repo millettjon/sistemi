@@ -94,11 +94,6 @@
                :href "//twitter.com/SistemiModerni"
                :tabindex "-1"}
     [:i.fa.fa-twitter.fa-lg]]
-
-   ;; Commenting out since we don't have a google-plus presence yet.
-   ;; //developers.google.com/+/web/share/
-   #_ [:a.social {:onclick "window.open(this.href,'GooglePlus','width=450,height=300',false); return false;" :href "//plus.google.com/share?url=https://www.sistemimoderni.com"} 
-       [:i.fa.fa-google-plus.fa-lg.social]]
    ])
 
 (defn standard-page
@@ -130,7 +125,8 @@
       [:meta {:name "description", :content "Modern shelving in Europe."}]
 
       head
-      (g/analytics (c/conf :google :analytics :account))]
+
+      (g/analytics (c/conf :google :analytics))]
 
      [:body
       ;; standard centered layout
