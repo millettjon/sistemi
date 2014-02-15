@@ -1,4 +1,4 @@
-(ns shipping.ups.request
+(ns shipping.ups.xml.request
   (:require [shipping.ups.common :as c]
             [shipping.ups.package :as p]))
 
@@ -28,21 +28,33 @@
 ;   </Request>
 ;
 ;    <Shipment>
-;      <!-- Optional value -->
+;      <!-- Optional value
 ;      <Description></Description>
+;      -->
 ;      <ReturnService>
 ;        <Code>5</Code>
 ;      </ReturnService>
-;      <!-- Optional value -->
+;      <!-- Optional value
 ;      <DocumentsOnly></DocumentsOnly>
+;      -->
 ;      <Shipper>
 ;        <Name>Sistemi</Name>
 ;        <AttentionName>SistemiFabricator</AttentionName>
 ;        <PhoneNumber>000111222</PhoneNumber>
 ;        <ShipperNumber>123456</ShipperNumber>
+;        <!-- Optional/Conditional value
+;        <TaxIdentificationNumber></TaxIdentificationNumber>
+;        <FaxNumber></FaxNumber>
+;        <EmailAddress></EmailAddress>
+;        -->
 ;        <Address>
 ;          <AddressLine1>123 Sistemi Drive</AddressLine1>
+;          <!-- Optional
+;          <AddressLine2></AddressLine2>
+;          <AddressLine3></AddressLine3>
+;          -->
 ;          <City>St. Martin D'Uriage</City>
+;          <!-- Required in US, Canada, Ireland -->
 ;          <StateProvinceCode></StateProvinceCode>
 ;          <CountryCode>FR</CountryCode>
 ;          <PostalCode>12345</PostalCode>

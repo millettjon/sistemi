@@ -1,4 +1,4 @@
-(ns shipping.ups.common)
+(ns shipping.ups.xml.common)
 
 (defn handle-optional
   "If a value is null, then return the 'default'."

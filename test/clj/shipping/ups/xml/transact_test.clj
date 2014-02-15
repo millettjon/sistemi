@@ -1,4 +1,4 @@
-(ns shipping.ups.transact_test
+(ns shipping.ups.xml.transact_test
   (:require [clj-http.client :as client]
             [clojure.data.xml :as x]
             [sistemi.config]

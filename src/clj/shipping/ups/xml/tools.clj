@@ -1,4 +1,4 @@
-(ns shipping.ups.tools
+(ns shipping.ups.xml.tools
   (:import [java.io ByteArrayInputStream])
   (:require [clojure.string :as str]))
 

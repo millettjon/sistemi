@@ -1,4 +1,4 @@
-(ns shipping.ups.util
+(ns shipping.ups.xml.util
   (:require [clojure.string :as s]
             [clojure.data.xml :as x]) )
 

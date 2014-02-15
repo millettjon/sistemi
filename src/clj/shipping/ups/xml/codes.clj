@@ -1,4 +1,4 @@
-(ns shipping.ups.codes)
+(ns shipping.ups.xml.codes)
 
 (def return-service-codes
   "Used in <Shipment><ReturnService><Code>"

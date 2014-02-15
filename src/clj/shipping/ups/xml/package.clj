@@ -1,4 +1,4 @@
-(ns shipping.ups.package
+(ns shipping.ups.xml.package
    (:require [shipping.ups.common :as c]))
 
 ;; <Dimensions>

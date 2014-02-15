@@ -1,4 +1,4 @@
-(ns shipping.ups.response_test
+(ns shipping.ups.xml.response_test
   (:import [java.io ByteArrayInputStream])
   (:require [shipping.ups.response :as rsp]
             [shipping.ups.util :as u]

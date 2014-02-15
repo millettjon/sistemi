@@ -1,4 +1,4 @@
-(ns shipping.ups.package_test
+(ns shipping.ups.xml.package_test
   (:require [shipping.ups.package :as p]
             [clojure.data.xml :as x]
             [shipping.ups.util :as u]

@@ -1,4 +1,4 @@
-(ns shipping.ups.request_test
+(ns shipping.ups.xml.request_test
   (:require [shipping.ups.request :as sr]
             [shipping.ups.util :as u]
             [clojure.data.xml :as x]

@@ -1,4 +1,4 @@
-(ns shipping.ups.transact
+(ns shipping.ups.xml.transact
   (:require [clj-http.client :as client]
             [clojure.tools.logging :as log]
             [shipping.ups.response :as rsp]))
