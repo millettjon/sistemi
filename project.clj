@@ -107,7 +107,7 @@
             [lein-marginalia "0.7.1"]
             [lein-ancient "0.5.3"]
             [lein-cloverage "1.0.2"]
-            [slamhound "RELEASE"]]
+            [slamhound "1.5.1"]]
 
   :aliases {"start" ["trampoline" "run" "-m" "sistemi.core"]
             "init-db" ^{:doc "Initialize the datomic schema."} ["run" "-m" "sistemi.cli/init-db"]
