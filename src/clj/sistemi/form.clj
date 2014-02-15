@@ -61,7 +61,7 @@
    :city {:type :string :max 50}
    :region {:type :string :max 50}
    :code {:type :string :max 20}
-   :country {:type :string :max 5}})
+   :country {:type :string :max 20}})
 
 (def order-shipping
   "Fields on the order/shipping page."
