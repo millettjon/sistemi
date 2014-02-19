@@ -1,8 +1,8 @@
 (ns shipping.ups.xml.response_test
   (:import [java.io ByteArrayInputStream])
-  (:require [shipping.ups.response :as rsp]
-            [shipping.ups.util :as u]
-            [shipping.ups.tools :as t]
+  (:require [shipping.ups.xml.response :as rsp]
+            [shipping.ups.xml.util :as u]
+            [shipping.ups.xml.tools :as t]
             [clojure.data.xml :as x]
             [clojure.xml :as xm]
             [clojure.zip :as zip])

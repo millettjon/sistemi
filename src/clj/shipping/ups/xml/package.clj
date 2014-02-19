@@ -1,5 +1,5 @@
 (ns shipping.ups.xml.package
-   (:require [shipping.ups.common :as c]))
+   (:require [shipping.ups.xml.common :as c]))
 
 ;; <Dimensions>
 ;;   <UnitOfMeasurement>

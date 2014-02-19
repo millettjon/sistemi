@@ -3,12 +3,12 @@
             [clojure.data.xml :as x]
             [sistemi.config]
             [app.config :as c]
-            [shipping.ups.transact :as trans]
-            [shipping.ups.common :as cmn]
-            [shipping.ups.request :as sr]
-            [shipping.ups.common_test :as ct]
-            [shipping.ups.package_test :as pt]
-            [shipping.ups.request_test :as rqt])
+            [shipping.ups.xml.transact :as trans]
+            [shipping.ups.xml.common :as cmn]
+            [shipping.ups.xml.request :as sr]
+            [shipping.ups.xml.common_test :as ct]
+            [shipping.ups.xml.package_test :as pt]
+            [shipping.ups.xml.request_test :as rqt])
   (:use [clojure.test]) )
 
 (def google (client/get "http://www.google.com"))
@@ -94,13 +94,13 @@
     (str (x/emit-str access) (x/emit-str confirm))
     ) )
 
-(deftest test-shipment-confirm-request
-  (sistemi.config/init!)
-  ;(pr c/config)
-  (let [ups_access (c/conf :ups)
-        req (shipment-confirm-request-xml ups_access)
-        rsp (trans/request-shipping req)]
-
-    (println (str "request:\n" req "\n"))
-    (println (str "response:\n" rsp))
-    ) )
+;(deftest test-shipment-confirm-request
+;  (sistemi.config/init!)
+;  ;(pr c/config)
+;  (let [ups_access (c/conf :ups)
+;        req (shipment-confirm-request-xml ups_access)
+;        rsp (trans/request-shipping req)]
+;
+;    (println (str "request:\n" req "\n"))
+;    (println (str "response:\n" rsp))
+;    ) )

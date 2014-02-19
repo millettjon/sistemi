@@ -1,8 +1,8 @@
 (ns shipping.ups.xml.package_test
-  (:require [shipping.ups.package :as p]
+  (:require [shipping.ups.xml.package :as p]
             [clojure.data.xml :as x]
-            [shipping.ups.util :as u]
-            [shipping.ups.common_test :as ct])
+            [shipping.ups.xml.util :as u]
+            [shipping.ups.xml.common_test :as ct])
   (:use [clojure.test]) )
 
 (def xml x/sexp-as-element)

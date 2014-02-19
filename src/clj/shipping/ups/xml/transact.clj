@@ -1,7 +1,7 @@
 (ns shipping.ups.xml.transact
   (:require [clj-http.client :as client]
             [clojure.tools.logging :as log]
-            [shipping.ups.response :as rsp]))
+            [shipping.ups.xml.response :as rsp]))
 
 
 ;; Test sandbox url

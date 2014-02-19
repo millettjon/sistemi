@@ -1,6 +1,6 @@
 (ns shipping.ups.xml.request
-  (:require [shipping.ups.common :as c]
-            [shipping.ups.package :as p]))
+  (:require [shipping.ups.xml.common :as c]
+            [shipping.ups.xml.package :as p]))
 
 ;; Reference vectors of keys below when looking up information for the order.
 ;; Use (zipmap) or equivalent to combine keys with order data and then pass

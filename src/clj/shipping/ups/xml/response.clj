@@ -1,6 +1,6 @@
 (ns shipping.ups.xml.response
   (:require [clojure.string :as str]
-            [shipping.ups.tools :as t]
+            [shipping.ups.xml.tools :as t]
             [clojure.xml :as xm]
             [clojure.zip :as zip]
             [clojure.tools.logging :as log])

@@ -1,7 +1,7 @@
 (ns shipping.ups.xml.common_test
-  (:require [shipping.ups.common :as c]
+  (:require [shipping.ups.xml.common :as c]
             [clojure.data.xml :as x]
-            [shipping.ups.util :as u])
+            [shipping.ups.xml.util :as u])
   (:use [clojure.test]) )
 
 (deftest test-handle-optional
