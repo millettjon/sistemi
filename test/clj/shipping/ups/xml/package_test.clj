@@ -11,7 +11,7 @@
   (u/strip-newlines 
 "<Dimensions>
 <UnitOfMeasurement>
-<Code>IN</Code>
+<Code>CM</Code>
 </UnitOfMeasurement>
 <Length>22</Length>
 <Width>20</Width>
@@ -19,7 +19,7 @@
 </Dimensions>") )
 
 ;; todo: expects everything as String and does not accept int, long, double, etc
-(def dimension-data {:unit_code "IN" :length "22" :width "20" :height "18"})
+(def dimension-data {:unit_code "CM" :length "22" :width "20" :height "18"})
 
 (deftest test-dimension-info
   (let [data1 (p/dimension-info dimension-data)]
@@ -29,10 +29,13 @@
 (def weight-xml
   (u/strip-newlines
 "<PackageWeight>
+<UnitOfMeasurement>
+<Code>KGS</Code>
+</UnitOfMeasurement>
 <Weight>14.1</Weight>
 </PackageWeight>") )
 
-(def weight-data {:weight "14.1"})
+(def weight-data {:weight "14.1" :unit_code "KGS"})
 
 (deftest test-weight-info
   (let [data1 (p/weight-info weight-data)]
@@ -100,13 +103,16 @@
 </PackagingType>
 <Dimensions>
 <UnitOfMeasurement>
-<Code>IN</Code>
+<Code>CM</Code>
 </UnitOfMeasurement>
 <Length>22</Length>
 <Width>20</Width>
 <Height>18</Height>
 </Dimensions>
 <PackageWeight>
+<UnitOfMeasurement>
+<Code>KGS</Code>
+</UnitOfMeasurement>
 <Weight>14.1</Weight>
 </PackageWeight>
 <ReferenceNumber>
@@ -133,15 +139,17 @@
 (def shipping-package-2
   (u/strip-newlines
 "<Package><PackagingType><Code>02</Code></PackagingType><Dimensions><UnitOfMeasurement>
-<Code>IN</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
-</Dimensions><PackageWeight><Weight>14.1</Weight></PackageWeight><ReferenceNumber><Code>02</Code>
+<Code>CM</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
+</Dimensions><PackageWeight><UnitOfMeasurement>
+<Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight></PackageWeight><ReferenceNumber><Code>02</Code>
 <Value>1234567</Value></ReferenceNumber><PackageServiceOptions><InsuredValue>
 <CurrencyCode>EUR</CurrencyCode><MonetaryValue>50.00</MonetaryValue></InsuredValue>
 <VerbalConfirmation><Name>Eric Romeo</Name><PhoneNumber>123456777</PhoneNumber>
 </VerbalConfirmation></PackageServiceOptions></Package>
 <Package><PackagingType>
-<Code>02</Code></PackagingType><Dimensions><UnitOfMeasurement><Code>IN</Code></UnitOfMeasurement>
-<Length>22</Length><Width>20</Width><Height>18</Height></Dimensions><PackageWeight><Weight>14.1</Weight>
+<Code>02</Code></PackagingType><Dimensions><UnitOfMeasurement><Code>CM</Code></UnitOfMeasurement>
+<Length>22</Length><Width>20</Width><Height>18</Height></Dimensions><PackageWeight><UnitOfMeasurement>
+<Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight>
 </PackageWeight><ReferenceNumber><Code>02</Code><Value>1234567</Value></ReferenceNumber>
 <PackageServiceOptions><InsuredValue><CurrencyCode>EUR</CurrencyCode><MonetaryValue>50.00</MonetaryValue>
 </InsuredValue><VerbalConfirmation><Name>Eric Romeo</Name><PhoneNumber>123456777</PhoneNumber>

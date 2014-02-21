@@ -28,7 +28,6 @@
 "<ShipmentConfirmRequest><Request><RequestAction>ShipConfirm</RequestAction>
 <RequestOption>nonvalidate</RequestOption><TransactionReference><CustomerContext>SistemiContextID-XX1122</CustomerContext>
 <XpciVersion>1.0001</XpciVersion></TransactionReference></Request><Shipment>
-<Description>Sistemi Test Shipment</Description><ReturnService><Code>5</Code></ReturnService><DocumentsOnly></DocumentsOnly>
 <Shipper><Name>Sistemi</Name>
 <AttentionName>SistemiFabricator</AttentionName><PhoneNumber>000111222</PhoneNumber><ShipperNumber>123456</ShipperNumber>
 <Address><AddressLine1>123 Sistemi Drive</AddressLine1><City>St. Martin D'Uriage</City>
@@ -51,7 +50,7 @@
 
 (deftest test-shipment-confirm-request
   (let [data (sr/shipment-confirm-request shipment-confirm-data)]
-    ;(is (= (str xml-header shipment-confirm-xml) (x/emit-str (xml data)) ))
+    (is (= (str xml-header shipment-confirm-xml) (x/emit-str (xml data)) ))
     ) )
 
 (def shipment-accept-xml

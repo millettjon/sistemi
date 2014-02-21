@@ -31,6 +31,8 @@
   "How much the package weighs -- lbs or SI?????"
   [weight_data]
   [:PackageWeight
+    [:UnitOfMeasurement
+      [:Code (weight_data :unit_code)]]
     [:Weight (weight_data :weight)]
   ])
 
