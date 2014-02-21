@@ -111,7 +111,9 @@
 
   :aliases {"start" ["trampoline" "run" "-m" "sistemi.core"]
             "init-db" ^{:doc "Initialize the datomic schema."} ["run" "-m" "sistemi.cli/init-db"]
-            "marg" ["marg" "--dir" "var/doc"]}
+            "marg" ["marg" "--dir" "var/doc"]
+            "clov" ["cloverage" "-o" "var/cloverage"]
+            }
 
   :cljsbuild {:crossovers []
               :crossover-path "var/target/crossovers"
