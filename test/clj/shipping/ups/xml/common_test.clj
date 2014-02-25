@@ -36,12 +36,17 @@
 (def receiver-address-data {:address1 "130 route de la combette" :city "St. Martin d'Uriage" :state_province ""
                             :country_code "FR" :postal "38410"})
 
-(def shipper-data {:user_id "SistemiShipper" :attention_name "SistemiFabricator" :phone "000111222"
+; Phone numbers are 10 alpha-numeric (Europe 2.2.2.2.2  (
+(def shipper-data {:user_id "SistemiShipper" :attention_name "SistemiFabricator" :phone "0423456789"
                    :shipper_number "123456" :address shipper-address-data})
 
-(def receiver-data {:user_id "SistemiReceiver" :attention_name "SistemiCustomer" :phone "000111222"
+; Phone numbers are 10 alpha-numeric
+(def receiver-data {:user_id "SistemiReceiver" :attention_name "SistemiCustomer" :phone "0412345678"
                    :shipper_number "123456" :company "Sistemi" :address receiver-address-data})
 
+;(def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
+;                              :service_data service-options-data ;:reference_data ct/reference-number-data
+;                              :service_options service-options-none})
 
 
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")

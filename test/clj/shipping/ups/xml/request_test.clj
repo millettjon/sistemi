@@ -29,7 +29,7 @@
 <RequestOption>nonvalidate</RequestOption><TransactionReference><CustomerContext>SistemiContextID-XX1122</CustomerContext>
 <XpciVersion>1.0001</XpciVersion></TransactionReference></Request><Shipment>
 <Shipper><Name>SistemiShipper</Name>
-<AttentionName>SistemiFabricator</AttentionName><PhoneNumber>000111222</PhoneNumber><ShipperNumber>123456</ShipperNumber>
+<AttentionName>SistemiFabricator</AttentionName><PhoneNumber>0423456789</PhoneNumber><ShipperNumber>123456</ShipperNumber>
 <Address><AddressLine1>ZA la Croisette</AddressLine1><City>Clelles en Trièves</City>
 <StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>38930</PostalCode>
 <ResidentialAddress></ResidentialAddress></Address></Shipper><ShipTo><CompanyName>Sistemi Fans</CompanyName>
@@ -42,9 +42,7 @@
 </BillShipper></Prepaid></PaymentInformation><Package><PackagingType><Code>02</Code></PackagingType><Dimensions>
 <UnitOfMeasurement><Code>CM</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
 </Dimensions><PackageWeight><UnitOfMeasurement><Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight>
-</PackageWeight><PackageServiceOptions><InsuredValue><CurrencyCode>EUR</CurrencyCode
-><MonetaryValue>50.00</MonetaryValue></InsuredValue><VerbalConfirmation><Name>Eric Romeo</Name>
-<PhoneNumber>123456777</PhoneNumber></VerbalConfirmation></PackageServiceOptions></Package><LabelSpecification>
+</PackageWeight><PackageServiceOptions></PackageServiceOptions></Package><LabelSpecification>
 <LabelPrintMethod><Code>GIF</Code></LabelPrintMethod><HTTPUserAgent>Mozilla/4.5</HTTPUserAgent><LabelImageFormat>
 <Code>GIF</Code></LabelImageFormat></LabelSpecification></Shipment></ShipmentConfirmRequest>"))
 
