@@ -25,7 +25,7 @@
 (def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
 (def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102016"})
 (def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
-(def service-data {:code "42" :description "The answer to life, etc"})
+(def service-data {:code "03" :description "Ground"})
 (def reference-number-data {:code "02" :value "1234567"})
 (def service-attempt-data {:description "Sistemi Test Data" :return_service_code "5" :documents_only ""})
 
@@ -118,8 +118,8 @@ address-xml
 (def service-xml
   (u/strip-newlines
 "<Service>
-<Code>42</Code>
-<Description>The answer to life, etc</Description>
+<Code>03</Code>
+<Description>Ground</Description>
 </Service>") )
 
 

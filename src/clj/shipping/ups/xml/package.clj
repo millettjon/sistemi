@@ -88,7 +88,8 @@
       [:Code (package_data :type_code)] ]
     (dimension-info (package_data :dimension_data))
     (weight-info (package_data :weight_data))
-    (c/reference-number-info (package_data :reference_data))
+    ; Generates error with and error without
+    ;(c/reference-number-info (package_data :reference_data))
     (service-option-info (package_data :service_data) (package_data :service_options))
     ])
 

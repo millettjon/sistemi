@@ -92,7 +92,7 @@
     ) )
 
 (def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
-                              :reference_data ct/reference-number-data :service_data service-options-data
+                              :service_data service-options-data ;:reference_data ct/reference-number-data
                               :service_options service-options-multi})
 
 (def shipping-package-1
@@ -115,10 +115,6 @@
 </UnitOfMeasurement>
 <Weight>14.1</Weight>
 </PackageWeight>
-<ReferenceNumber>
-<Code>02</Code>
-<Value>1234567</Value>
-</ReferenceNumber>
 <PackageServiceOptions>
 <InsuredValue>
 <CurrencyCode>EUR</CurrencyCode>
@@ -141,8 +137,7 @@
 "<Package><PackagingType><Code>02</Code></PackagingType><Dimensions><UnitOfMeasurement>
 <Code>CM</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
 </Dimensions><PackageWeight><UnitOfMeasurement>
-<Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight></PackageWeight><ReferenceNumber><Code>02</Code>
-<Value>1234567</Value></ReferenceNumber><PackageServiceOptions><InsuredValue>
+<Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight></PackageWeight><PackageServiceOptions><InsuredValue>
 <CurrencyCode>EUR</CurrencyCode><MonetaryValue>50.00</MonetaryValue></InsuredValue>
 <VerbalConfirmation><Name>Eric Romeo</Name><PhoneNumber>123456777</PhoneNumber>
 </VerbalConfirmation></PackageServiceOptions></Package>
@@ -150,8 +145,7 @@
 <Code>02</Code></PackagingType><Dimensions><UnitOfMeasurement><Code>CM</Code></UnitOfMeasurement>
 <Length>22</Length><Width>20</Width><Height>18</Height></Dimensions><PackageWeight><UnitOfMeasurement>
 <Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight>
-</PackageWeight><ReferenceNumber><Code>02</Code><Value>1234567</Value></ReferenceNumber>
-<PackageServiceOptions><InsuredValue><CurrencyCode>EUR</CurrencyCode><MonetaryValue>50.00</MonetaryValue>
+</PackageWeight><PackageServiceOptions><InsuredValue><CurrencyCode>EUR</CurrencyCode><MonetaryValue>50.00</MonetaryValue>
 </InsuredValue><VerbalConfirmation><Name>Eric Romeo</Name><PhoneNumber>123456777</PhoneNumber>
 </VerbalConfirmation></PackageServiceOptions></Package>"))
 

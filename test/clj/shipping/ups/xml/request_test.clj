@@ -36,13 +36,13 @@
 <AttentionName>Big Fan</AttentionName><PhoneNumber>123456777</PhoneNumber><Address>
 <AddressLine1>123 Sistemi Drive</AddressLine1><City>St. Martin D'Uriage</City>
 <StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
-<ResidentialAddress></ResidentialAddress></Address></ShipTo><Service><Code>42</Code>
-<Description>The answer to life, etc</Description></Service><PaymentInformation><Prepaid><BillShipper>
+<ResidentialAddress></ResidentialAddress></Address></ShipTo><Service><Code>03</Code>
+<Description>Ground</Description></Service><PaymentInformation><Prepaid><BillShipper>
 <CreditCard><Type>06</Type><Number>4111111111111111</Number><ExpirationDate>102016</ExpirationDate></CreditCard>
 </BillShipper></Prepaid></PaymentInformation><Package><PackagingType><Code>02</Code></PackagingType><Dimensions>
-<UnitOfMeasurement><Code>IN</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
-</Dimensions><PackageWeight><Weight>14.1</Weight></PackageWeight><ReferenceNumber><Code>02</Code>
-<Value>1234567</Value></ReferenceNumber><PackageServiceOptions><InsuredValue><CurrencyCode>EUR</CurrencyCode
+<UnitOfMeasurement><Code>CM</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>
+</Dimensions><PackageWeight><UnitOfMeasurement><Code>KGS</Code></UnitOfMeasurement><Weight>14.1</Weight>
+</PackageWeight><PackageServiceOptions><InsuredValue><CurrencyCode>EUR</CurrencyCode
 ><MonetaryValue>50.00</MonetaryValue></InsuredValue><VerbalConfirmation><Name>Eric Romeo</Name>
 <PhoneNumber>123456777</PhoneNumber></VerbalConfirmation></PackageServiceOptions></Package><LabelSpecification>
 <LabelPrintMethod><Code>GIF</Code></LabelPrintMethod><HTTPUserAgent>Mozilla/4.5</HTTPUserAgent><LabelImageFormat>
