@@ -25,19 +25,23 @@
 (def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
 (def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102016"})
 (def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
-(def service-data {:code "03" :description "Ground"})
+(def service-data {:code "11" :description "UPS Standard"})
 (def reference-number-data {:code "02" :value "1234567"})
 (def service-attempt-data {:description "Sistemi Test Data" :return_service_code "5" :documents_only ""})
 
-(def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province ""
-                   :country_code "FR" :postal "12345"})
-
 ;; Fabricator UPS account information
-(def shipper-data {:user_id "Sistemi" :attention_name "SistemiFabricator" :phone "000111222"
-                   :shipper_number "123456" :address address-data})
+(def shipper-address-data {:address1 "ZA la Croisette" :city "Clelles en Trièves" :state_province ""
+                           :country_code "FR" :postal "38930"})
 
-(def ship-to-data {:company "Sistemi Fans" :attention_name "Big Fan" :phone "123456777"
-                   :address address-data})
+(def receiver-address-data {:address1 "130 route de la combette" :city "St. Martin d'Uriage" :state_province ""
+                            :country_code "FR" :postal "38410"})
+
+(def shipper-data {:user_id "SistemiShipper" :attention_name "SistemiFabricator" :phone "000111222"
+                   :shipper_number "123456" :address shipper-address-data})
+
+(def receiver-data {:user_id "SistemiReceiver" :attention_name "SistemiCustomer" :phone "000111222"
+                   :shipper_number "123456" :company "Sistemi" :address receiver-address-data})
+
 
 
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
@@ -80,6 +84,31 @@
 <ResidentialAddress></ResidentialAddress>
 </Address>") )
 
+(def address-fabricator-1-xml
+  (u/strip-newlines
+"<Address>
+<AddressLine1>ZA la Croisette</AddressLine1>
+<City>Clelles en Trièves</City>
+<StateProvinceCode></StateProvinceCode>
+<CountryCode>FR</CountryCode>
+<PostalCode>38930</PostalCode>
+<ResidentialAddress></ResidentialAddress>
+</Address>" ) )
+
+(def address-sistemi-hq-xml
+  (u/strip-newlines
+"<Address>
+<AddressLine1>130 route de la combette</AddressLine1>
+<City>St. Martin D'Uriage</City>
+<StateProvinceCode></StateProvinceCode>
+<CountryCode>FR</CountryCode>
+<PostalCode38410></PostalCode>
+<ResidentialAddress></ResidentialAddress>
+</Address>" ) )
+
+(def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province ""
+                   :country_code "FR" :postal "12345"})
+
 (deftest test-address-info
   (let [data1 (c/address-info address-data)]
     (is (= (str xml-header address-xml) (x/emit-str (xml data1)) ))
@@ -95,9 +124,11 @@
 address-xml
 "</Shipper>") )
 
+(def shipper-data-test {:user_id "Sistemi" :attention_name "SistemiFabricator" :phone "000111222"
+                   :shipper_number "123456" :address address-data})
 
 (deftest test-shipper-info
-  (let [data1 (c/sistemi-shipper-info shipper-data)]
+  (let [data1 (c/sistemi-shipper-info shipper-data-test)]
     (is (= (str xml-header shipper-xml) (x/emit-str (xml data1)) ))
     ) )
 
@@ -110,6 +141,10 @@ address-xml
 address-xml
 "</ShipTo>") )
 
+
+(def ship-to-data {:company "Sistemi Fans" :attention_name "Big Fan" :phone "123456777"
+                   :address address-data})
+
 (deftest test-ship-to-info
   (let [data1 (c/ship-to-info ship-to-data)]
     (is (= (str xml-header ship-to-xml) (x/emit-str (xml data1)) ))
@@ -118,8 +153,8 @@ address-xml
 (def service-xml
   (u/strip-newlines
 "<Service>
-<Code>03</Code>
-<Description>Ground</Description>
+<Code>11</Code>
+<Description>UPS Standard</Description>
 </Service>") )
 
 

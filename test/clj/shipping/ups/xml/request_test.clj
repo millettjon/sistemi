@@ -28,16 +28,16 @@
 "<ShipmentConfirmRequest><Request><RequestAction>ShipConfirm</RequestAction>
 <RequestOption>nonvalidate</RequestOption><TransactionReference><CustomerContext>SistemiContextID-XX1122</CustomerContext>
 <XpciVersion>1.0001</XpciVersion></TransactionReference></Request><Shipment>
-<Shipper><Name>Sistemi</Name>
+<Shipper><Name>SistemiShipper</Name>
 <AttentionName>SistemiFabricator</AttentionName><PhoneNumber>000111222</PhoneNumber><ShipperNumber>123456</ShipperNumber>
-<Address><AddressLine1>123 Sistemi Drive</AddressLine1><City>St. Martin D'Uriage</City>
-<StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
+<Address><AddressLine1>ZA la Croisette</AddressLine1><City>Clelles en Trièves</City>
+<StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>38930</PostalCode>
 <ResidentialAddress></ResidentialAddress></Address></Shipper><ShipTo><CompanyName>Sistemi Fans</CompanyName>
 <AttentionName>Big Fan</AttentionName><PhoneNumber>123456777</PhoneNumber><Address>
 <AddressLine1>123 Sistemi Drive</AddressLine1><City>St. Martin D'Uriage</City>
 <StateProvinceCode></StateProvinceCode><CountryCode>FR</CountryCode><PostalCode>12345</PostalCode>
-<ResidentialAddress></ResidentialAddress></Address></ShipTo><Service><Code>03</Code>
-<Description>Ground</Description></Service><PaymentInformation><Prepaid><BillShipper>
+<ResidentialAddress></ResidentialAddress></Address></ShipTo><Service><Code>11</Code>
+<Description>UPS Standard</Description></Service><PaymentInformation><Prepaid><BillShipper>
 <CreditCard><Type>06</Type><Number>4111111111111111</Number><ExpirationDate>102016</ExpirationDate></CreditCard>
 </BillShipper></Prepaid></PaymentInformation><Package><PackagingType><Code>02</Code></PackagingType><Dimensions>
 <UnitOfMeasurement><Code>CM</Code></UnitOfMeasurement><Length>22</Length><Width>20</Width><Height>18</Height>

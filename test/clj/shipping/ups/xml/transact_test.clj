@@ -57,6 +57,7 @@
     } )
 
 (defn shipper-data
+  "Pull test address data (todo: move from ct)"
   [access_data]
   (let [sd1 ct/shipper-data]
     (assoc-in sd1 [:shipper_number] (access_data :account_number))
@@ -72,7 +73,7 @@
   [shipping_data]
   (let [confirm_request {:txn_reference ct/txn-reference-data
                          :shipper (shipping_data :shipper_data)
-                         :ship_to ct/ship-to-data
+                         :ship_to ct/receiver-data
                          :ship_service ct/service-data
                          :payment ct/payment-data
                          :packages (list pt/shipping-package-data-1)
