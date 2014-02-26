@@ -4,10 +4,9 @@
             [sistemi.config]
             [app.config :as c]
             [shipping.ups.xml.transact :as trans]
-            [shipping.ups.xml.common :as cmn]
+            [shipping.ups.xml.modules :as m]
             [shipping.ups.xml.request :as sr]
-            [shipping.ups.xml.common_test :as ct]
-            [shipping.ups.xml.package_test :as pt]
+            [shipping.ups.xml.modules_test :as mt]
             [shipping.ups.xml.request_test :as rqt])
   (:use [clojure.test]) )
 
@@ -59,7 +58,7 @@
 (defn shipper-data
   "Pull test address data (todo: move from ct)"
   [access_data]
-  (let [sd1 ct/shipper-data]
+  (let [sd1 mt/shipper-data]
     (assoc-in sd1 [:shipper_number] (access_data :account_number))
     ) )
 
@@ -67,17 +66,17 @@
   "Pulled from encrypted config (reuse for all transactions).
   This returns 'header' information for confirmed access."
   [access_info]
-  (cmn/access-request-info access_info) )
+  (m/access-request-info access_info) )
 
 (defn shipment-confirm-request
   [shipping_data]
-  (let [confirm_request {:txn_reference ct/txn-reference-data
+  (let [confirm_request {:txn_reference mt/txn-reference-data
                          :shipper (shipping_data :shipper_data)
-                         :ship_to ct/receiver-data
-                         :ship_service ct/service-data
-                         :payment ct/payment-data
-                         :packages (list pt/shipping-package-data-1)
-                         :label ct/label-spec-data}]
+                         :ship_to mt/receiver-data
+                         :ship_service mt/service-data
+                         :payment mt/payment-data
+                         :packages (list mt/shipping-package-data-1)
+                         :label mt/label-spec-data}]
 
     (sr/shipment-confirm-request confirm_request)
     ) )

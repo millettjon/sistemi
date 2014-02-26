@@ -1,6 +1,5 @@
 (ns shipping.ups.xml.request
-  (:require [shipping.ups.xml.common :as c]
-            [shipping.ups.xml.package :as p]))
+  (:require [shipping.ups.xml.modules :as m]))
 
 ;; Reference vectors of keys below when looking up information for the order.
 ;; Use (zipmap) or equivalent to combine keys with order data and then pass
@@ -86,18 +85,18 @@
     [:Request
     [:RequestAction "ShipConfirm"]
     [:RequestOption "nonvalidate"]
-    (c/transaction-reference-info (request_data :txn_reference))]
+    (m/transaction-reference-info (request_data :txn_reference))]
     [:Shipment
-;      [:Description (c/handle-optional (request_data :description) "")]
+;      [:Description (m/handle-optional (request_data :description) "")]
 ;      [:ReturnService
-;        [:Code (c/handle-optional (request_data :service_attempt_code) "5")] ]
-;      [:DocumentsOnly (c/handle-optional (request_data :documents_only) "")]
-      (c/sistemi-shipper-info (request_data :shipper))
-      (c/ship-to-info (request_data :ship_to))
-      (c/shipping-service-info (request_data :ship_service))
-      (c/payement-info (request_data :payment))
-      (p/shipping-packages-info (request_data :packages))
-      (c/label-spec-info (request_data :label)) ]
+;        [:Code (m/handle-optional (request_data :service_attempt_code) "5")] ]
+;      [:DocumentsOnly (m/handle-optional (request_data :documents_only) "")]
+      (m/sistemi-shipper-info (request_data :shipper))
+      (m/ship-to-info (request_data :ship_to))
+      (m/shipping-service-info (request_data :ship_service))
+      (m/payement-info (request_data :payment))
+      (m/shipping-packages-info (request_data :packages))
+      (m/label-spec-info (request_data :label)) ]
     ] )
 
 (defn shipment-accept-request

@@ -2,8 +2,7 @@
   (:require [shipping.ups.xml.request :as sr]
             [shipping.ups.xml.util :as u]
             [clojure.data.xml :as x]
-            [shipping.ups.xml.common_test :as ct]
-            [shipping.ups.xml.package_test :as pt])
+            [shipping.ups.xml.modules_test :as mt])
   (:use clojure.test) )
 
 
@@ -12,16 +11,16 @@
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 
 
-(def shipment-confirm-data {:txn_reference ct/txn-reference-data
+(def shipment-confirm-data {:txn_reference mt/txn-reference-data
                             :description "Sistemi Test Shipment"
                             :service_attempt_code "5"
                             :documents_only nil
-                            :shipper ct/shipper-data
-                            :ship_to ct/ship-to-data
-                            :ship_service ct/service-data
-                            :payment ct/payment-data
-                            :packages (list pt/shipping-package-data-1)
-                            :label ct/label-spec-data})
+                            :shipper mt/shipper-data
+                            :ship_to mt/ship-to-data
+                            :ship_service mt/service-data
+                            :payment mt/payment-data
+                            :packages (list mt/shipping-package-data-1)
+                            :label mt/label-spec-data})
 
 (def shipment-confirm-xml
   (u/strip-newlines
