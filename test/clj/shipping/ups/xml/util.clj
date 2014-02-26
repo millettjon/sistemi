@@ -17,16 +17,3 @@
   [element]
   (reduce )
   )
-
-(def foo {:a "a" :b '({:a "a1" :b (list "b1")} {:a "a1a" :b (list {:a "a1a2" :b "b2"})} ) } )
-
-;(defn test-foo
-;  [bar]
-;  (let [values (list foo)
-;        results '()]
-;    (loop [current (first values)]
-;      (if (= bar (-> current :a))
-;        (conj results (first (-> current :b)))
-;        (recur)
-;        ) )
-;    ) )
