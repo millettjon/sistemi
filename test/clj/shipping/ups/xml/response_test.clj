@@ -196,3 +196,45 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
       "19.60" (result :transportation_charges)
       "3.40"  (result :service_options_charges)
       ) ) )
+
+(def ship-accept-response-raw
+  (u/strip-newlines
+"{:orig-content-encoding nil,
+:trace-redirects [\"https://onlinetools.ups.com/ups.app/xml/ShipConfirm\"],
+:request-time 799,
+:status 200,
+:headers {\"date\" \"Wed, 05 Mar 2014 04:31:25 GMT\", \"server\" \"Apache\",
+\"x-frame-options\" \"SAMEORIGIN\", \"pragma\" \"no-cache\", \"connection\" \"close\",
+\"transfer-encoding\" \"chunked\", \"content-type\" \"application/xml\"},
+:body \"<?xml version=\"1.0\"?>
+<ShipmentConfirmResponse>
+<Response>
+<TransactionReference>
+<CustomerContext>SistemiContextID-XX1122</CustomerContext>
+<XpciVersion>1.0001</XpciVersion>
+</TransactionReference>
+<ResponseStatusCode>1</ResponseStatusCode>
+<ResponseStatusDescription>Success</ResponseStatusDescription>
+</Response>
+<ShipmentCharges>
+<TransportationCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>38.79</MonetaryValue>
+</TransportationCharges>
+<ServiceOptionsCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>0.00</MonetaryValue>
+</ServiceOptionsCharges>
+<TotalCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>38.79</MonetaryValue>
+</TotalCharges>
+</ShipmentCharges>
+<BillingWeight>
+<UnitOfMeasurement>
+<Code>KGS</Code>
+</UnitOfMeasurement>
+<Weight>16.0</Weight>
+</BillingWeight>
+<ShipmentIdentificationNumber>1ZAY34136894627262</ShipmentIdentificationNumber>
+<ShipmentDigest>foobar</ShipmentDigest>"))

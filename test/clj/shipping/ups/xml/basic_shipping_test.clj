@@ -5,10 +5,8 @@
             [app.config :as c]
             [shipping.ups.xml.transact :as trans]
             [shipping.ups.xml.modules :as m]
-            ;[shipping.ups.xml.common :as cmn]
             [shipping.ups.xml.request :as sr]
-            [shipping.ups.xml.common_test :as ct]
-            [shipping.ups.xml.package_test :as pt]
+            [shipping.ups.xml.response :as rsp]
             [shipping.ups.xml.request_test :as rqt])
   (:use [clojure.test]) )
 
@@ -16,10 +14,7 @@
 (def ship_accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
 (def xml x/sexp-as-element)
 
-;; Examples
-;(client/get "https://wwwcie.ups.com/ups.app/xml/ShipConfirm")
-;{:trace-redirects ["https://wwwcie.ups.com/ups.app/xml/ShipConfirm"], :request-time 513, :status 200, :headers {"date" "Fri, 17 Jan 2014 04:07:17 GMT", "server" "Apache", "x-frame-options" "SAMEORIGIN", "content-length" "242", "connection" "close", "content-type" "text/html; charset=ISO-8859-1"}, :body "<HTML>\r\n<HEAD><TITLE>UPS Online Tools ShipConfirm</TITLE></HEAD>\r\n<BODY><H2>\r\nService Name: ShipConfirm<br>\r\nRemote User: null<br>\r\nServer Port: 443<br>\r\nServer Name: wwwcie.ups.com<br>\r\nServlet Path: /ShipConfirm<br>\r\n</H2>\r\n</BODY></HTML>\r\n"}
-
+;; ************ Request Data *********************************
 (def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
 (def service-data {:code "11" :description "UPS Standard"})
 (def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102016"})
@@ -103,39 +98,107 @@
     (str (x/emit-str access) (x/emit-str confirm))
     ) )
 
-(deftest test-shipment-confirm-request
-  (sistemi.config/init!)
-  ;(pr c/config)
-  (let [ups_access (c/conf :ups)
-        req (shipment-confirm-request-xml ups_access)
-        rsp (trans/request-shipping req)]
-
-    (println (str "request:\n" req "\n"))
-    (println (str "response:\n" rsp))
-    ) )
+;(deftest test-shipment-confirm-request
+;  (sistemi.config/init!)
+;  ;(pr c/config)
+;  (let [ups_access (c/conf :ups)
+;        raw_req (shipment-confirm-request-xml ups_access)
+;        raw_rsp (trans/request-shipping raw_req)
+;        response (rsp/get-shipment-confirm-response raw_rsp)]
+;
+;    ;(println (str "raw request:\n" raw_req "\n"))
+;    ;(println (str "raw response:\n" raw_rsp))
+;    (println (str "response:\n" response))
+;    ) )
 
 
 ;; ****************** XML Sample **************************
 ; integration test
-;
-;<ShipmentConfirmResponse><Response>
-;   <TransactionReference>
-;     <CustomerContext>SistemiContextID-XX1122</CustomerContext>
-;     <XpciVersion>1.0001</XpciVersion>
-;   </TransactionReference>
-;   <ResponseStatusCode>0</ResponseStatusCode>
-;   <ResponseStatusDescription>Failure</ResponseStatusDescription>
-;   <Error>
-;     <ErrorSeverity>Hard</ErrorSeverity><ErrorCode>250005</ErrorCode>
-;     <ErrorDescription>No Access and Authentication Credentials provided</ErrorDescription>
-;   </Error>
-; </Response></ShipmentConfirmResponse>}
-;
-;(deftest test-request-shipping_invalid_request
-;  (sistemi.config/init!)
-;  (pr c/config)
-;  (let [ups (pr (c/conf :ups))
-;        rsp (trans/request-shipping rqt/shipment-confirm-xml)]
-;
-;    (is (= "No Access and Authentication Credentials provided" (-> rsp :error_msg)))
-;    ) )
+;<?xml version="1.0" encoding="UTF-8"?>
+;<AccessRequest xml:lang="en-US">
+;<AccessLicenseNumber>see-config-retrieval</AccessLicenseNumber>
+;<UserId>sistemiups</UserId>
+;<Password>ups-password</Password>
+;</AccessRequest><?xml version="1.0" encoding="UTF-8"?><ShipmentConfirmRequest>
+;<Request>
+;<RequestAction>ShipConfirm</RequestAction>
+;<RequestOption>nonvalidate</RequestOption>
+;<TransactionReference>
+;<CustomerContext>SistemiContextID-XX1122</CustomerContext>
+;<XpciVersion>1.0001</XpciVersion>
+;</TransactionReference>
+;</Request>
+;<Shipment>
+;<Shipper>
+;<Name>SistemiShipper</Name>
+;<AttentionName>SistemiFabricator</AttentionName>
+;<PhoneNumber>0423456789</PhoneNumber>
+;<ShipperNumber>AY3413</ShipperNumber>
+;<Address>
+;<AddressLine1>ZA la Croisette</AddressLine1>
+;<City>Clelles en Trièves</City>
+;<StateProvinceCode></StateProvinceCode>
+;<CountryCode>FR</CountryCode>
+;<PostalCode>38930</PostalCode>
+;<ResidentialAddress></ResidentialAddress>
+;</Address>
+;</Shipper>
+;<ShipTo>
+;<CompanyName>Sistemi</CompanyName>
+;<AttentionName>SistemiCustomer</AttentionName>
+;<PhoneNumber>0412345678</PhoneNumber>
+;<Address>
+;<AddressLine1>130 route de la combette</AddressLine1>
+;<City>St. Martin d'Uriage</City>
+;<StateProvinceCode></StateProvinceCode>
+;<CountryCode>FR</CountryCode>
+;<PostalCode>38410</PostalCode>
+;<ResidentialAddress></ResidentialAddress>
+;</Address>
+;</ShipTo>
+;<Service>
+;<Code>11</Code>
+;<Description>UPS Standard</Description>
+;</Service>
+;<PaymentInformation>
+;<Prepaid>
+;<BillShipper>
+;<CreditCard>
+;<Type>06</Type>
+;<Number>4111111111111111</Number>
+;<ExpirationDate>102016</ExpirationDate>
+;</CreditCard>
+;</BillShipper>
+;</Prepaid>
+;</PaymentInformation>
+;<Package>
+;<PackagingType>
+;<Code>02</Code>
+;</PackagingType>
+;<Dimensions>
+;<UnitOfMeasurement>
+;<Code>CM</Code>
+;</UnitOfMeasurement>
+;<Length>22</Length>
+;<Width>20</Width>
+;<Height>18</Height>
+;</Dimensions>
+;<PackageWeight>
+;<UnitOfMeasurement>
+;<Code>KGS</Code>
+;</UnitOfMeasurement>
+;<Weight>14.1</Weight>
+;</PackageWeight>
+;<PackageServiceOptions></PackageServiceOptions>
+;</Package>
+;<LabelSpecification>
+;<LabelPrintMethod>
+;<Code>GIF</Code>
+;</LabelPrintMethod>
+;<HTTPUserAgent>Mozilla/4.5</HTTPUserAgent>
+;<LabelImageFormat>
+;<Code>GIF</Code>
+;</LabelImageFormat>
+;</LabelSpecification>
+;</Shipment>
+;</ShipmentConfirmRequest>
