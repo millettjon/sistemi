@@ -73,7 +73,7 @@
 
 (def shipping-request-keys [:txn_reference :shipper :ship_to :ship_service :payment :packages :label])
 
-(defn shipment-confirm-request
+(defn create-ship-confirm-request-xml
   "Part 1 of a 2 part shipping order. General notes:
   RequestOption
     'validate' - street level validation only
@@ -99,7 +99,14 @@
       (m/label-spec-info (request_data :label)) ]
     ] )
 
-(defn shipment-accept-request
+;(defn build-ship-accept-data
+;  "Use the 'ship-accept' data and merge it with the 'ship-accept-response' to
+;  build a map of the necessary values."
+;  [ship_accept_data ship_accept_response_data]
+;
+;  )
+
+(defn create-ship-accept-request-xml
   "After receiving a successful 'Shipment Confirm Response' build this request
   and send to UPS."
   [request_accept_data]
@@ -112,5 +119,5 @@
       [:TransactionReference
         [:CustomerContext (request_accept_data :customer_context_id)]
         [:XpciVersion (request_accept_data :xpci_version)] ]
-      [:RequestAction (request_accept_data :request_action)] ]
+      [:RequestAction "ShipAccept"] ]
     [:ShipmentDigest (request_accept_data :shipment_digest)] ] )

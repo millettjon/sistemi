@@ -46,7 +46,7 @@
 <Code>GIF</Code></LabelImageFormat></LabelSpecification></Shipment></ShipmentConfirmRequest>"))
 
 (deftest test-shipment-confirm-request
-  (let [data (sr/shipment-confirm-request shipment-confirm-data)]
+  (let [data (sr/create-ship-confirm-request-xml shipment-confirm-data)]
     (is (= (str xml-header shipment-confirm-xml) (x/emit-str (xml data)) ))
     ) )
 
@@ -74,6 +74,6 @@
    :shipment_digest "SistemiModerniABC"})
 
 (deftest test-shipment-accept-request
-  (let [data (sr/shipment-accept-request shipment-accept-data)]
+  (let [data (sr/create-ship-accept-request-xml shipment-accept-data)]
     (is (= (str xml-header shipment-accept-xml) (x/emit-str (xml data)) ))
     ) )

@@ -5,7 +5,7 @@
             [app.config :as c]
             [shipping.ups.xml.transact :as trans]
             [shipping.ups.xml.modules :as m]
-            [shipping.ups.xml.request :as sr]
+            [shipping.ups.xml.request :as req]
             [shipping.ups.xml.response :as rsp]
             [shipping.ups.xml.request_test :as rqt])
   (:use [clojure.test]) )
@@ -66,50 +66,70 @@
     (assoc-in sd1 [:shipper_number] (access_data :account_number))
     ) )
 
-(defn access-request
+(defn access-request-xml
   "Pulled from encrypted config (reuse for all transactions).
   This returns 'header' information for confirmed access."
-  [access_info]
-  (m/access-request-info access_info) )
+  [access_data]
+  (m/access-request-info access_data) )
 
-(defn shipment-confirm-request
-  [shipping_data]
-  (let [confirm_request {:txn_reference txn-reference-data
-                         :shipper (shipping_data :shipper_data)
-                         :ship_to receiver-data
-                         :ship_service service-data
-                         :payment payment-data
-                         :packages (list shipping-package-data-1)
-                         :label label-spec-data}]
+(defn create-ship-confirm-request-data
+  "Create a map of key-value data necessary for a UPS ship confirm request"
+  [access_data]
+  (let [shipper_data (shipper-info-data access_data)
+        request_data1 {:access_data access_data :shipper_data shipper_data :service_attempt_code "5"}
+        request-data2 {:txn_reference txn-reference-data
+                       :shipper (request_data1 :shipper_data)
+                       :ship_to receiver-data
+                       :ship_service service-data
+                       :payment payment-data
+                       :packages (list shipping-package-data-1)
+                       :label label-spec-data}]
 
-    (sr/shipment-confirm-request confirm_request)
+    (merge request_data1 request-data2)
     ) )
 
-(defn shipment-confirm-request-xml
+(defn ship-confirm-request-xml
   "Combine AccessRequest and ShipmentConfirmRequest xml"
-  [access_info]
-  ; This top section should be called "build-data" and return 'req_data'
-  (let [access_data (access-data-from-config access_info)
-        shipper_data (shipper-info-data access_data)
-        req_data {:access_data access_data :shipper_data shipper_data :service_attempt_code "5"}
-        access (xml (access-request access_data))
-        confirm (xml (shipment-confirm-request req_data))]
+  [confirm_req_data]
+  (let [confirm (req/create-ship-confirm-request-xml confirm_req_data)
+        access-xml (xml (access-request-xml (confirm_req_data :access_data)))
+        confirm-xml (xml confirm)]
 
-    (str (x/emit-str access) (x/emit-str confirm))
+    (str (x/emit-str access-xml) (x/emit-str confirm-xml))
     ) )
 
-;(deftest test-shipment-confirm-request
-;  (sistemi.config/init!)
-;  ;(pr c/config)
-;  (let [ups_access (c/conf :ups)
-;        raw_req (shipment-confirm-request-xml ups_access)
-;        raw_rsp (trans/request-shipping raw_req)
-;        response (rsp/get-shipment-confirm-response raw_rsp)]
-;
-;    ;(println (str "raw request:\n" raw_req "\n"))
-;    ;(println (str "raw response:\n" raw_rsp))
-;    (println (str "response:\n" response))
-;    ) )
+(defn create-ship-accept-request-data
+  "Build shipment accept request data from txn_reference and shipment_digest (from confirm_response)"
+  [confirm_response_data]
+  (let [accept_request_data {:txn_reference txn-reference-data
+                             :shipment_digest (confirm_response_data :shipment_digest) }]
+
+    accept_request_data
+    ) )
+
+(deftest test-shipment-confirm-request
+  "The simplest full ship transaction I could get to work. It is composed of two parts:
+  1) ship confirm, 2) ship accept
+  Use this as a template for other shipping options."
+  (sistemi.config/init!)
+  (let [ups_access (c/conf :ups)
+        access_data (access-data-from-config ups_access)
+
+        ship_confirm_data (create-ship-confirm-request-data access_data)
+        ship_confirm_req (ship-confirm-request-xml ship_confirm_data)
+        ship_confirm_raw_rsp (trans/request-shipping ship_confirm_req)
+        ship_confirm_rsp (rsp/get-shipment-confirm-response ship_confirm_raw_rsp)
+
+        ship_accept_data (create-ship-accept-request-data ship_confirm_rsp)
+        ship_accept_req (req/create-ship-accept-request-xml ship_accept_data)
+        ]
+
+    ;(println (str "ship_confirm_request:\n" ship_confirm_req "\n"))
+    ;(println (str "ship_confirm_raw_response:\n" ship_confirm_raw_rsp "\n"))
+    ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
+    ;(println (str "ship accept data:\n" ship_accept_data "\n"))
+    ;(println (str "ship accept request:\n" ship_accept_req "\n"))
+    ) )
 
 
 ;; ****************** XML Sample **************************
