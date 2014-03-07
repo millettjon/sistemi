@@ -78,7 +78,7 @@
                          :packages (list mt/shipping-package-data-1)
                          :label mt/label-spec-data}]
 
-    (sr/shipment-confirm-request confirm_request)
+    (sr/create-ship-confirm-request-xml confirm_request)
     ) )
 
 (defn shipment-confirm-request-xml

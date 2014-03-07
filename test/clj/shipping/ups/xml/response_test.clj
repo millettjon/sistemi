@@ -286,6 +286,20 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
 </ShipmentResults>
 </ShipmentAcceptResponse>") )
 
-(def ship-accept-error-rsp
+(def ship-accept-cc-error-rsp
   (u/strip-newlines
+"<?xml version="1.0"?>
+<ShipmentAcceptResponse>
+<Response>
+<ResponseStatusCode>0</ResponseStatusCode>
+<ResponseStatusDescription>Failure</ResponseStatusDescription>
+<Error>
+<ErrorSeverity>Hard</ErrorSeverity>
+<ErrorCode>120414</ErrorCode>
+<ErrorDescription>Credit card authorization failed, contact your financial institution</ErrorDescription>
+</Error>
+</Response>
+<ShipmentResults/>
+</ShipmentAcceptResponse>
+"
     ) )
