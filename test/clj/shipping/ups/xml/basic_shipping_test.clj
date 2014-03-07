@@ -91,21 +91,33 @@
 (defn ship-confirm-request-xml
   "Combine AccessRequest and ShipmentConfirmRequest xml"
   [confirm_req_data]
-  (let [confirm (req/create-ship-confirm-request-xml confirm_req_data)
-        access-xml (xml (access-request-xml (confirm_req_data :access_data)))
-        confirm-xml (xml confirm)]
+  (let [access-xml (xml (access-request-xml (confirm_req_data :access_data)))
+        confirm-xml (xml (req/create-ship-confirm-request-xml confirm_req_data))]
 
     (str (x/emit-str access-xml) (x/emit-str confirm-xml))
     ) )
 
 (defn create-ship-accept-request-data
   "Build shipment accept request data from txn_reference and shipment_digest (from confirm_response)"
-  [confirm_response_data]
-  (let [accept_request_data {:txn_reference txn-reference-data
+  [access_data confirm_response_data]
+  (let [accept_request_data {:access_data access_data
+                             :txn_reference txn-reference-data
                              :shipment_digest (confirm_response_data :shipment_digest) }]
 
     accept_request_data
     ) )
+
+(defn ship-accept-request-xml
+  "Build the shipment accept request xml"
+  [accept_req_data]
+  (let [access-xml (xml (access-request-xml (accept_req_data :access_data)))
+        accept-xml (xml (req/create-ship-accept-request-xml accept_req_data))]
+
+    (str (x/emit-str access-xml) (x/emit-str accept-xml))
+    ) )
+
+(def shipping-confirm "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
+(def shipping-accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
 
 (deftest test-shipment-confirm-request
   "The simplest full ship transaction I could get to work. It is composed of two parts:
@@ -114,14 +126,15 @@
   (sistemi.config/init!)
   (let [ups_access (c/conf :ups)
         access_data (access-data-from-config ups_access)
-
+        ; part 1: shipping confirm
         ship_confirm_data (create-ship-confirm-request-data access_data)
-        ship_confirm_req (ship-confirm-request-xml ship_confirm_data)
-        ship_confirm_raw_rsp (trans/request-shipping ship_confirm_req)
-        ship_confirm_rsp (rsp/get-shipment-confirm-response ship_confirm_raw_rsp)
-
-        ship_accept_data (create-ship-accept-request-data ship_confirm_rsp)
-        ship_accept_req (req/create-ship-accept-request-xml ship_accept_data)
+        ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
+        ship_confirm_raw_rsp (client/post shipping-confirm {:body ship_confirm_req_xml :insecure? true})
+        ship_confirm_rsp (rsp/get-shipment-confirm-response (ship_confirm_raw_rsp :body))
+        ; part 2: shipping accept
+        ship_accept_data (create-ship-accept-request-data access_data ship_confirm_rsp)
+        ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
+        ship_accept_raw_rsp (client/post shipping-accept {:body ship_accept_req_xml :insecure? true})
         ]
 
     ;(println (str "ship_confirm_request:\n" ship_confirm_req "\n"))
@@ -129,6 +142,8 @@
     ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
     ;(println (str "ship accept data:\n" ship_accept_data "\n"))
     ;(println (str "ship accept request:\n" ship_accept_req "\n"))
+    ;; Fails with credit card auth
+    (println (str "ship accept raw response:\n" ship_accept_raw_rsp "\n"))
     ) )
 
 
