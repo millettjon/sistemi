@@ -197,7 +197,7 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
       "3.40"  (result :service_options_charges)
       ) ) )
 
-(def ship-accept-response-raw
+(def ship-accept-raw-response-1
   (u/strip-newlines
 "{:orig-content-encoding nil,
 :trace-redirects [\"https://onlinetools.ups.com/ups.app/xml/ShipConfirm\"],
@@ -238,3 +238,54 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
 </BillingWeight>
 <ShipmentIdentificationNumber>1ZAY34136894627262</ShipmentIdentificationNumber>
 <ShipmentDigest>foobar</ShipmentDigest>"))
+
+(def ship-accept-raw-response-2
+  (u/strip-newlines
+"<?xml version=\"1.0\"?>
+<ShipmentAcceptResponse>
+<Response>
+<ResponseStatusCode>1</ResponseStatusCode>
+<ResponseStatusDescription>Success</ResponseStatusDescription>
+</Response>
+<ShipmentResults>
+<ShipmentCharges>
+<TransportationCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>38.79</MonetaryValue>
+</TransportationCharges>
+<ServiceOptionsCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>0.00</MonetaryValue>
+</ServiceOptionsCharges>
+<TotalCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>38.79</MonetaryValue>
+</TotalCharges>
+</ShipmentCharges>
+<BillingWeight>
+<UnitOfMeasurement>
+<Code>KGS</Code>
+<Description>Kilograms</Description>
+</UnitOfMeasurement>
+<Weight>16.0</Weight>
+</BillingWeight>
+<ShipmentIdentificationNumber>1ZAY34136899238914</ShipmentIdentificationNumber>
+<PackageResults><TrackingNumber>1ZAY34136899238914</TrackingNumber>
+<ServiceOptionsCharges>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>0.00</MonetaryValue>
+</ServiceOptionsCharges>
+<LabelImage>
+<LabelImageFormat>
+<Code>GIF</Code>
+</LabelImageFormat>
+<GraphicImage>R0lGODdheAUgwcHB0dHR4eHh8fHyAgICEhISIiIiMjIyQkJCUlJSYmJicnJygoKCkpKSoqKisrKywsLC0tLS4uLi8vLzAwMDExMTIyMjMzMzQ0NDU1NTY2Njc3Nzg4ODk5OT</GraphicImage>
+<HTMLImage>PCFET0NUWVBFIEhUTUwgUFVCTElDICItLy9JRVRGLy9EVEQgSFRNTCAzLjIvL0VOIj4KPGh0bWw+PGhlYWQ+PHRpdGxlPgpWaWV3L1ByaW50IExhYmVsPC90aXRsZT48L2hlYWQ</HTMLImage>
+</LabelImage>
+</PackageResults>
+</ShipmentResults>
+</ShipmentAcceptResponse>") )
+
+(def ship-accept-error-rsp
+  (u/strip-newlines
+    ) )

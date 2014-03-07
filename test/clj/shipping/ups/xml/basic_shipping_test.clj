@@ -72,21 +72,23 @@
   [access_data]
   (m/access-request-info access_data) )
 
-(defn create-ship-confirm-request-data
-  "Create a map of key-value data necessary for a UPS ship confirm request"
+(defn merged-ship-confirm-data-basic
+  "A simplified map composed of defined maps."
   [access_data]
-  (let [shipper_data (shipper-info-data access_data)
-        request_data1 {:access_data access_data :shipper_data shipper_data :service_attempt_code "5"}
-        request-data2 {:txn_reference txn-reference-data
-                       :shipper (request_data1 :shipper_data)
-                       :ship_to receiver-data
-                       :ship_service service-data
-                       :payment payment-data
-                       :packages (list shipping-package-data-1)
-                       :label label-spec-data}]
+  (let [shipper_data (shipper-info-data access_data)]
+  (merge
+      {:access_data access_data}
+      {:shipper_data shipper_data}
+      {:service_attempt_code "5"}
+      {:packages (list shipping-package-data-1)}
+      {:txn_reference txn-reference-data}
+      {:shipper shipper_data}
+      {:ship_to receiver-data}
+      {:ship_service service-data}
+      {:payment payment-data}
+      {:label label-spec-data}
+   ) ) )
 
-    (merge request_data1 request-data2)
-    ) )
 
 (defn ship-confirm-request-xml
   "Combine AccessRequest and ShipmentConfirmRequest xml"
@@ -127,7 +129,7 @@
   (let [ups_access (c/conf :ups)
         access_data (access-data-from-config ups_access)
         ; part 1: shipping confirm
-        ship_confirm_data (create-ship-confirm-request-data access_data)
+        ship_confirm_data (merged-ship-confirm-data-basic access_data)
         ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
         ship_confirm_raw_rsp (client/post shipping-confirm {:body ship_confirm_req_xml :insecure? true})
         ship_confirm_rsp (rsp/get-shipment-confirm-response (ship_confirm_raw_rsp :body))
@@ -135,6 +137,7 @@
         ship_accept_data (create-ship-accept-request-data access_data ship_confirm_rsp)
         ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
         ship_accept_raw_rsp (client/post shipping-accept {:body ship_accept_req_xml :insecure? true})
+        ship_accept_rsp (rsp/get-shipment-accept-response (ship_accept_raw_rsp :body))
         ]
 
     ;(println (str "ship_confirm_request:\n" ship_confirm_req "\n"))
@@ -142,8 +145,9 @@
     ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
     ;(println (str "ship accept data:\n" ship_accept_data "\n"))
     ;(println (str "ship accept request:\n" ship_accept_req "\n"))
-    ;; Fails with credit card auth
+    ;; Might fail with credit card auth
     (println (str "ship accept raw response:\n" ship_accept_raw_rsp "\n"))
+    (println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
     ) )
 
 
