@@ -10,14 +10,14 @@
 (defn failure-info
   "Checks the ShipmentConfirmResponse for a failure and logs 'ErrorCode'
   and 'ErrorDescription' if true."
-  [sc_rsp_data]
-  (let [status (first (xml-> sc_rsp_data :Response :ResponseStatusDescription text))
-        error (first (xml-> sc_rsp_data :Response :Error text))
-        error_msg (first (xml-> sc_rsp_data :Response :Error :ErrorDescription text))]
+  [response_data]
+  (let [status (first (xml-> response_data :Response :ResponseStatusDescription text))
+        error (first (xml-> response_data :Response :Error text))
+        error_msg (first (xml-> response_data :Response :Error :ErrorDescription text))]
     (if (or (not (nil? error)) (= "Failure" status))
       (do
         (log/error (str "ShipmentConfirmResponse Failure '"
-                     (xml-> sc_rsp_data :Response :Error :ErrorCode text) ", " error_msg))
+                     (xml-> response_data :Response :Error :ErrorCode text) ", " error_msg))
         {:error_msg error_msg})
     nil
       ) ) )
@@ -67,14 +67,19 @@
   "A response to the 2nd of 2 requests for UPS shipping."
   [sa_response]
   (let [input (xm/parse (t/text-in-bytestream sa_response))
-        data (zip/xml-zip input)]
-    (assoc {}
-      :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
-      :response_status (first (xml-> data :Response :ResponseStatus text))
-      :response_status_description (first (xml-> data :Response :responseStatusDescription text))
-      :transportation_charges (first (xml-> data :ShipmentResults :ShipmentCharges :TransportationCharges :MonetaryValue text))
-      :service_options_charges (first (xml-> data :ShipmentResults :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
-      :total_charges  (first (xml-> data :ShipmentResults :ShipmentCharges :TotalCharges :MonetaryValue text))
-      :billing_weight (first (xml-> data :ShipmentResults :BillingWeight text))
-      :packages (get-response-packages data)
-      ) ) )
+        data (zip/xml-zip input)
+        failure (failure-info data)]
+    (if (nil? failure)
+      (assoc {}
+        :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
+        :response_status (first (xml-> data :Response :ResponseStatus text))
+        :response_status_description (first (xml-> data :Response :responseStatusDescription text))
+        :transportation_charges (first (xml-> data :ShipmentResults :ShipmentCharges :TransportationCharges :MonetaryValue text))
+        :service_options_charges (first (xml-> data :ShipmentResults :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
+        :total_charges  (first (xml-> data :ShipmentResults :ShipmentCharges :TotalCharges :MonetaryValue text))
+        :billing_weight (first (xml-> data :ShipmentResults :BillingWeight text))
+        :packages (get-response-packages data)
+        )
+      failure)
+    ) )
+
