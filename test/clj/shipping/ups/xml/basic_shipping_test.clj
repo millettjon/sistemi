@@ -9,6 +9,7 @@
 
 (def ship_confirm "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
 (def ship_accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
+
 (def xml x/sexp-as-element)
 
 ;; ************ Request Data *********************************
