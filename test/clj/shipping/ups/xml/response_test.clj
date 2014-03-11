@@ -301,5 +301,4 @@ SDJFKAJFSDIUR897348574KJWEHRIQEWU8948348(truncated)</ShipmentDigest>
 </Response>
 <ShipmentResults/>
 </ShipmentAcceptResponse>
-"
-    ) )
+") )

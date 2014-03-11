@@ -5,7 +5,7 @@
             [clojure.xml :as xm]
             [clojure.zip :as zip]
             [clojure.tools.logging :as log])
-  (:use [clojure.data.zip.xml :only (text xml->)])) )
+  (:use [clojure.data.zip.xml :only (text xml->)]))
 
 (def q "'")
 
@@ -13,6 +13,22 @@
   "Wrap quotes? Shit I can remember ;-)"
   [arg]
   (clojure.string/join (list q arg q)))
+
+;; todo: check with other request error messages
+(defn failure-info
+  "Checks the ShipmentConfirmResponse for a failure and logs 'ErrorCode'
+  and 'ErrorDescription' if true."
+  [sc_rsp_data]
+  (let [status (first (xml-> sc_rsp_data :Response :ResponseStatusDescription text))
+        error (first (xml-> sc_rsp_data :Response :Error text))
+        error_msg (first (xml-> sc_rsp_data :Response :Error :ErrorDescription text))]
+    (if (or (not (nil? error)) (= "Failure" status))
+      (do
+        (log/error (str "ShipmentConfirmResponse Failure '"
+                     (xml-> sc_rsp_data :Response :Error :ErrorCode text) ", " error_msg))
+        {:error_msg error_msg})
+      nil
+      ) ) )
 
 ;; Meat and Potatoes ...............
 
@@ -44,12 +60,6 @@
     (m/label-spec-info (request_data :label)) ]
    ] )
 
-;(defn build-ship-accept-data
-;  "Use the 'ship-accept' data and merge it with the 'ship-accept-response' to
-;  build a map of the necessary values."
-;  [ship_accept_data ship_accept_response_data]
-;
-;  )
 
 (defn create-ship-accept-request-xml
   "After receiving a successful 'Shipment Confirm Response' build this request
@@ -67,21 +77,6 @@
     [:RequestAction "ShipAccept"] ]
    [:ShipmentDigest (request_accept_data :shipment_digest)] ] )
 
-;; todo: check with other request error messages
-(defn failure-info
-  "Checks the ShipmentConfirmResponse for a failure and logs 'ErrorCode'
-  and 'ErrorDescription' if true."
-  [sc_rsp_data]
-  (let [status (first (xml-> sc_rsp_data :Response :ResponseStatusDescription text))
-        error (first (xml-> sc_rsp_data :Response :Error text))
-        error_msg (first (xml-> sc_rsp_data :Response :Error :ErrorDescription text))]
-    (if (or (not (nil? error)) (= "Failure" status))
-      (do
-        (log/error (str "ShipmentConfirmResponse Failure '"
-                     (xml-> sc_rsp_data :Response :Error :ErrorCode text) ", " error_msg))
-        {:error_msg error_msg})
-      nil
-      ) ) )
 
 ; Could refactor the (first (xml-> data)) to something like (foo data [& tags])
 (defn get-shipment-confirm-response
@@ -129,7 +124,7 @@
   [sa_response]
   (let [input (xm/parse (t/text-in-bytestream sa_response))
         data (zip/xml-zip input)
-        failure (failure-info sa_response)]
+        failure (failure-info data)]
     (if (nil? failure)
       (assoc {}
         :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
