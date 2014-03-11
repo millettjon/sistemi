@@ -68,7 +68,7 @@
   "Pulled from encrypted config (reuse for all transactions).
   This returns 'header' information for confirmed access."
   [access_data]
-  (m/access-request-info access_data) )
+  (m/access-request-xml access_data) )
 
 (defn merged-ship-confirm-data-basic
   "A simplified map composed of defined maps."
@@ -119,7 +119,7 @@
 (def shipping-confirm "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
 (def shipping-accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
 
-(deftest test-ship-request
+(deftest ^:integration test-ship-request
   "The simplest full ship transaction I could get to work. It is composed of two parts:
   1) ship confirm, 2) ship accept
   Use this as a template for other shipping options."

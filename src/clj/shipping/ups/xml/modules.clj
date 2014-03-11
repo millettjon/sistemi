@@ -19,7 +19,7 @@
 ;; </AccessRequest>
 (def access-request-keys [:lang_locale :license_number :user_id :password])
 
-(defn access-request-info
+(defn access-request-xml
   "Pull access request information from secure location?"
   [access-data]
   [:AccessRequest {:xml:lang (access-data :lang_locale)}

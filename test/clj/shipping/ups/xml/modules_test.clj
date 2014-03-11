@@ -19,6 +19,7 @@
 ; 2) Invalid credit card number (use sample below)
 ; 3) Invalid RequestOption
 
+;; todo: refactor to use ship_data_basic
 ;; Sample working request data required
 (def access-request-data {:lang_locale "en-US" :license_number "Sistemi123" :user_id "Sistemi" :password "foo"})
 (def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
@@ -58,8 +59,8 @@
 <Password>foo</Password>
 </AccessRequest>") )
 
-(deftest test-access-request-info
-  (let [data1 (m/access-request-info access-request-data)]
+(deftest test-access-request-xml
+  (let [data1 (m/access-request-xml access-request-data)]
     (is (= (str xml-header access-request-xml) (x/emit-str (xml data1)) ))
     ) )
 
