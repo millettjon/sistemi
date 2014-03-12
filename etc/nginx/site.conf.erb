@@ -3,8 +3,6 @@
 <% require 'edn' %>
 <% m = EDN.read(File.read('etc/profiles/' + ENV['PROFILE'] + '/default.edn')) %>
 
-server_names_hash_bucket_size 64;
-
 # NAKED DOMAIN - HTTP
 # Redirect to www and force use of https.
 server {
