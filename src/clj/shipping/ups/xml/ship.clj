@@ -7,7 +7,8 @@
             [clojure.data.xml :as x]
             [clojure.xml :as xm]
             [clojure.zip :as zip]
-            [clj-http.client :as client])
+            [clj-http.client :as client]
+            [taoensso.timbre :as loge])
   (:use [clojure.data.zip.xml :only (text xml->)]))
 
 (def q "'")
@@ -58,10 +59,10 @@
     [:RequestOption "nonvalidate"]
     (m/transaction-reference-info (request_data :txn_reference))]
    [:Shipment
-    ;      [:Description (m/handle-optional (request_data :description) "")]
-    ;      [:ReturnService
-    ;        [:Code (m/handle-optional (request_data :service_attempt_code) "5")] ]
-    ;      [:DocumentsOnly (m/handle-optional (request_data :documents_only) "")]
+    ; [:Description (m/handle-optional (request_data :description) "")]
+    ; [:ReturnService
+    ;   [:Code (m/handle-optional (request_data :service_attempt_code) "5")] ]
+    ; [:DocumentsOnly (m/handle-optional (request_data :documents_only) "")]
     (m/sistemi-shipper-info (request_data :shipper))
     (m/ship-to-info (request_data :ship_to))
     (m/shipping-service-info (request_data :ship_service))
@@ -188,7 +189,7 @@
 
   This requires that config be initialized"
   ([ship_confirm_data]
-    (shipping-trans-part1 ship_confirm_data (t/access-data-from-config (c/conf :usp))) )
+    (shipping-trans-part1 ship_confirm_data (t/access-data-from-config (c/conf :ups))) )
   ([ship_data access_data]
     (let [ship_confirm_data (merge ship_data access_data)
           ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
@@ -196,9 +197,10 @@
           ship_confirm_raw_rsp (client/post ship_confirm {:body ship_confirm_req_xml :insecure? true})
           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
 
-      ;(println (str "ship_confirm_request:\n" ship_confirm_req "\n"))
-      ;(println (str "ship_confirm_raw_response:\n" ship_confirm_raw_rsp "\n"))
-      ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
+      ; Has CC number or Account information
+      ;(log/info (assoc ship_confirm_req :event :ship_trans_part1/ship_confirm_req))
+      (loge/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
+      (loge/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
       ship_confirm_rsp
     ) ) )
 
@@ -208,17 +210,17 @@
 
   This requires config initialization."
   ([ship_confirm_response]
-    (shipping-trans-part2 ship_confirm_response (t/access-data-from-config (c/conf :usp))) )
+    (shipping-trans-part2 ship_confirm_response (t/access-data-from-config (c/conf :ups))) )
   ([ship_confirm_response access_data]
     (let [ship_accept_data (create-ship-accept-request-data access_data ship_confirm_response)
           ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
           ship_accept_raw_rsp (client/post ship_accept {:body ship_accept_req_xml :insecure? true})
           ship_accept_rsp (get-shipment-accept-response (ship_accept_raw_rsp :body))]
 
-      ;(println (str "ship accept data:\n" ship_accept_data "\n"))
-      ;(println (str "ship accept request:\n" ship_accept_req "\n"))
-      ;(println (str "ship accept raw response:\n" ship_accept_raw_rsp "\n"))
-      ;(println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
+      (loge/info (assoc ship_accept_data :event :ship_trans_part2/ship_accept_data))
+      (loge/info (assoc ship_accept_req_xml :event :ship_trans_part2/ship_accept_req_xml))
+      (loge/info (assoc ship_accept_raw_rsp :event :ship_trans_part2/ship_accept_raw_rsp))
+      (loge/info (assoc ship_accept_rsp :event :ship_trans_part2/ship_accept_rsp))
     ship_accept_rsp
     ) ) )
 
@@ -241,12 +243,13 @@
         ship_accept_rsp (get-shipment-accept-response (ship_accept_raw_rsp :body))
         ]
 
-    ;(println (str "ship_confirm_request:\n" ship_confirm_req "\n"))
-    ;(println (str "ship_confirm_raw_response:\n" ship_confirm_raw_rsp "\n"))
-    ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
-    ;(println (str "ship accept data:\n" ship_accept_data "\n"))
-    ;(println (str "ship accept request:\n" ship_accept_req "\n"))
-    ;; Might fail with credit card auth
-    ;(println (str "ship accept raw response:\n" ship_accept_raw_rsp "\n"))
-    ;(println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
+    ; Has CC number or Account information
+    ;(log/info (assoc ship_confirm_req :event :ship_trans/ship_confirm_req))
+    (loge/info (assoc ship_confirm_raw_rsp :event :ship_trans/ship_confirm_raw_resp))
+    (loge/info (assoc ship_confirm_rsp :event :ship_trans/ship_confirm_rsp))
+    (loge/info (assoc ship_accept_data :event :ship_trans/ship_accept_data))
+    (loge/info (assoc ship_accept_req_xml :event :ship_trans/ship_accept_req_xml))
+    (loge/info (assoc ship_accept_raw_rsp :event :ship_trans/ship_accept_raw_rsp))
+    (loge/info (assoc ship_accept_rsp :event :ship_trans/ship_accept_rsp))
+    ship_accept_rsp
     ) )
