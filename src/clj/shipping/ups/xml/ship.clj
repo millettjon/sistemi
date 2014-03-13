@@ -13,8 +13,11 @@
 (def q "'")
 (def xml x/sexp-as-element)
 
-(def ship_confirm "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
-(def ship_accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
+(def ship_confirm_test "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
+(def ship_accept_test "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
+
+(def ship_confirm "https://wwwcie.ups.com/ups.app/xml/ShipConfirm")
+(def ship_accept "https://wwwcie.ups.com/ups.app/xml/ShipAccept")
 
 (defn sq
   "Wrap quotes? Shit I can remember ;-)"
@@ -149,7 +152,7 @@
 
 ;;;;;;;;;;;;;;; transactional part (FIX ME) ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn ship-confirm-request-xml
+(defn- ship-confirm-request-xml
   "Combine AccessRequest and ShipmentConfirmRequest xml"
   [confirm_req_data]
   ;  (m/access-request-info access_data)
@@ -159,7 +162,7 @@
     (str (x/emit-str access-xml) (x/emit-str confirm-xml))
     ) )
 
-(defn create-ship-accept-request-data
+(defn- create-ship-accept-request-data
   "Build shipment accept request data from txn_reference and shipment_digest (from confirm_response)"
   [access_data confirm_request_data confirm_response_data]
   (let [accept_request_data {:access_data access_data
@@ -169,7 +172,7 @@
     accept_request_data
     ) )
 
-(defn ship-accept-request-xml
+(defn- ship-accept-request-xml
   "Build the shipment accept request xml"
   [accept_req_data]
   (let [access-xml (xml (m/access-request-xml (accept_req_data :access_data)))

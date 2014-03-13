@@ -35,12 +35,12 @@
 (def shipper-address-data {:address1 "ZA la Croisette" :city "Clelles en Trièves" :state_province ""
                            :country_code "FR" :postal "38930"})
 
-(def receiver-address-data {:address1 "130 route de la combette" :city "St. Martin d'Uriage" :state_province ""
-                            :country_code "FR" :postal "38410"})
-
 ; Phone numbers are 10 alpha-numeric (Europe 2.2.2.2.2  (
 (def shipper-data {:user_id "SistemiShipper" :attention_name "SistemiFabricator" :phone "0423456789"
                    :shipper_number "123456" :address shipper-address-data})
+
+(def receiver-address-data {:address1 "130 route de la combette" :city "St. Martin d'Uriage" :state_province ""
+                            :country_code "FR" :postal "38410"})
 
 ; Phone numbers are 10 alpha-numeric
 (def receiver-data {:user_id "SistemiReceiver" :attention_name "SistemiCustomer" :phone "0412345678"
@@ -115,9 +115,6 @@
 
     (str (x/emit-str access-xml) (x/emit-str accept-xml))
     ) )
-
-(def shipping-confirm "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
-(def shipping-accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
 
 ;(deftest ^:integration test-ship-request
 ;  "The simplest full ship transaction I could get to work. It is composed of two parts:
