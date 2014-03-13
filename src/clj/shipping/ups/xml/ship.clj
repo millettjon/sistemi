@@ -8,7 +8,7 @@
             [clojure.xml :as xm]
             [clojure.zip :as zip]
             [clj-http.client :as client]
-            [taoensso.timbre :as loge])
+            [taoensso.timbre :as logger])
   (:use [clojure.data.zip.xml :only (text xml->)]))
 
 (def q "'")
@@ -199,8 +199,8 @@
 
       ; Has CC number or Account information
       ;(log/info (assoc ship_confirm_req :event :ship_trans_part1/ship_confirm_req))
-      (loge/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
-      (loge/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
+      (logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
+      (logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
       ship_confirm_rsp
     ) ) )
 
@@ -217,10 +217,10 @@
           ship_accept_raw_rsp (client/post ship_accept {:body ship_accept_req_xml :insecure? true})
           ship_accept_rsp (get-shipment-accept-response (ship_accept_raw_rsp :body))]
 
-      (loge/info (assoc ship_accept_data :event :ship_trans_part2/ship_accept_data))
-      (loge/info (assoc ship_accept_req_xml :event :ship_trans_part2/ship_accept_req_xml))
-      (loge/info (assoc ship_accept_raw_rsp :event :ship_trans_part2/ship_accept_raw_rsp))
-      (loge/info (assoc ship_accept_rsp :event :ship_trans_part2/ship_accept_rsp))
+      (logger/info (assoc ship_accept_data :event :ship_trans_part2/ship_accept_data))
+      (logger/info (assoc ship_accept_req_xml :event :ship_trans_part2/ship_accept_req_xml))
+      (logger/info (assoc ship_accept_raw_rsp :event :ship_trans_part2/ship_accept_raw_rsp))
+      (logger/info (assoc ship_accept_rsp :event :ship_trans_part2/ship_accept_rsp))
     ship_accept_rsp
     ) ) )
 
@@ -245,11 +245,11 @@
 
     ; Has CC number or Account information
     ;(log/info (assoc ship_confirm_req :event :ship_trans/ship_confirm_req))
-    (loge/info (assoc ship_confirm_raw_rsp :event :ship_trans/ship_confirm_raw_resp))
-    (loge/info (assoc ship_confirm_rsp :event :ship_trans/ship_confirm_rsp))
-    (loge/info (assoc ship_accept_data :event :ship_trans/ship_accept_data))
-    (loge/info (assoc ship_accept_req_xml :event :ship_trans/ship_accept_req_xml))
-    (loge/info (assoc ship_accept_raw_rsp :event :ship_trans/ship_accept_raw_rsp))
-    (loge/info (assoc ship_accept_rsp :event :ship_trans/ship_accept_rsp))
+    (logger/info (assoc ship_confirm_raw_rsp :event :ship_trans/ship_confirm_raw_resp))
+    (logger/info (assoc ship_confirm_rsp :event :ship_trans/ship_confirm_rsp))
+    (logger/info (assoc ship_accept_data :event :ship_trans/ship_accept_data))
+    (logger/info (assoc ship_accept_req_xml :event :ship_trans/ship_accept_req_xml))
+    (logger/info (assoc ship_accept_raw_rsp :event :ship_trans/ship_accept_raw_rsp))
+    (logger/info (assoc ship_accept_rsp :event :ship_trans/ship_accept_rsp))
     ship_accept_rsp
     ) )
