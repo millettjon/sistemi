@@ -29,8 +29,8 @@
   [:div {:style {:margin "30px 0px 0px 30px"}}
    (wiz/checkout-wizard :payment)
 
-   ;; Used from js add stripe token and submit to server.
-   [:form#token-form {:action "payment" :method "post"}]
+   ;; placeholder to display payment error messages
+   [:p#message.error {:style {:display "none"}} "This is a message"]
 
    ;; Used for cc fields. Stripe pulls fields labeled with stripe-data
    ;; attribute. These fields are not submitted to the server.
@@ -48,7 +48,9 @@
         
         [:div.control-group
          [:label.control-label {:for "name"} "Name"]
-         [:div.controls [:input#name {:type "text" :data-stripe "name"}]]]
+         [:div.controls
+          (f/text :name {:data-stripe "name"})
+          ]]
 
         [:div.control-group
          [:label.control-label {:for "number"} "Number"]
@@ -141,4 +143,4 @@
                 (select-keys contact [:name])
 
                 payment)]
-    (response (layout/standard-page (head req) (f/with-form sf/order-payment params (body (cart/get req))) 0))))
+    (response (layout/standard-page (head req) (f/with-form sf/order-shipping params (body (cart/get req))) 0))))

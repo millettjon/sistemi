@@ -20,6 +20,11 @@
     color: #FFFFFF;
 }
 
+.error {
+    color: #FF0000;
+    font-size: 14px;
+}
+
 /* ----- LANGUAGE SELECTION ----- */
 #lang {
     font-family: Ubuntu,Arial,sans-serif;

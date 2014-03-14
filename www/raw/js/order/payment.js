@@ -1,8 +1,35 @@
+// Send the token to the server to charge the card.
+var postToken = function(token) {
+    console.log("POSTING TOKEN");
+    var r = new XMLHttpRequest();
+    r.open('POST', 'payment'); // note: relative path
+    //r.onLoad = chargeHandler; // note: may not work on safari; doesn't get called on network errors
+    r.setRequestHeader('Content-Type', 'application/json');
+    r.onreadystatechange = function() {
+        if (r.readyState===4) {
+            console.log("postToken - done");
+            if (r.status===200) {
+                var payment_result = JSON.parse(r.responseText);
+                console.log("JSON RESPONSE", payment_result);
+                if (payment_result.code === 0) {
+                    window.location = payment_result.location;
+                    return; // RETURN IF ALL WENT WELL
+                }
+            }
+
+            // Display error message.
+            $('#message').text(payment_result.message).show();
+
+            // Re-enable post button to allow retry.
+            $('#cc-form').find('button').prop('disabled', false);
+        }
+    };
+    r.send(JSON.stringify({'stripe-token': token}));
+};
+
 var stripeResponseHandler = function(status, response) {
   // Used client side only to edit cc fields and submit to stripe.
   var $ccForm = $('#cc-form');
-  // Used to post stripe token to server.
-  var $tokenForm = $('#token-form');
 
   console.log('stripe response:');
   console.log(status);
@@ -20,17 +47,11 @@ var stripeResponseHandler = function(status, response) {
     response.status = status;
   } else {
     console.log('success');
+
     // token contains id, last4, and card type
     var token = response.id;
-    // Insert the token into the form so it gets submitted to the server
-    $tokenForm.append($('<input type=\"hidden\" name=\"stripe-token\" />').val(token));
-    // and submit
-    $tokenForm.get(0).submit();
-
-    // TODO: leave it disabled?   
-    $ccForm.find('button').prop('disabled', false);
+    postToken(token);
   }
-
 };
 
 var validateForm = function() {

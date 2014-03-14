@@ -4,19 +4,72 @@
             [datomic.api :as d])
   (:refer-clojure :exclude [partition]))
 
+;; ? How to persist the order in Datomic?
+;; 
+;; - create schema to hold an order
+;; - create an order
+;;
+;; order
+;;   items (store item details as blob) type, details
+;;   price (total)
+;;     unit  :eur
+;;     value BigDecimal
+;;   contact info
+;;     name
+;;     email
+;;     phone
+;;   shipping info
+;;     address
+;;
+;; {:order {:price {:total #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}},
+;;          :items #ordered/map ([0 {:price {:workbook "shelf/shelf-chain-france.xls", :total #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}, :unit #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}, :parts {:fabrication-stephane #frinj.core.fjv{:v 47.86M, :u {:EUR 1}}, :finishing-marques #frinj.core.fjv{:v 45.36M, :u {:EUR 1}}, :packaging-box #frinj.core.fjv{:v 16.32M, :u {:EUR 1}}, :subtotal #frinj.core.fjv{:v 109.54M, :u {:EUR 1}}, :margin #frinj.core.fjv{:v 21.91M, :u {:EUR 1}}, :tax #frinj.core.fjv{:v 25.76M, :u {:EUR 1}}, :adjustment #frinj.core.fjv{:v -0.21M, :u {:EUR 1}}}},
+;;                                   :id 0, :type :shelf, :color {:rgb "#C51D34", :type :ral, :code 3027}, :quantity 1, :finish :laquer-matte, :width 120, :depth 30}])
+;;
+;; ? an entity is a collection of attributes?
+;; ? how are prices stored?
+;; ? is it useful to store prices a frinj units?
+;;
+;; (def order-contact
+;;   "Fields on the order/contact page."
+;;   {:name {:type :string :max 50}
+;;    :email {:type :string :max 100}
+;;    :phone {:type :string :max 20}})
+;;
+;; ;; Notes:
+;; ;; - region is not required for french address
+;; (def address
+;;   "Fields for an address."
+;;   {:name {:type :string :max 50}
+;;    :address1 {:type :string :max 100}
+;;    :address2 {:type :string :max 100}
+;;    :city {:type :string :max 50}
+;;    :region {:type :string :max 50}
+;;    :code {:type :string :max 20}
+;;    :country {:type :string :max 20}})
+
+;; What should the name be? :frinj/u :frinj/v
+;; unit + value
+;; 
+
+datum = entity attribute value
+
+
+
+
 (def partition
   :main)
 
 (def schema
   [;; browser
-   {:db/ident :browser/id
-    :db/id #db/id[:db.part/db]
+   {:db/id #db/id[:db.part/db]
+    :db/ident :browser/id
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/unique :db.unique/value
     :db/index true
     :db/doc "A browser's unique random id for event tracking."
-    :db.install/_attribute :db.part/db}])
+    :db.install/_attribute :db.part/db}
+   ])
 
 ;; datomic:dev://{transactor-host}:{port}/{db-name}
 (defn get-uri
@@ -44,6 +97,7 @@
 
     ;; Load the schema.
     @(d/transact conn schema)))
+
 #_ (init-db (get-uri))
 
 ;;

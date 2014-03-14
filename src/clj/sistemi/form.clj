@@ -66,9 +66,3 @@
 (def order-shipping
   "Fields on the order/shipping page."
   address)
-
-(def order-payment
-     "Fields on the order/payment page."
-     (merge
-      address 
-      {:stripe-token {:type :string :max 50}}))
