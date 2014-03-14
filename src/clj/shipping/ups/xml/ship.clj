@@ -14,11 +14,11 @@
 (def q "'")
 (def xml x/sexp-as-element)
 
-(def ship_confirm_test "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
-(def ship_accept_test "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
+(def ship_confirm_test_url "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
+(def ship_accept_test_url "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
 
-(def ship_confirm "https://wwwcie.ups.com/ups.app/xml/ShipConfirm")
-(def ship_accept "https://wwwcie.ups.com/ups.app/xml/ShipAccept")
+(def ship_confirm_url "https://wwwcie.ups.com/ups.app/xml/ShipConfirm")
+(def ship_accept_url "https://wwwcie.ups.com/ups.app/xml/ShipAccept")
 
 (defn sq
   "Wrap quotes? Shit I can remember ;-)"
@@ -165,9 +165,10 @@
 
 (defn- create-ship-accept-request-data
   "Build shipment accept request data from txn_reference and shipment_digest (from confirm_response)"
-  [access_data confirm_request_data confirm_response_data]
+  [access_data confirm_response_data]
   (let [accept_request_data {:access_data access_data
-                             :txn_reference confirm_request_data
+                             :txn_reference {:customer_context_id (confirm_response_data :customer_context_id)
+                                             :xpci_version (confirm_response_data :xpci_version)}
                              :shipment_digest (confirm_response_data :shipment_digest) }]
 
     accept_request_data
@@ -188,19 +189,19 @@
   Itsrequires user + sistemi + fabricator information.
 
   This requires that config be initialized"
-  ([ship_confirm_data]
-    (shipping-trans-part1 ship_confirm_data (t/access-data-from-config (c/conf :ups))) )
-  ([ship_data access_data]
+  ([ship_confirm_data access_data]
+    (shipping-trans-part1 ship_confirm_data access_data ship_confirm_url))
+  ([ship_data access_data confirm_url]
     (let [ship_confirm_data (merge ship_data access_data)
           ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
           ; Should this be secure?
-          ship_confirm_raw_rsp (client/post ship_confirm {:body ship_confirm_req_xml :insecure? true})
+          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? true})
           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
 
       ; Has CC number or Account information
-      ;(log/info (assoc ship_confirm_req :event :ship_trans_part1/ship_confirm_req))
-      (logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
-      (logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
+      ;(logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
+      ;(logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
+      ;(logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
       ship_confirm_rsp
     ) ) )
 
@@ -209,20 +210,20 @@
   the first part of a shipping request 'ship confirm'. Notably, it depends on the huge digest.
 
   This requires config initialization."
-  ([ship_confirm_response]
-    (shipping-trans-part2 ship_confirm_response (t/access-data-from-config (c/conf :ups))) )
-  ([ship_confirm_response access_data]
-    (let [ship_accept_data (create-ship-accept-request-data access_data ship_confirm_response)
+  ([ship_confirm_response_data access_data]
+    (shipping-trans-part2 ship_confirm_response_data access_data ship_accept_url))
+  ([ship_confirm_response_data access_data accept_url]
+    (let [ship_accept_data (create-ship-accept-request-data access_data ship_confirm_response_data)
           ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
-          ship_accept_raw_rsp (client/post ship_accept {:body ship_accept_req_xml :insecure? true})
+          ship_accept_raw_rsp (client/post accept_url {:body ship_accept_req_xml :insecure? true})
           ship_accept_rsp (get-shipment-accept-response (ship_accept_raw_rsp :body))]
 
-      (logger/info (assoc ship_accept_data :event :ship_trans_part2/ship_accept_data))
-      (logger/info (assoc ship_accept_req_xml :event :ship_trans_part2/ship_accept_req_xml))
-      (logger/info (assoc ship_accept_raw_rsp :event :ship_trans_part2/ship_accept_raw_rsp))
-      (logger/info (assoc ship_accept_rsp :event :ship_trans_part2/ship_accept_rsp))
+      ;(logger/info (assoc ship_accept_data :event :ship_trans_part2/ship_accept_data))
+      ;(logger/info (assoc ship_accept_req_xml :event :ship_trans_part2/ship_accept_req_xml))
+      ;(logger/info (assoc ship_accept_raw_rsp :event :ship_trans_part2/ship_accept_raw_rsp))
+      ;(logger/info (assoc ship_accept_rsp :event :ship_trans_part2/ship_accept_rsp))
     ship_accept_rsp
-    ) ) )
+      ) ) )
 
 (defn shipping-transaction-full
   "The simplest full ship transaction I could get to work. It is composed of two parts:
@@ -234,12 +235,12 @@
         ; part 1: shipping confirm
         ship_confirm_data (merge shipping_data access_data)
         ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
-        ship_confirm_raw_rsp (client/post ship_confirm {:body ship_confirm_req_xml :insecure? true})
+        ship_confirm_raw_rsp (client/post ship_confirm_url {:body ship_confirm_req_xml :insecure? true})
         ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))
         ; part 2: shipping accept
         ship_accept_data (create-ship-accept-request-data access_data ship_confirm_rsp)
         ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
-        ship_accept_raw_rsp (client/post ship_accept {:body ship_accept_req_xml :insecure? true})
+        ship_accept_raw_rsp (client/post ship_accept_url {:body ship_accept_req_xml :insecure? true})
         ship_accept_rsp (get-shipment-accept-response (ship_accept_raw_rsp :body))
         ]
 

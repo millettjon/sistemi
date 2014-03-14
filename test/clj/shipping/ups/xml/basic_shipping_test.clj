@@ -127,13 +127,13 @@
         ; part 1: shipping confirm
         ship_confirm_data (merged-ship-confirm-data-basic access_data)
         ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
-        ;ship_confirm_raw_rsp (client/post ship-confirm {:body ship_confirm_req_xml :insecure? true})
-        ;ship_confirm_rsp (ship/get-shipment-confirm-response (ship_confirm_raw_rsp :body))
+        ship_confirm_raw_rsp (client/post ship-confirm {:body ship_confirm_req_xml :insecure? true})
+        ship_confirm_rsp (ship/get-shipment-confirm-response (ship_confirm_raw_rsp :body))
         ; part 2: shipping accept
-        ;ship_accept_data (create-ship-accept-request-data access_data ship_confirm_rsp)
-        ;ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
-        ;ship_accept_raw_rsp (client/post ship-accept {:body ship_accept_req_xml :insecure? true})
-        ;ship_accept_rsp (ship/get-shipment-accept-response (ship_accept_raw_rsp :body))
+        ship_accept_data (create-ship-accept-request-data access_data ship_confirm_rsp)
+        ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
+        ship_accept_raw_rsp (client/post ship-accept {:body ship_accept_req_xml :insecure? true})
+        ship_accept_rsp (ship/get-shipment-accept-response (ship_accept_raw_rsp :body))
         ]
 
     ;(println "test-ship-request():\n" ship_confirm_data)

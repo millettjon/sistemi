@@ -6,6 +6,7 @@
             [shipping.ups.xml.modules_test :as mt]
             [shipping.ups.xml.request_data :as rd]
             [app.config :as c]
+            [sistemi.config]
             [clojure.data.xml :as x]
             [clojure.xml :as xm]
             [clojure.zip :as zip])
@@ -15,8 +16,8 @@
 (def xml x/sexp-as-element)
 (def xml-header "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 
-(def ship_confirm_test "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
-(def ship_accept_test "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
+(def ship_confirm_test_url "https://onlinetools.ups.com/ups.app/xml/ShipConfirm")
+(def ship_accept_test_url "https://onlinetools.ups.com/ups.app/xml/ShipAccept")
 
 (def shipment-confirm-data {:txn_reference mt/txn-reference-data
                             :description "Sistemi Test Shipment"
@@ -377,31 +378,34 @@ THDIUJTHEQW89RY8WIERHT9RI</HTMLImage>
 </ShipmentAcceptResponse>
 ") )
 
-(deftest ^:integration test-ship-request-from-rd
-  "The simplest full ship transaction I could get to work. It is composed of two parts:
-  1) ship confirm, 2) ship accept
-  Use this as a template for other shipping options."
-  (sistemi.config/init!)
-  (let [ups_access (c/conf :ups)
-;        access_data (access-data-from-config ups_access)
+;(deftest ^:integration test-shipping-trans-part1
+;  "The simplest full ship transaction I could get to work. It is composed of two parts:
+;  1) ship confirm, 2) ship accept
+;  Use this as a template for other shipping options."
+;  (sistemi.config/init!)
+;  (let [ups_access (c/conf :ups)
+;        access_data (t/access-data-from-config ups_access)
 ;        ship_confirm_data (rd/simple-request-data access_data)
-;        ; part 1: shipping confirm
-;        ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
-;        ship_confirm_raw_rsp (client/post ship-confirm {:body ship_confirm_req_xml :insecure? true})
-;        ship_confirm_rsp (ship/get-shipment-confirm-response (ship_confirm_raw_rsp :body))
-;        ; part 2: shipping accept
-;        ship_accept_data (create-ship-accept-request-data access_data ship_confirm_rsp)
-;        ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
-;        ship_accept_raw_rsp (client/post ship-accept {:body ship_accept_req_xml :insecure? true})
-;        ship_accept_rsp (ship/get-shipment-accept-response (ship_accept_raw_rsp :body))
-        ]
-    ;(println (str "ship-request-from-rd:\n" ship_confirm_data))
-    ;(println (str "ship_confirm_request:\n" ship_confirm_req_xml "\n"))
-    ;(println (str "ship_confirm_raw_response:\n" ship_confirm_raw_rsp "\n"))
-    ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
-    ;(println (str "ship accept data:\n" ship_accept_data "\n"))
-    ;(println (str "ship accept request:\n" ship_accept_req "\n"))
-    ;; Might fail with credit card auth
-    ;(println (str "ship accept raw response:\n" ship_accept_raw_rsp "\n"))
-    ;(println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
-    ) )
+;        ship_confirm_rsp (ship/shipping-trans-part1 ship_confirm_data access_data ship_confirm_test_url)
+;        ]
+;
+;    ;(println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
+;    (is (= "Success" (ship_confirm_rsp :response_status_description)))
+;    (is (not (nil? (ship_confirm_rsp :tracking_number))))
+;
+;    ) )
+
+;(deftest ^:integration test-shipping-trans-part2
+;  "The simplest full ship transaction I could get to work. It is composed of two parts:
+;  1) ship confirm, 2) ship accept
+;  Use this as a template for other shipping options."
+;  (sistemi.config/init!)
+;  (let [ups_access (c/conf :ups)
+;        access_data (t/access-data-from-config ups_access)
+;        ship_confirm_data (rd/simple-request-data access_data)
+;        ship_confirm_rsp (ship/shipping-trans-part1 ship_confirm_data access_data ship_confirm_test_url)
+;        ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship_accept_test_url)
+;        ]
+;    ;; Might fail with credit card auth
+;    (println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
+;    ) )
