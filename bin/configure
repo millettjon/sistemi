@@ -82,3 +82,12 @@ sudo service nginx restart
 
 # prompt integration
 #ensure_link .prompt /opt/eway/etc/prompt.d/www
+
+# ---------------------------------------------------
+# TODO PHANTOMJS
+# See: http://blog.zolotko.me/2012/12/clojure-selenium-webdriver-and-phantomjs.html
+# wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.7-linux-x86_64.tar.bz2
+# tar -xjf phantomjs-1.9.7-linux-x86_64.tar.bz2 
+# mv phantomjs-1.9.7-linux-x86_64 phantomjs/1.9.7-linux-x86_64
+# cd phantomjs/
+# ln -s 1.9.7-linux-x86_64 current

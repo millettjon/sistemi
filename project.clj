@@ -5,18 +5,31 @@
                                                         :snapshots false
                                                         :releases {:checksum :ignore :update :always}}}
 
-    ;; Use var/ for generated files.
+  ;; Use var/ for generated files.
   :source-paths ["src/clj"]
   :test-paths ["test/clj"]
   :target-path "var/target"
   :compile-path "var/target/classes" 
   :resource-paths ["etc/resources"]
 
+  :test-selectors {:default (complement :integration)
+                   :integration :integration
+                   :offline (complement :online)
+                   :all (fn [_] true)}
+
   :clean-targets [:target-path :compile-path "var/doc" "var/log" "lib"]
 
-  ;;:jvm-opts ["-Dlog4j.debug=true"]
-
   :dependencies [
+                 ;; sub dependencies to explicitly specify to avoid version overrides
+                 ;; note - these are not top level dependencies
+                 ;; note - re check these with lein deps :tree when upgrading top level dependencies
+                 [xml-apis "1.4.01"]
+                 ;[org.eclipse.jetty/jetty-server "8.1.7.v20120910"]
+                 [cheshire "5.2.0"]
+                 [org.clojure/data.json "0.2.3"]
+                 ;[org.mortbay.jetty/jetty "6.1.26"]
+                 ;[org.mortbay.jetty/servlet-api-2.5 "6.1.14"]
+
                  ;; clojure
                  [org.clojure/clojure "1.5.1"]
                  [slingshot "0.10.3"]
@@ -106,14 +119,12 @@
   :plugins [[lein-cljsbuild "0.3.4"]
             [lein-marginalia "0.7.1"]
             [lein-ancient "0.5.3"]
-            [lein-cloverage "1.0.2"]
-            [slamhound "1.5.1"]]
+            [lein-cloverage "1.0.2"]]
 
   :aliases {"start" ["trampoline" "run" "-m" "sistemi.core"]
             "init-db" ^{:doc "Initialize the datomic schema."} ["run" "-m" "sistemi.cli/init-db"]
             "marg" ["marg" "--dir" "var/doc"]
-            "clov" ["cloverage" "-o" "var/cloverage"]
-            }
+            "clov" ["cloverage" "-o" "var/cloverage"]}
 
   :cljsbuild {:crossovers []
               :crossover-path "var/target/crossovers"
@@ -133,4 +144,11 @@
 
   :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]
                                   [org.clojure/tools.nrepl "0.2.3"]
-                                  [ring-mock "0.1.5" :exclusions [org.clojure/clojure]]]}})
+                                  [ring-mock "0.1.5" :exclusions [org.clojure/clojure]]
+
+                                  ;; browser automated testing
+                                  [clj-webdriver/clj-webdriver "0.6.0"]
+                                  [com.github.detro.ghostdriver/phantomjsdriver "1.0.3"]
+                                  ]
+
+                   :jvm-opts ["-Dphantomjs.binary.path=./opt/phantomjs/current/bin/phantomjs"]} })
