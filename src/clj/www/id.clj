@@ -1,6 +1,6 @@
 (ns www.id
   (:require [clojure.tools.logging :as log]
-            [util.base62 :as b62]))
+            [util.id :as id]))
 
 ;; Generate a human readable reasonable unique request identifer for use in log messages.
 ;;
@@ -26,7 +26,7 @@
 (defn init!
   "Generate a unique boot identifier."
   []
-  (alter-var-root #'boot-id (constantly (b62/rand 4))))
+  (alter-var-root #'boot-id (constantly (id/rand-62 4))))
 
 ;; Count requests from zero.
 (def request-count (atom 0))
@@ -34,4 +34,4 @@
 (defn next!
   "Generates and returns a semi-unique request id."
   []
-  (str boot-id "." (b62/encode (swap! request-count inc))))
+  (str boot-id "." (id/encode-62 (swap! request-count inc))))

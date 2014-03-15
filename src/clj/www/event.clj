@@ -1,6 +1,6 @@
 (ns www.event
   "Browser event tracking for analytics."
-  (:require [util.base62 :as b62]
+  (:require [util.id :as id]
             [www.request :as req]
             [ring.util.response :as rsp]
             [datomic.api :as d]
@@ -24,7 +24,7 @@
 (defn- gen-id
   "Generates a new random browser id."
   []
-  (util.base62/rand 21)) ;; 126 (21*6) bits of entropy.
+  (id/rand-62 21)) ;; 126 (21*6) bits of entropy.
 
 ;; Use async here since it is faster and we don't need to wait for the result.
 (defn- new-browser-async

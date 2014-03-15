@@ -1,7 +1,8 @@
 (ns sistemi.datomic
   (:require [app.config :as cf]
             [sistemi.config :as scf]
-            [datomic.api :as d])
+            [datomic.api :as d]
+            [util.id :as id])
   (:refer-clojure :exclude [partition]))
 
 ;; ? How to persist the order in Datomic?
@@ -46,15 +47,28 @@
 ;;    :region {:type :string :max 50}
 ;;    :code {:type :string :max 20}
 ;;    :country {:type :string :max 20}})
-
+;;
 ;; What should the name be? :frinj/u :frinj/v
 ;; unit + value
 ;; 
-
-datum = entity attribute value
-
-
-
+;; datum = entity attribute value
+;; 
+;; - ups - get shipping estimate
+;;   - give priority
+;; - bookcase - add cart button
+;; - shelf - remove bookcase image and move it to the cart
+;; - review final pricing
+;; - order notification
+;;   - via jarvis
+;;   - via stripe
+;; - setup stripe
+;; - email confirmation - 
+;;   - could this be sent manually
+;; - code
+;;   - see if dave wants to work on it
+;; - dave get him setup with tasks for next week
+;; - insurance program
+;;   - 2 or 3 tiered package; right to return on reception; return in 7 days
 
 (def partition
   :main)
@@ -68,6 +82,45 @@ datum = entity attribute value
     :db/unique :db.unique/value
     :db/index true
     :db/doc "A browser's unique random id for event tracking."
+    :db.install/_attribute :db.part/db}
+
+   ;; ========== PRICE ==========
+   ;; attribute for price value (generic)
+   ;; attribute for price currency (generic)
+   ;;   ? is there a keyword value type?
+   ;; entity for price
+;; :db.type/keyword
+
+   ;; price amount
+   {:db/id #db/id[:db.part/db]
+    :db/ident :price/amount
+    :db/valueType :db.type/bigdec
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; price currency
+   {:db/id #db/id[:db.part/db]
+    :db/ident :price/currency
+    :db/valueType :db.type/keyword
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; ========== ORDER ==========
+   ;; order - id
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/id
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/unique :db.unique/value
+    :db/index true
+    :db.install/_attribute :db.part/db}
+   
+   ;; order - total
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/total
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
    ])
 
@@ -167,6 +220,48 @@ datum = entity attribute value
                              [?p :db/ident ?ident]]
        db))
 #_ (-> (get-conn) d/db get-partitions)
+
+
+(defn- gen-order-id
+  "Generates a new random order id."
+  []
+  (id/rand-36 6))
+
+;; Create a new order.
+#_ (let [conn (get-conn)
+         id (gen-order-id)]
+     (d/transact conn [{:db/id (d/tempid partition)
+                        :order/id id}]))
+
+;; List all orders ids.
+#_ (let [db (d/db (get-conn))
+         id (d/q '[:find ?id
+                   :where [_ :order/id ?id]]
+                 db)]
+     id)
+
+;; Check if an order exists.
+#_ (let [order-id "JI6WW5"]
+     (->> (get-conn)
+          d/db
+          (d/q '[:find ?e
+                 :in ?order-id $
+                 :where [?e :order/id ?order-id]]
+               order-id
+               )))
+
+;; Retrieve all attributes for an order.
+#_ (let [order-id "JI6WW5"
+         db (d/db (get-conn))
+         eid (d/q '[:find ?e
+                    :where [?e :order/id ?order-id]]
+                  db)]
+     (into {} (d/entity db (ffirst eid))))
+
+;; Update the total price for an order.
+
+;; Hmm, TDD using in memory database?
+
 
 
 ;; Sessions
