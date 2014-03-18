@@ -8,6 +8,13 @@ fundamental currency unit which is USD."
   [amount]
   (f/fjv. amount {:EUR 1}))
 
+(defn reader
+  [m]
+  (merge (f/fjv. nil nil) m))
+
+(def readers
+  {'frinj.core.fjv reader})
+
 (defn fj-round
   [number places]
   (let [v (:v number)]

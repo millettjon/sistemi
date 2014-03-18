@@ -14,6 +14,7 @@
             frinj.jvm
             [sistemi.registry :as registry]
             [sistemi.routes :as routes]
+            [sistemi.datomic :as d]
             [app.config :as cf]
             git)
   (:use [ring.adapter.jetty :only (run-jetty)]
@@ -47,6 +48,9 @@
 
   ;; ===== UNIT CALCULATIONS =====
   (frinj.jvm/frinj-init!)
+
+  ;; ===== DATOMIC =====
+  (d/init-db)
 
   ;; ===== HANDLERS =====
   ;; Register request handlers and build routes after localization

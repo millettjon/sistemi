@@ -2,73 +2,10 @@
   (:require [app.config :as cf]
             [sistemi.config :as scf]
             [datomic.api :as d]
-            [util.id :as id])
+            [util.id :as id]
+            [util.string :as s]
+            [taoensso.timbre :as log])
   (:refer-clojure :exclude [partition]))
-
-;; ? How to persist the order in Datomic?
-;; 
-;; - create schema to hold an order
-;; - create an order
-;;
-;; order
-;;   items (store item details as blob) type, details
-;;   price (total)
-;;     unit  :eur
-;;     value BigDecimal
-;;   contact info
-;;     name
-;;     email
-;;     phone
-;;   shipping info
-;;     address
-;;
-;; {:order {:price {:total #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}},
-;;          :items #ordered/map ([0 {:price {:workbook "shelf/shelf-chain-france.xls", :total #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}, :unit #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}, :parts {:fabrication-stephane #frinj.core.fjv{:v 47.86M, :u {:EUR 1}}, :finishing-marques #frinj.core.fjv{:v 45.36M, :u {:EUR 1}}, :packaging-box #frinj.core.fjv{:v 16.32M, :u {:EUR 1}}, :subtotal #frinj.core.fjv{:v 109.54M, :u {:EUR 1}}, :margin #frinj.core.fjv{:v 21.91M, :u {:EUR 1}}, :tax #frinj.core.fjv{:v 25.76M, :u {:EUR 1}}, :adjustment #frinj.core.fjv{:v -0.21M, :u {:EUR 1}}}},
-;;                                   :id 0, :type :shelf, :color {:rgb "#C51D34", :type :ral, :code 3027}, :quantity 1, :finish :laquer-matte, :width 120, :depth 30}])
-;;
-;; ? an entity is a collection of attributes?
-;; ? how are prices stored?
-;; ? is it useful to store prices a frinj units?
-;;
-;; (def order-contact
-;;   "Fields on the order/contact page."
-;;   {:name {:type :string :max 50}
-;;    :email {:type :string :max 100}
-;;    :phone {:type :string :max 20}})
-;;
-;; ;; Notes:
-;; ;; - region is not required for french address
-;; (def address
-;;   "Fields for an address."
-;;   {:name {:type :string :max 50}
-;;    :address1 {:type :string :max 100}
-;;    :address2 {:type :string :max 100}
-;;    :city {:type :string :max 50}
-;;    :region {:type :string :max 50}
-;;    :code {:type :string :max 20}
-;;    :country {:type :string :max 20}})
-;;
-;; What should the name be? :frinj/u :frinj/v
-;; unit + value
-;; 
-;; datum = entity attribute value
-;; 
-;; - ups - get shipping estimate
-;;   - give priority
-;; - bookcase - add cart button
-;; - shelf - remove bookcase image and move it to the cart
-;; - review final pricing
-;; - order notification
-;;   - via jarvis
-;;   - via stripe
-;; - setup stripe
-;; - email confirmation - 
-;;   - could this be sent manually
-;; - code
-;;   - see if dave wants to work on it
-;; - dave get him setup with tasks for next week
-;; - insurance program
-;;   - 2 or 3 tiered package; right to return on reception; return in 7 days
 
 (def partition
   :main)
@@ -85,12 +22,6 @@
     :db.install/_attribute :db.part/db}
 
    ;; ========== PRICE ==========
-   ;; attribute for price value (generic)
-   ;; attribute for price currency (generic)
-   ;;   ? is there a keyword value type?
-   ;; entity for price
-;; :db.type/keyword
-
    ;; price amount
    {:db/id #db/id[:db.part/db]
     :db/ident :price/amount
@@ -105,6 +36,66 @@
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
 
+   ;; ========== CONTACT ==========
+   ;; contact - name
+   {:db/id #db/id[:db.part/db]
+    :db/ident :contact/name
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; contact - email
+   {:db/id #db/id[:db.part/db]
+    :db/ident :contact/email
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; contact - phone
+   {:db/id #db/id[:db.part/db]
+    :db/ident :contact/phone
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; ========== ADDRESS ==========
+   ;; ? should this include name? probably not, name should be part of
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/address1
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/address2
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/city
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/region
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/code
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/country
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
    ;; ========== ORDER ==========
    ;; order - id
    {:db/id #db/id[:db.part/db]
@@ -114,49 +105,90 @@
     :db/unique :db.unique/value
     :db/index true
     :db.install/_attribute :db.part/db}
-   
+
+   ;; order - status
+   ;; purchased -> building -> shipping -> delivered
+   ;; ? should this be an enum?
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/status
+    :db/valueType :db.type/keyword
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; order - items
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/items
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
    ;; order - total
    {:db/id #db/id[:db.part/db]
     :db/ident :order/total
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; order - contact
+   ;; ? should this be a component or separate entity?
+   ;;   ? is it different if logged in?
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/contact
     :db/valueType :db.type/ref
     :db/isComponent true
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
-   ])
+
+   ;; order - shipping address
+   ;; ? where/how will ups info be stored? price, tracking number
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/shipping-address
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}])
 
 ;; datomic:dev://{transactor-host}:{port}/{db-name}
-(defn get-uri
-  "Builds a dataomic uri based on the current configuration and run level."
+;; datomic:mem://[db-name]
+(defn- get-uri
+  "Builds a datamic uri based on the current configuration and run level."
   []
-  (str (cf/conf :datomic-uri)
-       #_ "://" "/"
-       (-> (scf/active-profile) name)))
+  (let [uri (cf/conf :datomic-uri)]
+    (str uri
+         (if (s/ends-with? uri "/") "" "/")
+         (-> (scf/active-profile) name))))
+
 #_ (app.config/conf :datomic-uri)
 #_ (get-uri)
 
 (defn init-db
   "Initializes a database and adds the schema and partitions."
-  [uri]
-  ;; Create a database.
-  (d/create-database uri) ; returns true if it was created, false if it already existed
+  []
+  (let [uri (get-uri)]
+    
+    ;; Create a database.
+    (when (d/create-database uri) ; returns true if it was created, false if it already existed
 
-  (let [;; Get a connection.
-        conn (d/connect uri)]
+      (log/info {:event :db/init})
 
-    ;; Make a new partition.
-    @(d/transact conn [{:db/id (d/tempid :db.part/db)
-                        :db/ident partition
-                        :db.install/_partition :db.part/db}])
+      (let [;; Get a connection.
+            conn (d/connect uri)]
 
-    ;; Load the schema.
-    @(d/transact conn schema)))
+        ;; Make a new partition.
+        @(d/transact conn [{:db/id (d/tempid :db.part/db)
+                            :db/ident partition
+                            :db.install/_partition :db.part/db}])
 
-#_ (init-db (get-uri))
+        ;; Load the schema.
+        @(d/transact conn schema)))))
+
+#_ (init-db)
+
 
 ;;
 ;; From the docs: "Datomic connections do not adhere to an acquire/use/release
 ;; pattern.  They are thread-safe, cached, and long lived."
-;; 
+;;
 ;; Not sure how the caching works as this is 2 orders of magnitude
 ;; slower than just using the same connection.
 ;;
@@ -222,46 +254,9 @@
 #_ (-> (get-conn) d/db get-partitions)
 
 
-(defn- gen-order-id
-  "Generates a new random order id."
-  []
-  (id/rand-36 6))
-
-;; Create a new order.
-#_ (let [conn (get-conn)
-         id (gen-order-id)]
-     (d/transact conn [{:db/id (d/tempid partition)
-                        :order/id id}]))
-
-;; List all orders ids.
-#_ (let [db (d/db (get-conn))
-         id (d/q '[:find ?id
-                   :where [_ :order/id ?id]]
-                 db)]
-     id)
-
-;; Check if an order exists.
-#_ (let [order-id "JI6WW5"]
-     (->> (get-conn)
-          d/db
-          (d/q '[:find ?e
-                 :in ?order-id $
-                 :where [?e :order/id ?order-id]]
-               order-id
-               )))
-
-;; Retrieve all attributes for an order.
-#_ (let [order-id "JI6WW5"
-         db (d/db (get-conn))
-         eid (d/q '[:find ?e
-                    :where [?e :order/id ?order-id]]
-                  db)]
-     (into {} (d/entity db (ffirst eid))))
-
-;; Update the total price for an order.
-
-;; Hmm, TDD using in memory database?
-
+;; if using in memory database,
+;; - load the schema at startup
+;; -
 
 
 ;; Sessions

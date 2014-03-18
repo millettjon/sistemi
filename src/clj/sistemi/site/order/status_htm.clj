@@ -1,4 +1,4 @@
-(ns sistemi.site.order.confirmation-htm
+(ns sistemi.site.order.status-htm
   (:require [ring.util.response :refer [response]]
             [www.form :as f]
             [www.cart :as cart]
@@ -80,17 +80,29 @@
    ]
   )
 
+;; TODO: ?should lookup unqualify the keys?
+
 (defn body
   [{{:keys [id]} :params}]
   (let [order (o/lookup id)]
     [:div {:style {:margin "30px 0px 0px 30px"}}
 
-     [:p "Thank you for making your first CODE A NUMBER HERE purchase with
-Sistemi Moderni.  Your personalized order has been immediately sent to
-the fabricator closest to your product's final destination.  Feel free
-to contact us with any questions that may arise while you wait for
-your order's speedy delivery.  Below is a summary of your purchase for
-your records."]
+     [:h1 "Order Status"]
+
+     ;; TODO: Handle all possible order status.
+     ;; - being manufactured
+     ;; - being shipped
+     ;; - delivered
+     ;;
+     ;; TODO: Dispay tracking number.
+     ;;
+     [:p "Your order has been sent to the factory for fabrication."]
+
+
+     [:p "Order Date: DD/MM/YYYY"]
+     [:p "Expected Ship Date: DD/MM/YYYY"]
+
+     [:h1 "Order Details"]
 
      ;; TODO: factor this out
      (let [items (-> order :order/items vals)
@@ -137,23 +149,9 @@ your records."]
         [:tr.total
          [:td {:style "padding-top: 10px;"} (tr/translate :total)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
        )
-     
+
      [:br]
 
-     [:p "Over the next few weeks, we will be preparing and delivering your
-order to you.  If you would like to know your order's fabrication or
-delivery status, do not hesitate to send us a note or even call.  We
-are working on new systems to automate status reports in real time."]
-
-     [:p "As a way to say thank you, please accept this personal customer
-code. code here The code entitles you to a 10 euro discount on your
-next purchase.  If you give your code out to a friend or colleague and
-they make a purchase, we will add another 10euros towards your next
-purchase.  So please spread the code as this will make it easy for us
-to repay you for your kindness."]
-
-     [:p "All the best,</br>
-E. M. Romeo - President, Sistemi Moderni, SAS "]
      ]))
 
 (defn handle

@@ -12,6 +12,7 @@
             [ring.util.response :as resp]
             [www.session :as sess]
             [sistemi.form :as sf]
+            [sistemi.order :as order]
             [www.cart :as cart]
             [www.form :as f]
 
@@ -70,7 +71,7 @@
 (defn complete-order
   ""
   [session response]
-)
+  (order/create session))
 
 ;; TODO: handle stripe error
 ;;       - stay on page
@@ -122,8 +123,8 @@
           ;; Build the response data map.
           response-data (cond
                          ;; successful charge
-                         success? (do (complete-order session response)
-                                      {:code 0 :message "success" :location (tr/localize "confirmation.htm")})
+                         success? (let [order-id (complete-order session response)]
+                                      {:code 0 :message "success" :location (tr/localize "confirmation.htm" :query {:id order-id})})
 
                          ;; stripe error -> display to user
                          ;; TODO: Translate error messages.
@@ -139,27 +140,5 @@
                              resp/response
                              (resp/content-type "application/json"))]
       (if success?
-        (assoc json-response :session (-> session
-                                          (dissoc :cart)
-                                          (assoc :order (:cart session)))) ; TODO: fix order history to read from db
+        (assoc json-response :session (dissoc session :cart))
         json-response))))
-
-#_ {:order {:price {:total #frinj.core.fjv{:v 157.00M, :u {:EUR 1}}},
-         :items #ordered/map ([0 {:price {:workbook "shelf/shelf-chain-france.xls", :total #frinj.core.fjv{:v 157.00M, :u {:EUR 1}},
-                                          :unit #frinj.core.fjv{:v 157.00M, :u {:EUR 1}},
-                                          :parts {:fabrication-stephane #frinj.core.fjv{:v 47.86M, :u {:EUR 1}},
-                                                  :finishing-marques #frinj.core.fjv{:v 45.36M, :u {:EUR 1}},
-                                                  :packaging-box #frinj.core.fjv{:v 16.32M, :u {:EUR 1}},
-                                                  :subtotal #frinj.core.fjv{:v 109.54M, :u {:EUR 1}},
-                                                  :margin #frinj.core.fjv{:v 21.91M, :u {:EUR 1}},
-                                                  :tax #frinj.core.fjv{:v 25.76M, :u {:EUR 1}},
-                                                  :adjustment #frinj.core.fjv{:v -0.21M, :u {:EUR 1}}}},
-                                  :id 0,
-                                  :type :shelf,
-                                  :color {:rgb "#C51D34", :type :ral, :code 3027},
-                                  :quantity 1, :finish :laquer-matte, :width 120, :depth 30}]), :counter 0, :status :cart, :taxable true}
- :shipping {:region "MI", :code "49091", :city "Sturgis", :address2 "", :address1 "23950 Butternut", :name "Jonathan Millett", :country "USA"},
- :contact {:email "jon@millett.net", :phone "7862068250", :name "Jonathan Millett"}}
-
-;; order has :status :cart (is this needed), possibly if persisting session or cart in datomic
-;; - probably safe to delete as an order has more than just a cart (shipping info etc)
