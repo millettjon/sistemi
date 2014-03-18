@@ -85,7 +85,7 @@
                  [net.objectlab.kit/datecalc-common "1.2.0"]
                  [net.objectlab.kit/datecalc-joda "1.2.0" :exclusions [joda-time]]
 
-                 ;; Datomic
+                 ;; Datomic/Data
                  [com.datomic/datomic-pro "0.9.4384"
                   :exclusions [
                                ;; Exclude these since using log4j for logging.
@@ -93,10 +93,12 @@
                                org.slf4j/slf4j-nop
                                org.slf4j/log4j-over-slf4j ; note: causes an IncompatibleClassChangeError if included
                                ]]
+                 [prismatic/schema "0.2.1"]
 
                  ;; misc
                  [org.clojure/core.cache "0.6.3"]
                  [org.clojure/core.memoize "0.5.6"]
+                 ;; [flatland/ordered "1.5.2"] ; TODO use flatland/ordered as it is newer.
                  [ordered "1.3.2"]
                  [com.google.guava/guava "15.0"]
                  [org.clojure/tools.namespace "0.2.4"]
