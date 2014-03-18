@@ -9,4 +9,7 @@
 
  ;; Send feedback emails to the developer's email.
  :feedback {:email (git/conf :user :email)}
+
+ ;; Datomic transactor uri
+ :datomic-uri "datomic:mem://"
  }
