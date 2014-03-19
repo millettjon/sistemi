@@ -19,4 +19,9 @@
 
  ;; Datomic transactor uri
  :datomic-uri "datomic:dev://localhost:4334"
+
+ ;; Mandrill (transactional email)
+ :mandrill {:smtp {:host "smtp.mandrillapp.com"
+                   :port 587
+                   :user "jon@sistemimoderni.com"}}
  }
