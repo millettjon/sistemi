@@ -43,5 +43,4 @@
     (is (-> order :order/status))
     (is (-> order :order/items))
     (is (-> order :order/contact))
-    (is (-> order :order/shipping-address))
-    ))
+    (is (-> order :order/shipping-address))))

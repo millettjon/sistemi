@@ -155,8 +155,8 @@
        [:div#wheel-val-oiled {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]]
 
       [:div {:style "text-align: right"}
-       #_[:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
-                                                                      (tr/translate :cart :update))]]]]
+       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
+                                                                        (tr/translate :cart :update))]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize bookcase from defaults.
