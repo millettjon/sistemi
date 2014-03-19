@@ -59,7 +59,8 @@ the current :conf and the file's conf."
   (let [key (-> file path/shortname keyword)]
     (handle-file m file
                  (fn [{{old-data key} :conf :as m} data]
-                   (assoc-in m [:conf key] (merge old-data data))))))
+                   (assoc-in m [:conf key]
+                             (deep-merge-with (fn [& l] (last l)) old-data data))))))
 
 (defn- handle-files
   "Loads all remaining configurations."
