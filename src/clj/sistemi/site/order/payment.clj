@@ -66,22 +66,12 @@
        "description" description}
       (->amount amount)))))
 
-;; TODO: Save the order in datomic.
 ;; TODO: Send the confirmation email.
 (defn complete-order
   ""
-  [session response]
-  (order/create session))
+  [session payment-txn]
+  (order/create session payment-txn))
 
-;; TODO: handle stripe error
-;;       - stay on page
-;;       - display error to user
-;;       - log error
-;; TODO: handle success
-;;       - move cart to order history
-;;       - redirect to order confirmation page
-;;       - send order confirmation email
-;;
 ;; TODO: handle request error (e.g., by testing with no network connection)
 ;;       - stay on page
 ;;       - display error to user

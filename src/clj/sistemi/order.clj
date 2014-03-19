@@ -59,7 +59,7 @@
 
 (defn create
   "Creates a new order from the session."
-  [{:keys [cart shipping contact] :as session}]
+  [{:keys [cart shipping contact] :as session} payment-txn]
   (let [conn (sd/get-conn)
         id (gen-id)]
     (log/info {:event :order/create :id id})
@@ -69,7 +69,8 @@
                        :order/total (-> cart :price :total pr-str) ; coerce to string
                        :order/contact #db/id[:main -2]
                        :order/shipping-address #db/id[:main -3]
-                       :order/status :purchased}
+                       :order/status :purchased
+                       :payment/transaction (pr-str payment-txn)}
 
                       ;; contact info
                       (merge {:db/id #db/id[:main -2]}

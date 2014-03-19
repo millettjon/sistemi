@@ -33,7 +33,7 @@
    :contact {:email "jon@millett.net", :phone "7862068250", :name "Jonathan Millett"}})
 
 (deftest create-order
-  (let [order-id (order/create cart-data)
+  (let [order-id (order/create cart-data {:stripe "<payment transaction details>"})
         order (order/lookup order-id)]
     (is order-id)
     (is order)

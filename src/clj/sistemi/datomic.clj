@@ -58,6 +58,13 @@
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
 
+   ;; ========== PAYMENT ==========
+   {:db/id #db/id[:db.part/db]
+    :db/ident :payment/transaction
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
    ;; ========== ADDRESS ==========
    ;; ? should this include name? probably not, name should be part of
    {:db/id #db/id[:db.part/db]
