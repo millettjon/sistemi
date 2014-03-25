@@ -295,11 +295,12 @@ address-xml
 (def service-options-data (merge insurance-data verbal-conf-data))
 ;; for simple test case, no service options work.
 (def service-options-none '())
-(def service-options-single (list m/verbal-conf-option-info))
-(def service-options-multi (list m/insurance-option-info m/verbal-conf-option-info))
+(def service-options-multi
+  {:insurance {:currency_code "EUR" :value "50.00"}
+   :verbal_conf {:name "Eric Romeo" :phone "123456777"}} )
 
 (deftest test-service-option-info
-  (let [data1 (m/service-option-info service-options-data service-options-multi)]
+  (let [data1 (m/package-service-option-info service-options-multi)]
     (is (= (str xml-header service-options-xml) (x/emit-str (xml data1)) ))
     ) )
 

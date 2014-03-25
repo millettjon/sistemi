@@ -199,6 +199,7 @@
           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
 
       ; Has CC number or Account information
+      (println ship_confirm_req_xml)
       ;(logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
       ;(logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
       ;(logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))

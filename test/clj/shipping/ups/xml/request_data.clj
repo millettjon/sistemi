@@ -56,11 +56,10 @@
        {:type_code "02"
         :dimension_data {:unit_code "CM" :length "22" :width "20" :height "18"}
         :weight_data {:weight "14.1" :unit_code "KGS"}
-        ; No key-name conflict with these 2 service options (future refactor: specify service type)
-        ; Depends on shipping-service code (list m/insurance-option-info m/verbal-conf-option-info)
+        ; verbal confirmation does not always work
         :service_options '()
-        :service_data {:currency_code "EUR" :value "50.00"       ; insurance, what range?
-                       :name "Eric Romeo" :phone "123456777"} }  ; verbal confirmation
+        :service_data {:insurance {:currency_code "EUR" :value "50.00"}        ; insurance, what range?
+                       :verbal_conf {:name "Eric Romeo" :phone "123456777"}} }  ; verbal confirmation
        )}
     )
 

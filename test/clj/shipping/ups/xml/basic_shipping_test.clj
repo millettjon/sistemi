@@ -12,7 +12,7 @@
 
 ;; ************ Request Data *********************************
 (def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
-(def service-data {:code "11" :description "UPS Standard"})
+(def shipping-code-data {:code "11" :description "UPS Standard"})
 (def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102016"})
 (def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
 
@@ -26,8 +26,8 @@
 (def service-options-data (merge insurance-data verbal-conf-data))
 
 (def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
-                              :service_data service-options-data ;:reference_data ct/reference-number-data
-                              :service_options service-options-none})
+                              :service_data {} ;:reference_data ct/reference-number-data
+                              })
 
 ;; Fabricator UPS account information
 (def shipper-address-data {:address1 "ZA la Croisette" :city "Clelles en Trièves" :state_province ""
@@ -80,7 +80,7 @@
       {:txn_reference txn-reference-data}
       {:shipper shipper_data}
       {:ship_to receiver-data}
-      {:ship_service service-data}
+      {:ship_service shipping-code-data}
       {:payment payment-data}
       {:label label-spec-data}
    ) ) )

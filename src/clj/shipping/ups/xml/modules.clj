@@ -239,12 +239,29 @@
 
 ;; todo: check optional values
 (defn insurance-option-info
-  "If the package is insured."
+  "Optional field for package insurance. If no data is present, then no xml appears.
+  This also works. "
   [insurance_data]
-  [:InsuredValue
-   [:CurrencyCode (insurance_data :currency_code)]
-   [:MonetaryValue (insurance_data :value)]
-   ])
+  (if (nil? insurance_data)
+    nil
+    [:InsuredValue
+      [:CurrencyCode (insurance_data :currency_code)]
+      [:MonetaryValue (insurance_data :value)]
+      ]) )
+
+(def insurance-declared-value-keys [:currency_code :code :value])
+
+(defn insurance-declared-value
+  "Provided by UPS's Sebastien (it works) Use insurance-declared-value-keys"
+  [insurance_data]
+  (if (nil? insurance_data)
+    nil
+    [:DeclaredValue
+     [:Type
+      [:Code "01"]]
+     [:CurrencyCode (insurance_data :currency_code)]
+     [:MonetaryValue (insurance_data :value)]
+     ]) )
 
 ;; <VerbalConfirmation>
 ;;   <Name>Sidney Smith</Name>
@@ -253,25 +270,28 @@
 (def verbal-conf-keys [:name :phone])
 
 (defn verbal-conf-option-info
-  "A Shipping option for each package."
+  "A Shipping option for each package. This does not work when paired with
+  "
   [verbal_conf_data]
-  [:VerbalConfirmation
-   [:Name (verbal_conf_data :name)]
-   [:PhoneNumber (verbal_conf_data :phone)]
-   ])
+  (if (nil? verbal_conf_data)
+    nil
+    [:VerbalConfirmation
+      [:Name (verbal_conf_data :name)]
+      [:PhoneNumber (verbal_conf_data :phone)]
+      ]) )
 
-;; Not really necessary for use, other than to provide map depth {:insurance {:currency_code :value}}
 (def service-option-keys [:insurance :verbal_conf])
 
-;; todo: pass data onto
-(defn service-option-info
-  "The service options for each package in a Shipment like
-  'InsuredValue' and 'VerbalConfirmation'"
-  [option_data options]
+(defn package-service-option-info
+  "Generate optional XML for things like 'insurance' and 'verbal confirmation'."
+  [service_data]
   [:PackageServiceOptions
-   (for [option options]
-     (option option_data) )
-   ])
+   ;(insurance-option-info (service_data :insurance))
+   (insurance-declared-value (service_data :insurance))
+   ;; Does not seem to work for this option
+   ;(verbal-conf-option-info (service_data :verbal_conf))
+   ]
+  )
 
 (def package-keys [:type_code :dimension_data :weight_data :reference_data :service_data :service_options])
 
@@ -285,7 +305,7 @@
    (weight-info (package_data :weight_data))
    ; Generates error with and error without
    ;(c/reference-number-info (package_data :reference_data))
-   (service-option-info (package_data :service_data) (package_data :service_options))
+   (package-service-option-info (package_data :service_data))
    ])
 
 (defn shipping-packages-info
