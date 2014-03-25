@@ -57,5 +57,5 @@
         ]
 
     ;(println "insured_data:\n" insured_basic_data)
-    (println "ship_confirm_rsp:\n" ship_confirm_rsp)
+    ;(println "ship_confirm_rsp:\n" ship_confirm_rsp)
     ) )

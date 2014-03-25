@@ -292,6 +292,18 @@ address-xml
 </VerbalConfirmation>
 </PackageServiceOptions>"))
 
+(def service-options-insurance2-xml
+  (u/strip-newlines
+"<PackageServiceOptions>
+<DeclaredValue>
+<Type>
+<Code>01</Code>
+</Type>
+<CurrencyCode>EUR</CurrencyCode>
+<MonetaryValue>50.00</MonetaryValue>
+</DeclaredValue>
+</PackageServiceOptions>"))
+
 (def service-options-data (merge insurance-data verbal-conf-data))
 ;; for simple test case, no service options work.
 (def service-options-none '())
@@ -301,7 +313,7 @@ address-xml
 
 (deftest test-service-option-info
   (let [data1 (m/package-service-option-info service-options-multi)]
-    (is (= (str xml-header service-options-xml) (x/emit-str (xml data1)) ))
+    (is (= (str xml-header service-options-insurance2-xml) (x/emit-str (xml data1)) ))
     ) )
 
 (def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
