@@ -49,7 +49,7 @@
                          :postal "38410"}} }
     ) )
 
-(def package-data
+(def simple-package-data
   "Package dimensions pulled from google docs/frinj/etc"
   {:packages
      (list
@@ -66,7 +66,25 @@
 
 (defn simple-request-data
   "Meged data from 'sistemi-data', 'customer-data', and 'package-data'"
-  [config_access_info]
-  (merge (sistemi-data config_access_info) customer-data package-data) )
+  [config_access_data]
+  (merge (sistemi-data config_access_data) customer-data simple-package-data) )
+
+(def insured-package-data
+  "Package dimensions pulled from google docs/frinj/etc"
+  {:packages
+   (list
+     {:type_code "02"
+      :dimension_data {:unit_code "CM" :length "22" :width "20" :height "18"}
+      :weight_data {:weight "14.1" :unit_code "KGS"}
+      ;; verbal confirmation may not work --
+      :service_data {:insurance {:currency_code "EUR" :value "50.00"}
+                     :verbal_conf {:name "Eric Romeo" :phone "123456777"}} }
+     )}
+  )
+
+(defn simple-insured-request-data
+  "Simple request with insurance for 1 package. Otherwise identical to simple-request-data"
+  [config_access_data]
+  (merge (sistemi-data config_access_data) customer-data simple-package-data) )
 
 

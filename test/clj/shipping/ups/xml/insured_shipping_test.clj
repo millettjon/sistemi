@@ -29,33 +29,15 @@
   [config_access_info]
   (merge (rd/sistemi-data config_access_info) rd/customer-data insured-package-data) )
 
-;; mental exercise
-(defn create-simple-insured-data
-  [basic_data]
-  (let [packages (basic_data :packages)
-        service_options (basic_data :packages)
-        updated (assoc-in (first packages) [:service_options] '(:insurance))]
-    (assoc-in basic_data [:packages] (list updated))
-    ) )
 
-;(deftest test-create-simple-insured-data
+;(deftest test-simple-insured-shipment
 ;  (sistemi.config/init!)
 ;  (let [ups_access (c/conf :ups)
 ;        access_data (t/access-data-from-config ups_access)
-;        basic_data (rd/simple-request-data access_data)
-;        insured_data (create-simple-insured-data basic_data)]
+;        insured_basic_data (insured-request-data access_data)
+;        ship_confirm_rsp (ship/shipping-trans-part1 insured_basic_data access_data st/ship_confirm_test_url)
+;        ]
 ;
-;    (println "updated:\n" insured_data)
+;    (println "insured_data:\n" insured_basic_data)
+;    (println "ship_confirm_rsp:\n" ship_confirm_rsp)
 ;    ) )
-
-(deftest test-simple-insured-shipment
-  (sistemi.config/init!)
-  (let [ups_access (c/conf :ups)
-        access_data (t/access-data-from-config ups_access)
-        insured_basic_data (insured-request-data access_data)
-        ship_confirm_rsp (ship/shipping-trans-part1 insured_basic_data access_data st/ship_confirm_test_url)
-        ]
-
-    ;(println "insured_data:\n" insured_basic_data)
-    ;(println "ship_confirm_rsp:\n" ship_confirm_rsp)
-    ) )
