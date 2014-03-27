@@ -1,8 +1,7 @@
-(ns shipping.ups.ups-units)
+(ns shipping.ups.units)
 
 (def ups_units
-  "From a PDF file slightly cleaned and then formatted.
-  (ex: sed 's/\([A-Z\w]*\) = \([a-zA-Z]*\)/"\2" "\1"/' ups-units.txt)"
+  "From a PDF file slightly cleaned and then formatted."
   { "Barrel" "BA"
     "Bundle" "BE"
     "Bag" "BG"

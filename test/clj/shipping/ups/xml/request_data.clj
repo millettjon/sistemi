@@ -54,8 +54,9 @@
   {:packages
      (list
        {:type_code "02"
-        :dimension_data {:unit_code "CM" :length "22" :width "20" :height "18"}
-        :weight_data {:weight "14.1" :unit_code "KGS"}
+        ; Max dimension before getting additional surcharge, billing_weight = 26 KGS
+        :dimension_data {:unit_code "CM" :length "150" :width "48" :height "18"}
+        :weight_data {:weight "20.0" :unit_code "KGS"}
         ; verbal confirmation does not always work
         :service_options '()
         :service_data {:insurance {:currency_code "EUR" :value "50.00"}        ; insurance, what range?
