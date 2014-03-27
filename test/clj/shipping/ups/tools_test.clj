@@ -30,4 +30,4 @@
 
 ; It seems that billing weight 26.0 kg is the max for normal pricing
 (deftest test-package-calculate-billing-weight
-  (is (= 25.92 (t/package-calculate-billing-weight 150 48 18))) )
+  (is (> 26.0 (t/package-calculate-billing-weight 150 48 18))) )

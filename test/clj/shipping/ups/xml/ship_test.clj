@@ -2,7 +2,7 @@
   (:import [java.io ByteArrayInputStream])
   (:require [shipping.ups.xml.ship :as ship]
             [shipping.ups.xml.util :as u]
-            [shipping.ups.xml.tools :as t]
+            [shipping.ups.tools :as t]
             [shipping.ups.xml.modules_test :as mt]
             [shipping.ups.xml.request_data :as rd]
             [app.config :as c]

@@ -4,7 +4,7 @@
             [sistemi.config]
             [app.config :as c]
             [shipping.ups.xml.util :as u]
-            [shipping.ups.xml.tools :as t]
+            [shipping.ups.tools :as t]
             [shipping.ups.xml.modules :as m]
             [shipping.ups.xml.ship :as ship]
             [shipping.ups.xml.request_data :as rd]

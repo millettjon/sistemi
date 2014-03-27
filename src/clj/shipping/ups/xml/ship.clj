@@ -1,6 +1,6 @@
 (ns shipping.ups.xml.ship
   (:require [shipping.ups.xml.modules :as m]
-            [shipping.ups.xml.tools :as t]
+            [shipping.ups.tools :as t]
             [app.config :as c]
             [clojure.tools.logging :as log]
             [clojure.string :as str]
