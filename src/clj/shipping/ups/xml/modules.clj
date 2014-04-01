@@ -1,4 +1,5 @@
-(ns shipping.ups.xml.modules)
+(ns shipping.ups.xml.modules
+  (:require [shipping.ups.packages :as p]))
 
 (defn handle-optional
   "If a value is null, then return the 'default'."
@@ -301,10 +302,9 @@
   [:Package
    [:PackagingType
     [:Code (package_data :type_code)] ]
+   ;; Pass the 'heavy' indicator up through weight
    (dimension-info (package_data :dimension_data))
    (weight-info (package_data :weight_data))
-   ; Generates error with and error without
-   ;(c/reference-number-info (package_data :reference_data))
    (package-service-option-info (package_data :service_data))
    ])
 

@@ -55,7 +55,7 @@
      (list
        {:type_code "02"
         ; Max dimension before getting additional surcharge, billing_weight = 26 KGS
-        :dimension_data {:unit_code "CM" :length "150" :width "48" :height "18"}
+        :dimension_data {:unit_code "CM" :length "160" :width "48" :height "18"}
         :weight_data {:weight "20.0" :unit_code "KGS"}
         ; verbal confirmation does not always work
         :service_options '()
@@ -75,7 +75,7 @@
   {:packages
    (list
      {:type_code "02"
-      :dimension_data {:unit_code "CM" :length "22" :width "20" :height "18"}
+      :dimension_data {:unit_code "CM" :length "120" :width "48" :height "18"}
       :weight_data {:weight "14.1" :unit_code "KGS"}
       ;; verbal confirmation may not work --
       :service_data {:insurance {:currency_code "EUR" :value "50.00"}

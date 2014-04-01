@@ -104,11 +104,39 @@
   (let [raw (str xml-header error-response-1)
         input (xm/parse (t/text-in-bytestream raw))
         data (zip/xml-zip input)
-        error (ship/failure-info data)]
+        error (ship/failure-info data "Ship Confirm Unit Test")]
 
     (is (not (nil? error)))
     (is (= "The XML document is not well formed" (error :error_msg)))
     ) )
+
+;(def error-warn-response
+;  (u/strip-newlines
+;"<ShipmentConfirmResponse>
+;<Response>
+;<TransactionReference>
+;<CustomerContext>pull-me-from-customer-data</CustomerContext>
+;<XpciVersion>1.0001</XpciVersion>
+;</TransactionReference>
+;<ResponseStatusCode>1</ResponseStatusCode>
+;<ResponseStatusDescription>Success</ResponseStatusDescription>
+;<Error>
+;<ErrorSeverity>Warning</ErrorSeverity>
+;<ErrorCode>129001</ErrorCode>
+;<ErrorDescription>Additional Handling has automatically been set on Package 1.</ErrorDescription>
+;</Error>
+;</Response>"))
+;
+;(deftest test-get-shipment-confirm-response_warning
+;  (let [raw (str xml-header error-warn-response)
+;        input (xm/parse (t/text-in-bytestream raw))
+;        data (zip/xml-zip input)
+;        error (ship/failure-info data "ShipConfirm Warning")]
+;
+;    (is (not (nil? error)))
+;    (is (= "Additional Handling has automatically been set on Package 1." (error :error_msg)))
+;    ) )
+
 
 (def sample-xml
   (u/strip-newlines

@@ -29,14 +29,14 @@
 (defn failure-info
   "Checks the ShipmentConfirmResponse for a failure and logs 'ErrorCode'
   and 'ErrorDescription' if true."
-  [sc_rsp_data]
+  [sc_rsp_data context]
   (let [status (first (xml-> sc_rsp_data :Response :ResponseStatusDescription text))
         error (first (xml-> sc_rsp_data :Response :Error text))
         error_msg (first (xml-> sc_rsp_data :Response :Error :ErrorDescription text))]
-    (if (or (not (nil? error)) (= "Failure" status))
+    (if (and (not (nil? error)) (= "Failure" status))
       (do
-        (log/error (str "ShipmentConfirmResponse Failure '"
-                     (xml-> sc_rsp_data :Response :Error :ErrorCode text) ", " error_msg))
+        (log/error (str context " Failure:'"
+                     (xml-> sc_rsp_data :Response :Error :ErrorCode text) "', " error_msg))
         {:error_msg error_msg})
       nil
       ) ) )
@@ -95,7 +95,7 @@
   [sc_response]
   (let [input (xm/parse (t/text-in-bytestream sc_response))
         data (zip/xml-zip input)
-        failure (failure-info data)]
+        failure (failure-info data "Ship Confirm Response")]
     (if (nil? failure)
       (assoc {}
         :tracking_number (first (xml-> data :ShipmentIdentificationNumber text))
@@ -135,7 +135,7 @@
   [sa_response]
   (let [input (xm/parse (t/text-in-bytestream sa_response))
         data (zip/xml-zip input)
-        failure (failure-info data)]
+        failure (failure-info data "Ship Accept Response")]
     (if (nil? failure)
       (assoc {}
         :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
