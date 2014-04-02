@@ -32,12 +32,16 @@
   [sc_rsp_data context]
   (let [status (first (xml-> sc_rsp_data :Response :ResponseStatusDescription text))
         error (first (xml-> sc_rsp_data :Response :Error text))
-        error_msg (first (xml-> sc_rsp_data :Response :Error :ErrorDescription text))]
-    (if (and (not (nil? error)) (= "Failure" status))
+        error_msg (first (xml-> sc_rsp_data :Response :Error :ErrorDescription text))
+        severity (first (xml-> sc_rsp_data :Response :Error :ErrorSeverity text))]
+    (if (or (= "Failure" status) (= "Warning" severity))
       (do
-        (log/error (str context " Failure:'"
+;        (logger/error ( (str context " Failure Severity:'" severity
+;                               (xml-> sc_rsp_data :Response :Error :ErrorCode text) "', " error_msg)
+;                        :event :failure-info/error))
+        (log/error (str context " Failure Severity:'" severity
                      (xml-> sc_rsp_data :Response :Error :ErrorCode text) "', " error_msg))
-        {:error_msg error_msg})
+        {:error_msg error_msg :status status :severity severity})
       nil
       ) ) )
 
@@ -96,7 +100,7 @@
   (let [input (xm/parse (t/text-in-bytestream sc_response))
         data (zip/xml-zip input)
         failure (failure-info data "Ship Confirm Response")]
-    (if (nil? failure)
+    (if (or (nil? failure) (= "Success" (failure :status)))
       (assoc {}
         :tracking_number (first (xml-> data :ShipmentIdentificationNumber text))
         :response_status (first (xml-> data :Response :ResponseStatus text))
@@ -136,7 +140,7 @@
   (let [input (xm/parse (t/text-in-bytestream sa_response))
         data (zip/xml-zip input)
         failure (failure-info data "Ship Accept Response")]
-    (if (nil? failure)
+    (if (or (nil? failure) (= "Success" (failure :status)))
       (assoc {}
         :tracking_number (first (xml-> data :ShipmentResults :ShipmentIdentificationNumber text))
         :response_status (first (xml-> data :Response :ResponseStatus text))
@@ -195,7 +199,7 @@
     (let [ship_confirm_data (merge ship_data access_data)
           ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
           ; Should this be secure?
-          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? true})
+          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
 
       ; Has CC number or Account information
@@ -216,7 +220,7 @@
   ([ship_confirm_response_data access_data accept_url]
     (let [ship_accept_data (create-ship-accept-request-data access_data ship_confirm_response_data)
           ship_accept_req_xml (ship-accept-request-xml ship_accept_data)
-          ship_accept_raw_rsp (client/post accept_url {:body ship_accept_req_xml :insecure? true})
+          ship_accept_raw_rsp (client/post accept_url {:body ship_accept_req_xml :insecure? false})
           ship_accept_rsp (get-shipment-accept-response (ship_accept_raw_rsp :body))]
 
       ;(logger/info (assoc ship_accept_data :event :ship_trans_part2/ship_accept_data))

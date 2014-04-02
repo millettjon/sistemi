@@ -224,12 +224,16 @@
 (def weight-keys [:weight :unit])
 
 (defn weight-info
-  "How much the package weighs -- lbs or SI?????"
+  "How much the package weighs, default KG (pseudo SI).
+  It appears that > 26 kg billing weight triggers an extra
+  fee via UPS warning. 'LargePackageIndicator' does not seem
+  to do much."
   [weight_data]
   [:PackageWeight
    [:UnitOfMeasurement
     [:Code (weight_data :unit_code)]]
    [:Weight (weight_data :weight)]
+   ;[:LargePackageIndicator]
    ])
 
 ;; <InsuredValue>
