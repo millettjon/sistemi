@@ -23,16 +23,16 @@
   ; ["65" more than "11", but less than "07"]
   (assoc-in request_data [:ship_service] {:code "11" :description "Ground"}))
 
-;(deftest test-simple-insured-shipment
-;  (sistemi.config/init!)
-;  (let [ups_access (c/conf :ups)
-;        access_data (t/access-data-from-config ups_access)
-;        basic_data (rd/simple-insured-request-data access_data)
-;        insured_basic_data (update-ship-service-code basic_data)
-;        ship_confirm_rsp (ship/shipping-trans-part1 insured_basic_data access_data st/ship_confirm_test_url)
-;        ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship/ship_accept_test_url)
-;        ]
-;
-;    (println "ship_confirm_rsp:\n" ship_confirm_rsp)
-;    (println "ship_accept_resp:\n" ship_accept_rsp)
-;    ) )
+(deftest test-simple-insured-shipment
+  (sistemi.config/init!)
+  (let [ups_access (c/conf :ups)
+        access_data (t/access-data-from-config ups_access)
+        basic_data (rd/simple-insured-request-data access_data)
+        insured_basic_data (update-ship-service-code basic_data)
+        ship_confirm_rsp (ship/shipping-trans-part1 insured_basic_data access_data st/ship_confirm_test_url)
+        ;ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship/ship_accept_test_url)
+        ]
+
+    ;(println "ship_confirm_rsp:\n" ship_confirm_rsp)
+    ;(println "ship_accept_resp:\n" ship_accept_rsp)
+    ) )
