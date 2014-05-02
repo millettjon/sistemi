@@ -317,3 +317,10 @@
   (map p/xml result), otherwise it's just a collection of vectors."
   [packages_data]
   (for [data packages_data] (shipping-package-info data)) )
+
+
+(defn void-shipment-info
+  "Build void xml node for each tracking number"
+  [void_data]
+  ; get tracking numbers list here
+  (for [data void_data] ([:TrackingNumber data]) ) )

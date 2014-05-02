@@ -199,13 +199,13 @@
     (let [ship_confirm_data (merge ship_data access_data)
           ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
           ; Should this be secure?
-          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
+          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? true})
           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
 
       ; Has CC number or Account information
       ;(println ship_confirm_req_xml)
       ;(logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
-      ;(logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
+      (logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
       ;(logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
       ship_confirm_rsp
     ) ) )

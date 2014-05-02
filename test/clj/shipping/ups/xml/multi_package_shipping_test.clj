@@ -39,21 +39,21 @@
 
     })
 
-;(deftest test-packages
-;  (sistemi.config/init!)
-;  (let [ups_access (c/conf :ups)
-;        access_data (t/access-data-from-config ups_access)
-;        basic_data (rd/simple-insured-request-data access_data)
-;        package1 (first (basic_data :packages))
-;        ;packages_data basic_data
-;        packages_data (assoc-in basic_data [:packages] (list package1 package2))
-;        ;packages_data (assoc-in basic_data [:packages] (list package1 package2 package3))
-;        ;packages_data (assoc-in basic_data [:packages] (list package1 package2 package3 package3))
-;        ship_confirm_rsp (ship/shipping-trans-part1 packages_data access_data st/ship_confirm_test_url)
-;        ;ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship/ship_accept_test_url)
-;        ]
-;
-;    (println "ship_confirm_rsp:\n" ship_confirm_rsp)
-;    ;(println "ship_accept_resp:\n" ship_accept_rsp)
-;    ) )
+(deftest test-packages
+  (sistemi.config/init!)
+  (let [ups_access (c/conf :ups)
+        access_data (t/access-data-from-config ups_access)
+        basic_data (rd/simple-insured-request-data access_data)
+        package1 (first (basic_data :packages))
+        ;packages_data basic_data
+        ;packages_data (assoc-in basic_data [:packages] (list package1 package2))
+        packages_data (assoc-in basic_data [:packages] (list package1 package2 package3))
+        ;packages_data (assoc-in basic_data [:packages] (list package1 package2 package3 package3))
+        ship_confirm_rsp (ship/shipping-trans-part1 packages_data access_data st/ship_confirm_test_url)
+        ;ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship/ship_accept_test_url)
+        ]
+
+    ;(println "ship_confirm_rsp:\n" ship_confirm_rsp)
+    ;(println "ship_accept_resp:\n" ship_accept_rsp)
+    ) )
 
