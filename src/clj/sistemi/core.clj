@@ -63,6 +63,7 @@
   ;; pages e.g., cart.htm that work with any item type.
   (require 'sistemi.product)
   (require 'sistemi.product.shelf)
+  (require 'sistemi.product.bookcase)
 
   ;; ===== ROUTES =====
   (log/info "Bulding routes.")
