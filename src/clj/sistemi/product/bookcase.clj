@@ -19,7 +19,7 @@
   (p/fj-params-to-str(select-keys bookcase [:id :height :width :depth :cutout :color :finish])))
 
 (defmethod o/get-price :bookcase
-  [{:keys [finish width depth height quantity]} {:keys [taxable]}]
+  [{:keys [finish width depth height cutout quantity]} {:keys [taxable]}]
   (let [workbook "bookcase/bookcase-chain-france.xls"
         m (sheet/get (str "opt/costs/products/" workbook))
 
@@ -32,7 +32,7 @@
                      (assoc "order_width" (p/cm->mm depth))
                      (assoc "order_height" (p/cm->mm height))
                      (assoc "order_finish" (p/convert-finish finish))
-                     ;; TODO: does cutout need to be specified?
+                     (assoc "order_cutout" (p/convert-cutout cutout))
                      (assoc "order_quantity" quantity)
                      (assoc "order_taxable" (if taxable "yes" "no"))
 

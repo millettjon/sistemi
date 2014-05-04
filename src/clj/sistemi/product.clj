@@ -35,3 +35,11 @@
     (:laquer-matte :laquer-satin :laquer-glossy) "laquer"
     :valchromat-oiled "oil"
     :valchromat-raw "raw"))
+
+(defn convert-cutout
+  [cutout]
+  (case cutout
+    :semplice "none"
+    :ovale "oval"
+    :quadro "rectangle"))
+
