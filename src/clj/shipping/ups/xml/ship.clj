@@ -190,22 +190,19 @@
 (defn shipping-trans-part1
   "The first part of scheduling a UPS shipment (ship confirm). It is the first of two parts.
   Use this to calculate shipping costs or potentially as a holding state for the shipping txn.
-  Itsrequires user + sistemi + fabricator information.
-
-  This requires that config be initialized"
+  Itsrequires user + sistemi + fabricator information. This requires that config be initialized"
   ([ship_confirm_data access_data]
     (shipping-trans-part1 ship_confirm_data access_data ship_confirm_url))
   ([ship_data access_data confirm_url]
     (let [ship_confirm_data (merge ship_data access_data)
           ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
-          ; Should this be secure?
-          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? true})
+          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
 
       ; Has CC number or Account information
       ;(println ship_confirm_req_xml)
       ;(logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
-      (logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
+      ;(logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
       ;(logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
       ship_confirm_rsp
     ) ) )
@@ -213,7 +210,6 @@
 (defn shipping-trans-part2
   "Part 2 of a UPS shipping request 'ship accept'. It is fully dependent on the information from
   the first part of a shipping request 'ship confirm'. Notably, it depends on the huge digest.
-
   This requires config initialization."
   ([ship_confirm_response_data access_data]
     (shipping-trans-part2 ship_confirm_response_data access_data ship_accept_url))

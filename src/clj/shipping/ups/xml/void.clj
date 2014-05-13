@@ -1,9 +1,9 @@
 (ns shipping.ups.xml.void
   (:require [shipping.ups.xml.modules :as m]))
 
-(defn create-void-shipment-request
+(defn create-void-shipment-request-xml
   [void_data]
-  (m/access-request-xml (void_data))
+  (m/access-request-xml void_data)
   [:VoidShipmentRequest
    [:Request
     (m/transaction-reference-info void_data)
