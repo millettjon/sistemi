@@ -47,8 +47,6 @@
 
 ;; Meat and Potatoes ...............
 
-(def shipping-request-keys [:txn_reference :shipper :ship_to :ship_service :payment :packages :label])
-
 (defn create-ship-confirm-request-xml
   "Part 1 of a 2 part shipping order. General notes:
   RequestOption
@@ -61,18 +59,19 @@
    [:Request
     [:RequestAction "ShipConfirm"]
     [:RequestOption "nonvalidate"]
-    (m/transaction-reference-info (request_data :txn_reference))]
+    (m/transaction-reference-info (request_data :TransactionReference))]
    [:Shipment
     ; [:Description (m/handle-optional (request_data :description) "")]
     ; [:ReturnService
     ;   [:Code (m/handle-optional (request_data :service_attempt_code) "5")] ]
     ; [:DocumentsOnly (m/handle-optional (request_data :documents_only) "")]
-    (m/sistemi-shipper-info (request_data :shipper))
+    (m/sistemi-shipper-info (request_data :Shipper))
     (m/ship-to-info (request_data :ship_to))
-    (m/shipping-service-info (request_data :ship_service))
-    (m/payement-info (request_data :payment))
+    (m/service-info (request_data :Service))
+    ;; TODO: Fix typo
+    (m/payment-info (request_data :PaymentInformation))
     (m/shipping-packages-info (request_data :packages))
-    (m/label-spec-info (request_data :label)) ]
+    m/label-spec-info]
    ] )
 
 
@@ -161,17 +160,17 @@
   "Combine AccessRequest and ShipmentConfirmRequest xml"
   [confirm_req_data]
   ;  (m/access-request-info access_data)
-  (let [access-xml (xml (m/access-request-xml (confirm_req_data :access_data)))
+  (let [access-xml (xml (m/access-request (confirm_req_data :access_data)))
         confirm-xml (xml (create-ship-confirm-request-xml confirm_req_data))]
 
     (str (x/emit-str access-xml) (x/emit-str confirm-xml))
     ) )
 
 (defn- create-ship-accept-request-data
-  "Build shipment accept request data from txn_reference and shipment_digest (from confirm_response)"
+  "Build shipment accept request data from TransactionReference and shipment_digest (from confirm_response)"
   [access_data confirm_response_data]
   (let [accept_request_data {:access_data access_data
-                             :txn_reference {:customer_context_id (confirm_response_data :customer_context_id)
+                             :TransactionReference {:customer_context_id (confirm_response_data :customer_context_id)
                                              :xpci_version (confirm_response_data :xpci_version)}
                              :shipment_digest (confirm_response_data :shipment_digest) }]
 
@@ -181,7 +180,7 @@
 (defn- ship-accept-request-xml
   "Build the shipment accept request xml"
   [accept_req_data]
-  (let [access-xml (xml (m/access-request-xml (accept_req_data :access_data)))
+  (let [access-xml (xml (m/access-request (accept_req_data :access_data)))
         accept-xml (xml (create-ship-accept-request-xml accept_req_data))]
 
     (str (x/emit-str access-xml) (x/emit-str accept-xml))
@@ -194,18 +193,20 @@
   ([ship_confirm_data access_data]
     (shipping-trans-part1 ship_confirm_data access_data ship_confirm_url))
   ([ship_data access_data confirm_url]
-    (let [ship_confirm_data (merge ship_data access_data)
-          ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
-          ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
-          ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))]
+     (let [ship_confirm_data (assoc ship_data :access_data access_data)
+           ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
+           _ (pr ship_confirm_req_xml)
+           ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
+           ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))
+           ]
 
       ; Has CC number or Account information
       ;(println ship_confirm_req_xml)
       ;(logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
       ;(logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
       ;(logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
-      ship_confirm_rsp
-    ) ) )
+       ship_confirm_rsp
+       )))
 
 (defn shipping-trans-part2
   "Part 2 of a UPS shipping request 'ship accept'. It is fully dependent on the information from

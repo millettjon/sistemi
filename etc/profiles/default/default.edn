@@ -24,4 +24,17 @@
  :mandrill {:smtp {:host "smtp.mandrillapp.com"
                    :port 587
                    :user "jon@sistemimoderni.com"}}
- }
+
+ :ups {;; test urls
+       :urls {:confirm "https://onlinetools.ups.com/ups.app/xml/ShipConfirm"
+              :accept "https://onlinetools.ups.com/ups.app/xml/ShipAccept"}
+
+       :Shippers {:stephane {:Name "SistemiShipper"
+                             :AttentionName "SistemiFabricator"
+                             :PhoneNumber "0423456789"
+                             :ShipperNumber "AY3413"
+                             :Address {:AddressLine1 "ZA la Croisette"
+                                       :City "Clelles en Trièves"
+                                       :StateProvinceCode ""
+                                       :CountryCode "FR"
+                                       :PostalCode "38930"}}}}}

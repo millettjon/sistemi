@@ -406,34 +406,34 @@ THDIUJTHEQW89RY8WIERHT9RI</HTMLImage>
 </ShipmentAcceptResponse>
 ") )
 
-;(deftest ^:integration test-shipping-trans-part1
-;  "The simplest full ship transaction I could get to work. It is composed of two parts:
-;  1) ship confirm, 2) ship accept
-;  Use this as a template for other shipping options."
-;  (sistemi.config/init!)
-;  (let [ups_access (c/conf :ups)
-;        access_data (t/access-data-from-config ups_access)
-;        ship_confirm_data (rd/simple-request-data access_data)
-;        ship_confirm_rsp (ship/shipping-trans-part1 ship_confirm_data access_data ship_confirm_test_url)
-;        ]
-;
-;    (println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
-;    (is (= "Success" (ship_confirm_rsp :response_status_description)))
-;    (is (not (nil? (ship_confirm_rsp :tracking_number))))
-;
-;    ) )
+(deftest ^:integration test-shipping-trans-part1
+ "The simplest full ship transaction I could get to work. It is composed of two parts:
+ 1) ship confirm, 2) ship accept
+ Use this as a template for other shipping options."
+ (sistemi.config/init!)
+ (let [ups_access (c/conf :ups)
+       access_data (t/access-data-from-config ups_access)
+       ship_confirm_data (rd/simple-request-data access_data)
+       ship_confirm_rsp (ship/shipping-trans-part1 ship_confirm_data access_data ship_confirm_test_url)
+       ]
 
-;(deftest ^:integration test-shipping-trans-part2
-;  "The simplest full ship transaction I could get to work. It is composed of two parts:
-;  1) ship confirm, 2) ship accept
-;  Use this as a template for other shipping options."
-;  (sistemi.config/init!)
-;  (let [ups_access (c/conf :ups)
-;        access_data (t/access-data-from-config ups_access)
-;        ship_confirm_data (rd/simple-request-data access_data)
-;        ship_confirm_rsp (ship/shipping-trans-part1 ship_confirm_data access_data ship_confirm_test_url)
-;        ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship_accept_test_url)
-;        ]
-;    ;; Might fail with credit card auth
-;    (println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
-;    ) )
+   (println (str "ship_confirm_response:\n" ship_confirm_rsp "\n"))
+   (is (= "Success" (ship_confirm_rsp :response_status_description)))
+   (is (not (nil? (ship_confirm_rsp :tracking_number))))
+
+   ) )
+
+(deftest ^:integration test-shipping-trans-part2
+ "The simplest full ship transaction I could get to work. It is composed of two parts:
+ 1) ship confirm, 2) ship accept
+ Use this as a template for other shipping options."
+ (sistemi.config/init!)
+ (let [ups_access (c/conf :ups)
+       access_data (t/access-data-from-config ups_access)
+       ship_confirm_data (rd/simple-request-data access_data)
+       ship_confirm_rsp (ship/shipping-trans-part1 ship_confirm_data access_data ship_confirm_test_url)
+       ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship_accept_test_url)
+       ]
+   ;; Might fail with credit card auth
+   (println (str "ship_accept_response:\n" ship_accept_rsp "\n"))
+   ) )
