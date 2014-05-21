@@ -62,6 +62,7 @@
 
                  ;; email
                  [com.draines/postal "1.11.1"]
+                 [clj-mandrill "0.1.0"]
 
                  ;; user agent detection
                  [bitwalker/UserAgentUtils "1.11"]
