@@ -76,6 +76,7 @@
     [:ShipTo
      (v :Name)
      (v :CompanyName) ; required; can't be blank; WTF?
+     (v :AttentionName) ; maybe required with CompanyName?
      (v :PhoneNumber)
      (address-info Address)]))
 
@@ -101,10 +102,7 @@
         (v :Number)
         (v :ExpirationDate)]]]]))
 
-;; <ReferenceNumber>
-;;   <Code>02</Code>
-;;   <Value>1234567</Value>
-;; </ReferenceNumber>
+
 (def reference-number-keys [:code :value])
 
 (defn reference-number-info
@@ -122,14 +120,7 @@
    [:HTTPUserAgent "Mozilla/4.5"]
    [:LabelImageFormat [:Code "GIF"]]])
 
-;; <Dimensions>
-;;   <UnitOfMeasurement>
-;;     <Code>IN</Code>
-;;   </UnitOfMeasurement>
-;;   <Length>22</Length>
-;;   <Width>20</Width>
-;;   <Height>18</Height>
-;; </Dimensions>
+
 (def dimension-keys [:unit_code :length :width :height])
 
 (defn dimension-info
@@ -143,9 +134,6 @@
    [:Height (dimension_data :height)]
    ])
 
-;; <PackageWeight>
-;;   <Weight>14.1</Weight>
-;; </PackageWeight>
 (def weight-keys [:weight :unit])
 
 (defn weight-info
@@ -161,10 +149,6 @@
    ;[:LargePackageIndicator]
    ])
 
-;; <InsuredValue>
-;;   <CurrencyCode>USD</CurrencyCode>
-;;   <MonetaryValue>149.99</MonetaryValue>
-;; </InsuredValue>
 (def insurance-keys [:currency_code :value])
 
 ;; todo: check optional values
@@ -193,10 +177,6 @@
      [:MonetaryValue (insurance_data :value)]
      ]) )
 
-;; <VerbalConfirmation>
-;;   <Name>Sidney Smith</Name>
-;;   <PhoneNumber>4105551234</PhoneNumber>
-;; </VerbalConfirmation>
 (def verbal-conf-keys [:name :phone])
 
 (defn verbal-conf-option-info
