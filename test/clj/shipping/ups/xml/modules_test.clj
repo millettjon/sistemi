@@ -20,23 +20,23 @@
 
 ;(def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
 (def service-data {:Code "11" :Description "UPS Standard"})
-(def reference-number-data {:code "02" :value "1234567"})
-(def service-attempt-data {:description "Sistemi Test Data" :return_service_code "5" :documents_only ""})
+(def reference-number-data {:Code "02" :Value "1234567"})
+(def service-attempt-data {:Description "Sistemi Test Data" :ReturnServiceCode "5" :documents_only ""})
 
 ;; Fabricator UPS account information
-(def shipper-address-data {:address1 "ZA la Croisette" :city "Clelles en Trièves" :state_province ""
-                           :country_code "FR" :postal "38930"})
+(def shipper-address-data {:AddressLine1 "ZA la Croisette" :City "Clelles en Trièves" :StateProvinceCode ""
+                           :CountryCode "FR" :PostalCode "38930"})
 
-(def receiver-address-data {:address1 "130 route de la combette" :city "St. Martin d'Uriage" :state_province ""
-                            :country_code "FR" :postal "38410"})
+(def receiver-address-data {:AddressLine1 "130 route de la combette" :City "St. Martin d'Uriage" :StateProvinceCode ""
+                            :CountryCode "FR" :PostalCode "38410"})
 
 ; Phone numbers are 10 alpha-numeric (Europe 2.2.2.2.2  (
-(def shipper-data {:user_id "SistemiShipper" :attention_name "SistemiFabricator" :phone "0423456789"
-                   :shipper_number "123456" :address shipper-address-data})
+(def shipper-data {:Name "SistemiShipper" :AttentionName "SistemiFabricator" :PhoneNumber "0423456789"
+                   :ShipperNumber "123456" :Address shipper-address-data})
 
 ; Phone numbers are 10 alpha-numeric
-(def receiver-data {:user_id "SistemiReceiver" :attention_name "SistemiCustomer" :phone "0412345678"
-                    :shipper_number "123456" :company "Sistemi" :address receiver-address-data})
+(def receiver-data {:UserId "SistemiReceiver" :AttentionName "SistemiCustomer" :PhoneNumber "0412345678"
+                    :ShipperNumber "123456" :CompanyName "Sistemi" :Address receiver-address-data})
 
 ;(def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
 ;                              :service_data service-options-data ;:reference_data reference-number-data
