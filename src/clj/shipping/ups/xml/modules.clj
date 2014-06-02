@@ -91,10 +91,7 @@
         (v :Number)
         (v :ExpirationDate)]]]]))
 
-;; <ReferenceNumber>
-;;   <Code>02</Code>
-;;   <Value>1234567</Value>
-;; </ReferenceNumber>
+
 (def reference-number-keys [:code :value])
 
 (defn reference-number-info
@@ -137,10 +134,6 @@
      ;; [:LargePackageIndicator]
      ]))
 
-;; <InsuredValue>
-;;   <CurrencyCode>USD</CurrencyCode>
-;;   <MonetaryValue>149.99</MonetaryValue>
-;; </InsuredValue>
 (def insurance-keys [:currency_code :value])
 
 ;; todo: check optional values
@@ -169,10 +162,6 @@
      [:MonetaryValue (insurance_data :value)]
      ]) )
 
-;; <VerbalConfirmation>
-;;   <Name>Sidney Smith</Name>
-;;   <PhoneNumber>4105551234</PhoneNumber>
-;; </VerbalConfirmation>
 (def verbal-conf-keys [:name :phone])
 
 (defn verbal-conf-option-info

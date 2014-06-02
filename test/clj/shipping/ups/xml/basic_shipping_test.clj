@@ -66,7 +66,7 @@
   "Pulled from encrypted config (reuse for all transactions).
   This returns 'header' information for confirmed access."
   [access_data]
-  (m/access-request-xml access_data) )
+  (m/access-request access_data) )
 
 (defn merged-ship-confirm-data-basic
   "A simplified map composed of defined maps."

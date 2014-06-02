@@ -6,14 +6,6 @@
 
 (def xml x/sexp-as-element)
 
-(deftest test-handle-optional
-  (let [one (m/handle-optional "a" "")
-        two (m/handle-optional nil "")]
-    (are [x y] (= x y)
-      "a" one
-      "" two
-      ) ) )
-
 ;; Known error cases
 ; 1) Setting StateRegionCode for Europe
 ; 2) Invalid credit card number (use sample below)
@@ -21,28 +13,30 @@
 
 ;; todo: refactor to use ship_data_basic
 ;; Sample working request data required
-(def access-request-data {:lang_locale "en-US" :license_number "Sistemi123" :user_id "Sistemi" :password "foo"})
-(def txn-reference-data {:customer_context_id "SistemiContextID-XX1122" :xpci_version "1.0001"})
-(def payment-data {:type "06" :card_number "4111111111111111" :expiration_date "102016"})
-(def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
-(def service-data {:code "11" :description "UPS Standard"})
-(def reference-number-data {:code "02" :value "1234567"})
-(def service-attempt-data {:description "Sistemi Test Data" :return_service_code "5" :documents_only ""})
+(def access-request-data {:lang_locale "en-US" :AccessLicenseNumber "Sistemi123" :UserId "Sistemi" :Password "foo"})
+(def txn-reference-data {:CustomerContext "SistemiContextID-XX1122" :XpciVersion "1.0001"})
+
+(def payment-data {:Type "06" :Number "4111111111111111" :ExpirationDate "102016"})
+
+;(def label-spec-data {:label_print_code "GIF" :http_user_agent "Mozilla/4.5" :label_image_code "GIF"})
+(def service-data {:Code "11" :Description "UPS Standard"})
+(def reference-number-data {:Code "02" :Value "1234567"})
+(def service-attempt-data {:Description "Sistemi Test Data" :ReturnServiceCode "5" :documents_only ""})
 
 ;; Fabricator UPS account information
-(def shipper-address-data {:address1 "ZA la Croisette" :city "Clelles en Trièves" :state_province ""
-                           :country_code "FR" :postal "38930"})
+(def shipper-address-data {:AddressLine1 "ZA la Croisette" :City "Clelles en Trièves" :StateProvinceCode ""
+                           :CountryCode "FR" :PostalCode "38930"})
 
-(def receiver-address-data {:address1 "130 route de la combette" :city "St. Martin d'Uriage" :state_province ""
-                            :country_code "FR" :postal "38410"})
+(def receiver-address-data {:AddressLine1 "130 route de la combette" :City "St. Martin d'Uriage" :StateProvinceCode ""
+                            :CountryCode "FR" :PostalCode "38410"})
 
 ; Phone numbers are 10 alpha-numeric (Europe 2.2.2.2.2  (
-(def shipper-data {:user_id "SistemiShipper" :attention_name "SistemiFabricator" :phone "0423456789"
-                   :shipper_number "123456" :address shipper-address-data})
+(def shipper-data {:Name "SistemiShipper" :AttentionName "SistemiFabricator" :PhoneNumber "0423456789"
+                   :ShipperNumber "123456" :Address shipper-address-data})
 
 ; Phone numbers are 10 alpha-numeric
-(def receiver-data {:user_id "SistemiReceiver" :attention_name "SistemiCustomer" :phone "0412345678"
-                    :shipper_number "123456" :company "Sistemi" :address receiver-address-data})
+(def receiver-data {:UserId "SistemiReceiver" :AttentionName "SistemiCustomer" :PhoneNumber "0412345678"
+                    :ShipperNumber "123456" :CompanyName "Sistemi" :Address receiver-address-data})
 
 ;(def shipping-package-data-1 {:type_code "02" :dimension_data dimension-data :weight_data weight-data
 ;                              :service_data service-options-data ;:reference_data reference-number-data
@@ -60,7 +54,7 @@
 </AccessRequest>") )
 
 (deftest test-access-request-xml
-  (let [data1 (m/access-request-xml access-request-data)]
+  (let [data1 (m/access-request access-request-data)]
     (is (= (str xml-header access-request-xml) (x/emit-str (xml data1)) ))
     ) )
 
@@ -69,7 +63,6 @@
   (u/strip-newlines
 "<TransactionReference>
 <CustomerContext>SistemiContextID-XX1122</CustomerContext>
-<XpciVersion>1.0001</XpciVersion>
 </TransactionReference>"))
 
 (deftest test-transaction-reference-info
@@ -111,8 +104,8 @@
 <ResidentialAddress></ResidentialAddress>
 </Address>" ) )
 
-(def address-data {:address1 "123 Sistemi Drive" :city "St. Martin D'Uriage" :state_province ""
-                   :country_code "FR" :postal "12345"})
+(def address-data {:AddressLine1 "123 Sistemi Drive" :City "St. Martin D'Uriage" :StateProvinceCode ""
+                   :CountryCode "FR" :PostalCode "12345"})
 
 (deftest test-address-info
   (let [data1 (m/address-info address-data)]
@@ -129,8 +122,8 @@
 address-xml
 "</Shipper>") )
 
-(def shipper-data-test {:user_id "Sistemi" :attention_name "SistemiFabricator" :phone "000111222"
-                        :shipper_number "123456" :address address-data})
+(def shipper-data-test {:Name "Sistemi" :AttentionName "SistemiFabricator"
+                        :PhoneNumber "000111222" :ShipperNumber "123456" :Address address-data})
 
 (deftest test-shipper-info
   (let [data1 (m/sistemi-shipper-info shipper-data-test)]
@@ -140,6 +133,7 @@ address-xml
 (def ship-to-xml
   (u/strip-newlines
 "<ShipTo>
+<Name>Sistemi Fans</Name>
 <CompanyName>Sistemi Fans</CompanyName>
 <AttentionName>Big Fan</AttentionName>
 <PhoneNumber>123456777</PhoneNumber>"
@@ -147,8 +141,8 @@ address-xml
 "</ShipTo>") )
 
 
-(def ship-to-data {:company "Sistemi Fans" :attention_name "Big Fan" :phone "123456777"
-                   :address address-data})
+(def ship-to-data {:Name "Sistemi Fans" :AttentionName "Big Fan" :CompanyName "Sistemi Fans"
+                   :PhoneNumber "123456777" :Address address-data})
 
 (deftest test-ship-to-info
   (let [data1 (m/ship-to-info ship-to-data)]
@@ -164,7 +158,7 @@ address-xml
 
 
 (deftest test-shipping-service-info
-  (let [data1 (m/shipping-service-info service-data)]
+  (let [data1 (m/service-info service-data)]
     (is (= (str xml-header service-xml) (x/emit-str (xml data1)) ))
     ) )
 
@@ -183,7 +177,7 @@ address-xml
 
 
 (deftest test-payment-info
-  (let [data1 (m/payement-info payment-data)]
+  (let [data1 (m/payment-info payment-data)]
     (is (= (str xml-header payment-xml) (x/emit-str (xml data1)) ))
     ) )
 
@@ -211,8 +205,10 @@ address-xml
 </LabelImageFormat>
 </LabelSpecification>"))
 
+(def label-spec-data {:Code "GIF"})
+
 (deftest test-label-spec-info
-  (let [data1 (m/label-spec-info label-spec-data)]
+  (let [data1 m/label-spec-info]
     (is (= (str xml-header label-spec-xml) (x/emit-str (xml data1)) ))
     ) )
 
