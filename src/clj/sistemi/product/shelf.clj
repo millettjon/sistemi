@@ -17,7 +17,7 @@
   (p/fj-params-to-str (select-keys shelf [:id :width :depth :color :finish])))
 
 (defmethod get-price :shelf
-  [{:keys [finish width depth quantity]} {:keys [taxable]}]
+  [{:keys [finish width depth quantity]} {:keys [taxable?]}]
   (let [workbook "shelf/shelf-chain-france.xls"
         m (sheet/get (str "opt/costs/products/" workbook))
 
@@ -30,7 +30,7 @@
                      (assoc "order_width" (p/cm->mm depth))
                      (assoc "order_finish" (p/convert-finish finish))
                      (assoc "order_quantity" quantity)
-                     (assoc "order_taxable" (if taxable "yes" "no"))
+                     (assoc "order_taxable" (if taxable? "yes" "no"))
 
                      ;; read outputs
                      (select-keys ["fab_stephane_total"

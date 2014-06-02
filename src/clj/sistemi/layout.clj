@@ -62,12 +62,9 @@
         [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (order/total-items cart) ") "
         (-> cart :price :total fmt/eur-short)
         [:br]
-        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " " (-> 15 cal/business-days cal/format-france)
+        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " " (-> (order/delivery-date) cal/format-date-dMMM)
 
         #_ (tr/translate :cart)]])))
-;; TODO: Display date in locale of request.
-;; TODO: Calculate date in locale of fabrication chain.
-;; TODO: Calculate date when cart changes or shipping address changes.
 
 (defn doctype-html5
  [html]
@@ -176,7 +173,7 @@
            [:li 
             [:a {:href "#" :tabindex "-1"} (tr/translate :header :signup)]]
            [:li 
-            [:a {:href "#" :tabindex "-1"} (tr/translate :header :contact)]]
+            [:a {:href (tr/localize "/contact.htm") :tabindex "-1"} (tr/translate :header :contact)]]
            [:li 
             [:a {:href (tr/localize "/team.htm") :tabindex "-1"} (tr/translate :header :team)]]
            [:li 

@@ -8,7 +8,8 @@
             [sistemi.form :as sf]
             [sistemi.format :as fmt]
             [sistemi.layout :as layout]
-            [sistemi.site.order.wizard :as wiz]))
+            [sistemi.site.order.wizard :as wiz]
+            [clojure.string :as s]))
 
 ;; PLACES WHERE THE CART/ORDER GETS ENUMERATED
 ;; Cart
@@ -88,9 +89,12 @@
      [:p "Thank you for making your first CODE A NUMBER HERE purchase with
 Sistemi Moderni.  Your personalized order has been immediately sent to
 the fabricator closest to your product's final destination.  Feel free
-to contact us with any questions that may arise while you wait for
+to " [:a {:href (tr/localize "/contact.htm") :tabindex "-1"} (s/lower-case (tr/translate :dict :contact))]
+      " us with any questions that may arise while you wait for
 your order's speedy delivery.  Below is a summary of your purchase for
 your records."]
+
+     
 
      ;; TODO: factor this out
      (let [items (-> order :order/items vals)

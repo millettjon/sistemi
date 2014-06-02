@@ -50,7 +50,10 @@
                :blog "blog"
                :feedback "feedback"}
         :copyright ["Copyright 2014 SISTEMI MODERNI."
-                    "All rights reserved."]}
+                    "All rights reserved."]
+        ;; General dictionary
+        :dict {:contact "contact"}
+        }
 
    :fr {;; page
         :title "Meubles Étagères Moderne : Sistemi Moderni"
@@ -86,7 +89,10 @@
                :blog "blog"
                :feedback "Vos Impressions"}
         :copyright ["© 2014 SISTEMI MODERNI."
-                    "(all rights reserved)"]}
+                    "(all rights reserved)"]
+
+        :dict {:contact "contacter"}
+        }
 
    :it {;; page
         :title ""

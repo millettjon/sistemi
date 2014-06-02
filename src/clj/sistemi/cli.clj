@@ -7,5 +7,5 @@
   [& args]
   (sistemi.config/init!)
   (prn "Initializing the datomic schema.")
-  (-> (d/get-uri) d/init-db)
+  (d/init-db)
   (datomic.api/shutdown true))

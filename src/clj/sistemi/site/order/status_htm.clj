@@ -8,7 +8,8 @@
             [sistemi.form :as sf]
             [sistemi.format :as fmt]
             [sistemi.layout :as layout]
-            [sistemi.site.order.wizard :as wiz]))
+            [sistemi.site.order.wizard :as wiz]
+            [util.calendar :as cal]))
 
 ;; PLACES WHERE THE CART/ORDER GETS ENUMERATED
 ;; Cart
@@ -89,18 +90,10 @@
 
      [:h1 "Order Status"]
 
-     ;; TODO: Handle all possible order status.
-     ;; - being manufactured
-     ;; - being shipped
-     ;; - delivered
-     ;;
-     ;; TODO: Dispay tracking number.
-     ;;
      [:p "Your order has been sent to the factory for fabrication."]
 
-
-     [:p "Order Date: DD/MM/YYYY"]
-     [:p "Expected Ship Date: DD/MM/YYYY"]
+     [:p "Order Date: " (-> order :order/purchase-date cal/format-date-M)]
+     [:p "Delivery Date: " (-> order :order/estimated-delivery-date cal/format-date-M)]
 
      [:h1 "Order Details"]
 

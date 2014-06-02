@@ -31,7 +31,8 @@
                  ;[org.mortbay.jetty/servlet-api-2.5 "6.1.14"]
 
                  ;; clojure
-                 [org.clojure/clojure "1.5.1"]
+                 ;;[org.clojure/clojure "1.5.1"]
+                 [org.clojure/clojure "1.6.0"]
                  [slingshot "0.10.3"]
 
                  ;; logging

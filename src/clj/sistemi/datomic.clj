@@ -4,14 +4,24 @@
             [datomic.api :as d]
             [util.id :as id]
             [util.string :as s]
+            [util.map :as m]
+            [util.edn :as edn]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [partition]))
 
 (def partition
   :main)
 
+(def schema-attributes
+  [{:db/id #db/id[:db.part/db]
+    :db/ident :db/pack
+    :db/valueType :db.type/keyword
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}])
+
 (def schema
-  [;; browser
+  [; ========== TRACKING ==========
+   ;; browser
    {:db/id #db/id[:db.part/db]
     :db/ident :browser/id
     :db/valueType :db.type/string
@@ -22,6 +32,7 @@
     :db.install/_attribute :db.part/db}
 
    ;; ========== PRICE ==========
+   ;; TODO: delete if not used.
    ;; price amount
    {:db/id #db/id[:db.part/db]
     :db/ident :price/amount
@@ -29,6 +40,7 @@
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
 
+   ;; TODO: delete if not used.
    ;; price currency
    {:db/id #db/id[:db.part/db]
     :db/ident :price/currency
@@ -66,7 +78,6 @@
     :db.install/_attribute :db.part/db}
 
    ;; ========== ADDRESS ==========
-   ;; ? should this include name? probably not, name should be part of
    {:db/id #db/id[:db.part/db]
     :db/ident :address/address1
     :db/valueType :db.type/string
@@ -99,8 +110,30 @@
 
    {:db/id #db/id[:db.part/db]
     :db/ident :address/country
+    :db/valueType :db.type/keyword
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; ========== SHIPPING ==========
+   {:db/id #db/id[:db.part/db]
+    :db/ident :shipping/address
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :shipping/price
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/pack :edn
+    :db.install/_attribute :db.part/db}
+
+   {:db/id #db/id[:db.part/db]
+    :db/ident :shipping/boxes
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; ========== ORDER ==========
@@ -127,12 +160,44 @@
     :db/ident :order/items
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/pack :edn
+    :db.install/_attribute :db.part/db}
+
+   ;; order - sub-total
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/sub-total
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/pack :edn
+    :db.install/_attribute :db.part/db}
+
+   ;; order - taxable?
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/taxable?
+    :db/valueType :db.type/boolean
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
+   ;; order - tax
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/tax
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; order - total
    {:db/id #db/id[:db.part/db]
     :db/ident :order/total
     :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/pack :edn
+    :db.install/_attribute :db.part/db}
+
+   ;; order - purchase date
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/purchase-date
+    :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
 
@@ -146,14 +211,21 @@
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
 
-   ;; order - shipping address
-   ;; ? where/how will ups info be stored? price, tracking number
+   ;; order - shipping
    {:db/id #db/id[:db.part/db]
-    :db/ident :order/shipping-address
+    :db/ident :order/shipping
     :db/valueType :db.type/ref
     :db/isComponent true
     :db/cardinality :db.cardinality/one
-    :db.install/_attribute :db.part/db}])
+    :db.install/_attribute :db.part/db}
+
+   ;; order - estimated delivery date
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/estimated-delivery-date
+    :db/valueType :db.type/instant
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+   ])
 
 ;; datomic:dev://{transactor-host}:{port}/{db-name}
 ;; datomic:mem://[db-name]
@@ -167,6 +239,43 @@
 
 #_ (app.config/conf :datomic-uri)
 #_ (get-uri)
+
+(defn ent1
+  "Gets the first entity from a query result consiting of eids. The returned entity is touched."
+  [eids db]
+  (->> eids
+       ffirst
+       (d/entity db)
+       d/touch))
+
+;; TODO: make a tail recursive version using loop
+;; TODO: make a version of walk that works with datomic entity maps
+(defn ent->map
+  "Deeply converts a datomic entity to a map. Unpacks edn values along the way."
+  [emap]
+  (reduce (fn [m [k v]]
+            (let [v (if (component? k)
+                      (ent->map v)
+                      (if (edn? k)
+                        (edn/read-string v)
+                        v))]
+              (assoc m k v)))
+   {}
+   emap))
+
+(defn lookup1
+  "Queries for a single entity. The result is touched, converted to a
+map, unpacked, and has keyworkds unqualified. The database to use can
+optionally be passed as the first element in args and will be used as
+the first query argument."
+  [query & args]
+  (let [[db, args] (if (= datomic.db.Db (type (first args)))
+                       [(first args) (rest args)]
+                       [(d/db (get-conn)) args])]
+    (-> (apply d/q query db args)
+        (ent1 db)
+        ent->map
+        m/unqualify)))
 
 (defn init-db
   "Initializes a database and adds the schema and partitions."
@@ -186,11 +295,25 @@
                             :db/ident partition
                             :db.install/_partition :db.part/db}])
 
+
+        ;; Add attributes
+        @(d/transact conn schema-attributes)
+
         ;; Load the schema.
-        @(d/transact conn schema)))))
+        @(d/transact conn schema)
+       ))))
 
 #_ (init-db)
 
+;; Update schema
+#_ (let [uri (get-uri)]
+     (let [conn (d/connect uri)]
+       @(d/transact conn schema)
+       ))
+
+;; Delete database
+#_ (let [uri (get-uri)]
+     (d/delete-database uri))
 
 ;;
 ;; From the docs: "Datomic connections do not adhere to an acquire/use/release
@@ -221,6 +344,38 @@
 ;; query existing:    150 ms after warmup   ~0.15 ms
 ;; query non-existing: 180 ms               ~0.18
 
+
+;; Get all attributes for an attribute.
+(defn attribute
+  "Returns a map of attributes for an attribute."
+  [k]
+  (let [db (d/db (get-conn))
+        eid (d/q '[:find ?e
+                   :in ?k $
+                   :where [?e :db/ident ?k]]
+                 k
+                 db)]
+    (into {} (d/entity db (ffirst eid)))))
+#_ (attribute :order/sub-total)
+
+(defn edn?
+  "Returns true if the attribute is packed in edn format."
+  [k]
+  (-> k
+      attribute
+      :db/pack
+      (= :edn)))
+#_ (edn? :order/sub-total) ; -> true
+#_ (edn? :order/status) ; -> false
+
+(defn component?
+  "Returns true if the attribute is a component."
+  [k]
+  (-> k
+      attribute
+      :db/isComponent))
+#_ (component? :order/tax) ; -> nil
+#_ (component? :order/shipping) ; -> true
 
 ;; Check if an entity exists with a given browser id.
 #_ (let [browser-id "xyzzy"]

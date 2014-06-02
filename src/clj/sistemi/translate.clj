@@ -6,11 +6,32 @@
             [util.path :as path]
             [www.url :as url]
             [sistemi.handler :as handler]
-            [sistemi.registry :as registry]))
+            [sistemi.registry :as registry])
+  (:import [java.util Locale]))
 
 (defn full-locale
   []
-  (l/full-locale (:locale req/*req*)))
+  (-> req/*req* :locale (or :en))
+;  (l/full-locale (:locale req/*req*))
+  )
+#_ (full-locale)
+
+(defn- language
+  []
+  (:locale req/*req*))
+
+(def countries
+  "List of countries."
+  (->> (Locale/getISOCountries)
+      seq
+      (map keyword)
+      (into [])))
+
+(defn translate-country
+  [country-code]
+  (let [country (Locale. "" (name country-code))
+        locale (Locale. (name (language)))]
+    (.getDisplayCountry country locale)))
 
 (defn translate
   [& keys]

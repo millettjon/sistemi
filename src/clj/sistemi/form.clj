@@ -1,6 +1,7 @@
 (ns sistemi.form
   (:require [sistemi.format :as fmt]
-            [color.ral :as ral]))
+            [color.ral :as ral]
+            [sistemi.translate :as tr]))
 
 (def feedback
   "A customer feedback message."
@@ -51,6 +52,7 @@
    :email {:type :string :max 100}
    :phone {:type :string :max 20}})
 
+
 ;; Notes:
 ;; - region is not required for french address
 (def address
@@ -61,8 +63,18 @@
    :city {:type :string :max 50}
    :region {:type :string :max 50}
    :code {:type :string :max 20}
-   :country {:type :string :max 20}})
+   :country {:type :set :options tr/countries
+             :format tr/translate-country}
+   })
+
+(def ship-to-countries
+  #{:FR :ES :DE :IT :UK :GB})
 
 (def order-shipping
   "Fields on the order/shipping page."
+  ;; Only ship to a subset of countries.
+  (update-in address [:country :options] (partial filter ship-to-countries)))
+
+(def order-payment
+  "Fields on the order/payment page."
   address)

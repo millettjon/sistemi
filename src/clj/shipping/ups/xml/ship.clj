@@ -8,8 +8,9 @@
             [clojure.xml :as xm]
             [clojure.zip :as zip]
             [clj-http.client :as client]
+            [util.frinj :as f]
             [taoensso.timbre :as logger])
-  (:use [clojure.data.zip.xml :only (text xml->)]))
+  (:use [clojure.data.zip.xml :only (text xml-> xml1->)]))
 
 (def q "'")
 (def xml x/sexp-as-element)
@@ -24,6 +25,7 @@
   "Wrap quotes? Shit I can remember ;-)"
   [arg]
   (clojure.string/join (list q arg q)))
+
 
 ;; todo: check with other request error messages
 (defn failure-info
@@ -45,6 +47,75 @@
       nil
       ) ) )
 
+(defn parse
+  "Parse xml response."
+  [xml]
+  (-> xml
+      t/text-in-bytestream
+      xm/parse
+      zip/xml-zip))
+
+;; (defn to-hiccup
+;;   "Converts a data.xml tree to a more compressed hiccup version."
+;;   [{:keys [tag attrs content]}]
+;;   (let [elm (if (nil? attrs)
+;;               [tag]
+;;               [tag attrs])
+;;         content (map #(if (map? %) (hic %) %) content)]
+;;     (into [] (concat elm content))))
+
+#_ (let [x {:tag :ShipmentConfirmResponse, :attrs nil, :content [{:tag :Response, :attrs nil, :content [{:tag :ResponseStatusCode, :attrs nil, :content ["0"]} {:tag :ResponseStatusDescription, :attrs nil, :content ["Failure"]} {:tag :Error, :attrs nil, :content [{:tag :ErrorSeverity, :attrs nil, :content ["Hard"]} {:tag :ErrorCode, :attrs nil, :content ["120202"]} {:tag :ErrorDescription, :attrs nil, :content ["Missing or invalid ship to address line 1"]}]}]}]}]
+     (hic x))
+
+(defn success?
+  "Returns true if a request was successful."
+  [response]
+  (= "Success"
+     (xml1-> response :Response :ResponseStatusDescription text)))
+
+(defn failure-info2
+  [response]
+  ;;(xml1-> response :Response)
+  (xml-> response :Response :Error)
+  )
+
+;; Can we make a generic fn to check for success?
+#_ (let [success "<?xml version=\"1.0\"?>\n<ShipmentConfirmResponse><Response><ResponseStatusCode>1</ResponseStatusCode><ResponseStatusDescription>Success</ResponseStatusDescription></Response></ShipmentConfirmResponse>"
+         error "<?xml version=\"1.0\"?>\n<ShipmentConfirmResponse><Response><ResponseStatusCode>0</ResponseStatusCode><ResponseStatusDescription>Failure</ResponseStatusDescription><Error><ErrorSeverity>Hard</ErrorSeverity><ErrorCode>120202</ErrorCode><ErrorDescription>Missing or invalid ship to address line 1</ErrorDescription></Error></Response></ShipmentConfirmResponse>"
+         ]
+     (-> error
+         ;success
+         parse
+         ;;(xml1-> :Response :ResponseStatusDescription text)
+         ;;success?
+         ;;failure-info2
+         prn
+         ))
+
+
+#_ (defn get-shipment-confirm-response
+  "Map xml response data to internal map for common usage."
+  [sc_response]
+  (let [input (xm/parse (t/text-in-bytestream sc_response))
+        data (zip/xml-zip input)
+        failure (failure-info data "Ship Confirm Response")]
+    (if (or (nil? failure) (= "Success" (failure :status)))
+      (assoc {}
+        :tracking_number (first (xml-> data :ShipmentIdentificationNumber text))
+        :response_status (first (xml-> data :Response :ResponseStatus text))
+        :response_status_description (first (xml-> data :Response :ResponseStatusDescription text))
+        :billing_weight (first (xml-> data :BillingWeight text))
+        :transportation_charges (first (xml-> data :ShipmentCharges :TransportationCharges :MonetaryValue text))
+        :service_options_charges (first (xml-> data :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
+        :total-charges (-> data (xml1-> :ShipmentCharges :TotalCharges) currency->fj)
+        :shipment_digest (first (xml-> data :ShipmentDigest text))
+        :customer_context_id (first (xml-> data :CustomerContext text))
+        :xpci_version (first (xml-> data :XpciVersion text))
+        )
+      failure)
+    ) )
+
+
 ;; Meat and Potatoes ...............
 
 (defn create-ship-confirm-request-xml
@@ -61,16 +132,17 @@
     [:RequestOption "nonvalidate"]
     (m/transaction-reference-info (request_data :TransactionReference))]
    [:Shipment
+    (m/m->v request_data :Description {:optional? true}) ; required if international
     ; [:Description (m/handle-optional (request_data :description) "")]
     ; [:ReturnService
     ;   [:Code (m/handle-optional (request_data :service_attempt_code) "5")] ]
     ; [:DocumentsOnly (m/handle-optional (request_data :documents_only) "")]
     (m/sistemi-shipper-info (request_data :Shipper))
-    (m/ship-to-info (request_data :ship_to))
+    (m/ship-to-info (request_data :ShipTo))
     (m/service-info (request_data :Service))
     ;; TODO: Fix typo
     (m/payment-info (request_data :PaymentInformation))
-    (m/shipping-packages-info (request_data :packages))
+    (m/shipping-packages-info (:Packages request_data))
     m/label-spec-info]
    ] )
 
@@ -91,6 +163,13 @@
     [:RequestAction "ShipAccept"] ]
    [:ShipmentDigest (request_accept_data :shipment_digest)] ] )
 
+(defn currency->fj
+  "Converts a ups currency xml element to a frinj value."
+  [e]
+  (f/fj-currency
+   (bigdec (xml1-> e :MonetaryValue text))
+   (-> (xml1-> e :CurrencyCode text) keyword)))
+;; how to convert a string to a big decimal
 
 ; Could refactor the (first (xml-> data)) to something like (foo data [& tags])
 (defn get-shipment-confirm-response
@@ -107,7 +186,7 @@
         :billing_weight (first (xml-> data :BillingWeight text))
         :transportation_charges (first (xml-> data :ShipmentCharges :TransportationCharges :MonetaryValue text))
         :service_options_charges (first (xml-> data :ShipmentCharges :ServiceOptionsCharges :MonetaryValue text))
-        :total_charges (first (xml-> data :ShipmentCharges :TotalCharges :MonetaryValue text))
+        :total-charges (-> data (xml1-> :ShipmentCharges :TotalCharges) currency->fj)
         :shipment_digest (first (xml-> data :ShipmentDigest text))
         :customer_context_id (first (xml-> data :CustomerContext text))
         :xpci_version (first (xml-> data :XpciVersion text))
@@ -195,16 +274,17 @@
   ([ship_data access_data confirm_url]
      (let [ship_confirm_data (assoc ship_data :access_data access_data)
            ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
-           _ (pr ship_confirm_req_xml)
+           _ (prn "REQUEST" ship_confirm_req_xml)
            ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
+           _ (prn "RAW RESPONSE" ship_confirm_raw_rsp)
            ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))
            ]
 
-      ; Has CC number or Account information
-      ;(println ship_confirm_req_xml)
-      ;(logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
-      ;(logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
-      ;(logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
+       ;; Has CC number or Account information
+       ;; (println ship_confirm_req_xml)
+       ;; (logger/info (assoc ship_confirm_req_xml :event :ship_trans_part1/ship_confirm_req_xml))
+       ;; (logger/info (assoc ship_confirm_raw_rsp :event :ship_trans_part1/ship_confirm_raw_resp))
+       ;; (logger/info (assoc ship_confirm_rsp :event :ship_trans_part1/ship_confirm_rsp))
        ship_confirm_rsp
        )))
 

@@ -13,7 +13,8 @@
   {:items (ordered-map)
    :counter -1
    :status :cart
-   :taxable true})
+   :taxable? true ; set to true by default until shipping address is known
+   })
 
 (defn get
   "Gets the cart from the current request."

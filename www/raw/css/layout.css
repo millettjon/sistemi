@@ -1,3 +1,7 @@
+a, a:active, a:visited {
+    color: #FFFFFF;
+}
+
 /* ----- GREY BOXES AND BORDERS ----- */
 .greybox {
     background-color: #262626;
@@ -120,6 +124,11 @@
 
 .payment input.invalid {
     border: 1px solid red;
+}
+
+.payment select {
+    /* width: 145px; */
+    width: 155px;
 }
 
 label.error {

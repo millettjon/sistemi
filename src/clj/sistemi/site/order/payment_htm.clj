@@ -109,7 +109,8 @@
 
         [:div.control-group {:style {:margin-bottom "0px"}}
          [:label.control-label {:for "country"} "Country"]
-         [:div.controls (f/text :country {:data-stripe "address-country"})]]
+         ;; [:div.controls (f/text :country {:data-stripe "address-country"})]
+         [:div.controls (f/select :country {:data-stripe "address-country"})]]
 
         ]]
 
@@ -134,13 +135,13 @@
 ])
 
 (defn handle
-  [{ {:keys [contact shipping payment]} :session :as req}]
+  [{ {:keys [payment] {:keys [contact shipping]} :cart} :session :as req}]
   (let [params (merge
                 ;; default to shipping address (all or nothing)
-                (if payment {} shipping)
+                (if payment {} (:address shipping))
 
                 ;; default to name from contact data
                 (select-keys contact [:name])
 
                 payment)]
-    (response (layout/standard-page (head req) (f/with-form sf/order-shipping params (body (cart/get req))) 0))))
+    (response (layout/standard-page (head req) (f/with-form sf/order-payment params (body (cart/get req))) 0))))

@@ -29,6 +29,10 @@
   [length]
   (<= 270 length))
 
+;; TODO: Dave explain why
+;; a) '() fails here
+;; b) just use [] instead of list
+;; c) or simplify to (* 2 (+ height width))
 (defn package-calculate-girth
   "A UPS Girth calculation: 2 x height + 2 x width
   This is where I had to use (list) because '() breaks at compilation"

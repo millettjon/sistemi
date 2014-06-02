@@ -87,6 +87,5 @@
 
 (defn handle
   [req]
-  (let [s (:session req)
-        params (s :contact)]
+  (let [params (get-in req [:session :cart :contact])]
     (response (layout/standard-page (head req) (f/with-form sf/order-contact params (body (cart/get req))) 0))))

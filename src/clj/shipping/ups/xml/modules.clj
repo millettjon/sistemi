@@ -3,12 +3,6 @@
 
 (defn m->v
   "Function that takes a map and a key and returns a hiccup style vector."
-  [m k]
-  [k (k m)])
-
-;; Need a way to leave out
-(defn m->v
-  "Function that takes a map and a key and returns a hiccup style vector."
   ([m k]
      (m->v m k {}))
   ([m k {:keys [optional?]}]
@@ -51,10 +45,7 @@
      (v :StateProvinceCode)
      (v :CountryCode)
      (v :PostalCode)
-     (v :ResidentialAddress)]))
-;; TODO: ? What is the residential address flag used for? Can it take a value?
-;; 35.59 w/o ResidentalAddress
-;; 38.79 w/ ResidentalAddress
+     (v :ResidentialAddress)])) ; make this optional (why is this on for the shipper?
 
 ;; TODO: ? Can this be combined with the ship-to-info?
 (defn sistemi-shipper-info
@@ -68,15 +59,14 @@
      (v :ShipperNumber)
      (address-info Address)]))
 
-;; TODO: ? Does this include the right set of fields?
 (defn ship-to-info
   "Returns recipient info as an xml structure."
   [{:keys [Address] :as ship-to-map}]
   (let [v (partial m->v ship-to-map)]
     [:ShipTo
-     (v :Name)
-     (v :CompanyName) ; required; can't be blank; WTF?
-     (v :PhoneNumber)
+     (v :CompanyName) ; required
+     (v :AttentionName {:optional? true}) ; required for international
+     (v :PhoneNumber {:optional? true}) ; required for international
      (address-info Address)]))
 
 ;; TODO: What are the various shipping codes?
@@ -122,44 +112,30 @@
    [:HTTPUserAgent "Mozilla/4.5"]
    [:LabelImageFormat [:Code "GIF"]]])
 
-;; <Dimensions>
-;;   <UnitOfMeasurement>
-;;     <Code>IN</Code>
-;;   </UnitOfMeasurement>
-;;   <Length>22</Length>
-;;   <Width>20</Width>
-;;   <Height>18</Height>
-;; </Dimensions>
-(def dimension-keys [:unit_code :length :width :height])
-
 (defn dimension-info
   "The physical dimensions for the package (excludes weight)"
-  [dimension_data]
-  [:Dimensions
-   [:UnitOfMeasurement
-    [:Code (dimension_data :unit_code)]]
-   [:Length (dimension_data :length)]
-   [:Width (dimension_data :width)]
-   [:Height (dimension_data :height)]
-   ])
-
-;; <PackageWeight>
-;;   <Weight>14.1</Weight>
-;; </PackageWeight>
-(def weight-keys [:weight :unit])
+  [dimension-map]
+  (let [v (partial m->v dimension-map)]
+    [:Dimensions
+     [:UnitOfMeasurement
+      (v :Code)]
+     (v :Length)
+     (v :Width)
+     (v :Height)]))
 
 (defn weight-info
   "How much the package weighs, default KG (pseudo SI).
   It appears that > 26 kg billing weight triggers an extra
   fee via UPS warning. 'LargePackageIndicator' does not seem
   to do much."
-  [weight_data]
-  [:PackageWeight
-   [:UnitOfMeasurement
-    [:Code (weight_data :unit_code)]]
-   [:Weight (weight_data :weight)]
-   ;[:LargePackageIndicator]
-   ])
+  [weight-map]
+  (let [v (partial m->v weight-map)]
+    [:PackageWeight
+     [:UnitOfMeasurement
+      (v :Code)]
+     (v :Weight)
+     ;; [:LargePackageIndicator]
+     ]))
 
 ;; <InsuredValue>
 ;;   <CurrencyCode>USD</CurrencyCode>
@@ -227,15 +203,14 @@
 
 (defn shipping-package-info
   "Package information for shipping."
-  [package_data]
+  [package-map]
   [:Package
    [:PackagingType
-    [:Code (package_data :type_code)] ]
+    [:Code (:Code package-map :Code)]]
    ;; Pass the 'heavy' indicator up through weight
-   (dimension-info (package_data :dimension_data))
-   (weight-info (package_data :weight_data))
-   (package-service-option-info (package_data :service_data))
-   ])
+   (dimension-info (:Dimensions package-map))
+   (weight-info (:PackageWeight package-map))
+   (package-service-option-info (:PackageServiceOptions package-map))])
 
 (defn shipping-packages-info
   "The information for each package to be shipped. Dump xml with

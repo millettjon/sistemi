@@ -74,7 +74,8 @@
 
         [:div.control-group {:style {:margin-bottom "0px"}}
          [:label.control-label {:for "country"} "Country"]
-         [:div.controls (f/text :country)]]
+         [:div.controls (f/select :country {})]
+         ]
 
         ]]
 
@@ -99,7 +100,7 @@
 ])
 
 (defn handle
-  [req]
-  (let [s (:session req)
-        params (merge (select-keys (s :contact) [:name]) (s :shipping))]
+  [{s :session :as req}]
+  (let [params (merge (select-keys (s :contact) [:name])
+                      (-> s :cart :shipping :address))]
     (response (layout/standard-page (head req) (f/with-form sf/order-shipping params (body (cart/get req))) 0))))
