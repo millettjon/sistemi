@@ -92,14 +92,14 @@
 
      [:p "Your order has been sent to the factory for fabrication."]
 
-     [:p "Order Date: " (-> order :order/purchase-date cal/format-date-M)]
-     [:p "Delivery Date: " (-> order :order/estimated-delivery-date cal/format-date-M)]
+     [:p "Order Date: " (-> order :purchase-date cal/format-date-M)]
+     [:p "Delivery Date: " (-> order :estimated-delivery-date cal/format-date-M)]
 
      [:h1 "Order Details"]
 
      ;; TODO: factor this out
-     (let [items (-> order :order/items vals)
-           total (-> order :order/total fmt/eur-short)]
+     (let [items (-> order :items vals)
+           total (-> order :total fmt/eur-short)]
        [:table.cart
         [:tr
          [:th {:style "text-align:left;"} (tr/translate :item)]

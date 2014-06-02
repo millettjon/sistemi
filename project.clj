@@ -88,13 +88,13 @@
                  [net.objectlab.kit/datecalc-joda "1.2.0" :exclusions [joda-time]]
 
                  ;; Datomic/Data
-                 ;[com.datomic/datomic-pro "0.9.4384"
-                 ; :exclusions [
-                               ;; Exclude these since using log4j for logging.
-                               ;; See: http://docs.datomic.com/configuring-logging.html
-                 ;              org.slf4j/slf4j-nop
-                 ;              org.slf4j/log4j-over-slf4j ; note: causes an IncompatibleClassChangeError if included
-                 ;              ]]
+                 [com.datomic/datomic-pro "0.9.4384"
+                 :exclusions [
+                              ;Exclude these since using log4j for logging.
+                              ;See: http://docs.datomic.com/configuring-logging.html
+                              org.slf4j/slf4j-nop
+                              org.slf4j/log4j-over-slf4j ; note: causes an IncompatibleClassChangeError if included
+                              ]]
                  [prismatic/schema "0.2.1"]
 
                  ;; misc

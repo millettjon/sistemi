@@ -94,11 +94,10 @@ to " [:a {:href (tr/localize "/contact.htm") :tabindex "-1"} (s/lower-case (tr/t
 your order's speedy delivery.  Below is a summary of your purchase for
 your records."]
 
-     
-
      ;; TODO: factor this out
-     (let [items (-> order :order/items vals)
-           total (-> order :order/total fmt/eur-short)]
+     (let [items (-> order :items vals)
+           _ (clojure.pprint/pprint order)
+           total (-> order :total fmt/eur-short)]
        [:table.cart
         [:tr
          [:th {:style "text-align:left;"} (tr/translate :item)]

@@ -240,6 +240,51 @@
 #_ (app.config/conf :datomic-uri)
 #_ (get-uri)
 
+;;
+;; From the docs: "Datomic connections do not adhere to an acquire/use/release
+;; pattern.  They are thread-safe, cached, and long lived."
+;;
+;; Not sure how the caching works as this is 2 orders of magnitude
+;; slower than just using the same connection.
+;;
+(defn get-conn
+  "Gets a connection for the currently configured database."
+  []
+  (d/connect (get-uri)))
+
+;; Get all attributes for an attribute.
+(defn attribute
+  "Returns a map of attributes for an attribute."
+  [k]
+  (let [db (d/db (get-conn))
+        eid (d/q '[:find ?e
+                   :in ?k $
+                   :where [?e :db/ident ?k]]
+                 k
+                 db)]
+    (into {} (d/entity db (ffirst eid)))))
+#_ (attribute :order/sub-total)
+
+(defn edn?
+  "Returns true if the attribute is packed in edn format."
+  [k]
+  (-> k
+      attribute
+      :db/pack
+      (= :edn)))
+#_ (edn? :order/sub-total) ; -> true
+#_ (edn? :order/status) ; -> false
+
+(defn component?
+  "Returns true if the attribute is a component."
+  [k]
+  (-> k
+      attribute
+      :db/isComponent))
+#_ (component? :order/tax) ; -> nil
+#_ (component? :order/shipping) ; -> true
+
+
 (defn ent1
   "Gets the first entity from a query result consiting of eids. The returned entity is touched."
   [eids db]
@@ -315,19 +360,6 @@ the first query argument."
 #_ (let [uri (get-uri)]
      (d/delete-database uri))
 
-;;
-;; From the docs: "Datomic connections do not adhere to an acquire/use/release
-;; pattern.  They are thread-safe, cached, and long lived."
-;;
-;; Not sure how the caching works as this is 2 orders of magnitude
-;; slower than just using the same connection.
-;;
-(defn get-conn
-  "Gets a connection for the currently configured database."
-  []
-  (d/connect (get-uri)))
-
-
 ;; ? How long does it take to ...
 #_ (let [conn (get-conn)]
      (time
@@ -344,38 +376,6 @@ the first query argument."
 ;; query existing:    150 ms after warmup   ~0.15 ms
 ;; query non-existing: 180 ms               ~0.18
 
-
-;; Get all attributes for an attribute.
-(defn attribute
-  "Returns a map of attributes for an attribute."
-  [k]
-  (let [db (d/db (get-conn))
-        eid (d/q '[:find ?e
-                   :in ?k $
-                   :where [?e :db/ident ?k]]
-                 k
-                 db)]
-    (into {} (d/entity db (ffirst eid)))))
-#_ (attribute :order/sub-total)
-
-(defn edn?
-  "Returns true if the attribute is packed in edn format."
-  [k]
-  (-> k
-      attribute
-      :db/pack
-      (= :edn)))
-#_ (edn? :order/sub-total) ; -> true
-#_ (edn? :order/status) ; -> false
-
-(defn component?
-  "Returns true if the attribute is a component."
-  [k]
-  (-> k
-      attribute
-      :db/isComponent))
-#_ (component? :order/tax) ; -> nil
-#_ (component? :order/shipping) ; -> true
 
 ;; Check if an entity exists with a given browser id.
 #_ (let [browser-id "xyzzy"]
