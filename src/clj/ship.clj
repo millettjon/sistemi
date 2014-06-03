@@ -85,10 +85,10 @@
 ;; Country Code List: http://www.ups.com/worldshiphelp/WS14/ENU/AppHelp/Codes/Country_Territory_and_Currency_Codes.htm
 (defn address->ups
   "Converts a phone and address to a ups address."
-  [{:keys [name address1 address2 city region code country] :as address}
-   {:keys [phone] :as contact}]
-  {:CompanyName name
-   :AttentionName name
+  [{:keys [contact address1 address2 city region code country] :as address}
+   {:keys [phone] :as order-contact}]
+  {:CompanyName (:name contact)
+   :AttentionName (:name contact)
    :PhoneNumber phone
    :Address {:AddressLine1 address1
              :AddressLine2 address2

@@ -6,7 +6,6 @@
             [datomic.api :as d]
             [sistemi.datomic :as sd]
             [taoensso.timbre :as log]
-            [util.map :as m]
             [frinj.ops :as u]
             [schema.core :as s]
             [util.calendar :as cal]
@@ -32,7 +31,6 @@
 (defn recalc
   "Recalculates prices for an order."
   [{:keys [items shipping taxable?] :as order}]
-  (prn "================== RECALC ====================")
   (let [;; Recalculate prices of each line item using spreadsheets.
         items (reduce (fn [items [i item]] (assoc-in items [i :price] (get-price item order)))
                       items
@@ -96,59 +94,28 @@
 (defn create
   "Creates a new order from the session."
   [{:keys [cart] :as session} payment-txn]
-  (let [conn (sd/get-conn)
-        id (gen-id)
+  (let [id (gen-id)
         _ (log/info {:event :order/create :id id})
-        result (d/transact conn [{:db/id #db/id[:main -1]
-                                  :order/id id
-                                  :order/items (-> cart :items pr-str)
-                                  :order/taxable? (-> cart :taxable?)
-
-                                  ;; TODO: make a component for prices
-                                  ;; ? what about shipping?
-                                  :order/sub-total (-> cart :price :sub-total pr-str)
-                                  :order/tax (-> cart :price :tax pr-str)
-                                  :order/total (-> cart :price :total pr-str)
-
-                                  :order/contact #db/id[:main -2]
-                                  :order/shipping #db/id[:main -3]
-                                  :order/status :purchased
-                                  :order/purchase-date (java.util.Date.)
-                                  :order/estimated-delivery-date (-> (delivery-date) .toDate)
-
-                                  ;; TODO: make payment a component
-                                  :payment/transaction (pr-str payment-txn)}
-
-                                 ;; contact info
-                                 (merge {:db/id #db/id[:main -2]}
-                                        (m/qualify-keys (-> cart :contact) :contact))
-
-                                 ;; shipping
-                                 {:db/id #db/id[:main -3]
-                                  :shipping/address #db/id[:main -4]
-                                  :shipping/boxes (-> cart :shipping :boxes pr-str)
-                                  ;; Move to prices component
-                                  :shipping/price (-> cart :shipping :price :total pr-str)}
-
-                                 ;; shipping - address
-                                 ;; TODO: make contact a component
-                                 (-> {:db/id #db/id[:main -4]
-                                      :contact/name (-> cart :shipping :address :name)}
-                                     (merge (m/qualify-keys (-> cart :shipping :address) :address))
-                                     (dissoc :address/name))])]
-    ;;(prn "TXN RESULT" result)
+        result (-> cart
+                   (dissoc :counter)
+                   (assoc :id id
+                          :status :purchased
+                          :purchase-date (java.util.Date.)
+                          :estimated-delivery-date (-> (delivery-date) .toDate)
+                          :payment {:transaction payment-txn})
+                   (sd/create :order))]
+    (prn "TXN RESULT" result)
     id))
 
 (defn lookup
   "Lookup an order by id."
   [order-id]
-  (sd/lookup1 '[:find ?e
+  (sd/lookup '[:find ?e
                 :in $ ?order-id
                 :where [?e :order/id ?order-id]]
               order-id))
 
 (def ^:private test-order-id "LUB9ZR")
-#_ (-> test-order-id lookup m/unqualify)
 
 ;; Check if an order exists.
 #_ (let [order-id "LAKTLK"]

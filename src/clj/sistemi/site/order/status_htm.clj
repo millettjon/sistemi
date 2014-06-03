@@ -99,7 +99,7 @@
 
      ;; TODO: factor this out
      (let [items (-> order :items vals)
-           total (-> order :total fmt/eur-short)]
+           total (-> order :price :total fmt/eur-short)]
        [:table.cart
         [:tr
          [:th {:style "text-align:left;"} (tr/translate :item)]
@@ -115,8 +115,9 @@
              [:span {:style "font-size: 16px; color: white;"} (tr/translate "/product" type :name)]]
 
             ;; product image
-            [:div {:style {:width "64px" :height "64px" :float "left" :margin "8px 10px 0px 0px"}}
-             [:img {:src (str "/img/products/" (name type) "-small.png")}]]
+            (if-not (= type :shelf)
+              [:div {:style {:width "64px" :height "64px" :float "left" :margin "8px 10px 0px 0px"}}
+               [:img {:src (str "/img/products/" (name type) "-small.png")}]])
 
             ;; product specs
             ;; ? macro with-type?

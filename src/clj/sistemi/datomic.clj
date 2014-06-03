@@ -4,13 +4,13 @@
             [datomic.api :as d]
             [util.id :as id]
             [util.string :as s]
-            [util.map :as m]
             [util.edn :as edn]
+            [clojure.walk :as w]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [partition]))
 
 (def partition
-  :main)
+  :db.part/user)
 
 (def schema-attributes
   [{:db/id #db/id[:db.part/db]
@@ -32,20 +32,28 @@
     :db.install/_attribute :db.part/db}
 
    ;; ========== PRICE ==========
-   ;; TODO: delete if not used.
-   ;; price amount
+   ;; price - sub-total
    {:db/id #db/id[:db.part/db]
-    :db/ident :price/amount
-    :db/valueType :db.type/bigdec
+    :db/ident :price/sub-total
+    :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
-   ;; TODO: delete if not used.
-   ;; price currency
+   ;; price - tax
    {:db/id #db/id[:db.part/db]
-    :db/ident :price/currency
-    :db/valueType :db.type/keyword
+    :db/ident :price/tax
+    :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/pack :edn
+    :db.install/_attribute :db.part/db}
+
+   ;; price - total
+   {:db/id #db/id[:db.part/db]
+    :db/ident :price/total
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; ========== CONTACT ==========
@@ -75,9 +83,17 @@
     :db/ident :payment/transaction
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
+    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; ========== ADDRESS ==========
+   {:db/id #db/id[:db.part/db]
+    :db/ident :address/contact
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
    {:db/id #db/id[:db.part/db]
     :db/ident :address/address1
     :db/valueType :db.type/string
@@ -123,17 +139,17 @@
     :db.install/_attribute :db.part/db}
 
    {:db/id #db/id[:db.part/db]
-    :db/ident :shipping/price
+    :db/ident :shipping/boxes
     :db/valueType :db.type/string
     :db/cardinality :db.cardinality/one
     :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    {:db/id #db/id[:db.part/db]
-    :db/ident :shipping/boxes
-    :db/valueType :db.type/string
+    :db/ident :shipping/price
+    :db/valueType :db.type/ref
+    :db/isComponent true
     :db/cardinality :db.cardinality/one
-    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; ========== ORDER ==========
@@ -163,12 +179,12 @@
     :db/pack :edn
     :db.install/_attribute :db.part/db}
 
-   ;; order - sub-total
+   ;; order - price
    {:db/id #db/id[:db.part/db]
-    :db/ident :order/sub-total
-    :db/valueType :db.type/string
+    :db/ident :order/price
+    :db/valueType :db.type/ref
+    :db/isComponent true
     :db/cardinality :db.cardinality/one
-    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; order - taxable?
@@ -176,22 +192,6 @@
     :db/ident :order/taxable?
     :db/valueType :db.type/boolean
     :db/cardinality :db.cardinality/one
-    :db.install/_attribute :db.part/db}
-
-   ;; order - tax
-   {:db/id #db/id[:db.part/db]
-    :db/ident :order/tax
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/pack :edn
-    :db.install/_attribute :db.part/db}
-
-   ;; order - total
-   {:db/id #db/id[:db.part/db]
-    :db/ident :order/total
-    :db/valueType :db.type/string
-    :db/cardinality :db.cardinality/one
-    :db/pack :edn
     :db.install/_attribute :db.part/db}
 
    ;; order - purchase date
@@ -225,7 +225,14 @@
     :db/valueType :db.type/instant
     :db/cardinality :db.cardinality/one
     :db.install/_attribute :db.part/db}
-   ])
+
+   ;; order - payment
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/payment
+    :db/valueType :db.type/ref
+    :db/isComponent true
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}])
 
 ;; datomic:dev://{transactor-host}:{port}/{db-name}
 ;; datomic:mem://[db-name]
@@ -240,7 +247,7 @@
 #_ (app.config/conf :datomic-uri)
 #_ (get-uri)
 
-;;
+
 ;; From the docs: "Datomic connections do not adhere to an acquire/use/release
 ;; pattern.  They are thread-safe, cached, and long lived."
 ;;
@@ -252,19 +259,19 @@
   []
   (d/connect (get-uri)))
 
-;; Get all attributes for an attribute.
 (defn attribute
   "Returns a map of attributes for an attribute."
-  [k]
-  (let [db (d/db (get-conn))
-        eid (d/q '[:find ?e
-                   :in ?k $
-                   :where [?e :db/ident ?k]]
-                 k
-                 db)]
-    (into {} (d/entity db (ffirst eid)))))
-#_ (attribute :order/sub-total)
+  ([k] (attribute k (d/db (get-conn))))
+  ([k db]
+     (let [eid (d/q '[:find ?e
+                      :in ?k $
+                      :where [?e :db/ident ?k]]
+                    k
+                    db)]
+       (if-let [e (d/entity db (ffirst eid))]
+         (into {} e)))))
 
+;; TODO: Take db as an argument.
 (defn edn?
   "Returns true if the attribute is packed in edn format."
   [k]
@@ -272,21 +279,22 @@
       attribute
       :db/pack
       (= :edn)))
-#_ (edn? :order/sub-total) ; -> true
+#_ (edn? :price/sub-total) ; -> true
 #_ (edn? :order/status) ; -> false
 
+;; TODO: Take db as an argument.
 (defn component?
   "Returns true if the attribute is a component."
   [k]
   (-> k
       attribute
       :db/isComponent))
-#_ (component? :order/tax) ; -> nil
+#_ (component? :price/tax) ; -> nil
 #_ (component? :order/shipping) ; -> true
 
 
 (defn ent1
-  "Gets the first entity from a query result consiting of eids. The returned entity is touched."
+  "Gets, touches, and returns the first entity from a query result consisting of entity ids."
   [eids db]
   (->> eids
        ffirst
@@ -295,12 +303,13 @@
 
 ;; TODO: make a tail recursive version using loop
 ;; TODO: make a version of walk that works with datomic entity maps
-(defn ent->map
-  "Deeply converts a datomic entity to a map. Unpacks edn values along the way."
+(defn unpack
+  "Deeply unpacks a datomic entity. Returns a map with all components
+coerced to maps and edn values unpacked."
   [emap]
   (reduce (fn [m [k v]]
             (let [v (if (component? k)
-                      (ent->map v)
+                      (unpack v)
                       (if (edn? k)
                         (edn/read-string v)
                         v))]
@@ -308,7 +317,34 @@
    {}
    emap))
 
-(defn lookup1
+(defn- unqualify1
+  "Unqualifies keywords in a map."
+  [m]
+  (reduce (fn [m [k v]]
+            (assoc m
+              (if (keyword? k)
+                (-> k name keyword)
+                k)
+              v))
+          {}
+          m))
+#_ (unqualify1 {:address/city "Sturgis" :address/country :US :foo "FOO"})
+#_ (instance? clojure.lang.IRecord (Rec. "hi"))
+
+;; Should it ignore records completely?
+;; - yes since, if they came from datomic, they had to have already been coerced
+(defn unqualify
+  [m]
+  (w/postwalk (fn [v]
+                (cond (instance? clojure.lang.IRecord v) v
+                      (map? v) (unqualify1 v)
+                      :else v))
+              m))
+#_ (unqualify1 {:order/shipping {:shipping/address {:address/city "Sturgis" :address/country :US}}})
+#_ (unqualify {:order/shipping {:shipping/address {:address/city "Sturgis" :address/country :US}}})
+#_ (unqualify {:order/sub-total (frinj.ops/fj 1 :m)})
+
+(defn lookup
   "Queries for a single entity. The result is touched, converted to a
 map, unpacked, and has keyworkds unqualified. The database to use can
 optionally be passed as the first element in args and will be used as
@@ -319,8 +355,64 @@ the first query argument."
                        [(d/db (get-conn)) args])]
     (-> (apply d/q query db args)
         (ent1 db)
-        ent->map
-        m/unqualify)))
+        unpack
+        unqualify)))
+
+(defn tid
+  "Creates a temporary id in the :main partition with the indicated number."
+  [i]
+  (d/tempid partition i))
+
+;; - don't re-qualify namespaced keywords
+;; - ? don't qualify ordered map?
+;; - ? don't qualify things that will be edn-ified?
+;; - ? don't qualify records?
+;; - ? check if an attribute exists?
+
+(defn qualify
+  "Qualifies bare keywords in map m with a namespace ns. If they key
+ns exists in m and points to a submap, the submap is used instead."
+  [m ns]
+  (reduce (fn [m [k v]]
+            (let [k2 (apply keyword (map name [ns k]))]
+              (assoc m
+                (if (attribute k2) k2 k)   ; only qualify existing attributes
+                (if (component? k2)
+                  (qualify v k)
+                  v))))
+          {}
+          m))
+#_ (qualify {:foo "FOO"} :order)
+#_ (attribute :order/status)
+
+(defn pack
+  "Converts map m into a list of linked entities. EDN attributes are packed along the way."
+  ([m]
+     (vals (pack m -1 {})))
+  ([m i acc]
+     ;; add children
+     (reduce (fn [acc [k v]]
+               (let [f (partial assoc-in acc [i k])]
+                 (cond (edn? k)        (f (pr-str v))
+                       (component? k)  (let [i2 (-> acc count (* -1) dec)]
+                                         (pack v i2 (f (tid i2))))
+                       :else           (f v)
+                       )))
+             (assoc acc i {:db/id (tid i)}) ; add self
+             m)))
+
+;; TODO: Error handling.
+;; TODO: Pass in db.
+;; TODO: ? What result should be returned?
+(defn create
+  "Qualifies keys in map m using namespace ns, packs the map, and transacts the result."
+  [m ns]
+  (let [conn (get-conn)
+        entities (-> m
+                     (qualify ns)
+                     pack)
+        result (d/transact conn entities)]
+    result))
 
 (defn init-db
   "Initializes a database and adds the schema and partitions."

@@ -101,6 +101,10 @@
 
 (defn handle
   [{s :session :as req}]
-  (let [params (merge (select-keys (s :contact) [:name])
-                      (-> s :cart :shipping :address))]
+  (let [address (-> s :cart :shipping :address)
+        params (merge (select-keys (s :contact) [:name])
+                      (-> address
+                          (dissoc :contact)
+                          (assoc :name (-> address :contact :name)))
+                     (-> s :cart :shipping :address))]
     (response (layout/standard-page (head req) (f/with-form sf/order-shipping params (body (cart/get req))) 0))))

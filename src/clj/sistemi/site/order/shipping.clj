@@ -14,10 +14,12 @@
   (= :FR (:country address)))
 
 (defn update-shipping
-  [cart shipping]
+  [cart address]
   (-> cart
-      (assoc-in [:shipping :address] shipping)
-      (assoc :taxable? (taxable? shipping))
+      (assoc-in [:shipping :address] (-> address
+                                         (dissoc :name)
+                                         (assoc :contact {:name (address :name)})))
+      (assoc :taxable? (taxable? address))
       order/recalc))
 
 (defn handle
