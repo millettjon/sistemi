@@ -51,8 +51,21 @@
                :feedback "feedback"}
         :copyright ["Copyright 2014 SISTEMI MODERNI."
                     "All rights reserved."]
-        ;; General dictionary
-        :dict {:contact "contact"}
+
+        ;; general misc
+        :contact "contact"
+
+        ;; general - cart/order related
+        :total "total"
+        :subtotal "subtotal"
+        :shipping "shipping"
+        :item "item"
+        :quantity "quantity"
+        :price "price"
+        :unit_price "unit price"
+        :copy "copy"
+        :edit "edit"
+        :delete "delete"
         }
 
    :fr {;; page
@@ -91,7 +104,18 @@
         :copyright ["© 2014 SISTEMI MODERNI."
                     "(all rights reserved)"]
 
-        :dict {:contact "contacter"}
+        ;; general
+        :contact "contacter"
+
+        ;; general - cart/order related
+        :subtotal "Sous-total"
+        :item "article"
+        :quantity "quantité"
+        :price "prix"
+        :unit_price "prix unitaire"
+        :copy "copier"
+        :edit "modifier"
+        :delete "supprimer"
         }
 
    :it {;; page
@@ -122,7 +146,18 @@
                :blog "blog"
                :feedback "Feedback"}
         :copyright ["@ 2014 SISTEMI MODERNI."
-                    "(all rights reserved)"]}
+                    "(all rights reserved)"]
+
+        ;; general - cart/order related
+        :subtotal "totale parziale"
+        :item "articolo"
+        :quantity "quantità"
+        :price "prezzo"
+        :unit_price "prezzo unitario"
+        :edit "modifica"
+        :copy "copia"
+        :delete "annulla"
+        }
 
    :es {;; page
         :title "Muebles de Estantería Moderna : Sistemi Moderni"

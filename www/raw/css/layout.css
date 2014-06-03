@@ -243,3 +243,12 @@ button.btn[type=submit]:focus {
 .col-wrap {
     overflow: hidden;
 }
+
+/* Order Detail Table */
+table.order                {width:100%; margin-top: 15px;}
+table.order tr.double_rule {border-top: 6px double #383838; padding-top: 10px;}
+table.order tr.item        {border-top: 2px solid #383838;}
+table.order tr.item > td   {padding-top:10px; padding-bottom:10px; vertical-align:top;}
+table.order tr.total       {font-size: 16px;}
+table.order tr.total > td  {padding-top: 10px; text-transform: capitalize;}
+table.order th             {text-transform: capitalize;}
