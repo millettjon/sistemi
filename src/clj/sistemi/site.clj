@@ -1,19 +1,7 @@
 (ns sistemi.site
+  "Root url and strings table."
   (:require [sistemi.layout :as layout])
   (:use [ring.util.response :only (response content-type)]))
-
-#_ (ns sistemi.site
-  "Root of all urls in the site."
-  (:require [locale.core :as l]
-            [locale.translate :as ltr]
-            [sistemi.registry :as registry]
-            [sistemi.translate :as tr]
-            [www.request :as req]
-            [www.user-agent :as ua]
-            [www.event :as e])
-  (:use [ring.util.response :only (response content-type)]
-        [hiccup page])
-  (:import java.io.File))
 
 (def strings
   {:en {;; page
