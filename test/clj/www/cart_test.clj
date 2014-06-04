@@ -1,11 +1,13 @@
 (ns www.cart-test
   (:require [www.cart :as cart]
-            [sistemi.order :as order])
+            [sistemi.order :as order]
+            [util.frinj :as f])
   (:use [clojure.test]))
 
 (defmethod order/get-price :default
   [item order]
-  {:total 3})
+  {:total (f/fj-eur 3)}
+  )
 
 (deftest test-add
   (let [cart (cart/add nil {:id -1 :item :foo})]
