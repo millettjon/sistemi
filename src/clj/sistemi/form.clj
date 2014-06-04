@@ -72,8 +72,11 @@
 
 (def order-shipping
   "Fields on the order/shipping page."
-  ;; Only ship to a subset of countries.
-  (update-in address [:country :options] (partial filter ship-to-countries)))
+  (-> address
+      ;; Only ship to a subset of countries.
+      (update-in [:country :options] (partial filter ship-to-countries))
+      ;; Default to France for now.
+      (assoc-in [:country :default] :FR)))
 
 (def order-payment
   "Fields on the order/payment page."
