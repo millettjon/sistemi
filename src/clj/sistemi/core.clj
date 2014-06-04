@@ -10,8 +10,7 @@
   (:require [sistemi.logging]
             [taoensso.timbre :as log]
             [www.id :as id]
-            sistemi.config
-            frinj.jvm
+            [sistemi.init]
             [sistemi.registry :as registry]
             [sistemi.routes :as routes]
             [sistemi.datomic :as d]
@@ -37,7 +36,6 @@
   (log/info {:event :boot/git :git-branch (git/branch):git-sha (git/sha)})
 
   ;; ===== CONFIGURATION =====
-  (sistemi.config/init!)
   (taoensso.timbre/info {:event :boot/config :config (harpocrates.core/redact cf/config)})
 
   ;; ===== LOCALIZATION =====
@@ -45,12 +43,6 @@
     (set-locales! (m :locales))
     (set-default-locale! (m :default-locale))
     (set-default-territories! (m :default-territories)))
-
-  ;; ===== UNIT CALCULATIONS =====
-  (frinj.jvm/frinj-init!)
-
-  ;; ===== DATOMIC =====
-  (d/init-db)
 
   ;; ===== HANDLERS =====
   ;; Register request handlers and build routes after localization
