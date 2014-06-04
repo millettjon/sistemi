@@ -7,7 +7,7 @@
   "Builds a frinj euro value. Useful since fj autoconverts to the
 fundamental currency unit which is USD."
   [amount]
-  (f/fjv. amount {:EUR 1}))
+  (f/fjv. (bigdec amount) {:EUR 1}))
 
 (defn fj-currency
   "Builds a frinj currency value. Useful since fj autoconverts to the
@@ -32,7 +32,10 @@ fundamental currency unit which is USD."
 
 (defn fj-bd_
   [{:keys [v] :as num} divisor places]
-  (assoc num :v (.divide v (bigdec divisor) places BigDecimal/ROUND_HALF_EVEN)))
+  (assoc num :v (.divide (bigdec v) (bigdec divisor) places BigDecimal/ROUND_HALF_EVEN)))
+#_ (fj-bd_ (fj-eur 33) 1.2 2)
+#_ (fj-bd_ (fj-eur 33) 3M 2)
+#_ (fj-bd_ (fj-eur 33M) 3M 2)
 
 (defn fj-max
   "Returns the greatest of the values."
