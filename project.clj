@@ -54,7 +54,7 @@
                  [ring/ring-json "0.2.0"]
 
                  ;; templating
-                 [hiccup "1.0.4"]
+                 [hiccup "1.0.5"]
                  [enlive "1.1.1"]
                  [selmer "0.5.9"]
 
@@ -74,7 +74,7 @@
 
                  ;; payment
                  [clojurewerkz/money "1.4.0"]
-                 [abengoa/clj-stripe "1.0.3"]
+                 [abengoa/clj-stripe "1.0.4"]
 
                  ;; validation
                  [bouncer "0.3.0-alpha1"]
