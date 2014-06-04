@@ -3,10 +3,41 @@
             [app.config :as cf]
             [www.form :as f]
             [www.cart :as cart]
+            [sistemi.translate :as tr]
             [sistemi.site.order :as order]
             [sistemi.form :as sf]
             [sistemi.layout :as layout]
             [sistemi.site.order.wizard :as wiz]))
+
+(def strings
+  {:en {:cc "Credit Card"
+        :name "Name"
+        :number "Number"
+        :cvn "CVC"
+        :expiration "Expiration"
+        :continue "Next"
+        :billing-address "Billing Address"
+        :address1 "Address 1"
+        :address2 "Address 2"
+        :city "City"
+        :region "Region"
+        :postal "Postal Code"
+        :country "Country"}
+   :fr {:cc "CARTE DE CREDIT"
+        :name "Nom"
+        :number "Numéro de carte"
+        :cvn "Cryptogramme visuel"
+        :expiration "Date d’expiration"
+        :continue "SUIVANT"
+        :billing-address "ADRESSE DE FACTURATION"
+        :address1 "Adresse"
+        :address2 "Adresse suite"
+        :city "Ville"
+        :region "remove"
+        :postal "Code postal"
+        :country "Pays"}
+   :it {}
+   :es {}})
 
 (def names {})
 
@@ -42,18 +73,18 @@
       [:td {:style {:width "50%" :vertical-align "top"}}
        [:fieldset
 
-        [:p.form-header "Credit Card"]
+        [:p.form-header (tr/translate :cc)]
 
         [:span.payment-errors]
         
         [:div.control-group
-         [:label.control-label {:for "name"} "Name"]
+         [:label.control-label {:for "name"} (tr/translate :name)]
          [:div.controls
           (f/text :name {:data-stripe "name"})
           ]]
 
         [:div.control-group
-         [:label.control-label {:for "number"} "Number"]
+         [:label.control-label {:for "number"} (tr/translate :number)]
          [:div.controls [:input#number {:type "text"
                                         :size "20"
                                         :data-stripe "number"
@@ -67,7 +98,7 @@
         ;; TODO: is span.validation necessary
 
         [:div.control-group
-         [:label.control-label {:for "expiration"} "Expiration"]
+         [:label.control-label {:for "expiration"} (tr/translate :expiration)]
          [:div.controls
           ;; Note: The expiration input is not submitted. Rather the month and year are parsed from it into hidden fields.
           [:input.cc-exp {:type "text"
@@ -77,38 +108,39 @@
          [:input.cc-exp-year {:type "hidden" :data-stripe "exp-year"}]]
 
         [:div.control-group
-         [:label.control-label {:for "CVC"} "CVC"]
+         [:label.control-label {:for "CVC"} (tr/translate :cvn)]
          [:div.controls
           [:input.cc-cvc {:type "text" :data-stripe "cvc"
                           :pattern "\\d*" :x-autocompletetype "cc-csc"
                           :required "true" :autocomplete "off" :maxlength "4"}]]]
 
-        [:p.form-header "Billing Address"]
+        [:p.form-header (tr/translate :billing-address)]
 
         ;; [:input#sync-address {:type "checkbox" :checked "true"} " Same as shipping address."]
 
         [:div.control-group
-         [:label.control-label {:for "address1"} "Address 1"]
+         [:label.control-label {:for "address1"} (tr/translate :address1)]
          [:div.controls (f/text :address1 {:data-stripe "address-line1"})]]
 
         [:div.control-group
-         [:label.control-label {:for "address2"} "Address 2"]
+         [:label.control-label {:for "address2"} (tr/translate :address2)]
          [:div.controls (f/text :address2 {:data-stripe "address-line2" :placeholder "(optional)"})]]
 
         [:div.control-group
-         [:label.control-label {:for "city"} "City"]
+         [:label.control-label {:for "city"} (tr/translate :city)]
          [:div.controls (f/text :city {:data-stripe "address_city"})]]
 
-        [:div.control-group
-         [:label.control-label {:for "region"} "Region"]
-         [:div.controls (f/text :region {:data-stripe "address-state" :placeholder "(optional)"})]]
+        ;; todo: commented out per Antoine
+;        [:div.control-group
+;         [:label.control-label {:for "region"} "Region"]
+;         [:div.controls (f/text :region {:data-stripe "address-state" :placeholder "(optional)"})]]
 
         [:div.control-group
-         [:label.control-label {:for "code"} "Postal Code"]
+         [:label.control-label {:for "code"} (tr/translate :postal)]
          [:div.controls (f/text :code {:data-stripe "address-zip"})]]
 
         [:div.control-group {:style {:margin-bottom "0px"}}
-         [:label.control-label {:for "country"} "Country"]
+         [:label.control-label {:for "country"} (tr/translate :country)]
          ;; [:div.controls (f/text :country {:data-stripe "address-country"})]
          [:div.controls (f/select :country {:data-stripe "address-country"})]]
 
@@ -128,7 +160,7 @@
 
        ;; grey next
        [:div {:style {:text-align "right" :margin-top "150px"}}
-        [:button.btn.btn-inverse.btn-large {:type "submit"} "Next"]]
+        [:button.btn.btn-inverse.btn-large {:type "submit"} (tr/translate :continue)]]
        ]]
 
      ]]

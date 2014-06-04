@@ -31,7 +31,7 @@
         :quantity "Quantità"}
 
    :fr {;:title "TODO: French"
-        :spin "cliquez pour tourner"
+        :spin "Cliquez pour pivoter"
         :width "Largeur"
         :depth "Profondeur"
         :height "Hauteur"

@@ -11,8 +11,9 @@
 (defn access-data-from-config
   "Pulled from our encrypted config"
   [access_config_info]
-  { :user_id (access_config_info :user-id)
-    :password (access_config_info :password)
-    :license_number (access_config_info :access-key)
-    :account_number (access_config_info :account-number)
+  (println "access_config_info:" access_config_info)
+  { :UserId (:UserId access_config_info)
+    :Password (:Password access_config_info)
+    :AccessLicenseNumber (:AccessLicenseNumber access_config_info)
+    :AccountNumber (:AccountNumber access_config_info)
     :lang_locale "en-US"} )

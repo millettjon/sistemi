@@ -9,6 +9,19 @@
             [sistemi.layout :as layout]
             [sistemi.site.order.wizard :as wiz]))
 
+(def strings
+  {:en {:contact "Contact Information"
+        :name "Name"
+        :email "Email Address"
+        :phone "Phone"}
+   :fr {:contact "Contact Information"
+        :name "Prénom Nom"
+        :email "Adresse email"
+        :phone "téléphone"}
+   :it {}
+   :es {}
+   })
+
 (def names {})
 
 (defn head
