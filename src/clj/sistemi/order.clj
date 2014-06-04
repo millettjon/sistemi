@@ -6,13 +6,14 @@
             [datomic.api :as d]
             [sistemi.datomic :as sd]
             [taoensso.timbre :as log]
-            [frinj.ops :as u]
+            [frinj.ops :as f]
             [schema.core :as s]
             [util.calendar :as cal]
             [ship])
-  (:use [clojure.pprint :only [pprint]]))
+  (:use [clojure.pprint :only [pprint]]
+        [util.frinj :only [fj-eur fj-round fj-bd_]]))
 
-(def france-tax-rate (u/fj 0.20))
+(def france-tax-rate 0.20)
 
 (defmulti get-price
   "Calculates the price components for an item."
@@ -28,6 +29,19 @@
     [:tr [:td "unit"]  [:td (-> m :unit fmt/eur)]]
     [:tr [:td "total"] [:td (-> m :total fmt/eur)]]]])
 
+;; Hmm, maybe not worthwhile as it doesn't take shipping into account.
+;; - changes if ups shipping price includes taxes
+;; (subtotal + adjustment) * (1 + tax-rate) = total
+;; (subtotal + adjustment) = total / (1 + tax-rate)
+;; adjustment = (total / (1 + tax-rate)) - subtotal
+(defn fudge
+  "Calculate fudge adjustment to make a total come out to given whole number."
+  [total subtotal tax-rate]
+  (-> total
+      (fj-bd_ (+ 1 tax-rate) 2)
+      (f/fj- subtotal)
+      (fj-round 2)))
+
 (defn recalc
   "Recalculates prices for an order."
   [{:keys [items shipping taxable?] :as order}]
@@ -39,30 +53,26 @@
         ;; Shipping cost of whole order.
         ship-map (if shipping
                    {:shipping (merge shipping (ship/estimate order))})
+        shipping (or (get-in ship-map [:shipping :price :total])
+                     (fj-eur 0))
 
-        ;; Recalculate order total (not including shipping).
-        total (apply u/fj+ (map #(-> % second :price :total) items))
-
-        ;; Subtotal - sub-total = total / (1 + tax-rate).
-        sub-total (if taxable?
-                    (u/fj_ total (u/fj+ 1 france-tax-rate)) 
-                    total)
+        ;; Calculate subtotal of all items.
+        subtotal (apply f/fj+ (map #(-> % second :price :total) items))
 
         ;; Sales tax.
         tax (if taxable?
-              (u/fj* sub-total france-tax-rate)
-              (u/fj 0))
+              (-> (f/fj* subtotal france-tax-rate)
+                  (fj-round 2))
+              (fj-eur 0))
 
-        ;; Grand total, include shipping.
-        total (if ship-map
-                (u/fj+ total (get-in ship-map [:shipping :price :total]))
-                total)]
+        ;; Grand total, including tax and shipping.
+        total (f/fj+ subtotal tax shipping)]
 
     (-> order
         (merge ship-map)
         (assoc
           :items items
-          :price {:sub-total sub-total
+          :price {:sub-total subtotal
                   :tax tax
                   :total total}))))
 
@@ -114,8 +124,6 @@
                 :in $ ?order-id
                 :where [?e :order/id ?order-id]]
               order-id))
-
-(def ^:private test-order-id "LUB9ZR")
 
 ;; Check if an order exists.
 #_ (let [order-id "LAKTLK"]

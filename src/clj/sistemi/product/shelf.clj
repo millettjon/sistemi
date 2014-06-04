@@ -30,7 +30,6 @@
                      (assoc "order_width" (p/cm->mm depth))
                      (assoc "order_finish" (p/convert-finish finish))
                      (assoc "order_quantity" quantity)
-                     (assoc "order_taxable" (if taxable? "yes" "no"))
 
                      ;; read outputs
                      (select-keys ["fab_stephane_total"
@@ -38,8 +37,6 @@
                                    "packaging_box_total"
                                    "order_subtotal"
                                    "total_margin"
-                                   "total_tax"
-                                   "total_adjustment"
                                    "total_total"])
 
                      ;; return a normal hash
@@ -58,6 +55,4 @@
              :finishing-marques (prices "order_finishing_marques")
              :packaging-box (prices "packaging_box_total")
              :subtotal (prices "order_subtotal")
-             :margin (prices "total_margin")
-             :tax (prices "total_tax")
-             :adjustment (prices "total_adjustment")}}))
+             :margin (prices "total_margin")}}))

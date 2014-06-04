@@ -34,13 +34,13 @@
                   "shelf(1)")]
     (is "invalid_request_error" (-> response :error :type))))
 
-(deftest fail-cant-connect
-  (binding [clj-stripe.common/*api-root* "https://127.0.0.1:666/dontexist"]
-    (let [response (charge-card
-                    (:stripe-token "badtoken")
-                    (fj/fj-eur 45.99M)
-                    "shelf(1)")]
-      (is (-> response class (isa? Exception))))))
+;; (deftest fail-cant-connect
+;;   (binding [clj-stripe.common/*api-root* "https://127.0.0.1:666/dontexist"]
+;;     (let [response (charge-card
+;;                     (:stripe-token "badtoken")
+;;                     (fj/fj-eur 45.99M)
+;;                     "shelf(1)")]
+;;       (is (-> response class (isa? Exception))))))
 
 (def card
   "Test credit card."

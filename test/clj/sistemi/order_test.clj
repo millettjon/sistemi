@@ -1,18 +1,12 @@
 (ns sistemi.order-test
-  (:require [sistemi.order :as order]
+  (:require [sistemi.init]
+            [sistemi.order :as o]
             [sistemi.datomic :as d]
             [util.edn :as edn]
-            [util.frinj :as f]
             [clojure.pprint :as p])
-  (:use clojure.test))
-
-(defn db-fixture
-  "Initiaizes the datomic dev db."
-  [f]
-  (d/init-db)
-  (f))
-
-(use-fixtures :once db-fixture)
+  (:use clojure.test
+        [frinj.ops :only [fj fj+ fj*]]
+        [util.frinj :only [fj-eur fj-round fj-bd_]]))
 
 (def cart-data
   "Sample cart data to convert to an order."
@@ -50,17 +44,37 @@
           }})
 
 (deftest create-order
-  (let [order-id (order/create cart-data {:stripe "<payment transaction details>"})
-        order (order/lookup order-id)]
+  (let [order-id (o/create cart-data {:stripe "<payment transaction details>"})
+        order (o/lookup order-id)]
     (is order-id)
     (is order)
-    ;;(prn "----------------------------------------")
-    ;;(p/pprint order)
     (is (= (-> order :price :total) (-> cart-data :cart :price :total)))
-    ;;(prn "TOTAL" (-> order :order/total))
-
     (is (-> order :status))
     (is (-> order :items))
     (is (-> order :contact))
-    (is (-> order :shipping))
-    ))
+    (is (-> order :shipping))))
+
+(defn- check-fudge
+  [total]
+  (let [tax-rate      o/france-tax-rate
+        total         (fj-eur total)
+        desired-total (fj-round total 0)
+        subtotal      (fj-bd_ total (+ 1 tax-rate) 2)
+        fudge         (o/fudge desired-total subtotal tax-rate)]
+    (fj-round (fj* (fj+ subtotal fudge) (+ 1 tax-rate)) 2)))
+
+;; Property based testing would be interesting here.
+(deftest fudge
+  (are [total desired-total] (= (check-fudge total) (-> desired-total fj-eur (fj-round 2)))
+       10 10
+       13 13
+       21.3 21
+       88.7 89
+       1.29 1
+       57.99 58
+       58.01 58
+       17.51 18
+       137.49 137
+       137.50 138
+       137.51 138
+       138.50 138))
