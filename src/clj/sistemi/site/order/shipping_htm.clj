@@ -9,7 +9,7 @@
             [sistemi.site.order.wizard :as wiz]))
 
 (def strings
-  {:en {:shipping "Shipping Address"
+  {:en {:shipping-address "Shipping Address"
         :name "Name"
         :address1 "Address 1"
         :address2 "Address 2"
@@ -18,7 +18,7 @@
         :postal "Postal Code"
         :country "Country"
         :continue "Next"}
-   :fr {:shipping "ADRESSE DE LIVRAISON"
+   :fr {:shipping-address "ADRESSE DE LIVRAISON"
         :name "Prénom Nom"
         :address1 "Adresse"
         :address2 "Adresse suite"
@@ -88,10 +88,11 @@
          [:label.control-label {:for "city"} (tr/translate :city)]
          [:div.controls (f/text :city)]]
 
-        ;; todo: per Antoine's comments
-;        [:div.control-group
-;         [:label.control-label {:for "region"} (tr/translate :region)]
-;         [:div.controls (f/text :region {:placeholder "(optional)"})]]
+        ;; TODO: per Antoine's comments
+        #_ [:div.control-group
+            [:label.control-label {:for "region"} (tr/translate :region)]
+            [:div.controls (f/text :region {:placeholder "(optional)"})]]
+        (f/hidden :region)
 
         [:div.control-group
          [:label.control-label {:for "code"} (tr/translate :postal)]
@@ -126,10 +127,12 @@
 
 (defn handle
   [{s :session :as req}]
-  (let [address (-> s :cart :shipping :address)
+  (let [address      (-> s :cart :shipping :address)
+        session-name (-> s :contact :name)
+        contact-name (-> s :cart :contact :name)
+        ship-name    (-> address :contact :name)
         params (merge (select-keys (s :contact) [:name])
                       (-> address
                           (dissoc :contact)
-                          (assoc :name (-> address :contact :name)))
-                     (-> s :cart :shipping :address))]
+                          (assoc :name (or ship-name contact-name session-name))))]
     (response (layout/standard-page (head req) (f/with-form sf/order-shipping params (body (cart/get req))) 0))))
