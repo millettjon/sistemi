@@ -31,5 +31,4 @@
           resp/redirect
           (assoc :session
             (assoc (:session req) :contact values))
-          (cart/swap req update-contact values)
-          ))))
+          (cart/swap req update-contact values)))))

@@ -130,10 +130,11 @@
          [:label.control-label {:for "city"} (tr/translate :city)]
          [:div.controls (f/text :city {:data-stripe "address_city"})]]
 
-        ;; todo: commented out per Antoine
-;        [:div.control-group
-;         [:label.control-label {:for "region"} "Region"]
-;         [:div.controls (f/text :region {:data-stripe "address-state" :placeholder "(optional)"})]]
+        ;; TODO: commented out per Antoine
+        #_ [:div.control-group
+            [:label.control-label {:for "region"} "Region"]
+            [:div.controls (f/text :region {:data-stripe "address-state" :placeholder "(optional)"})]]
+        (f/hidden :region)
 
         [:div.control-group
          [:label.control-label {:for "code"} (tr/translate :postal)]

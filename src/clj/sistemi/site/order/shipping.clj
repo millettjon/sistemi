@@ -27,5 +27,4 @@
   (f/with-valid-form sf/order-shipping params
     (-> (tr/localize "payment.htm")
         resp/redirect
-        (cart/swap req update-shipping (f/values))
-        )))
+        (cart/swap req update-shipping (f/values)))))

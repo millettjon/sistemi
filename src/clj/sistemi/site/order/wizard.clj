@@ -2,23 +2,6 @@
   (:require [sistemi.translate :as tr])
   (:use [www.wizard :only [wizard]]))
 
-;; todo: what about 'cart' in site.clj, this is not a page, so will it have access to site/strings?
-(def strings
-  {:en {:cart " Cart"
-        :contact " Contact"
-        :shipping " Shipping"
-        :payment " Payment"}
-   :fr {:cart " PANIER"
-        :contact " CONTACT"
-        :shipping " LIVRAISON"
-        :payment " PAIEMENT"}
-   :it {:cart " "
-        :contact " "
-        :shipping " "
-        :payment " "}
-   :es {}
-   })
-
 (defn- a-attr
   "Anchor attributes."
   [url]

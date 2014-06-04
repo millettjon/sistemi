@@ -4,7 +4,8 @@
             [util.frinj :as fu]))
 
 (def strings
-  {:en {:summary "Order Summary"
+  {:en {:payment "payment"
+        :summary "Order Summary"
         :sub-total "Subtotal"
         :shipping "Shipping"
         :tax "Tax"

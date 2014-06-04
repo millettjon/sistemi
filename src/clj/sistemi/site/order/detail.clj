@@ -60,9 +60,10 @@
 
      [:tr.total.double_rule
       [:td (tr/translate :subtotal)]
-      [:td {:style {:text-align "right"} :colspan 3}
-       ;; add tax back in to subtotal
-       (fmt/eur-short (frinj.ops/fj+ (-> order :price :tax) (-> order :price :sub-total)))]]
+      [:td {:style {:text-align "right"} :colspan 3} (-> order :price :sub-total fmt/eur-short)]]
+
+     [:tr.total
+      [:td (tr/translate :tax)] [:td {:style {:text-align "right"} :colspan 3} (-> order :price :tax fmt/eur-short)]]
 
      [:tr.total
       [:td (tr/translate :shipping)] [:td {:style {:text-align "right"} :colspan 3} (-> order :shipping :price :total fmt/eur-short)]]
