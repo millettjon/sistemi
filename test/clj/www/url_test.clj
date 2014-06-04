@@ -19,8 +19,8 @@
 (deftest query-to-str-test
   (are [a b] (= (url/query-to-str a) b)
        {} ""
-       {:a "A"} "a=A"
-       {:a "A" :b "B"} "a=A&b=B"))
+       {:a "A"} "a=A")
+  (is (contains? #{"a=A&b=B" "b=B&a=A"} (url/query-to-str {:a "A" :b "B"}))))
 
 (deftest encode-query-part-test
   (are [s result] (= (url/encode-query-part s) result)

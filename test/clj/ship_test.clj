@@ -25,8 +25,9 @@
                   ;;:address2 ""
                   :address1 "23950 Butternut"
                   :name "Jonathan Millett"
-                  :country "USA"}]
-       (ship/address->ups shipping)))
+                  :country "USA"}
+        contact {:phone "12345"}]
+       (ship/address->ups shipping contact)))
 
 (deftest ^:integration estimate*
   (let [{:keys [items] :as order}

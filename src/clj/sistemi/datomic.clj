@@ -363,12 +363,6 @@ the first query argument."
   [i]
   (d/tempid partition i))
 
-;; - don't re-qualify namespaced keywords
-;; - ? don't qualify ordered map?
-;; - ? don't qualify things that will be edn-ified?
-;; - ? don't qualify records?
-;; - ? check if an attribute exists?
-
 (defn qualify
   "Qualifies bare keywords in map m with a namespace ns. If they key
 ns exists in m and points to a submap, the submap is used instead."

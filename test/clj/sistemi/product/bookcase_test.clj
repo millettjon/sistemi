@@ -1,5 +1,6 @@
 (ns sistemi.product.bookcase-test
-  (:require [sistemi.order :as order])
+  (:require [sistemi.order :as o]
+            sistemi.product.bookcase)
   (:use clojure.test))
 
 (def bookcase
@@ -9,12 +10,12 @@
    :finish :laquer-matte
    :width 120
    :height 200
-   ;; Is cutount needed?
+   :cutout :semplice
    :depth 30})
 
 (def order
   {:taxable true})
 
 (deftest get-price
-  (let [price (order/get-price bookcase order)]
+  (let [price (o/get-price bookcase order)]
     (is (-> price :total :v))))

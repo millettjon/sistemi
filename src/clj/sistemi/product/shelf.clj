@@ -53,8 +53,7 @@
 
     {:workbook workbook
      :total total
-     ;;:unit (fj_ (-> total :v .doubleValue) quantity)
-     :unit (fj-bd_ total quantity 2)
+     :unit (fj-bd_ total quantity 2) ; 
      :parts {:fabrication-stephane (prices "fab_stephane_total")
              :finishing-marques (prices "order_finishing_marques")
              :packaging-box (prices "packaging_box_total")

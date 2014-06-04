@@ -34,8 +34,7 @@
     (is (thrown-with-msg? RuntimeException #"I don't know that language." (check :zz #{:en :es :de :fr} "I don't know that language.")))
     (is (thrown-with-msg? RuntimeException #"I don't speak ':zz'." (check :zz #{:en :es :de :fr} "I don't speak '~A'. Are you asleep?")))
     (let [langs #{:en :es :de :fr}]
-      (is (thrown-with-msg? RuntimeException #"I don't speak ':zz'. I do speak :en, :es, :de, :fr." (check :zz #{:en :es :de :fr} "I don't speak '~A'. I do speak ~{~a~^, ~}." langs)))
-      ))
+      (is (thrown-with-msg? RuntimeException #"I don't speak ':zz'. I do speak :de, :en, :es, :fr." (check :zz #{:en :es :de :fr} "I don't speak '~A'. I do speak ~{~a~^, ~}." (sort langs))))))
   (testing "custom message"
     (is (= 42 (check 42 "Apparently that is not the answer to life the universe and everything.")))
     (is (thrown-with-msg? RuntimeException #"I am the eggman." (check nil "I am the eggman.")))
@@ -43,3 +42,4 @@
           (check false "Am I the eggman? ~A.")))
     (is (thrown-with-msg? RuntimeException #"Am I the eggman\? false \(goo goo g'joob\)\."
           (check false "Am I the eggman? ~A (~A)." "goo goo g'joob")))))
+

@@ -1,5 +1,6 @@
 (ns sistemi.product.shelf-test
-  (:require [sistemi.order :as order])
+  (:require [sistemi.order :as o]
+            sistemi.product.shelf)
   (:use clojure.test))
 
 (def shelf
@@ -14,5 +15,5 @@
   {:taxable true})
 
 (deftest get-price
-  (let [price (order/get-price shelf order)]
+  (let [price (o/get-price shelf order)]
     (is (-> price :total :v))))

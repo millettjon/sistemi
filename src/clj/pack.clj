@@ -1,6 +1,7 @@
 (ns pack
   "Calculates the number, dimensions, and weight of each box for an order."
-  (require [util.frinj :as fu])
+  (:require sistemi.init
+            [util.frinj :as fu])
   (:use [frinj.ops]
         [clojure.pprint]))
 
