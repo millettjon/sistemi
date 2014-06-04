@@ -27,10 +27,12 @@
         :unit_price "Unit Price"
         :copy "Copy"
         :edit "Edit"
-        :delete "Delete"}
+        :delete "Delete"
+        :checkout "Checkout"}
    :es {:title ""}
    :fr {:title ""
         :cart_contents "Votre panier contient les articles suivants"
+        :total "Total"
         :subtotal "Sous-total"
         :item "Article"
         :quantity "Quantité"
@@ -39,9 +41,11 @@
         :copy "Copier"
         :edit "Modifier"
         :delete "Supprimer"
+        :checkout "Passer la commande"
         }
    :it {:title ""
         :cart_contents "Il suo carrello contiene gli articoli seguenti"
+        :total "Totale"
         :subtotal "Totale parziale"
         :item "Articolo"
         :quantity "Quantità"
@@ -49,7 +53,8 @@
         :unit_price "Prezzo Unitario"
         :edit "Modifica"
         :copy "Copia"
-        :delete "Annulla"}
+        :delete "Annulla"
+        :checkout "Acquista"}
    })
 
 (defn format-param
@@ -161,7 +166,7 @@
 
      [:div {:style {:text-align "right" :margin-top "20px" :margin-bottom "20px"}}
       [:a {:href "order/contact.htm"}
-       [:button.btn.btn-inverse.btn-large {:type "submit" :tabindex 1} "Checkout"]]]
+       [:button.btn.btn-inverse.btn-large {:type "submit" :tabindex 1} (tr/translate :checkout)]]]
 
      [:script {:type "text/javascript"}
       "jQuery(document).ready(function() {"

@@ -276,7 +276,7 @@
            ship_confirm_req_xml (ship-confirm-request-xml ship_confirm_data)
            _ (prn "REQUEST" ship_confirm_req_xml)
            ship_confirm_raw_rsp (client/post confirm_url {:body ship_confirm_req_xml :insecure? false})
-           _ (prn "RAW RESPONSE" ship_confirm_raw_rsp)
+           ;_ (prn "RAW RESPONSE" ship_confirm_raw_rsp)
            ship_confirm_rsp (get-shipment-confirm-response (ship_confirm_raw_rsp :body))
            ]
 

@@ -20,7 +20,8 @@
         :height "Height"
         :finish "Finish"
         :color "Color"
-        :quantity "Quantity"}
+        :quantity "Quantity"
+        :background-color "background"}
    :es {}
    :it {;:title ""
         ;:spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
@@ -31,7 +32,8 @@
         :height "Altezza"
         :finish "Finitura"
         :color "Colore"
-        :quantity "Quantità"}
+        :quantity "Quantità"
+        :background-color "sfondo"}
 
    :fr {;:title ""
         :spin "cliquez pour tourner"
@@ -41,7 +43,8 @@
         :finish "Finition"
         :color "Couleur"
         :cutout "Découpe"
-        :quantity "Quantité"}
+        :quantity "Quantité"
+        :background-color "l’arrière-plan"}
 
    })
 
@@ -97,7 +100,7 @@
      ;; Note: This must be positioned with z-index: 1 to be over the
      ;; spin div.
      [:button#toggle-background.btn.btn-inverse {:style "margin-left: 20px; position: relative; z-index: 1; outline: none;"}
-      [:i.icon-white.icon-adjust {:style "margin-right: 10px;"}] "background"]
+      [:i.icon-white.icon-adjust {:style "margin-right: 10px;"}] (tr/translate :background-color)]
 
      [:div {:style "position: absolute; top: 5px; width: 100%; text-align: right; z-index: 0;"}
       [:span {:style "margin-right: 20px;"} (tr/translate :spin)]]
@@ -144,7 +147,8 @@
        [:div.controls
         [:div {:style {:height "25px"}}
          [:div#color-swatch {:style {:width "25px" :height "100%" :display "inline-block" :border-radius "5px" :vertical-align "middle"}}]
-         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle" :padding-top "4px" :color "white"}}]]]]
+         [:div#color-text {:style {:margin-left "10px" :display "inline-block" :height "100%" :vertical-align "middle"
+                                   :padding-top "4px" :color "white"}}]]]]
 
       ;; TODO: Factor this out?
       [:div {:style {:position :relative

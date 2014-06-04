@@ -21,7 +21,7 @@
   ; ["11" cheapest option with insurance]
   ; "12" invalid for these 2 locations
   ; ["65" more than "11", but less than "07"]
-  (assoc-in request_data [:ship_service] {:code "11" :description "Ground"}))
+  (assoc-in request_data [:ship_service] {:Code "11" :Description "Ground"}))
 
 (deftest test-simple-insured-shipment
   (sistemi.config/init!)
@@ -32,6 +32,10 @@
         ship_confirm_rsp (ship/shipping-trans-part1 insured_basic_data access_data st/ship_confirm_test_url)
         ;ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship/ship_accept_test_url)
         ]
+
+    (println "ups_access:\n" ups_access "\n")
+    (println "access_data:\n" access_data "\n")
+    (println "basic_data:\n" basic_data "\n")
 
     ;(println "ship_confirm_rsp:\n" ship_confirm_rsp)
     ;(println "ship_accept_resp:\n" ship_accept_rsp)
