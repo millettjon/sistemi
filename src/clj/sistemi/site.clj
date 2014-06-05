@@ -54,6 +54,8 @@
         :copy "copy"
         :edit "edit"
         :delete "delete"
+        :payment "Payment"
+        :continue "Next"
         }
 
    :fr {;; page
@@ -104,6 +106,8 @@
         :copy "copier"
         :edit "modifier"
         :delete "supprimer"
+        :payment " PAIEMENT"
+        :continue "Suivant"
         }
 
    :it {;; page

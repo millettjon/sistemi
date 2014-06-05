@@ -5,6 +5,7 @@
             [sistemi.form :as sf]
             [sistemi.site.order :as order]
             [util.frinj :as fu]
+            [sistemi.translate :as tr]
             [sistemi.format :as fmt]
             [sistemi.layout :as layout]
             [sistemi.site.order.wizard :as wiz]))
@@ -13,11 +14,13 @@
   {:en {:contact "Contact Information"
         :name "Name"
         :email "Email Address"
-        :phone "Phone"}
+        :phone "Phone"
+        :continue "Next"}
    :fr {:contact "Contact Information"
         :name "Prénom Nom"
         :email "Adresse email"
-        :phone "téléphone"}
+        :phone "téléphone"
+        :continue "SUIVANT"}
    :it {}
    :es {}
    })
@@ -62,18 +65,18 @@
       [:td {:style {:width "50%" :vertical-align "top"}}
        [:fieldset
 
-        [:p.form-header "Contact Information"]
+        [:p.form-header (tr/translate :contact)]
 
         [:div.control-group
-         [:label.control-label {:for "name"} "Name"]
+         [:label.control-label {:for "name"} (tr/translate :name)]
          [:div.controls (f/text :name {:tabindex 1})]]
 
         [:div.control-group
-         [:label.control-label {:for "email"} "Email Address"]
+         [:label.control-label {:for "email"} (tr/translate :email)]
          [:div.controls (f/text :email {:tabindex 1})]]
 
         [:div.control-group
-         [:label.control-label {:for "phone"} "Phone"]
+         [:label.control-label {:for "phone"} (tr/translate :phone)]
          [:div.controls (f/text :phone {:placeholder "(optional)" :tabindex 1})]]
 
         ]]
@@ -92,7 +95,7 @@
 
        ;; grey next
        [:div {:style {:text-align "right" :margin-top "150px"}}
-        [:button#submit.btn.btn-inverse.btn-large {:type "submit" :tabindex 1} "Next"]]
+        [:button#submit.btn.btn-inverse.btn-large {:type "submit" :tabindex 1} (tr/translate :continue)]]
        ]]
 
      ]]
