@@ -107,7 +107,7 @@
 
                  ;; event driven
                  [http-kit "2.1.16"]
-                 [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
+                 [org.clojure/core.async "0.1.303.0-886421-alpha"]
 
                  ;; Clojurescript
                  ;; Note: Dommy 0.1.2 doesn't work with 0.0-2030.
