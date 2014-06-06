@@ -18,7 +18,7 @@
         :postal "Postal Code"
         :country "Country"
         :continue "Next"}
-   :fr {:shipping-address "ADRESSE DE LIVRAISON"
+   :fr {:shipping-address "Adresse de Livraison"
         :name "Prénom Nom"
         :address1 "Adresse"
         :address2 "Adresse suite"
@@ -26,7 +26,7 @@
         :region "remove"
         :postal "Code postal"
         :country "Pays"
-        :continue "SUIVANT"}
+        :continue "Suivant"}
    :it {}
    :es {}
    })
@@ -70,7 +70,7 @@
       [:td {:style {:width "50%" :vertical-align "top"}}
        [:fieldset
 
-        [:p.form-header (tr/translate :shipping)]
+        [:p.form-header (tr/translate :shipping-address)]
 
         [:div.control-group
          [:label.control-label {:for "name"} (tr/translate :name)]

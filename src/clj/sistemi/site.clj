@@ -106,7 +106,7 @@
         :copy "copier"
         :edit "modifier"
         :delete "supprimer"
-        :payment " PAIEMENT"
+        :payment "Paiement"
         :continue "Suivant"
         }
 

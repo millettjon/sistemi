@@ -47,7 +47,8 @@
                 :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
                          :valchromat-raw "Valchromat – brut" :valchromat-oiled "Valchromat – huilé"}
                 :color "Couleur"}
-        :bookcase {:width "Longeur"
+        :bookcase {:name "Bibliothèque Personnalisée"
+                   :width "Longeur"
                    :depth "Profondeur"
                    :height "Hauteur"
                    :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"

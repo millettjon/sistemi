@@ -11,16 +11,18 @@
             [sistemi.site.order.wizard :as wiz]))
 
 (def strings
-  {:en {:contact "Contact Information"
+  {:en {:contact-info "Contact Information"
+        :contact "Contact"
         :name "Name"
         :email "Email Address"
         :phone "Phone"
         :continue "Next"}
-   :fr {:contact "Contact Information"
+   :fr {:contact-info "Contact Information"
+        :contact "Contact"
         :name "Prénom Nom"
         :email "Adresse email"
         :phone "téléphone"
-        :continue "SUIVANT"}
+        :continue "Suivant"}
    :it {}
    :es {}
    })
@@ -65,7 +67,7 @@
       [:td {:style {:width "50%" :vertical-align "top"}}
        [:fieldset
 
-        [:p.form-header (tr/translate :contact)]
+        [:p.form-header (tr/translate :contact-info)]
 
         [:div.control-group
          [:label.control-label {:for "name"} (tr/translate :name)]
