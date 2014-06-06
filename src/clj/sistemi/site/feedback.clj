@@ -23,7 +23,7 @@
                                       :pass (conf :jarvis :password)
                                       :ssl true}
                                     {:from (conf :jarvis :user)
-                                     :to (conf :feedback :email)
+                                     :to (conf :email :info)
                                      :subject "Feedback submission from website"
                                      :body message})]
     (case (:error result)
