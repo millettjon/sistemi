@@ -14,8 +14,9 @@
  :jarvis {:host "smtp.gmail.com"
           :user "jarvis@sistemimoderni.com"}
 
- ;; Email address to send feedback emails to.
- :feedback {:email "info@sistemimoderni.com"}
+ ;; Email addressess
+ :email {:info "info@sistemimoderni.com"
+         :support "support@sistemimoderni.com"}
 
  ;; Datomic transactor uri
  :datomic-uri "datomic:dev://localhost:4334"

@@ -12,9 +12,11 @@
   (let [name (path/name file)]
     (cond
      (str/ends-with? name ".edn")     (-> file slurp edn/read-string)
+     (str/ends-with? name ".clj")     (-> file str load-file)
      (str/ends-with? name ".edn.gpg") (-> file (gpg/decrypt gpg-opts)))))
 
 #_ (read-file {} "etc/profiles/default/default.edn")
+#_ (read-file {} "etc/profiles/development/email.clj")
 
 (defn- handle-file
   "Handles processing of one file. Removes the file from the
