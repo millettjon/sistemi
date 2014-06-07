@@ -36,7 +36,7 @@
         :background-color "sfondo"}
 
    :fr {;:title ""
-        :spin "cliquez pour tourner"
+        :spin "Cliquez pour pivoter"
         :width "Largeur"
         :depth "Profondeur"
         :height "Hauteur"

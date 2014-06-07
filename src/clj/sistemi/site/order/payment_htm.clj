@@ -33,7 +33,7 @@
         :address1 "Adresse"
         :address2 "Adresse suite"
         :city "Ville"
-        :region "remove"
+        :region "Région"
         :postal "Code postal"
         :country "Pays"}
    :it {}

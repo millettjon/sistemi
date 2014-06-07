@@ -54,7 +54,7 @@
         :copy "copy"
         :edit "edit"
         :delete "delete"
-        :payment "Payment"
+        :payment " Payment"
         :continue "Next"
         }
 
@@ -106,7 +106,7 @@
         :copy "copier"
         :edit "modifier"
         :delete "supprimer"
-        :payment "Paiement"
+        :payment " Paiement"
         :continue "Suivant"
         }
 

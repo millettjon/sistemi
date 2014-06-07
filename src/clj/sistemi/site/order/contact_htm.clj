@@ -12,13 +12,13 @@
 
 (def strings
   {:en {:contact-info "Contact Information"
-        :contact "Contact"
+        :contact " Contact"
         :name "Name"
         :email "Email Address"
         :phone "Phone"
         :continue "Next"}
    :fr {:contact-info "Contact Information"
-        :contact "Contact"
+        :contact " Contact"
         :name "Prénom Nom"
         :email "Adresse email"
         :phone "téléphone"
