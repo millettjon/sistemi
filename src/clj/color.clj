@@ -5,7 +5,9 @@
   :type)
 (defmethod format-swatch :default
   [{:keys [rgb]}]
-  [:span.label {:style {:background-color rgb}} "&nbsp;&nbsp"])
+  [:span.label {:style {:background-color rgb
+                          :border-radius "3px"
+                          :padding "1px 7px 1px"}} "&nbsp;"]) ; keep an &nbsp or the span will get deleted on android's gmail app
 
 (defmulti format-name
   "Returns a html formatted color name."
