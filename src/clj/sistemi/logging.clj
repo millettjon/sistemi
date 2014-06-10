@@ -106,6 +106,9 @@
   (log4j/set-loggers!
    ;;:root     {:level :info :pattern "%d{HH:mm:ss.SSS} %p %c %m%n"}
    :root {:out log4j-adapter}
+
+   ;; This dep of CSSBox spams a ton of info messages.
+   "cz.vutbr.web.csskit.antlr.SimplePreparator" {:level :warn}
    ))
 
 (defn init!
@@ -131,13 +134,16 @@
   ;; Capture System.out and System.err.
   (clojure.tools.logging/log-capture! "stdout"))
 
+#_ (init! {})
+#_ (t/set-level! :info)
+#_ (t/set-level! :warn)
+
 #_ (t/debug "test debug")
 #_ (t/info "test info")
 #_ (t/warn "test warn")
 #_  (t/error "test error")
 #_ (t/info (Exception. "fucked") "fubar")
 
-#_ (init! {})
 #_ (t/info nil)
 #_ (t/info "foo")
 #_ (t/info {:event :boot-id/create :boot-id "zAEx" })
