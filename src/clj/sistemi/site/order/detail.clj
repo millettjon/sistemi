@@ -30,7 +30,7 @@
         [:td
          [:div 
           ;; product name
-          [:span {:style "font-size: 16px; color: white;"} (tr/translate "/product" type :name)]]
+          [:span.white {:style "font-size: 16px;"} (tr/translate "/product" type :name)]]
 
          ;; product image
          ;; - no shelf image yet

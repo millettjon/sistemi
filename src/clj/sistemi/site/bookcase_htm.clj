@@ -12,7 +12,7 @@
    :fr "etagères"})
 
 (def strings
-  {:en {:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
+  {:en {;;:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
         :spin "drag to spin"
         :cutout "Cutout"
         :width "Length"
@@ -23,8 +23,8 @@
         :quantity "Quantity"
         :background-color "background"}
    :es {}
-   :it {;:title ""
-        ;:spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
+   :it {;; :title ""
+        ;; :spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
         :spin "Clic e Tira"
         :cutout "Ritaglio"
         :width "Lunghezza"
@@ -34,8 +34,7 @@
         :color "Colore"
         :quantity "Quantità"
         :background-color "sfondo"}
-
-   :fr {;:title ""
+   :fr {
         :spin "Cliquez pour pivoter"
         :width "Largeur"
         :depth "Profondeur"

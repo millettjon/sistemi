@@ -244,6 +244,8 @@ button.btn[type=submit]:focus {
     overflow: hidden;
 }
 
+#inner-content {margin: 30px 0px 0px 30px;}
+
 /* Order Detail Table */
 table.order                {width:100%; margin-top: 15px;}
 table.order tr.double_rule {border-top: 6px double #383838; padding-top: 10px;}

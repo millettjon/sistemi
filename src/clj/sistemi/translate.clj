@@ -87,3 +87,12 @@
             parent-path (path/parent (:path req-url))
             parent-url (assoc req-url :path (path/join locale parent-path))]
         (url/qualify lurl parent-url)))))
+
+(defmacro with-page
+  "Executes body within the translation context of the given locale
+and uri path. Allows rendering of emails that don't have an associated
+web request."
+  [locale path & body]
+  `(with-bindings {#'req/*req* {:locale ~locale
+                              :uri ~path}}
+     ~@body))

@@ -16,6 +16,7 @@
 
  ;; Email addressess
  :email {:info "info@sistemimoderni.com"
+         :orders "orders@sistemimoderni.com"
          :support "support@sistemimoderni.com"}
 
  ;; Datomic transactor uri

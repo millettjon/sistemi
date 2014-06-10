@@ -162,6 +162,13 @@
     :db/index true
     :db.install/_attribute :db.part/db}
 
+   ;; order - locale
+   {:db/id #db/id[:db.part/db]
+    :db/ident :order/locale
+    :db/valueType :db.type/string
+    :db/cardinality :db.cardinality/one
+    :db.install/_attribute :db.part/db}
+
    ;; order - status
    ;; purchased -> building -> shipping -> delivered
    ;; ? should this be an enum?
@@ -202,8 +209,6 @@
     :db.install/_attribute :db.part/db}
 
    ;; order - contact
-   ;; ? should this be a component or separate entity?
-   ;;   ? is it different if logged in?
    {:db/id #db/id[:db.part/db]
     :db/ident :order/contact
     :db/valueType :db.type/ref
@@ -397,7 +402,7 @@ ns exists in m and points to a submap, the submap is used instead."
 
 ;; TODO: Error handling.
 ;; TODO: Pass in db.
-;; TODO: ? What result should be returned?
+;; TODO: ? What should this return?
 (defn create
   "Qualifies keys in map m using namespace ns, packs the map, and transacts the result."
   [m ns]

@@ -50,23 +50,38 @@
                       items
                       items)
 
+        ;; Calculate subtotal of all items.
+        subtotal (apply f/fj+ (map #(-> % second :price :total) items))
+
         ;; Shipping cost of whole order.
         ship-map (if shipping
                    {:shipping (merge shipping (ship/estimate order))})
         shipping (or (get-in ship-map [:shipping :price :total])
                      (fj-eur 0))
 
-        ;; Calculate subtotal of all items.
-        subtotal (apply f/fj+ (map #(-> % second :price :total) items))
+        ;; Pretax total
+        pretax-total (f/fj+ subtotal shipping)
 
         ;; Sales tax.
         tax (if taxable?
-              (-> (f/fj* subtotal france-tax-rate)
+              (-> (f/fj* pretax-total france-tax-rate)
                   (fj-round 2))
               (fj-eur 0))
 
         ;; Grand total, including tax and shipping.
-        total (f/fj+ subtotal tax shipping)]
+        total (f/fj+ pretax-total tax)
+
+        ;; Adjust to nearest euro.
+        ;; Round it, calculate adjustment (to margin), recalc tax and total.
+        ;; A dataflow model is looking better!
+        ]
+
+;; subtotal    (subtract adjustment from here when displaying)
+;; shipping
+;; adjustment  (not displayed)  (add this)
+;; pretax-total (not displayed) (add this)
+;; tax
+;; total
 
     (-> order
         (merge ship-map)
@@ -93,29 +108,38 @@
 ;; - long enough to avoid collisions and be hard to guess
 ;; - users may need to type in, write down, or reference on phone so
 ;;   - keep short enough to be human friendly
-;;   - don't use lower case letters (base 36 instead of base 62)
+;;   - use uppercase letters only to avoid confusing letters with numbers
+;;
+;; 26^6   308,915,776
+;; 36^6 2,176,782,336
+;;
+;; TODO: use a database function to detect (and resolve?) collisions.
+;;   ? can the id be generated in the database?
+;;   ? how to make sure collision events are logged?
+;;
 (defn- gen-id
   "Generates a new random order id."
   []
-  (id/rand-36 6))
+  (id/rand-26 6))
 
 ;; TODO: Define a schema for an order.
-
 (defn create
   "Creates a new order from the session."
-  [{:keys [cart] :as session} payment-txn]
+  [{:keys [cart] :as session} {:keys [locale payment-txn] :as args}]
   (let [id (gen-id)
         _ (log/info {:event :order/create :id id})
-        result (-> cart
+        order (-> cart
                    (dissoc :counter)
                    (assoc :id id
                           :status :purchased
+                          :locale locale
                           :purchase-date (java.util.Date.)
                           :estimated-delivery-date (-> (delivery-date) .toDate)
-                          :payment {:transaction payment-txn})
-                   (sd/create :order))]
-    (prn "TXN RESULT" result)
-    id))
+                          :payment {:transaction payment-txn}))
+        result (sd/create order :order)]
+;;    (prn "-------------------TXN RESULT" result)
+;;    (prn "-------------------TXN RESULT DONE------------------------")
+    order))
 
 (defn lookup
   "Lookup an order by id."

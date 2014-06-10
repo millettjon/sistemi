@@ -43,7 +43,7 @@
         ;; general misc
         :contact "contact"
 
-        ;; general - cart/order related
+        ;; cart/order related
         :total "total"
         :subtotal "subtotal"
         :shipping "shipping"
@@ -54,7 +54,7 @@
         :copy "copy"
         :edit "edit"
         :delete "delete"
-        :payment " Payment"
+        :payment "Payment"
         :continue "Next"
         }
 
@@ -97,7 +97,7 @@
         ;; general
         :contact "contacter"
 
-        ;; general - cart/order related
+        ;; cart/order related
         :subtotal "Sous-total"
         :item "article"
         :quantity "quantité"
@@ -106,7 +106,7 @@
         :copy "copier"
         :edit "modifier"
         :delete "supprimer"
-        :payment " Paiement"
+        :payment "Paiement"
         :continue "Suivant"
         }
 

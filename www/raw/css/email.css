@@ -1,0 +1,123 @@
+/* Based on The MailChimp Reset INLINE: Yes. */  
+/* Client-specific Styles */
+#outlook a {padding:0;} /* Force Outlook to provide a "view in browser" menu link. */
+body{width:100% !important; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; margin:0; padding:0;} 
+/* Prevent Webkit and Windows Mobile platforms from changing default font sizes.*/ 
+.ExternalClass {width:100%;} /* Force Hotmail to display emails at full width */  
+.ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height: 100%;}
+/* Forces Hotmail to display normal line spacing.  More on that: http://www.emailonacid.com/forum/viewthread/43/ */ 
+#backgroundTable {
+    margin:0;
+    padding:0;
+    width:100% !important;
+    line-height: 100% !important;
+}
+/* End reset */
+
+/* Some sensible defaults for images
+   Bring inline: Yes. */
+img {outline:none; text-decoration:none; -ms-interpolation-mode: bicubic;} 
+a img {border:none;} 
+.image_fix {display:block;}
+
+/* Yahoo paragraph fix
+   Bring inline: Yes. */
+p {margin: 1em 0;}
+
+/* Hotmail header color reset
+   Bring inline: Yes. */
+h1, h2, h3, h4, h5, h6 {color: black !important;}
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {color: blue !important;}
+
+h1 a:active, h2 a:active,  h3 a:active, h4 a:active, h5 a:active, h6 a:active {
+    color: red !important; /* Preferably not the same color as the normal header link color.  There is limited support for psuedo classes in email clients, this was added just for good measure. */
+}
+
+h1 a:visited, h2 a:visited,  h3 a:visited, h4 a:visited, h5 a:visited, h6 a:visited {
+    color: purple !important; /* Preferably not the same color as the normal header link color. There is limited support for psuedo classes in email clients, this was added just for good measure. */
+}
+
+/* Outlook 07, 10 Padding issue fix
+   Bring inline: No.*/
+table td {border-collapse: collapse;}
+
+/* Remove spacing around Outlook 07, 10 tables
+   Bring inline: Yes */
+table { border-collapse:collapse; mso-table-lspace:0pt; mso-table-rspace:0pt; }
+
+/* Styling your links has become much simpler with the new Yahoo.  In fact, it falls in line with the main credo of styling in email and make sure to bring your styles inline.  Your link colors will be uniform across clients when brought inline.
+   Bring inline: Yes. */
+a {color: orange;}
+
+/*==================== EMAIL BOILERPLATE OVERRIDES ====================*/
+
+#backgroundTable {
+    color: #999;
+    background-color: #FFF;
+    font-family: Ubuntu,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 13px;
+}
+.white {color: #FFF;}
+
+#bodyTable {
+    /* Can't set line-height in backgroundTable since it has to be 100% (according to emailboilerplate). */
+    line-height: 18px;
+
+    /* Gmail apparently allows setting the background color here. However, the black is too jarring. */
+    background-color: #000;
+}
+
+a {text-decoration: none;}
+a, a:active, a:visited { color: #FFFFFF;}
+
+/*==================== LAYOUT.CSS INCLUSIONS ====================*/
+/* order detail related */
+/* note: shared with layout.css
+   todo: refactor */
+table.order                {width:100%; margin-top: 15px;}
+table.order tr.double_rule {border-top: 6px double #383838; padding-top: 10px;}
+table.order tr.item        {border-top: 2px solid #383838;}
+table.order tr.item > td   {padding-top:10px; padding-bottom:10px; vertical-align:top;}
+table.order tr.total       {font-size: 16px;}
+table.order tr.total > td  {padding-top: 10px; text-transform: capitalize;}
+table.order th             {text-transform: capitalize;}
+
+/*==================== LAYOUT.CSS OVERRIDES ====================*/
+
+#inner-content {margin: 0px;}
+
+/*==================== EXPERIMENTATION ====================*/
+
+/* table.order {background-color: #eee;} */
+
+/* header */
+table.order th {
+    background-color: #ccc;
+}
+
+/* subtotal */
+table.order tr.double_rule {
+    background-color: #fff;
+}
+
+/* total */
+table.order tr.total:last-child {
+    background-color: #ccc;
+}
+
+/*==================== LIGHT COLOR THEME OVERRIDES ====================*/
+#backgroundTable {
+    color: #000;
+    background-color: #FFF;
+}
+
+#bodyTable { background-color: #FFF; }
+
+/* TODO: what color should the anchors be? */
+a {text-decoration: underline;}
+a, a:active, a:visited { color: #000;}
+
+.white {color: #000;
+        /* background-color: #ddd; */
+       }

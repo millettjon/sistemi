@@ -218,3 +218,36 @@
            [:br] "St. Martin d&rsquo;Uriage, France"
            [:br] "M. +33 6 09 46 92 00"]
           [:div#copyright (interpose [:br] (tr/translate :copyright))]]]]]]])))
+
+(defn doctype-xhtml-strict
+ [html]
+ (str "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+      html))
+
+;;
+;; Ref: http://htmlemailboilerplate.com/
+;; 
+(defn email-page
+  [body]
+  (doctype-xhtml-strict
+   (hcp/html
+    [:html {:xmlns "http://www.w3.org/1999/xhtml"
+            :lang (req/*req* :locale)}
+     [:head
+      [:meta {:http-equiv "Content-Type", :content "text/html; charset=utf-8"}]
+      [:meta {:name "viewport", :content "width=device-width, initial-scale=1.0"}]
+      [:title  (tr/translate :title)]
+
+      [:style {:type "text/css"}
+       (slurp "www/raw/css/email.css")]]
+
+     [:body
+      ;; Outer table to set the background (100% width).
+      [:table#backgroundTable {:style {:cellpadding "0" :cellspacing "0" :border "0"}}
+       [:tr
+        [:td {:valign "top"}
+         
+         ;; Inner table to force width to 600px.
+         [:table#bodyTable {:style {:width "600px"}}
+          [:tr
+           [:td body]]]]]]]])))

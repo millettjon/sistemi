@@ -13,6 +13,7 @@
             [www.session :as sess]
             [sistemi.form :as sf]
             [sistemi.order :as order]
+            [mail.mandrill :as m]
             [www.cart :as cart]
             [www.form :as f]
 
@@ -66,11 +67,12 @@
        "description" description}
       (->amount amount)))))
 
-;; TODO: Send the confirmation email.
 (defn complete-order
-  ""
-  [session payment-txn]
-  (order/create session payment-txn))
+  "Saves the order to datomic and sends the user a confirmation email."
+  [session opts]
+  (let [order (order/create session opts)]
+    (m/send-order-confirmation order)
+    order))
 
 ;; TODO: handle request error (e.g., by testing with no network connection)
 ;;       - stay on page
@@ -93,7 +95,7 @@
 ;; {:invoice nil, :refunded false, :metadata {}, :refunds [], :balance_transaction "txn_103e6r27flN4SizkR7bIjmPQ", :currency "eur", :card {:country "US", :customer nil, :exp_month 5, :last4 "4242", :address_zip_check "pass", :name "Jonathan Millett", :address_line2 "", :fingerprint "RYdQB7XGFSIvdwRm", :cvc_check "pass", :address_line1 "23950 Butternut", :object "card", :address_city "Sturgis", :address_zip "49091", :address_state "MI", :address_line1_check "pass", :type "Visa", :exp_year 2015, :address_country "USA", :id "card_103e6r27flN4SizkUYMbNk9C"}, :customer nil, :captured true, :dispute nil, :livemode false, :amount 15700, :object "charge", :failure_code nil, :created 1394539561, :amount_refunded 0, :failure_message nil, :paid true, :id "ch_103e6r27flN4SizkQw8ud60j", :description ""}
 
 (defn handle
-  [{:keys [body session]:as req}]
+  [{:keys [body session locale] :as req}]
 
   (let [stripe-token (-> body :stripe-token)]
     ;; Save the event for posterity.
@@ -113,8 +115,8 @@
           ;; Build the response data map.
           response-data (cond
                          ;; successful charge
-                         success? (let [order-id (complete-order session response)]
-                                      {:code 0 :message "success" :location (tr/localize "confirmation.htm" :query {:id order-id})})
+                         success? (let [order (complete-order session {:locale locale :payment-txn response})]
+                                    {:code 0 :message "success" :location (tr/localize "confirmation.htm" :query {:id (:id order)})})
 
                          ;; stripe error -> display to user
                          ;; TODO: Translate error messages.

@@ -10,8 +10,7 @@
 
 (def cart-data
   "Sample cart data to convert to an order."
-  {:cart {
-          :shipping {:price {:total #frinj.core.fjv{:v 35.53M, :u {:EUR 1}}},
+  {:cart {:shipping {:price {:total #frinj.core.fjv{:v 35.53M, :u {:EUR 1}}},
                      :boxes [{:Code "02", :Dimensions {:Width "39", :Height "10", :Length "120", :Code "CM"}, :PackageWeight {:Weight "4.96", :Code "KGS"}, :PackageServiceOptions {}}],
                      :address {:country :FR, :code "38410", :region "", :city "St. Martin d'Uriage", :address2 "", :address1 "130 route de la combette", :contact {:name "Jonathan Millett"}}},
           :contact {:name "Jonathan Millett", :phone "+34934021100", :email "jon@millett.net"},
@@ -41,18 +40,23 @@
           :counter 0,
           :status :cart,
           :taxable? true
-          }})
+          }
+   })
+
+#_ (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"})
 
 (deftest create-order
-  (let [order-id (o/create cart-data {:stripe "<payment transaction details>"})
-        order (o/lookup order-id)]
+  (let [order-id (:id (o/create cart-data {:locale "fr" :payment-txn "<payment transaction details>"}))
+        order (o/lookup order-id)
+        ]
     (is order-id)
     (is order)
     (is (= (-> order :price :total) (-> cart-data :cart :price :total)))
     (is (-> order :status))
     (is (-> order :items))
     (is (-> order :contact))
-    (is (-> order :shipping))))
+    (is (-> order :shipping))
+    ))
 
 (defn- check-fudge
   [total]

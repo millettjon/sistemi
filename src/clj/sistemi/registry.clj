@@ -137,6 +137,13 @@
 
 ;;; --------------------------------------------------
 ;;; FUNCTIONS DEPENDENT ON VARS
+(defn get-handler
+  "Returns the handler fn for a canonical path."
+  [path]
+  (->> path
+       path/split
+       (get-in handlers)
+       :handler))
 
 (defn register-namespace
   "Registers string translations, path translations and the handler for a namespace."

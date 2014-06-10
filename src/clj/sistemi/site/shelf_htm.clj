@@ -11,7 +11,7 @@
   {})
 
 (def strings
-  {:en {:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
+  {:en {;;:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
         :spin "drag to spin"
         :width "Length"
         :depth "Depth"

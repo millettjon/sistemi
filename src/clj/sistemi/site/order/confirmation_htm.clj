@@ -5,6 +5,8 @@
             [sistemi.site.order.detail :as od]
             [sistemi.layout :as layout]))
 
+(def names {})
+
 (def strings
   {:en {}
    :es {}
@@ -14,7 +16,7 @@
 (defn body
   [{{:keys [id]} :params}]
   (let [order (o/lookup id)]
-    [:div {:style {:margin "30px 0px 0px 30px"}}
+    [:div#inner-content
 
      [:p "Thank you for making your first purchase with
 Sistemi Moderni.  Your personalized order has been immediately sent to
@@ -23,6 +25,10 @@ to " [:a {:href (tr/localize "/contact.htm") :tabindex "-1"} (tr/translate :cont
       " us with any questions that may arise while you wait for
 your order's speedy delivery.  Below is a summary of your purchase for
 your records."]
+
+     [:table
+      [:tr [:td "Order Number"] [:td id]]
+      ]
 
      (od/detail order)
      
@@ -46,5 +52,8 @@ E. M. Romeo - President, Sistemi Moderni, SAS "]
      ]))
 
 (defn handle
-  [req]
-  (response (layout/standard-page nil (body req) 0)))
+  [{{:keys [format]} :params :as req}]
+  (let [html (case format
+               "email" (layout/email-page (body req))
+               (layout/standard-page nil (body req) 0))]
+    (response html)))
