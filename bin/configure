@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configures base configuration and code.
-# Keep actions idempotent so that re-running the installer won't break things.
+# Keep actions idempotent so that re-running the won't break things.
 
 # ---------------------------------------------------
 # Change to the project root directory.
