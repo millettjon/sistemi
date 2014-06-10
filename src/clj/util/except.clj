@@ -1,5 +1,6 @@
 (ns util.except
   "Macros for handling and throwing exceptions."
+  (:require [taoensso.timbre :as log])
   (:use [clojure.pprint :only (cl-format)]))
 
 (defmacro safely
@@ -13,8 +14,16 @@
 (defmacro swallow
   "Evaluates an expression swallowing any exceptions. Returns the result of evaluating expr or the
    exception if one occurred."
-  [expr]
-  `(try ~expr (catch Exception x# x#)))
+  ([form]
+     `(try ~form (catch Exception x# x#)))
+  ([form f]
+     `(try ~form (catch Exception x#
+                   (~f x#)
+                   x#))))
+
+#_ (swallow (throw (Exception. "fubar")))
+#_ (swallow (throw (Exception. "fubar"))
+            prn)
 
 (defn die
   "Throws a RuntimeException with the given message. When multiple arguments are passed, cl-format
@@ -75,3 +84,11 @@
           (if (~validate-fn result#)
             result#
             (die ~format-string result# ~@format-args))))))
+
+(defn log
+  "Logs an exception as an error."
+  [event-type x]
+  (let [data (if (instance? clojure.lang.ExceptionInfo x)
+               (.data x)
+               x)]
+    (log/error {:event event-type :data data})))
