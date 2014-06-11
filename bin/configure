@@ -25,7 +25,7 @@ source "$(dirname $BASH_SOURCE)/../opt/bootstrap/bootstrap.bash"
 # ---------------------------------------------------
 # Determine the active profile. If not set, set it to development.
 # ---------------------------------------------------
-[[ -z "$(get_profile)" ]] && set_profile development
+[[ undefined =  "$(get_profile)" ]] && set_profile development
 assert_profile_in development staging production
 export PROFILE=$(get_profile)
 
@@ -52,6 +52,7 @@ chmod +x bin/lein
 for DIR in .lein .m2 var/target; do
     mkdir -p $DIR
     sudo chown sm-www:sm-www $DIR
+    sudo chmod 775 $DIR
 done
 
 # ---------------------------------------------------
@@ -67,6 +68,7 @@ ensure_link etc/nginx/conf.d/base.conf /etc/nginx/conf.d/base.conf
 erb etc/nginx/site.conf.erb | sudo tee /etc/nginx/sites-available/sistemi-$PROFILE.conf > /dev/null
 sudo ln -sf /etc/nginx/sites-available/sistemi-$PROFILE.conf /etc/nginx/sites-enabled
 sudo service nginx restart
+sudo nginx -t
 
 # ---------------------------------------------------
 # Cron
