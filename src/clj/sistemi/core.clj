@@ -73,4 +73,4 @@
     (browse-url  (<< "http://localhost:~{(cf/conf :port)}")))
 
   ;; Start jetty.
-  (run-jetty #'routes (select-keys cf/config [:port :host])))
+  (run-jetty #'routes {:host "127.0.0.1" :port (cf/conf :port)}))
