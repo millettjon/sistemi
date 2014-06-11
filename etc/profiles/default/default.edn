@@ -17,7 +17,12 @@
  ;; Email addressess
  :email {:info "info@sistemimoderni.com"
          :orders "orders@sistemimoderni.com"
-         :support "support@sistemimoderni.com"}
+         :support "support@sistemimoderni.com"
+         :eric "eric@sistemimoderni.com"
+         :jon "jon@sistemimoderni.com"
+         :einat "nata@sistemimoderni.com"
+         :antoine "antoine@sistemimoderni.com"
+         :dave "ruff@sistemimoderni.com"}
 
  ;; Datomic transactor uri
  :datomic-uri "datomic:dev://localhost:4334"
