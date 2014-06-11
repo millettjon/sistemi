@@ -232,6 +232,9 @@
            // TODO: Use texture if available.
            $('#color-swatch').css('background-color', rgb);
 
+           // Update hidden form field.
+           $('#shelf-form input[name=color]').val(edn.stringify(color));
+
            // Update the model.
            var hex = rgbHexToInt(rgb);
            if (bookcase.color != hex) {
