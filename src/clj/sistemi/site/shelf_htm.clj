@@ -19,7 +19,9 @@
         :height "Height"
         :finish "Finish"
         :color "Color"
-        :quantity "Quantity"}
+        :quantity "Quantity"
+        :displayed "displayed"
+        }
    :es {}
 
    :it {;:title "TODO: Italian"
@@ -38,7 +40,8 @@
         :height "Hauteur"
         :finish "Finition"
         :color "Couleur"
-        :quantity "Quantité"}
+        :quantity "Quantité"
+        :displayed "présentées"}
    })
 
 (defn head
@@ -146,6 +149,9 @@
      "shelf.width=" (f/default :width) ";\n"
      "shelf.depth=" (f/default :depth) ";\n"
      "shelf.quantity=" (f/default :quantity) ";\n"
+
+     "var tr = {};\n"
+     "tr.displayed = '" (tr/translate :displayed) "';\n"
 
      "jQuery(document).ready(function() {
          // Hookup the form controls.

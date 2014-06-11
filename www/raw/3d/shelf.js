@@ -34,7 +34,7 @@ function updateNumDisplayed(shelf) {
   var n = numShelvesToDisplay(s);
   var vis = (s.quantity == n) ? 'hidden' : 'visible';
   d.css('visibility', vis);
-  d.text('(' + n + ' displayed)');
+  d.text('(' + n + ' ' + tr.displayed + ')');
 }
 
 function shelvesHeight(shelf) {
