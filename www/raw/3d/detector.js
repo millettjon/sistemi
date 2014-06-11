@@ -6,7 +6,7 @@ Detector = {
 jQuery(document).ready(function() {
   // Check for canvas and webgl.
   if (Detector.webgl) {
-    $('#under_construction').css('display', 'inline');
+    $('#header_message').css('display', 'inline');
   }
   else if (Detector.canvas) {
     $('#webgl_recommended').css('display', 'inline');
