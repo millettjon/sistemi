@@ -1,6 +1,7 @@
 (ns sistemi.site.shelf-htm
   (:require [util.string :as stru]
             [sistemi.form :as sf]
+            [sistemi.design :as design]
             [www.request :as r]
             [www.form :as f]
             [sistemi.translate :as tr])
@@ -83,8 +84,7 @@
    [:tr
     [:td#design-box {:style {:vertical-align "top" :background-color "#000"}}
     [:div#model {:style {:width "450px"}}]
-
-    [:div {:style "text-align: center;"} (tr/translate :spin)]]
+     (design/toolbar)]
 
    [:td {:width "225" :style {:height "225px"}}
     

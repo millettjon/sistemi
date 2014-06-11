@@ -43,6 +43,9 @@
         ;; general misc
         :contact "contact"
 
+        ;; design
+        :design {:toggle-background "background"}
+
         ;; cart/order related
         :total "total"
         :subtotal "subtotal"
@@ -97,6 +100,9 @@
 
         ;; general
         :contact "contacter"
+
+        ;; design
+        :design {:toggle-background "l’arrière-plan"}
 
         ;; cart/order related
         :subtotal "Sous-total"

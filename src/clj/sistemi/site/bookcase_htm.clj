@@ -1,6 +1,7 @@
 (ns sistemi.site.bookcase-htm
   (:require [util.string :as stru]
             [sistemi.form :as sf]
+            [sistemi.design :as design]
             [www.request :as r]
             [www.form :as f]
             [sistemi.translate :as tr])
@@ -20,8 +21,7 @@
         :height "Height"
         :finish "Finish"
         :color "Color"
-        :quantity "Quantity"
-        :background-color "background"}
+        :quantity "Quantity"}
    :es {}
    :it {;; :title ""
         ;; :spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
@@ -42,10 +42,7 @@
         :finish "Finition"
         :color "Couleur"
         :cutout "Découpe"
-        :quantity "Quantité"
-        :background-color "l’arrière-plan"}
-
-   })
+        :quantity "Quantité"}})
 
 (defn head
   []
@@ -91,20 +88,7 @@
     [:td#design-box {:style {:vertical-align "top" :background-color "#000"}}
     ;; 3d model
     [:div#model {:style {:width "450px"}}]
-
-    ;; Toolbar
-    ;; Note: This must be position: relative to allow the spin text to be positioned relative to it.
-    [:div {:style "height: 50px; position: relative; margin-top: 20px;"}
-
-     ;; Note: This must be positioned with z-index: 1 to be over the
-     ;; spin div.
-     [:button#toggle-background.btn.btn-inverse {:style "margin-left: 20px; position: relative; z-index: 1; outline: none;"}
-      [:i.icon-white.icon-adjust {:style "margin-right: 10px;"}] (tr/translate :background-color)]
-
-     [:div {:style "position: absolute; top: 5px; width: 100%; text-align: right; z-index: 0;"}
-      [:span {:style "margin-right: 20px;"} (tr/translate :spin)]]
-
-     ]]
+     (design/toolbar)]
 
    [:td {:width "225" :style {:height "225px"}}
 
