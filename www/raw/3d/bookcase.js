@@ -232,6 +232,8 @@ function addVerticalMembers(bookcase, addGeometry) {
         break;
       case ':ovale': cutoutOval(shape, bbox);
         break;
+      case ':semplice':
+        break;
       default:
         console.warn('Ignoring invalid cutout: "' + s.cutout + '"');
     }
