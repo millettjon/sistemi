@@ -67,18 +67,18 @@
         [:script {:type "text/javascript" :src "/3d/bookcase.js"}]
 
         ;; styles
-        [:style "#shelf-form {margin-left: 10px; margin-top: 10px;}"]
+        [:style "#shelf-form {margin-left: 0px; margin-top: 10px;}"]
 
         [:style "#shelf-form .control-group {margin-bottom: 12px}"]
-        [:style "#shelf-form .control-label {width: 45px; color: #FFF; padding-top: 4px}"]
-        [:style "#shelf-form .controls {margin-left: 55px;}"]
+        [:style "#shelf-form .control-label {width: 55px; color: #FFF; padding-top: 4px}"]
+        [:style "#shelf-form .controls {margin-left: 65px;}"]
 
-        [:style "#shelf-form .chzn-select {width: 160px;}"]
+        [:style "#shelf-form .chzn-select {width: 100px;}"]
         [:style "#shelf-form input {border-radius: 5px;}"]
         [:style "#shelf-form select {height: 23px; line-height: 24px;}"]
 
         [:style "#shelf-form #color {width: 90px;}"]
-        [:style "#shelf-form #submit {margin-top: 31px;}"]
+        [:style "#shelf-form #submit {margin-top: 20px;}"]
         ]))
 
 (defn body
@@ -102,28 +102,28 @@
 
       [:div.control-group
        [:label.control-label {:for "width"} (tr/translate :width)]
-       [:div.controls
+       [:div.controls {:style {:margin-left "80px"}}
         (f/select :width {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "height"} (tr/translate :height)]
-       [:div.controls
+       [:div.controls {:style {:margin-left "80px"}}
         (f/select :height {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "depth"} (tr/translate :depth)]
-       [:div.controls
+       [:div.controls {:style {:margin-left "80px"}}
         (f/select :depth {:class "chzn-select" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "cutout"} (tr/translate :cutout)]
        [:div.controls
-        (f/select :cutout {:class "customStyleSelectBox" :style "width: 165px" :tabindex 1})]]
+        (f/select :cutout {:class "customStyleSelectBox" :style "width: 160px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "finish"} (tr/translate :finish)]
        [:div.controls
-        (f/select :finish {:class "customStyleSelectBox" :style "width: 165px" :tabindex 1})]]
+        (f/select :finish {:class "customStyleSelectBox" :style "width: 160px" :tabindex 1})]]
 
       [:div.control-group
        [:label.control-label {:for "color"} (tr/translate :color)]
