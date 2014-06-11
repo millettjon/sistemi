@@ -5,6 +5,7 @@
             [schema.core :as sm]
             [taoensso.timbre :as log]
             [net.cgrand.enlive-html :as html]
+            [sistemi.layout :as lay]
             [util.except :as ex]
             [mail.css :as css]
             [sistemi.translate :as tr]
@@ -182,7 +183,7 @@ ______________________________________________________________________
         render             ; Render back to html.
 
         css/inline
-        sistemi.layout/doctype-xhtml-strict
+        lay/doctype-xhtml-strict
         )))
 
 (defn order-confirmation-subject
