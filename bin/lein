@@ -346,3 +346,18 @@ else
     fi
 fi
 
+r "$TRAMPOLINE_FILE" ] && [ "$LEIN_TRAMPOLINE_WARMUP" = "" ]; then
+            TRAMPOLINE="$(cat $TRAMPOLINE_FILE)"
+            if [ "$INPUT_CHECKSUM" = "" ]; then
+                rm $TRAMPOLINE_FILE
+            fi
+            if [ "$TRAMPOLINE" = "" ]; then
+                exit $EXIT_CODE
+            else
+                exec sh -c "exec $TRAMPOLINE"
+            fi
+        else
+            exit $EXIT_CODE
+        fi
+    fi
+fi
