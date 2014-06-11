@@ -70,7 +70,8 @@
 
         :account "Mon Compte"
         :cart {:_ "Panier"
-               :add "Ajouter au panier"}
+               :add "Ajouter au panier"
+               :update "Réactualiser panier"}
 
         :header {:signup "S’abonner aux news"
                  :contact "Nous contacter"
