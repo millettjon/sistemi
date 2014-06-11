@@ -201,7 +201,7 @@
              sidebar]])]
 
         ;; ----- CONTENT -----
-        [:td {:colspan "3" :width "675" :style {:vertical-align "top"}}
+        [:td {:colspan "3" :width "675" :style {:vertical-align "top" :text-align "justify"}}
          body]]
 
        ;; ----- RED BAR -----
