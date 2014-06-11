@@ -30,7 +30,7 @@
                                       with your wishes by clicking here.")}
                :david {:name "Ruff Anderson" :position "Developer"
                        :description (stru/join-lines
-                                     "Ruff is our rocket scientist turned software guru. For over 10 years his
+                                     "Ruff is our rocket scientist turned software guru. For over 10 years he has
                                      been customizing solutions to delicate problems with precision and ingenuity.
                                      Ruff is now applying his genius to developing software solutions for the
                                      design world.  What sort of cool problems do you think Ruff should solve
