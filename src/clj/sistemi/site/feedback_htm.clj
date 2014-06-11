@@ -69,6 +69,7 @@
                           [:p "per email: feedback@sistemimoderni.com"]
                           [:p "o usando il formulario nella finestra qui sotto"]]
                    }}
+
    :fr {:title "SistemiModerni: Vos Impressions"
         :feedback {:title "Vos Impressions – Dites-nous tout!"
                    :call-head "Appelez-nous au:"
@@ -78,22 +79,10 @@
                    :questionaire-head "Questionnaire :"
                    :questionaire-body "Vous offrir des « feedback codes » qui vous permettront de profiter de remises."
                    :text [:div
-                          [:p "Merci d’avoir ouvert cette page et de prendre un moment pour remplir notre"
-                           " formulaire."]
-                          [:p "Lorsque vous l’aurez envoyé, nous vous adresserons en retour un “feedback code“"
-                           " qui permettra de bénéficier d’une remise de 10 € lors de votre prochain achat."
-                           " Si vous appréciez ce que nous faisons et que vous recommandez SistemiModerni à des"
-                           " amis,  vous pouvez leur communiquer votre feedback code. Ainsi, à chaque fois qu’un"
-                           " de vos amis commandera vous bénéficierez de 10€ de remise supplémentaire. Votre remise"
-                           " peut devenir très importante et vous permettre d’obtenir des produits SistemiModerni"
-                            " gratuits!"]
-                          [:p "Pour améliorer nos produits, nous sommes aussi curieux de ce que vous avez apprécié"
-                           " que de ce qui vous a déplu. Si vous avez des suggestions à nous faire, nous sommes"
-                           " aussi à votre écoute. Alors, n’hésitez pas à nous contacter! Nous sommes toujours à"
-                           " votre écoute."]
-                          [:p "Ecris un truc cool dans la fenêtre ci-dessous."]]}}
-
-   })
+                          [:p "Merci d’avoir ouvert cette page et de prendre un moment pour remplir notre formulaire."]
+                          [:p "Nous vous adresserons en retour un “" [:span.bullet_title "feedback code"] "“ qui vous permettra de bénéficier d’une remise de 10 € lors de votre prochain achat. Si vous appréciez ce que nous faisons, faites connaître SistemiModerni à vos amis et communiquez leur votre feedback code. Ainsi, à chaque commande, vous bénéficierez de 10 € de remise supplémentaire. 10 €  + 10 €  + 10 € … : vous pourrez peut-être obtenir des produits SistemiModerni gratuits !"]
+                          [:p [:span.bullet_title "Dites-nous tout"] " ! Nous avons hâte de vous lire : avez-vous apprécié notre démarche, nos articles ? Comment pouvons-nous améliorer nos services ? Nous sommes à votre écoute, vos critiques, vos idées, vos suggestions seront les bienvenues…"]
+                          [:p "Ecris un truc cool dans la fenêtre ci-dessous."]]}}})
 
 (defn body
   []

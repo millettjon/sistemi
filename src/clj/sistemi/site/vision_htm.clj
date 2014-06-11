@@ -26,12 +26,12 @@
                        the most modern of systems to deliver your personalized products to your doorstep.")}}
    :es {}
    :fr {:vision {:title "NOTRE VISION"
-                 :text (stru/join-lines "<span class=\"company_name\">SistemiModerni</span> a été créée
-                       pour vous offrir design et qualité au meilleur prix. Nous estimons qu’il faut
-                       arrêter de fabriquer des produits jetables de qualité médiocre. Nous
-                       pensons aussi que vous  devriez pouvoir disposer des  produits tels 
-                       que vous les imaginez.  C’est pour cela que nous tenons à vous donner
-                       les moyens de personnaliser toute les gammes de nos produits.")}}
+                 :text  [:div
+                         [:p [:span.company_name "SistemiModerni"] " a été créé pour vous offrir design et qualité au meilleur prix. Nous estimons qu’il faut arrêter de fabriquer des produits jetables de qualité médiocre."]
+                         [:p [:span.company_name "SistemiModerni"] " dit oui à la diversité ! Nous pensons que chacun doit pouvoir disposer des meubles et des objets sur mesure qu’il a imaginé pour son intérieur personnel, pour son environnement professionnel."]
+                         [:p [:span.company_name "SistemiModerni"] " vous donne les moyens de mettre votre touche personnelle à vos étagères et vos bibliothèques : choisissez le design, le matériau, les dimensions, la couleur !"]
+                         [:p [:span.company_name "SistemiModerni"] " réalise vos rêves, tout simplement."]]
+                 }}
 
    :it {:vision {:title "LA NOSTRA VISIONE"
                  :text (stru/join-lines "<span class=\"company_name\">Sistemi Moderni</span> è stata fondata

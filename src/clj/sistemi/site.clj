@@ -72,10 +72,10 @@
         :cart {:_ "Panier"
                :add "Ajouter au panier"}
 
-        :header {:signup "S’abonner"
+        :header {:signup "S’abonner aux news"
                  :contact "Nous contacter"
-                 :careers "Jobs"
-                 :team "Qui sommes nous"}
+                 :careers "Les offres d’emploi"
+                 :team "L’équipe"}
         :menu {
                :home "Accueil"
                :vision "Notre Vision"

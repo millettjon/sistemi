@@ -27,19 +27,17 @@
                           your gift when it arrives at your doorstep.")}}
    :es {}
    :fr {:title "TODO: French"
-        :system {:title "TODO French"
-                 :text (stru/join-lines
-                         "Votre produit commence avec vous. Vos choix envoyés, les ordres sont donnés aux
-                         machines en usine. Les machines coupent le bois (contreplaqué certifié PEFC ou
-                         medium (mdf)) selon vos besoins avec vitesse et précision.  Une fois votre étagère
-                         coupée, elle est contrôlée et lissée à la main pour être prête à peindre. Dans la
-                         cabine de peinture votre étagère est couverte par une couche de laque que vous
-                         avez choisie. Ensuite, vos étagères sont soigneusement emballées et encartonnées
-                         dans une boîte idéalement conçue pour la livraison à domicile.
-
-                         Vous apprécierez d’ouvrir votre colis quand il arrivera chez vous. Montez-le
-                         vous-même très facilement sans vis ni clous.")}}
-
+        :system {:title "LE SYSTEME"
+                 :text
+                 [:div
+                  [:p "Votre meuble commence avec votre choix."]
+                  [:p [:span.bullet_title "Étape 1 "] ": Sélectionnez votre produit et ses caractéristiques (couleur, dimensions, finitions...)"]
+                  [:p [:span.bullet_title "Étape 2 "] ": Vos choix sont transmis directement aux machines, dans l'usine partenaire la plus proche de chez vous. Ces machines vont découper sur mesure avec vitesse et précision des panneaux Valchromat  (brut ou huilée) teintés dans la masse ou du medium écologiques (mdf) si vous souhaitez une finition laquée."]
+                  [:p [:span.bullet_title "Étape 3 "] ": Vos pièces sont contrôlées et lissées à la main pour être prêtes à peindre."]
+                  [:p [:span.bullet_title "Étape 4 "] ": Lors de cette phase, une finition (huilée, brut, laquée) est appliquée à vos pièces si vous avez opté pour ce choix."]
+                  [:p [:span.bullet_title "Étape 5 "] ": Vos étagères sont soigneusement emballées et encartonnées dans une boîte idéalement conçue pour la livraison à domicile."]
+                  [:p [:span.bullet_title "Étape 6 "] ": À réception, montez votre meuble vous-même très facilement, sans clous ni vis."]
+                  [:p [:span.bullet_title "Étape 7 "] ": Appréciez le résultat et faites-nous connaître vos impressions !"]]}}
 
    :it {:title "IL SISTEMA"
         :system {:title "Il sistema"
