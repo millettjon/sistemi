@@ -27,7 +27,7 @@
                            " are intrigued by what " company " has to offer. Do not stop here! Take a moment"
                            " to really tell us how you feel about " company " and what you would like to see"
                            " us do for you."]
-                          [:p "Please click " [:a {:href "#survey"} "here"] " to take a moment and fill out our"
+                          #_ [:p "Please click " [:a {:href "#survey"} "here"] " to take a moment and fill out our"
                            " questionnaire. Once you submit it, we will give you a feedback code which entitles"
                            " you to a ¤ 10 discount on your next purchase. If you are sufficiently impressed"
                            " with what we are doing and refer us to a friend, make sure you give them your code"
