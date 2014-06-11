@@ -212,7 +212,6 @@
          // --------------------
          // Setup the color picker.
          function onColor(color) {
-           // TODO: Update hidden form field w/ EDN value.
            var text;
            var rgb = color.rgb;
            var t = color.type;
@@ -271,9 +270,14 @@
          var height = model.width();
          model.css({height: height.toString() + 'px'});
 
-         // Start animating.
+         // Create the bookcase model.
          drawBookcase(bookcase, model[0]);
-         onColor(defaultRAL);
+
+         // Call the color change handler to make sure the right color name and code are displayed.
+         onColor(edn.objectify($('#shelf-form input[name=color]').val()));
+         // onColor(defaultRAL);
+
+         // Start animating.
          startAnimation();
      });"
      ]]]
