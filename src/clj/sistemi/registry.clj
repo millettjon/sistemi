@@ -67,7 +67,7 @@
                            (if (conf :internationalization :require-url-translations)
                              (log/warn (str "No entry for locale " locale " in namespace " ns ".")))
                              (assoc m locale cname))
-        :default (do (log/error (str "Ignoring entry for unknown locale " locale " in namespace " ns "."))
+        :default (do (log/info (str "Ignoring entry for unknown locale " locale " in namespace " ns "."))
                      (dissoc m locale))))
      m
      (set/union locales (keys m)))))

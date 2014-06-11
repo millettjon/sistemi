@@ -1,7 +1,7 @@
 {:port 2000
  
  :internationalization { ;; list of enabled languages
-                        :locales ["en" "fr" "es" "it"]
+                        :locales ["en" "fr"]
                         :default-locale "en"
                         :default-territories {:en "GB", :fr "FR", :de "DE", :es "ES", :it "IT"}
 
