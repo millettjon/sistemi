@@ -131,13 +131,13 @@
 
 
       [:div.control-group {:style "margin-top: 20px;"}
-       [:label.control-label {:for "quantity"} (tr/translate :quantity)]
-       [:div.controls
+       [:label.control-label {:for "quantity" :style {:margin-left "50px"}} (tr/translate :quantity)]
+       [:div.controls {:style {:margin-left "120px"}}
         (f/select :quantity {:class "chzn-select" :tabindex 1})
-        [:div#numDisplayed {:style "text-align: center; visibility: hidden"} "(4 displayed)"]
+        [:div#numDisplayed {:style {:text-align "center" :visibility "hidden"}} "(4 displayed)"]
         ]]
 
-      [:div {:style "text-align: center"}
+      [:div {:style "text-align: right"}
        [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
                                                                       (tr/translate :cart :update) )]]
       ]]
