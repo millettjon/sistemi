@@ -208,16 +208,10 @@ div.text_content {
     color: #AD0039;
 }
 
-
-.greytextarea {
-	color: #FFFFFF;
-	/* height: 210px; */
-        height: 100px;
-        width: 100%;
-	background-color: #404040;
-	overflow: scroll;
-	/* margin-left: 20px; */
-	padding: 0px;
+.feedback_textarea {
+    height: 100px;
+    width: 100%;
+    overflow: scroll;
 }
 
 .submitbtn {

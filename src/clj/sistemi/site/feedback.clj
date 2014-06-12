@@ -17,14 +17,17 @@
 
 (defn mail-feedback
   "Forwards a feedback email."
-  [a message]
-  (let [result (postal/send-message ^{:host (conf :jarvis :host)
+  [a {:keys [email message] :as feedback}]
+  (let [email (if-not (empty? email) email)
+        jarvis (conf :jarvis :user)
+        result (postal/send-message ^{:host (conf :jarvis :host)
                                       :user (conf :jarvis :user)
                                       :pass (conf :jarvis :password)
                                       :ssl true}
-                                    {:from (conf :jarvis :user)
+                                    {:from jarvis
                                      :to (conf :email :info)
-                                     :subject "Feedback submission from website"
+                                     :reply-to (or email jarvis)
+                                     :subject (str "Feedback from " (or email "website"))
                                      :body message})]
     (case (:error result)
       :SUCCESS (log/info "Forwarded form feedback via email.")
@@ -37,9 +40,8 @@
   [req]
   (f/with-form sf/feedback (:params req)
     (if-not (f/errors?)
-      (let [message (:message (f/values))]
-        (log/info {:feedback message})
-        ;; TODO: Persist feedback to database.
-        (send-off feedback-mailer mail-feedback message))
+      (let [feedback (f/values)]
+        (log/info {:feedback feedback})
+        (send-off feedback-mailer mail-feedback feedback))
       (log/warn "Ignored feedback message (too long)."))
     (resp/redirect (tr/localize "feedback/thanks.htm"))))

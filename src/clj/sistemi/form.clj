@@ -5,7 +5,8 @@
 
 (def feedback
   "A customer feedback message."
-  {:message {:type :string :max 4096 :default ""}})
+  {:email {:type :string :max 100 :default ""}
+   :message {:type :string :max 4096 :default ""}})
 
 (def cart-item-id
   "Id of a shopping cart item."

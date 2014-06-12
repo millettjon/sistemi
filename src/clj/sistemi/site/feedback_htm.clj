@@ -1,8 +1,9 @@
 (ns sistemi.site.feedback-htm
   (:require [sistemi.form :as sf]
-            [www.form :as f])
+            [www.form :as f]
+            [sistemi.translate :as tr])
   (:use [ring.util.response :only (response)]
-        [sistemi translate layout]))
+        [sistemi layout]))
 
 (def company
   [:span.company_name "SistemiModerni"])
@@ -84,15 +85,18 @@
                           [:p [:span.bullet_title "Dites-nous tout"] " ! Nous avons hâte de vous lire : avez-vous apprécié notre démarche, nos articles ? Comment pouvons-nous améliorer nos services ? Nous sommes à votre écoute, vos critiques, vos idées, vos suggestions seront les bienvenues…"]
                           [:p "Ecris un truc cool dans la fenêtre ci-dessous."]]}}})
 
+(defn placeholder
+  [k]
+  (str "(" (tr/translate k) ")"))
+
 (defn body
   []
   [:div.text_content
-   [:p.title (translate :feedback :title)]
-   (translate :feedback :text)
-    ;; TODO: handle phone and email here
-   ;; TODO: collect name, email, and subject
+   [:p.title (tr/translate :feedback :title)]
+   (tr/translate :feedback :text)
    [:form#feedback {:method "post", :action "feedback", :name "feedback"}
-    (f/textarea :message {:class "greytextarea" :tabindex 1})
+    (f/text :email {:placeholder (placeholder :email) :tabindex 1})
+    (f/textarea :message {:class "feedback_textarea" :placeholder (placeholder :message) :tabindex 1})
     [:br]
     [:div {:style "text-align: right"}
      [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} "Submit"]]
@@ -100,5 +104,4 @@
 
 (defn handle
   [req]
-  (response (standard-page "" (f/with-form sf/feedback nil (body)) 544))
-  )
+  (response (standard-page "" (f/with-form sf/feedback nil (body)) 544)))

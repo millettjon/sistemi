@@ -42,6 +42,8 @@
 
         ;; general misc
         :contact "contact"
+        :email "email"
+        :message "message"
 
         ;; design
         :design {:toggle-background "background"}
@@ -100,6 +102,8 @@
 
         ;; general
         :contact "contacter"
+        :email "email"
+        :message "message"
 
         ;; design
         :design {:toggle-background "l’arrière-plan"}
