@@ -43,6 +43,12 @@
           }
    })
 
+(deftest recalc
+  ;; cart with some items
+  (o/recalc cart-data)
+  ;; empty cart
+  (o/recalc (assoc cart-data :items nil)))
+
 #_ (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"})
 
 (deftest create-order

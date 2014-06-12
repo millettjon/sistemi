@@ -51,7 +51,8 @@
                       items)
 
         ;; Calculate subtotal of all items.
-        subtotal (apply f/fj+ (map #(-> % second :price :total) items))
+        subtotal (or (apply f/fj+ (map #(-> % second :price :total) items))
+                     (fj-eur 0))
 
         ;; Shipping cost of whole order.
         ship-map (if shipping
@@ -59,7 +60,7 @@
         shipping (or (get-in ship-map [:shipping :price :total])
                      (fj-eur 0))
 
-        ;; Pretax total
+        ;; Pretax total.
         pretax-total (f/fj+ subtotal shipping)
 
         ;; Sales tax.
