@@ -157,6 +157,7 @@
 
   :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.6"]
                                   [org.clojure/tools.nrepl "0.2.3"]
+                                  [weavejester/cider-nrepl "0.7.0-SNAPSHOT"]
                                   [ring-mock "0.1.5" :exclusions [org.clojure/clojure]]
 
                                   ;; browser automated testing
