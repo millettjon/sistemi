@@ -93,3 +93,15 @@ sudo nginx -t
 # mv phantomjs-1.9.7-linux-x86_64 phantomjs/1.9.7-linux-x86_64
 # cd phantomjs/
 # ln -s 1.9.7-linux-x86_64 current
+
+# TODO Setup Firewall
+#   ufw allow 22/tcp
+#   ufw allow 80/tcp
+#   ufw allow 443/tcp
+#   ufw default deny
+#   ufw enable
+
+# - BUG: when switching profile, disable the nginx config for the old profile
+# - BUG: configure doesn't aleart if missing nginx ssl cert
+# - BUG: need to copy files into etc/secure/{gpg,nginx} (use git-crypt?)
+# - init datomic database and schema
