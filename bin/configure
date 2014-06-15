@@ -51,8 +51,8 @@ chmod +x bin/lein
 # ---------------------------------------------------
 for DIR in .lein .m2 var/target; do
     mkdir -p $DIR
-    sudo chown sm-www:sm-www $DIR
-    sudo chmod 775 $DIR
+#    sudo chown sm-www:sm-www $DIR
+#    sudo chmod 775 $DIR
 done
 
 # ---------------------------------------------------
