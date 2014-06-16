@@ -5,7 +5,7 @@
  :nrepl true
  
  ;; Launch the website in a browser.
- :launch-browser true
+ ;; :launch-browser false
 
  ;; Datomic transactor uri
  :datomic-uri "datomic:mem://"}
