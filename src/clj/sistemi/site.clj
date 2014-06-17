@@ -44,6 +44,7 @@
         :contact "contact"
         :email "email"
         :message "message"
+        :tbd "TBD"
 
         ;; design
         :design {:toggle-background "background"}
@@ -107,6 +108,7 @@
         :contact "contacter"
         :email "email"
         :message "message"
+        :tbd "Reste à voir."
 
         ;; design
         :design {:toggle-background "l’arrière-plan"}

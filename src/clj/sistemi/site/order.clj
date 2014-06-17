@@ -20,7 +20,7 @@
 (defn summary
   "Returns html for the order summary block."
   [cart]
-  (let [shipping (or (-> cart :shipping :price :total) (fu/fj-eur 0))
+  (let [shipping (-> cart :shipping :price :total)
         sub-total (-> cart :price :sub-total)
         tax (-> cart :price :tax)
         total (-> cart :price :total)]
@@ -33,9 +33,15 @@
      [:p.form-header (tr/translate :summary)]
 
      [:table {:style {:float "right" :font-size "14px" :width "100%"}}
-      [:tr [:td {:style {:text-align "left" :padding-right "10px"}} (tr/translate :sub-total)] [:td (-> sub-total fmt/eur-short)]]
-      [:tr [:td {:style {:text-align "left"}} (tr/translate :shipping)] [:td (-> shipping fmt/eur-short)]]
-      [:tr [:td {:style {:text-align "left"}} (tr/translate :tax)] [:td (-> tax fmt/eur-short)]]
+      [:tr [:td {:style {:text-align "left" :padding-right "10px" :text-transform "capitalize"}} (tr/translate :sub-total)] [:td (-> sub-total fmt/eur-short)]]
+      [:tr [:td {:style {:text-align "left" :text-transform "capitalize"}} (tr/translate :shipping)]
+       [:td (if shipping
+              (-> shipping fmt/eur-short)
+              (tr/translate :tbd))]]
+      [:tr [:td {:style {:text-align "left" :text-transform "capitalize"}} (tr/translate :tax)]
+       [:td (if shipping
+              (-> tax fmt/eur-short)
+              (tr/translate :tbd))]]
       [:tr {:style {:color "#ddd" :border-top "2px solid #5a5a5a"}}
-       [:td {:style {:text-align "left" }} (tr/translate :total)] [:td (-> total fmt/eur-short)]]
+       [:td {:style {:text-align "left" :text-transform "capitalize"}} (tr/translate :total) "&nbsp;" (fmt/tax-msg cart)] [:td (-> total fmt/eur-short)]]
       ]]))
