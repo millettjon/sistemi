@@ -1,6 +1,7 @@
 (ns color.valchromat
   "Valchromat colors."
-  (:require edn
+  (:require color
+            edn
             [translate :as tr]))
 
 ;; Official list of colors - http://www.valchromat.pt/gama.aspx?menuid=963&eid=3058
