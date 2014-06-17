@@ -4,6 +4,7 @@
             [sistemi.design :as design]
             [www.request :as r]
             [www.form :as f]
+            [www.tag :as tag]
             [sistemi.translate :as tr])
   (:use [ring.util.response :only (response)]
         [sistemi translate layout]))
@@ -59,7 +60,7 @@
         [:style ".customStyleSelectBoxInner {background:url(jquery.customSelect/arrow.png) no-repeat center right; }"]
 
         ;; color picker
-        [:script {:type "text/javascript" :src "js/main.js"}]
+        (tag/script "js/main.js")
 
         ;; 3d model
         [:script {:type "text/javascript" :src "/3d/Three.js"}]
