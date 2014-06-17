@@ -1,6 +1,9 @@
 {:host "localhost"
  :domain "sm1.in"
 
+ ;; Use non minimized js files.
+ :minimize? false
+
  ;; Start an nrepl server.
  :nrepl true
  

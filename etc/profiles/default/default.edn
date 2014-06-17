@@ -9,7 +9,10 @@
                         ;; page or url handler.
                         :require-url-translations false}
 
- ;; The mail account used to send internal mail notifications.
+ ;; Use minified files where possible.
+ :minimize? true
+
+;; The mail account used to send internal mail notifications.
  ;; (See http://en.wikipedia.org/wiki/Edwin_Jarvis).
  :jarvis {:host "smtp.gmail.com"
           :user "jarvis@sistemimoderni.com"}
