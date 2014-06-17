@@ -44,8 +44,6 @@
         :contact "contact"
         :email "email"
         :message "message"
-        :pre-tax "pre tax"
-        :tax-inc "tax inc"
 
         ;; design
         :design {:toggle-background "background"}
@@ -63,6 +61,9 @@
         :delete "delete"
         :payment "Payment"
         :continue "Next"
+        :pre-tax "pre tax"
+        :tax-inc "tax inc"
+        :tax "tax"
         }
 
    :fr {;; page
@@ -106,8 +107,6 @@
         :contact "contacter"
         :email "email"
         :message "message"
-        :pre-tax "HT"
-        :tax-inc "TTC"
 
         ;; design
         :design {:toggle-background "l’arrière-plan"}
@@ -123,6 +122,10 @@
         :delete "supprimer"
         :payment "Paiement"
         :continue "Suivant"
+        :pre-tax "HT"
+        :tax-inc "TTC"
+        :shipping "livraison"
+        :tax "T.V.A"
         }
 
    :it {;; page

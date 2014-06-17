@@ -7,13 +7,9 @@
   {:en {:payment "payment"
         :summary "Order Summary"
         :sub-total "Subtotal"
-        :shipping "Shipping"
-        :tax "Tax"
         :total "Total"}
    :fr {:summary "Récapitulatif de Commande"
         :sub-total "Sous-total"
-        :shipping "Livraison"
-        :tax "T.V.A"
         :total "Total"}
    :it {}
    :es {}})

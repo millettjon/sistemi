@@ -72,14 +72,9 @@
         [:script {:type "text/javascript" :src "/js/cart.js"}]
 
         [:style
-         "table.cart {width:100%; margin-top: 15px;}"
-         "tr.item {border-top: 2px solid #383838;}"
-         "tr.item > td {padding-top:10px; padding-bottom:10px; vertical-align:top;}"
-         "tr.total {border-top: 6px double #383838; font-size: 16px; color: white}"
          ".link_button {margin:0px; padding:0px; color:#0088CC; background-color:#000; border:0px;}"
          ".link_button:hover {text-decoration:underline; color:#00AAFF;}"
-         ".link_button:focus {text-decoration:underline; color:#00AAFF;}"
-         ]]))
+         ".link_button:focus {text-decoration:underline; color:#00AAFF;}"]]))
 
 (defn body-empty
   []
@@ -160,9 +155,23 @@
           [:td {:style "text-align: right; padding-top: 13px;"}
            [:span.white {:style "font-size: 16px;" } (-> item :price :total fmt/eur-short)]]]])
 
-      [:tr.total
-       [:td {:style "padding-top: 10px;"} (tr/translate :total)] [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
+      ;; If there is a shipping address, display subtotal, shipping, and taxes.
+      (if (:shipping cart)
+        (list [:tr.total.double_rule
+               [:td (tr/translate :subtotal)]
+               [:td {:style {:text-align "right"} :colspan 3} (-> cart :price :sub-total fmt/eur-short)]]
+              [:tr.total
+               [:td (tr/translate :tax)]
+               [:td {:style {:text-align "right"} :colspan 3} (-> cart :price :tax fmt/eur-short)]]
+              [:tr.total
+               [:td (tr/translate :shipping)]
+               [:td {:style {:text-align "right"} :colspan 3} (-> cart :shipping :price :total fmt/eur-short)]]))
 
+      [(if (:shipping cart)
+         :tr.total.white
+         :tr.total.double_rule.white) 
+       [:td {:style "padding-top: 10px;"} (tr/translate :total) "&nbsp;" (fmt/tax-msg cart)]
+       [:td {:style {:text-align "right" :padding-top "10px"} :colspan 3} total]]]
 
      [:div {:style {:text-align "right" :margin-top "20px" :margin-bottom "20px"}}
       [:a {:href "order/contact.htm"}
