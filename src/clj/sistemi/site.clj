@@ -44,6 +44,8 @@
         :contact "contact"
         :email "email"
         :message "message"
+        :pre-tax "pre tax"
+        :tax-inc "tax inc"
 
         ;; design
         :design {:toggle-background "background"}
@@ -104,6 +106,8 @@
         :contact "contacter"
         :email "email"
         :message "message"
+        :pre-tax "HT"
+        :tax-inc "TTC"
 
         ;; design
         :design {:toggle-background "l’arrière-plan"}

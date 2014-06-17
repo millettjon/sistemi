@@ -59,12 +59,18 @@
       [:li [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (0)"]
       [:li 
        [:a {:href (tr/localize "/cart.htm") :tabindex "-1"}
-        [:i.fa.fa-shopping-cart.fa-lg.fa-fw] " (" (order/total-items cart) ") "
+        [:i.fa.fa-shopping-cart.fa-lg.fa-fw]
+        [:span "(" (order/total-items cart) ")"]
+        "&nbsp;"
         (-> cart :price :total fmt/eur-short)
-        [:br]
-        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " " (-> (order/delivery-date) cal/format-date-dMMM)
+        "&nbsp;"
+        "&nbsp;"
+        [:span.grey {:style {:text-transform "uppercase"
+                             :font-size "10px"}}
+         (-> cart fmt/tax-msg)]
 
-        #_ (tr/translate :cart)]])))
+        [:br]
+        [:i.fa.fa-truck.fa-lg.fa-fw {:style {:margin-top "10px"}}] " " (-> (order/delivery-date) cal/format-date-dMMM)]])))
 
 (defn doctype-html5
  [html]

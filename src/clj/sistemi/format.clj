@@ -23,6 +23,11 @@
   [v]
   (eur v 0))
 
+
+(defn tax-msg
+  [{:keys [shipping]}]
+  (-> (if shipping :tax-inc :pre-tax) tr/translate))
+
 (defn cm
   [v]
   (let [v (if (instance? frinj.core.fjv v)

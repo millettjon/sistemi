@@ -24,6 +24,10 @@ a, a:active, a:visited, a:hover {
     color: #FFFFFF;
 }
 
+.grey {
+    color: #999;
+}
+
 .error {
     color: #FF0000;
     font-size: 14px;
