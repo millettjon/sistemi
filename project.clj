@@ -114,17 +114,14 @@
                  [org.clojure/core.async "0.1.303.0-886421-alpha"]
 
                  ;; Clojurescript
-                 [org.clojure/clojurescript "0.0-2234" :exclusionsz [org.clojure/tools.reader]]
+                 [org.clojure/clojurescript "0.0-2234"]
                  [jayq "2.5.1"]            ;; jquery wrapper
                  [rm-hull/monet "0.1.12" :exclusions [org.clojure/tools.reader]] ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
                  [pathetic "0.5.1"]
 
                  ;; For proper handling of internationalized chars in url path segments.
-                 [com.google.gdata/core "1.47.1" :exclusions [com.google.code.findbugs/jsr305]
-                  ]
-
-                 ]
+                 [com.google.gdata/core "1.47.1" :exclusions [com.google.code.findbugs/jsr305]]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
             [lein-marginalia "0.7.1"]
