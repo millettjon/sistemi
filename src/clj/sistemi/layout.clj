@@ -20,12 +20,11 @@
   [:home
    :vision
    [:boutique
-    {:label :shelves :page "/shelf.htm"}
-    {:label :bookcases :page "/bookcase.htm"}]
+    {:label :bookcases :page "/bookcase.htm"}
+    {:label :shelves :page "/shelf.htm"}]
    :system
    :feedback
-   :blog
-   ])
+   :blog])
 
 (defn menu
   []
