@@ -240,6 +240,15 @@
    {}
    *fields*))
 
+(defn defaults
+  []
+  (reduce
+   (fn [m [k v]] (if-let [v (default k)]
+                  (assoc m k v)
+                  m))
+   {}
+   *fields*))
+
 ;; ===== rendering =====
 (defn select
   [k opts]
