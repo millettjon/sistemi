@@ -2,6 +2,9 @@
   (:require [util.string :as stru]
             [sistemi.form :as sf]
             [sistemi.design :as design]
+            [sistemi.format :as fmt]
+            [sistemi.order :as o]
+            [sistemi.product :as p]
             [www.request :as r]
             [www.form :as f]
             [sistemi.translate :as tr]
@@ -83,7 +86,7 @@
         ]))
 
 (defn body
-  []
+  [{{cart :cart} :session :as req}]
   [:table {:cellspacing "0" :cellpadding "0" :width "675"}
    [:tr
     [:td#design-box {:style {:vertical-align "top" :background-color "#000"}}
@@ -138,10 +141,15 @@
         [:div#numDisplayed {:style {:text-align "center" :visibility "hidden"}} "(4 displayed)"]
         ]]
 
-      [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
-                                                                      (tr/translate :cart :update) )]]
-      ]]
+      [:table {:style {:width "100%"}}
+       [:tr
+        [:td {:style {:text-align "right" :padding-right "10px"}} [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1}
+                                                                   (if (= -1 (f/default :id)) (tr/translate :cart :add)
+                                                                       (tr/translate :cart :update))]]
+        [:td {:style {:vertical-align "middle" :padding-top "20px"}}
+         [:div
+          [:span#total.white] "&nbsp;&nbsp;"
+          [:span {:style {:font-size "10px" :text-transform "uppercase"}} (fmt/tax-msg cart)]]]]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize shelf from defaults.
@@ -161,16 +169,19 @@
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {
+           updatePrice();
            shelf.width = $(this).val();
            updateAnimation(shelf);
          });
 
          $('#depth').chosen().change(function() {
+           updatePrice();
            shelf.depth = $(this).val();
            updateAnimation(shelf);
          });
 
          $('#quantity').chosen().change(function() {
+           updatePrice();
            shelf.quantity = $(this).val();
            updateAnimation(shelf);
          });
@@ -179,6 +190,7 @@
          var lastRAL;
          var lastVAL;
          $('#finish').change(function() {
+           updatePrice();
            var clr;
            var finish = $(this).val();
            $('#wheel-ral').css('visibility', 'hidden');
@@ -270,6 +282,20 @@
          // Create three.js model.
          drawShelf(shelf, model[0]);
 
+         // Realtime price update.
+         // Pull values from form fields and submit to price handler to get the updated price.
+         function updatePrice() {
+           var b = {};
+           b.id = $('[name=id]').val();
+           b.quantity = $('[name=quantity]').val();
+           b.type = $('[name=type]').val();
+           b.width = $('#width').chosen().val();
+           b.depth = $('#depth').chosen().val();
+           b.finish = $('#finish').val();
+           b.color = $('#shelf-form input[name=color]').val();
+           price.update_price(b, '#total');
+         }
+
          // Call the color change handler to make sure the right color name and code are displayed.
          onColor(edn.objectify($('#shelf-form input[name=color]').val()));
 
@@ -285,4 +311,4 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form (:shelf sf/cart-items) (:params req) (body)) 544)))
+  (response (standard-page (head) (f/with-form (:shelf sf/cart-items) (:params req) (body req)) 544)))
