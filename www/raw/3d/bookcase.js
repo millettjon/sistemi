@@ -398,6 +398,9 @@ function drawBookcase(bookcase, container) {
 }
 
 function updateAnimation(bookcase) {
+  console.log('updateAnimation: bookcase');
+  console.log(bookcase);
+
   // Stop the animation and clear the model.
   stopAnimation();
   $(g_container).empty();
