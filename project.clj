@@ -118,6 +118,7 @@
                  [jayq "2.5.1"]            ;; jquery wrapper
                  [rm-hull/monet "0.1.12" :exclusions [org.clojure/tools.reader]] ;; html5 canvas
                  [prismatic/dommy "0.1.2"] ;; jquery replacement using clojurescript idioms
+                 [com.cemerick/url "0.1.1"]
                  [pathetic "0.5.1"]
 
                  ;; For proper handling of internationalized chars in url path segments.

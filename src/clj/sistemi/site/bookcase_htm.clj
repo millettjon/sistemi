@@ -1,6 +1,9 @@
 (ns sistemi.site.bookcase-htm
   (:require [util.string :as stru]
             [sistemi.form :as sf]
+            [sistemi.format :as fmt]
+            [sistemi.order :as o]
+            [sistemi.product :as p]
             [sistemi.design :as design]
             [www.request :as r]
             [www.form :as f]
@@ -83,7 +86,8 @@
         ]))
 
 (defn body
-  []
+  [{{cart :cart} :session :as req}]
+
   [:table {:cellspacing "0" :cellpadding "0" :width "675"}
    [:tr
     [:td#design-box {:style {:vertical-align "top" :background-color "#000"}}
@@ -142,9 +146,15 @@
        [:div#wheel-val {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]
        [:div#wheel-val-oiled {:style "position: absolute; top: 0px; left: 0px; visibility: hidden;"}]]
 
-      [:div {:style "text-align: right"}
-       [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1} (if (= -1 (f/default :id)) (tr/translate :cart :add)
-                                                                        (tr/translate :cart :update))]]]]
+      [:table {:style {:width "100%"}}
+       [:tr
+        [:td {:style {:text-align "right" :padding-right "10px"}} [:button#submit.btn.btn-inverse {:type "submit" :tabindex 1}
+                                             (if (= -1 (f/default :id)) (tr/translate :cart :add)
+                                                 (tr/translate :cart :update))]]
+        [:td {:style {:vertical-align "middle" :padding-top "20px"}}
+         [:div
+          [:span#total.white] "&nbsp;&nbsp;"
+          [:span {:style {:font-size "10px" :text-transform "uppercase"}} (fmt/tax-msg cart)]]]]]]]
 
     [:script {:type "text/javascript"}
      ;; Initialize bookcase from defaults.
@@ -164,6 +174,7 @@
          var lastRAL;
          var lastVAL;
          $('#finish').change(function() {
+           updatePrice();
            var clr;
            var finish = $(this).val();
            $('#wheel-ral').css('visibility', 'hidden');
@@ -194,18 +205,22 @@
 
          // Hookup on change events to update the model.
          $('#width').chosen().change(function() {
+           updatePrice();
            bookcase.width = $(this).val();
            updateAnimation(bookcase);
          });
          $('#height').chosen().change(function() {
+           updatePrice();
            bookcase.height = $(this).val();
            updateAnimation(bookcase);
          });
          $('#depth').chosen().change(function() {
+           updatePrice();
            bookcase.depth = $(this).val();
            updateAnimation(bookcase);
          });
          $('#cutout').change(function() {
+           updatePrice();
            bookcase.cutout = $(this).val();
            updateAnimation(bookcase);
          });
@@ -253,6 +268,22 @@
          color.val_picker.init('#wheel-val-oiled', 'oiled', callback);
          // --------------------
 
+         // Realtime price update.
+         // Pull values from form fields and submit to price handler to get the updated price.
+         function updatePrice() {
+           var b = {};
+           b.id = $('[name=id]').val();
+           b.quantity = $('[name=quantity]').val();
+           b.type = $('[name=type]').val();
+           b.width = $('#width').chosen().val();
+           b.height = $('#height').chosen().val();
+           b.depth = $('#depth').chosen().val();
+           b.cutout = $('#cutout').val();
+           b.finish = $('#finish').val();
+           b.color = $('#shelf-form input[name=color]').val();
+           price.update_price(b, '#total');
+         }
+
          // Toggle background button handler.
          $('#toggle-background').click(function(e) {
            var box = $('#design-box');
@@ -276,7 +307,9 @@
 
          // Call the color change handler to make sure the right color name and code are displayed.
          onColor(edn.objectify($('#shelf-form input[name=color]').val()));
-         // onColor(defaultRAL);
+
+         // Call finish change handler to make sure the proper color wheel is displayed.
+         $('#finish').change();
 
          // Start animating.
          startAnimation();
@@ -286,4 +319,4 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form (:bookcase sf/cart-items) (:params req) (body)) 520)))
+  (response (standard-page (head) (f/with-form (:bookcase sf/cart-items) (:params req) (body req)) 520)))

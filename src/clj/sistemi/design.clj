@@ -12,5 +12,5 @@
    [:button#toggle-background.btn.btn-inverse {:style "margin-left: 20px; position: relative; z-index: 1; outline: none;"}
     [:i.icon-white.icon-adjust {:style "margin-right: 10px;"}] (tr/translate :design :toggle-background)]
 
-   [:div {:style "position: absolute; top: 5px; width: 100%; text-align: right; z-index: 0;"}
+   [:div {:style "position: absolute; top: 5px; width: 100%; text-align: center; z-index: 0;"}
     [:span {:style "margin-right: 20px;"} (tr/translate :spin)]]])
