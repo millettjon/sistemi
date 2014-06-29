@@ -5,6 +5,7 @@
             [util.id :as id]
             [util.string :as s]
             [util.edn :as edn]
+            [util.except :as ex]
             [clojure.walk :as w]
             [taoensso.timbre :as log])
   (:refer-clojure :exclude [partition]))
@@ -409,9 +410,22 @@ ns exists in m and points to a submap, the submap is used instead."
   (let [conn (get-conn)
         entities (-> m
                      (qualify ns)
-                     pack)
-        result (d/transact conn entities)]
-    result))
+                     pack)]
+    @(d/transact conn entities)))
+
+(defn unique-conflict?
+  "Returns true if ex or its cause is a a :db.error/unique-conflict."
+  [ex]
+  (some #(= :db.error/unique-conflict (-> % ex-data :db/error))
+        [ex (.getCause ex)]))
+#_ (unique-conflict? (java.lang.Exception.))
+#_ (unique-conflict? (java.lang.Exception. "foo"))
+#_ (unique-conflict? (java.lang.Exception. "foo" (java.lang.Exception.)))
+
+(defn until-unique
+  "Retries f up to 5 times in the event of :db.error/unique-conflict exception."
+  [f]
+  (ex/try-times* 5 unique-conflict? f))
 
 (defn init-db
   "Initializes a database and adds the schema and partitions."

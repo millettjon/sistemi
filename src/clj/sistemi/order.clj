@@ -11,7 +11,10 @@
             [util.calendar :as cal]
             [ship])
   (:use [clojure.pprint :only [pprint]]
-        [util.frinj :only [fj-eur fj-round fj-bd_]]))
+        [util.frinj :only [fj-eur fj-round fj-bd_]])
+  (:import [java.lang IllegalStateException]
+           [java.util.concurrent ExecutionException]
+           ))
 
 (def france-tax-rate 0.20)
 
@@ -118,7 +121,7 @@
 ;;   ? can the id be generated in the database?
 ;;   ? how to make sure collision events are logged?
 ;;
-(defn- gen-id
+(defn gen-id
   "Generates a new random order id."
   []
   (id/rand-26 6))
@@ -127,20 +130,17 @@
 (defn create
   "Creates a new order from the session."
   [{:keys [cart] :as session} {:keys [locale payment-txn] :as args}]
-  (let [id (gen-id)
-        _ (log/info {:event :order/create :id id})
-        order (-> cart
-                   (dissoc :counter)
-                   (assoc :id id
-                          :status :purchased
-                          :locale locale
-                          :purchase-date (java.util.Date.)
-                          :estimated-delivery-date (-> (delivery-date) .toDate)
-                          :payment {:transaction payment-txn}))
-        result (sd/create order :order)]
-;;    (prn "-------------------TXN RESULT" result)
-;;    (prn "-------------------TXN RESULT DONE------------------------")
-    order))
+  (let [order (-> cart
+                  (dissoc :counter)
+                  (assoc :status :purchased
+                         :locale locale
+                         :purchase-date (java.util.Date.)
+                         :estimated-delivery-date (-> (delivery-date) .toDate)
+                         :payment {:transaction payment-txn}))]
+    (sd/until-unique #(let [id (gen-id)
+                            order (assoc order :id id)]
+                        (sd/create order :order)
+                        order))))
 
 (defn lookup
   "Lookup an order by id."
@@ -159,4 +159,3 @@
                  :where [?e :order/id ?order-id]]
                order-id
                )))
-

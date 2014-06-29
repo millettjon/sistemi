@@ -3,6 +3,7 @@
             [sistemi.order :as o]
             [sistemi.datomic :as d]
             [util.edn :as edn]
+            [util.fn :as fn]
             [clojure.pprint :as p])
   (:use clojure.test
         [frinj.ops :only [fj fj+ fj*]]
@@ -49,20 +50,37 @@
   ;; empty cart
   (o/recalc (assoc cart-data :items nil)))
 
-#_ (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"})
+#_ (-> (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"})
+       :id)
 
 (deftest create-order
   (let [order-id (:id (o/create cart-data {:locale "fr" :payment-txn "<payment transaction details>"}))
-        order (o/lookup order-id)
-        ]
+        order (o/lookup order-id)]
     (is order-id)
     (is order)
     (is (= (-> order :price :total) (-> cart-data :cart :price :total)))
     (is (-> order :status))
     (is (-> order :items))
     (is (-> order :contact))
-    (is (-> order :shipping))
-    ))
+    (is (-> order :shipping))))
+
+;; Mock out the id generation
+#_ (with-redefs [util.id/rand-26 (constantly "ABCDEF")]
+     (-> (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"})
+         :id))
+
+(deftest create-order-collision
+  (let [order (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"})
+        id (:id order)]
+
+    ;; Test that it recovers from a single id collision.
+    (with-redefs [o/gen-id (fn/playback [id] o/gen-id)]
+      (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"}))
+
+    ;; Test that it throws an exception if the id always collides.
+    (is (thrown? java.util.concurrent.ExecutionException
+                 (with-redefs [o/gen-id (fn/playback (repeat id) o/gen-id)]
+                   (o/create cart-data {:locale "fr" :payment-txn "<stripe details>"}))))))
 
 (defn- check-fudge
   [total]
