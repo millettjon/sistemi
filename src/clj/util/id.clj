@@ -34,7 +34,9 @@
   [length]
   (apply str (repeatedly length #(char (nth digits (.nextInt (SecureRandom.) 26))))))
 
-#_ (rand-26 6)
+;; Print more codes.
+#_ (doseq [_ (range 20)]
+     (prn (rand-26 6)))
 
 ;; Formatting
 #_ (let [id (rand-26 6)]
