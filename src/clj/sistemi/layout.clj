@@ -42,13 +42,21 @@
                 [:li.menui
                  [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :tabindex "-1" :style {:height "20px"}} label]]
                 ))]])
+
         ;; regular item
-        (let [page (if (= item :home)
-                     "/"
+        (let [page (case item
+                     :home "/"
+                     :blog "/blog"
                      (str "/" (name item) ".htm"))
               label (tr/translate :menu item)]
           [:li.menui
-           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui")) {:href (tr/localize page) :tabindex "-1" :style {:height "20px"}} label]]
+           [(keyword (str "a" (if (= page cur-page) "#current_item" "") ".menui"))
+            {:href
+             ;; special case for blog since it is not a normal handler
+             (if (= page "/blog")
+               (str "/" (req/*req* :locale) page)
+               (tr/localize page))
+             :tabindex "-1" :style {:height "20px"}} label]]
           )))))
 
 (defn cart-block

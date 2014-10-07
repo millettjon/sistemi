@@ -1,8 +1,15 @@
-/* border around main content */
+/* main content area */
 div#content {
-    /* margin-top: 25px; */
+    margin-top: 25px;
     margin-left: 25px;
+    margin-bottom: 25px;
 }
+
+/* blog post section*/
+div.post-list {
+    margin-bottom: 25px;
+}
+
 
 /* category link */
 .cat-links a {

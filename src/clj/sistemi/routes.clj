@@ -2,7 +2,8 @@
   (:require [sistemi.registry :as registry]
             [util.string :as str]
             [sistemi.datomic :as sd]
-            [www.event :as e])
+            [www.event :as e]
+            [sistemi.blog :as b])
   (:use net.cgrand.moustache
         (ring.middleware file file-info params keyword-params content-type session json)
         (ring.middleware stacktrace lint cookies) ; dev items
@@ -79,6 +80,7 @@
       ;; (spy :prefix "before wrap-handler")
       wrap-handler                ; Call a handler if one is defined for the uri.
       (wrap-file "www/raw" {:allow-symlinks? true})    ; Serve static files.
+      ["blog" &] b/handle
       [&] pass)
 
      ;; Redirect the main home page to a localized version.

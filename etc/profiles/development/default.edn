@@ -4,9 +4,6 @@
  ;; Use non minimized js files.
  :minimize? false
 
- ;; Start an nrepl server.
- :nrepl true
- 
  ;; Launch the website in a browser.
  ;; :launch-browser false
 

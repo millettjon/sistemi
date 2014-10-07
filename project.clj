@@ -121,6 +121,9 @@
                  [com.cemerick/url "0.1.1"]
                  [pathetic "0.5.1"]
 
+                 ;; REPL related
+                 [cider/cider-nrepl "0.7.0"]
+
                  ;; For proper handling of internationalized chars in url path segments.
                  [com.google.gdata/core "1.47.1" :exclusions [com.google.code.findbugs/jsr305]]]
 
@@ -150,10 +153,7 @@
                        :output-to "www/raw/js/main.min.js"
                        :output-dir "var/target/cljsbuild/prod"}}}}
 
-  :profiles {:dev {:dependencies [[org.clojure/tools.trace "0.7.8"]
-                                  [org.clojure/tools.nrepl "0.2.3"]
-                                  [weavejester/cider-nrepl "0.7.0-SNAPSHOT"]
-                                  [ring-mock "0.1.5" :exclusions [org.clojure/clojure]]
+  :profiles {:dev {:dependencies [[ring-mock "0.1.5" :exclusions [org.clojure/clojure]]
 
                                   ;; browser automated testing
                                   [clj-webdriver/clj-webdriver "0.6.1" :exclusions [org.mortbay.jetty/jetty]]

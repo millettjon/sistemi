@@ -5,7 +5,8 @@
             [clj-time.core :as time]
             [locale.translate :as tr-l]
             [sistemi.registry :as registry]
-            [sistemi.translate :as tr-s])
+            [sistemi.translate :as tr-s]
+            [util.except :as x])
   (:use ring.util.response
         ring.persistent-cookies
         [sistemi.handler :only (throw-403)]
@@ -38,7 +39,8 @@
 
                referer (if (not (request/self-referred? req)) ; Only allow requests from the same server.
                          (throw-403 req (str "Third party referals not supported (referer=" referer ")."))
-                         (tr-l/localize (tr-s/canonicalize (:path (url/new-URL referer))) registry/localized-paths (assoc req :locale locale)))
+                         (x/safely (tr-l/localize (tr-s/canonicalize (:path (url/new-URL referer))) registry/localized-paths (assoc req :locale locale))
+                                   (path/qualify locale))) ; Return default on exception.
 
                :default (path/qualify locale))
           response (redirect (str (url/qualify uri req)))]

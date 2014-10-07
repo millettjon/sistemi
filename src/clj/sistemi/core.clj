@@ -15,7 +15,9 @@
             [sistemi.routes :as routes]
             [sistemi.datomic :as d]
             [app.config :as cf]
-            git)
+            git
+            [clojure.tools.nrepl.server :as nrepl-server]
+            [cider.nrepl :refer (cider-nrepl-handler)])
   (:use [ring.adapter.jetty :only (run-jetty)]
         clojure.java.browse
         clojure.contrib.strint
@@ -61,11 +63,9 @@
   (log/info "Bulding routes.")
   (def routes (routes/build-routes))
 
-  ;; Start nrepl if enabled.
-  (when (cf/conf :nrepl)
-    (log/info "Starting nrepl server on 127.0.0.1:7888.")
-    (require 'clojure.tools.nrepl.server)
-    (eval '(clojure.tools.nrepl.server/start-server :port 7888 :bind "127.0.0.1")))
+  ;; Start nrepl server.
+  (log/info "Starting cider-nrepl server on 127.0.0.1:7888.")
+  (nrepl-server/start-server :port 7888 :bind "127.0.0.1" :hander cider-nrepl-handler)
 
   ;; Launch a browser if configured.
   (when (cf/conf :launch-browser)
