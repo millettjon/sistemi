@@ -29,7 +29,7 @@
 
  :datomic-uri "datomic:dev://localhost:4334"
 
- :blog-uri "https://blog1.sm1.in"
+ :blog-uri "https://blog.sm1.in"
 
  ;; Mandrill (transactional email)
  :mandrill {:smtp {:host "smtp.mandrillapp.com"
