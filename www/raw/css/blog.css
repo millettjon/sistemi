@@ -50,6 +50,36 @@ div.post-list {
     text-decoration: none;
 }
 
+.article-image {
+    border: 10px solid;
+    margin-bottom: 10px;
+}
+
+.article-meta {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.article-meta .categories {
+    text-align: right;
+}
+
+a.continue-reading {
+    margin-left: 10px;
+}
+
+div.side-block h3 {
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+ul.side-nav {
+    margin-left: 15px;
+    list-style-type: none;
+    /* list-style-position: inside; */
+}
+
+
 /* author link */
 span.byline {
     margin-left: 15px;

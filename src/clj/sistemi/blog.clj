@@ -1,6 +1,6 @@
 (ns sistemi.blog
   "Scrapes the wordpress blog."
-  (:require [net.cgrand.enlive-html :as html]
+  (:require [net.cgrand.enlive-html :as el]
             [clojure.contrib.core :as contrib]
             [clojure.core.cache :as cache]
             [www.url :as u]
@@ -14,8 +14,8 @@
       u/new-URL))
 
 (defn fetch-url [url]
-  (prn "FETCHING URL" url)
-  (html/html-resource (java.net.URL. url)))
+  ;; (prn "FETCHING URL" url)
+  (el/html-resource (java.net.URL. url)))
 
 (def ^:private cache
   "Cache urls for 1 minute."
@@ -36,13 +36,13 @@
 (defn strip-comment-links
   "Strips the leave a comment links."
   [node]
-  (html/at node
+  (el/at node
            [:span.comments-link] nil))
 
 (defn strip-respond
   "Strips the respond section from a post."
   [node]
-  (html/at node
+  (el/at node
            [:div#respond] nil))
 
 ;; - strip scheme, host, and port
@@ -51,11 +51,10 @@
 (defn url-from-blog-to-site
   "Converts the url from the blog site's to the main site's format."
   [url]
-  (-> url
-      u/new-URL
-      (assoc :scheme nil :host nil :port nil)
-      ;; (assoc :path (p/new-path ""))
-      ))
+  (let [u (u/new-URL url)]
+    (if (= (:host base-url) (:host u))
+      (assoc u :scheme nil :host nil :port nil) ;; strip scheme, host and port
+      url)))
 
 (defn fix-link
   [node]
@@ -64,39 +63,31 @@
 ;; <a href="https://blog1.sm1.in/en/blog/looking-for-a-multi-lingual-community-manager">Looking for a multi-lingual community manager</a>
 (defn fix-urls
   [node]
-  (html/at node
-           [:h2 :a] fix-link ; post title
-           [:p.categories :a] fix-link
-           [:div.pagination :a] fix-link
-
-           ;;[:h1.entry-title :a] fix-link
-           ;;[:span.entry-date :a] fix-link
-           ;;[[:span :.author :.vcard] :a] fix-link
-           ;;[:span.tag-links :a] fix-link
-           ;;[:div.nav-links :a] fix-link ; on post page
+  (el/at node
+           [:a] fix-link
            ))
 
 (defn fix-date
   [node]
-  (html/at node
-           [:p.date] (html/prepend (html/html [:i.fa.fa-clock-o]) " ")
+  (el/at node
+           [:p.date] (el/prepend (el/html [:i.fa.fa-clock-o]) " ")
            ))
 
 (defn fix-author
   [node]
-  (html/at node
-           [:span.author.vcard :a] (html/prepend (html/html [:i.fa.fa-user]) " ")
+  (el/at node
+           [:span.author.vcard :a] (el/prepend (el/html [:i.fa.fa-user]) " ")
            ))
 
 (defn fix-tag
   [node]
-  (html/at node
-           [:span.tag-links :a] (html/prepend (html/html [:i.fa.fa-tag]) " ")
+  (el/at node
+           [:span.tag-links :a] (el/prepend (el/html [:i.fa.fa-tag]) " ")
            ))
 
 (defn delete-screen-reader-text
   [node]
-  (html/at node
+  (el/at node
            [:.screen-reader-text] nil
            ))
 
@@ -111,7 +102,7 @@
 (defn render
   [nodes]
   (->> nodes
-       html/emit*
+       el/emit*
        (apply str)))
 
 (defmulti convert-content
@@ -123,14 +114,14 @@
 
 (defn fix-container
   [node]
-  (html/at node
+  (el/at node
            [:div.large-9] #(-> %
                                (assoc-in [:attrs :class] nil)
                                (assoc-in [:attrs :id] "content"))))
 
 (defn fix-pagenation
   [node]
-  (html/at node
+  (el/at node
            ;; Change <strong> tag to a <span class='current-page'>
            [:div.pagination :strong] #(assoc %
                                         :tag :span
@@ -138,38 +129,44 @@
            ;; Rename pagination class to avoid conflict with bootstrap's pagination class.
            [:div.pagination] #(assoc-in % [:attrs :class] "blog-pagination")))
 
+;; Move the "Continue Reading ..." anchor to the end of the first paragraph.
+(defn fix-continue
+  [node]
+  (el/at node
+         [:div.post-list] (el/move [:a.continue-reading] [:div.article-first-para :p] el/append)))
+
+(defn fix-article-image
+  [node]
+  (el/at node
+         [:div.post-list] (fn [node]
+                            (let [article-url (-> [node]
+                                                  (el/select [:h2 :a])
+                                                  first
+                                                  :attrs
+                                                  :href)]
+                              ;; (prn "ARTICLE-URL" article-url)
+                              
+                              (el/at node
+                                     [:img.article-image] (el/wrap :a {:href article-url}))))))
+
+;; - find url from here: div.post-list h2 a
+;; - wrap image in a tag 
+
 (defmethod convert-content :default
   [url]
   (println "CONVERT-CONTENT :DEFAULT")
   (-> url
       str
       fetch-cached-url
-      (html/select [:div.large-9])
+      (el/select [:div.large-9])
       fix-container
       fix-urls
+
+      ;; blog page specific
       fix-pagenation
+      fix-continue
+      fix-article-image
 
-      ;; fix-date
-      ;; fix-author
-      ;; fix-tag
-      render
-      ))
-
-(defmethod convert-content :p
-  [url]
-  (println "CONVERT-CONTENT :P")
-  (-> url
-      str
-      fetch-cached-url
-      ;;(html/select [:div#content])
-      ;;(html/select [:div.row])
-      ;; strip-comment-links
-      ;; strip-respond
-      ;; fix-urls
-      ;; fix-date
-      ;; fix-author
-      ;; fix-tag
-      ;; delete-screen-reader-text
       render
       ))
 
@@ -180,18 +177,19 @@
       url-from-site-to-blog
       convert-content))
 
+;; Remove the 3rd and 4th children.
+
 (defn convert-sidebar
   [url]
   (-> url
       str
       fetch-cached-url
-      (html/select [:div.large-3])
-#_      (html/at [:aside#icl_lang_sel_widget] nil
-               [:aside#search-2] nil
-               [:aside#recent-comments-2] nil
-               [:aside#meta-2] nil
-               [:li :a] fix-link
-               )
+      (el/select [:div.large-3])
+
+      ;; Delete the Tags sections for now.
+      (el/at [[:div.side-block #{(el/nth-child 3) (el/nth-child 4)} ]] nil)
+
+      fix-urls
       render))
 
 (defn sidebar
