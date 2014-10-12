@@ -60,3 +60,11 @@ div#content a {
     color: #000;
     text-decoration: underline;
 }
+
+div#content h2 a {
+    text-decoration: none;
+}
+
+div#content h2 a:hover {
+    text-decoration: underline;
+}
