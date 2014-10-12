@@ -1,0 +1,62 @@
+div#content {
+    margin-top: 25px;
+    margin-left: 25px;
+    margin-bottom: 25px;
+}
+
+div.post-list {
+    margin-bottom: 25px;
+}
+
+.article-image {
+    border: 10px solid;
+    margin-bottom: 10px;
+}
+
+.article-meta {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.article-meta .categories {
+    text-align: right;
+}
+
+a.continue-reading {
+    margin-left: 10px;
+}
+
+div.side-block h3 {
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+div.side-block a {
+    font-size: 12px;
+    color: #8C8C8C;
+}
+
+div.side-block a:hover {
+    color: #FFF;
+    text-decoration: none;
+}
+
+ul.side-nav {
+    margin-left: 0px;
+    list-style-type: none;
+}
+
+/* -------------------------------------------------- */
+/* CHANGES TO MAKE BLOG BLACK FOREGROUND AND WHITE BACKGROUND */
+
+div#content {
+    margin: 0px;
+    padding: 25px;
+    color: #000;
+    background-color: #FFF;
+}
+
+div#content a {
+    color: #000;
+    text-decoration: underline;
+}

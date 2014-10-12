@@ -210,7 +210,7 @@
         (app req)))))
 
 (def head
-  [:link {:rel "stylesheet" :href "/css/blog.css" :type "text/css"}])
+  [:link {:rel "stylesheet" :href "/css/blog-white.css" :type "text/css"}])
 
 ;; no content type?
 (defn handle
