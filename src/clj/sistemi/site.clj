@@ -198,38 +198,71 @@
    })
 
 (def head
-  (seq [
-        ;; NIVO Slider
-        [:link {:rel "stylesheet" :href "/nivo/nivo-slider.css" :type "text/css" :media "screen"}]
-        [:script {:src "/nivo/jquery.nivo.slider.pack.js" :type "text/javascript"}]
-        [:script {:type "text/javascript"}
-         "$(window).load(function() {
-	$('#slider').nivoSlider({
-		startSlide:1, //Set starting Slide (0 index)
-		slideshowEnd: function(){$('#slider').data('nivo:vars').stop = true;},
-		effect:'fade', // Specify sets like: 'fold,fade,sliceDown'
-        animSpeed:200, // Slide transition speed
-        pauseTime:3000, // How long each slide will show
-        directionNav:false, // Next & Prev navigation
-        directionNavHide:false, // Only show on hover
-        controlNav:false, // 1,2,3... navigation
-        controlNavThumbs:false, // Use thumbnails for Control Nav
-        controlNavThumbsFromRel:false, // Use image rel for thumbs
-        controlNavThumbsSearch: '.jpg', // Replace this with...
-        controlNavThumbsReplace: '_thumb.jpg', // ...this in thumb Image src
-        keyboardNav:true, // Use left & right arrows
-        pauseOnHover:false, // Stop animation while hovering
-        manualAdvance:false, // Force manual transitions
-        captionOpacity:0.8, // Universal caption opacity
-	});
-});"
-         ]]))
+  (seq []))
+
+(defn gallery-image 
+  [path]
+   [:img.gallery-image {:src (str "/gallery/" path)
+                        :width "300px"
+                        }])
 
 (def body
-  [:div#slider {:style "margin-left: 42px"}
-   [:img {:src "graphics/contemporary-shelving.jpg" :alt "Contemporary Shelving" :width "633" :height "544"}]
-   [:img {:src "graphics/classic-shelving.jpg" :alt "Classic Shelves" :width "633" :height "544"}]
-   [:img {:src "graphics/modern-shelves.jpg" :alt "Modern Bookcase" :width "633" :height "544"}]])
+  [:div#gallery
+   [:p "Welcome to a new kind of design.  With Sistemi Moderni you can personalize everything we have to offer.  Why not start with our screwless shelving solutions?  601,920 dimensions and 213 lacquering colors gives you the power to fulfill all of your shelving needs!"]
+
+   [:h2 "Shelving"]
+   ;; TODO: shelving gallery here
+   ;; TODO: scroll down
+
+   [:p "Do you have a shelving support system and do you need a way to personalize the shelves?  Do you simply need panels colored and cut to a specific dimensions for a particular project?  Try our single shelf solution!"]
+
+   [:h2 "Single Shelves"]
+   ;; TODO: single shelf gallery here
+   ;; TODO: scroll down
+
+   [:p "Have a look at other products we have in development right now.  Please let us know what you like by either clicking on the  by each image or sending us a message by clicking on the ."]
+
+   [:h2 "Modulo Wall Panels"]
+   ;; TODO: modulo gallery
+
+   [:h2 "Lamps"]
+   [:p "Our patent pending lamp design is nearing launch!"]
+
+   [:h2 "Wall Panels"]
+
+   [:h2 "Tables"]
+
+   [:h2 "Nata Sofas"]
+
+   (map gallery-image
+        ["130102SM.1200.2400.0300.Ovale.Library.jpeg"
+         "130108SM.1200.2400.0300.Ovale.Office.jpeg"
+         "130215SM.2100.1500.0350.Claudo.6.jpeg"
+         "130217SM.2000.0760.0350.Credens.4.B.Blu.jpeg"
+         "130217SM.2000.0760.0350.Credens.4.jpeg"
+         "130217SM.2000.0760.0350.Credens.4.R.Grey.jpeg"
+         "130217SM.2000.0760.0350.Credens.4.R.Grey.Oil.jpeg"
+         "130218SM.2400.1500.0350.Gradi.Dbl.B.jpeg"
+         "130218SM.2400.1500.0350.Gradi.Dbl.B.W.jpeg"
+         "130218SM.2400.1500.0350.Gradi.Val.Y.Grey.Oil.jpeg"
+         "130219SM.2100.1500.0350.Claudo.6.Blu.Y.W.jpeg"
+         "130219SM.2100.1500.0350.Claudo.6.O.B.jpeg"
+         "130219SM.2400.1500.0350.Gradi.Val.O.R.Oil.jpeg"
+         "130220SM.0610.2100.0350.Claudo.6.Val.Gr.B.Oil.jpeg"
+         "130220SM.2000.0760.0350.Credens.4.R.B.Oil.jpeg"
+         "130221SM.2000.0760.0350.Credens.4.B.Blu.jpeg"
+         "130319.SM.Stools.3.jpeg"
+         "130424SM.1200.2400.0300.Ovale.Biblioteque.R.jpeg"
+         "130426SM.SofaNata.Br.Bl.R.jpeg"
+         "130426SM.SofaNata.V.Blegs.LGback.1.jpeg"
+         "130426SM.SofaNata.V.BluLegs.Yback.jpeg"
+         "130426SM.SofaNata.V.LGLegs.Gback.jpeg"
+         "130426SM.SofaNata.V.LGLegs.Yback.jpeg"
+         "130426SM.SofaNata.V.RLegs.Blback.jpeg"
+         "131209EG-sofa-blue-velvet.jpeg"
+         "131212EG-sofa-blue-velvet.jpeg"
+         "131221EG-sofa-blue-velvet.jpeg"
+         ])])
 
 (defn handle
   [req]

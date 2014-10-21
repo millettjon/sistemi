@@ -267,3 +267,15 @@ table.order tr.item > td   {padding-top: 10px; padding-bottom:10px; vertical-ali
 table.order tr.total       {font-size: 16px;}
 table.order tr.total > td  {padding-top: 10px; text-transform: capitalize;}
 table.order th             {text-transform: capitalize;}
+
+/* Gallery */
+div#gallery {
+    margin-left: 25px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+img.gallery-image {
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
