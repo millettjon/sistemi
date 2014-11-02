@@ -1,0 +1,69 @@
+#!/usr/bin/ruby
+
+require 'find'
+require 'fileutils'
+require 'shellwords'
+
+module Gallery
+
+  GALLERY_DIR="www/raw/gallery"
+
+  class << self
+    # Munges a path for use on the web.
+    # - lowercase
+    # - replace space with '-'
+    def munge(path)
+      path.downcase.gsub(' ', '-')
+    end
+
+    def import_image(image, source_dir, target_dir, opts)
+      rpath = image.gsub(source_dir + "/", "")  # relative path.
+      trpath = munge(rpath)                     # target relative path
+
+      # Note: Don't bother cleaning up the names now since:
+      # a) they are useful to Eric
+      # b) it ensures that the filename is unique
+
+      # Get the 
+      puts "Importing image: #{rpath} -> #{trpath}."
+
+      # Create the target directory if necessary.
+      tpath = target_dir + "/" + trpath
+      tdir = File.dirname(tpath)
+      File.exists? tdir or FileUtils.mkdir tdir
+
+      # Import the image, scaling as necessary.
+      size = opts[:max_width]
+      cmd = ['convert',
+             image,
+             '-resize', "#{size}x#{size}>",
+             tpath]
+      system(cmd.shelljoin)
+      
+    end
+
+    def import(source_dir, opts={})
+      opts = {max_width: 200}.merge(opts)
+      target_dir = GALLERY_DIR
+
+      puts "Importing images into gallery from dropbox."
+      puts "  source directory: '#{source_dir}'"
+      puts "  target directory: '#{target_dir}'"
+      puts "  options: #{opts.inspect}"
+
+      Find.find(source_dir) do |path|
+        ext = path.match(/\.([^\.]+)$/)[1]
+        case ext
+        when 'jpeg','jpg'
+          import_image(path, source_dir, target_dir, opts)
+        end
+      end
+    end
+  end
+end
+
+# Change to project directory.
+Dir.chdir File.dirname(File.dirname(File.expand_path(__FILE__)))
+
+# Import images.
+Gallery.import("/data/download/Dropbox/SistemiModerni (1)/Communication.Marketing/New Pages for Site/Images for Gallery Page")
