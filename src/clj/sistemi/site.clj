@@ -262,11 +262,14 @@
    [:p "Welcome to a new kind of design.  With Sistemi Moderni you can personalize everything we have to offer.  Why not start with our screwless shelving solutions?  601,920 dimensions and 213 lacquering colors gives you the power to fulfill all of your shelving needs!"]
 
    (gallery-section-bookshelves)
+   (gallery-section "single-shelf-systems")
    (gallery-section "modulo")
+
+   ;; TODO wall panels
    (gallery-section "credenzas")
    (gallery-section "cupboards")
-   (gallery-section "office-cubicle-library")
    (gallery-section "sofas")
+   (gallery-section "office-cubicle-library")
 
    ;; [:h2 "Shelving"]
    ;; ;; TODO: shelving gallery here
