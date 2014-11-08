@@ -42,6 +42,30 @@ module Gallery
       
     end
 
+    def identify_image(path)
+      cmd = ['identify', '-verbose', path]
+      out = `#{cmd.shelljoin}`
+    end
+
+    def image_geometry(data)
+      #  Geometry: 1024x768+0+0
+      if data.match(/^  Geometry: (\d+)x(\d+)+/)
+        w = $1.to_i
+        h = $2.to_i
+        {width: w, height: h, aspect: w.to_f/h.to_f}
+      end
+    end
+
+    def each_image(dir)
+      Find.find(dir) do |path|
+        ext = path.match(/\.([^\.]+)$/)[1] rescue nil
+        case ext
+        when 'jpeg','jpg'
+          yield path
+        end
+      end
+    end
+
     def import(source_dir, opts={})
       opts = {max_width: 200}.merge(opts)
       target_dir = GALLERY_DIR
@@ -51,12 +75,34 @@ module Gallery
       puts "  target directory: '#{target_dir}'"
       puts "  options: #{opts.inspect}"
 
-      Find.find(source_dir) do |path|
-        ext = path.match(/\.([^\.]+)$/)[1]
-        case ext
-        when 'jpeg','jpg'
-          import_image(path, source_dir, target_dir, opts)
+      # Delete old images.
+      puts "Deleting previously imported images in '#{target_dir}'."
+      each_image(target_dir) do |path|
+        FileUtils.rm path
+      end
+
+      # Import images.
+      each_image(source_dir) do |path|
+        # CHECK PRECONDITIONS
+        # Aspect ratio must be 4/3.
+        data = identify_image path
+        g = image_geometry(data)
+        a = g[:aspect]
+        unless a == 4.0/3.0
+          puts "WARNING: Skipping image #{path} since aspect ratio (#{a}) is not 4/3."
+          next
         end
+
+        # Image must be at least 1024 wide.
+        w = g[:width]
+        min_width = 1024
+        if w < min_width
+          puts "WARNING: Skipping image #{path} since width (#{w}) is less than #{min_width}."
+          next
+        end
+
+        # Import the image.
+        import_image(path, source_dir, target_dir, opts)
       end
     end
   end
