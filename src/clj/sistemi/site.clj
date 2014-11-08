@@ -1,7 +1,8 @@
 (ns sistemi.site
   "Root url and strings table."
   (:require [sistemi.layout :as layout]
-            [util.path :as p])
+            [util.path :as p]
+            [clojure.string :as s])
   (:use [ring.util.response :only (response content-type)]))
 
 (def strings
@@ -204,14 +205,6 @@
 ;; (def gallery-sections
 ;;   ["bookshelves" "credenzas" "cupboards" "modulo" "office-cubicle-library" "sofas"])
 
-;; - use 3 columns
-;;   - make sure the pixel sizes match
-;; ? What happens on mouse over?
-;; ? What happens on click?
-;; ? Where are the large versions stored?
-;; ? How are the large versions accessed?
-;; ? How is image loading prioritized?
-
 (defn gallery-image 
   [path]
    [:img.gallery-image {:src (p/unqualify path "www/raw")
@@ -228,14 +221,50 @@
    (map gallery-image
         (-> section gallery-dir p/files))))
 
+#_ (-> "foo"
+       (java.io.File.)
+       .getName
+       )
+#_ (isa? java.io.File (java.io.File. "foo"))
+#_ (instance? java.io.File (java.io.File. "foo"))
+
+(defn item-name
+  [item]
+  (cond
+   (instance? java.io.File item) (.getName item)
+   :default item))
+
+(defn furniture-volume
+  "Calculates volume of a furntiure based on Eric's naming
+  convention. Split by '.' and multiply the first three segments that
+  are digits only."
+  [item]
+  (-> item
+      item-name
+      (s/split #"\.")
+      (->> (filter #(re-matches #"\d+" %))
+           (map #(Integer. %))
+           (apply *))))
+#_ (furniture-volume "130218sm.2400.1500.0350.gradi.dbl.b.w.jpeg")
+
+(defn gallery-section-bookshelves
+  []
+  (list
+   [:h2 "Bookshelves"]
+   (map gallery-image
+        (-> "bookshelves"
+            gallery-dir
+            p/files
+            (->> (sort-by furniture-volume))))))
+
 (def body
   [:div#gallery
    [:p "Welcome to a new kind of design.  With Sistemi Moderni you can personalize everything we have to offer.  Why not start with our screwless shelving solutions?  601,920 dimensions and 213 lacquering colors gives you the power to fulfill all of your shelving needs!"]
 
-   (gallery-section "bookshelves")
+   (gallery-section-bookshelves)
+   (gallery-section "modulo")
    (gallery-section "credenzas")
    (gallery-section "cupboards")
-   (gallery-section "modulo")
    (gallery-section "office-cubicle-library")
    (gallery-section "sofas")
 
