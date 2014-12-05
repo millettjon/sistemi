@@ -2,7 +2,8 @@
   "Root url and strings table."
   (:require [sistemi.layout :as layout]
             [util.path :as p]
-            [clojure.string :as s])
+            [clojure.string :as s]
+            [sistemi.translate :as tr])
   (:use [ring.util.response :only (response content-type)]))
 
 (def strings
@@ -67,6 +68,9 @@
         :pre-tax "pre tax"
         :tax-inc "tax inc"
         :tax "tax"
+
+        ;; GALLERY
+        :gallery {:intro "With Sistemi Moderni you can personalize everything we have to offer.  Why not start with our screwless shelving solutions?  601,920 dimensions and 213 lacquering colors gives you the power to fulfill all of your shelving needs!"}
         }
 
    :fr {;; page
@@ -205,7 +209,7 @@
 ;; (def gallery-sections
 ;;   ["bookshelves" "credenzas" "cupboards" "modulo" "office-cubicle-library" "sofas"])
 
-(defn gallery-image 
+(defn gallery-image
   [path]
    [:img.gallery-image {:src (p/unqualify path "www/raw")
                         :width "200px"}])
@@ -257,13 +261,34 @@
             p/files
             (->> (sort-by furniture-volume))))))
 
+(defn gallery-modulo-image
+  [path]
+   [:img.gallery-image {:src (p/unqualify path "www/raw")
+                        :width "630px"}])
+
+(defn gallery-section-modulo
+  []
+  (let [section "modulo"]
+    (list
+     [:h2 section]
+     [:a {:href "modulo_v1/index_local.html"}
+      (map gallery-modulo-image
+           (-> section gallery-dir p/files))])))
+
+
+
 (def body
   [:div#gallery
-   [:p "Welcome to a new kind of design.  With Sistemi Moderni you can personalize everything we have to offer.  Why not start with our screwless shelving solutions?  601,920 dimensions and 213 lacquering colors gives you the power to fulfill all of your shelving needs!"]
+
+   [:div
+    [:img.header-image {:src "graphics/gallery-intro.jpg"}]]
+
+   ;;   [:p {:style {:clear "both"}} (tr/translate :width)]
+
 
    (gallery-section-bookshelves)
    (gallery-section "single-shelf-systems")
-   (gallery-section "modulo")
+   (gallery-section-modulo)
 
    ;; TODO wall panels
    (gallery-section "credenzas")
@@ -332,5 +357,5 @@
 (defn handle
   [req]
   (-> (response (layout/standard-page head body 544))
-      ;; Set the content type explicitly since this is served from / and has no .htm extension.      
+      ;; Set the content type explicitly since this is served from / and has no .htm extension.
       (content-type "text/html; charset=utf-8")))
