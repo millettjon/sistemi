@@ -2,7 +2,7 @@
 |------------------------------------------------------------------------------------------
 |	@author ivanmoreno
 |	http://www.plus360degrees.com/
-|   iLuminosity
+|   SistemiModerni
 |------------------------------------------------------------------------------------------
 */
 
@@ -34,7 +34,7 @@ var isLoaded = false;
 
 function init() 
 {
-	browser = new PLUS360DEGREES.IdentifyBrowser( "iLuminosity" );
+	browser = new PLUS360DEGREES.IdentifyBrowser( "SistemiModerni" );
 
 	var loading = PLUS360DEGREES.DOM.div( 'loading' );
 	loading.innerHTML = "Modulo is loading<br>Thank you for your patience";
@@ -147,7 +147,7 @@ function init()
 	var buttons = [];
 	var isStats = false;
 
-	for( var i = 0; i < 7; i++ )
+	for( var i = 0; i < 8; i++ )
 	{
 		var button = PLUS360DEGREES.DOM.div( 'button'+ i );
 		button.classList.add( 'button' );
@@ -176,6 +176,9 @@ function init()
 				break;
 			case 6: 
 				button.textContent = "RETURN";
+				break;
+			case 7: 
+				button.textContent = "BACK";
 				break;
 		}
 
@@ -220,6 +223,9 @@ function init()
 					case 6:
 						isAnim1 = isAnim2 = isAnim3 = isAnim4 = false;
 						lamp.reset();
+						break;
+					case 7:
+                                                window.location.href =  '/';
 						break;
 				}
 
