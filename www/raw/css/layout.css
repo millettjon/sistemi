@@ -275,6 +275,29 @@ div#gallery {
     margin-bottom: 25px;
 }
 
+div#gallery p {
+    font-size: 32px;
+    line-height: 39px;
+    color: #FFF;
+}
+
+div#gallery h2 {
+    text-transform: uppercase;
+    color: #FFF;
+}
+
+div#gallery img.header-image {
+    margin-bottom: 15px;
+}
+
+div#gallery p.header-text {
+    font-size: 64px;
+    /* line-height:  72px; */
+    line-height:  90px;
+    text-transform: uppercase;
+    /* text-align: left; */
+}
+
 img.gallery-image {
     margin-right: 15px;
     margin-bottom: 15px;
