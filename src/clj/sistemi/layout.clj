@@ -207,11 +207,28 @@
         ;; Menu
         [:td.greybox.greyborder_r {:width "225" :style {:height "100%;" :vertical-align "top"}}
          [:ul.menu.menum (menu)]
+
          ;; Hack since the sidebar parameter used to be height.
          (when-not (number? sidebar)
            [:div {:style {:clear "left" :width "225px" :border-top "1px solid #3B3B3B" :padding-top "20px"}}
             [:div {:style {:margin-left "32px"}}
-             sidebar]])]
+             sidebar]])
+
+         ;; Award
+         [:div {:style {:background-color "#777"
+                        :width "100%"
+                        :display "inline-block"
+                        :padding-top "5px"
+                        :padding-bottom "5px"
+                        :margin-top "25px"
+                        :margin-bottom "15px"
+                        :border-radius "5px"
+                        }}
+          [:img {:src (tr/localize "/graphics/awards/2014-interior-design-boy.png")
+                 :style {:display "block"
+                         :margin-left "auto"
+                         :margin-right "auto"}
+                 }]]]
 
         ;; ----- CONTENT -----
         [:td {:colspan "3" :width "675" :style {:vertical-align "top" :text-align "justify"}}
