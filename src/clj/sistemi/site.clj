@@ -1,8 +1,8 @@
 (ns sistemi.site
   "Root url and strings table."
   (:require [sistemi.layout :as layout]
+            [sistemi.product.gallery :as g]
             [util.path :as p]
-            [clojure.string :as s]
             [sistemi.translate :as tr])
   (:use [ring.util.response :only (response content-type)]))
 
@@ -206,60 +206,22 @@
 (def head
   (seq []))
 
-;; (def gallery-sections
-;;   ["bookshelves" "credenzas" "cupboards" "modulo" "office-cubicle-library" "sofas"])
-
 (defn gallery-image
-  [path]
-   [:img.gallery-image {:src (p/unqualify path "www/raw")
+  "Returns an img element for a product image."
+  [{:keys [file]}]
+   [:img.gallery-image {:src (p/unqualify file "www/raw")
                         :width "200px"}])
 
-(defn gallery-dir
-  [dir]
-  (p/join "www/raw/gallery" dir))
-
 (defn gallery-section
-  [section]
+  "Returns an h2 element for a product category."
+  [section & opts]
   (list
    [:h2 section]
-   (map gallery-image
-        (-> section gallery-dir p/files))))
-
-#_ (-> "foo"
-       (java.io.File.)
-       .getName
-       )
-#_ (isa? java.io.File (java.io.File. "foo"))
-#_ (instance? java.io.File (java.io.File. "foo"))
-
-(defn item-name
-  [item]
-  (cond
-   (instance? java.io.File item) (.getName item)
-   :default item))
-
-(defn furniture-volume
-  "Calculates volume of a furntiure based on Eric's naming
-  convention. Split by '.' and multiply the first three segments that
-  are digits only."
-  [item]
-  (-> item
-      item-name
-      (s/split #"\.")
-      (->> (filter #(re-matches #"\d+" %))
-           (map #(Integer. %))
-           (apply *))))
-#_ (furniture-volume "130218sm.2400.1500.0350.gradi.dbl.b.w.jpeg")
-
-(defn gallery-section-bookshelves
-  []
-  (list
-   [:h2 "Bookshelves"]
-   (map gallery-image
-        (-> "bookshelves"
-            gallery-dir
-            p/files
-            (->> (sort-by furniture-volume))))))
+   (->> (apply g/get-images section opts)
+        (partition 3)  ; truncate to 3 items per row
+        (take 3)       ; truncate to 3 rows (9 items) total
+        flatten
+        (map gallery-image))))
 
 (defn gallery-modulo-image
   [path]
@@ -273,11 +235,9 @@
      [:h2 section]
      [:a {:href "modulo_v1/index_local.html"}
       (map gallery-modulo-image
-           (-> section gallery-dir p/files))])))
+           (-> section g/gallery-dir p/files))])))
 
-
-
-(def body
+(defn body []
   [:div#gallery
 
    [:div
@@ -286,15 +246,16 @@
    ;;   [:p {:style {:clear "both"}} (tr/translate :width)]
 
 
-   (gallery-section-bookshelves)
-   (gallery-section "single-shelf-systems")
+   (gallery-section :bookshelves :compare-fn g/compare-volume)
+   (gallery-section :single-shelf-systems)
    (gallery-section-modulo)
 
    ;; TODO wall panels
-   (gallery-section "credenzas")
-   (gallery-section "cupboards")
-   (gallery-section "sofas")
-   (gallery-section "office-cubicle-library")
+   (gallery-section :credenzas)
+   (gallery-section :credenzas-classic)
+   (gallery-section :cupboards)
+   (gallery-section :sofas)
+   (gallery-section :office-cubicle-library)
 
    ;; [:h2 "Shelving"]
    ;; ;; TODO: shelving gallery here
@@ -356,6 +317,6 @@
 
 (defn handle
   [req]
-  (-> (response (layout/standard-page head body 544))
+  (-> (response (layout/standard-page head (body) 544))
       ;; Set the content type explicitly since this is served from / and has no .htm extension.
       (content-type "text/html; charset=utf-8")))
