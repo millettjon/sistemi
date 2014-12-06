@@ -284,6 +284,7 @@ div#gallery p {
 div#gallery h2 {
     text-transform: uppercase;
     color: #FFF;
+    font-weight: normal;
 }
 
 div#gallery img.header-image {
