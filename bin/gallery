@@ -4,6 +4,20 @@ require 'find'
 require 'fileutils'
 require 'shellwords'
 
+CONF = {
+  default: {
+    enforce_aspect: true,
+    width: 200
+  },
+
+  # For the modulo, use a width of 630 px and don't worry about the aspect ratio.
+  "Modulo" => {
+    enforce_aspect: false,
+    width: 630
+  }
+}
+
+
 module Gallery
 
   GALLERY_DIR="www/raw/gallery"
@@ -33,7 +47,7 @@ module Gallery
       File.exists? tdir or FileUtils.mkdir tdir
 
       # Import the image, scaling as necessary.
-      size = opts[:max_width]
+      size = opts[:width]
       cmd = ['convert',
              image,
              '-resize', "#{size}x#{size}>",
@@ -66,14 +80,12 @@ module Gallery
       end
     end
 
-    def import(source_dir, opts={})
-      opts = {max_width: 200}.merge(opts)
+    def import(source_dir, p_opts={})
       target_dir = GALLERY_DIR
 
       puts "Importing images into gallery from dropbox."
       puts "  source directory: '#{source_dir}'"
       puts "  target directory: '#{target_dir}'"
-      puts "  options: #{opts.inspect}"
 
       # Delete old images.
       puts "Deleting previously imported images in '#{target_dir}'."
@@ -83,14 +95,22 @@ module Gallery
 
       # Import images.
       each_image(source_dir) do |path|
+        # Determine directory specific options.
+        dir_opts = CONF[File.basename(File.dirname(path))] || {}
+        opts = CONF[:default].merge(dir_opts).merge(p_opts)
+        puts "  options: #{opts.inspect}"
+
         # CHECK PRECONDITIONS
         # Aspect ratio must be 4/3.
         data = identify_image path
         g = image_geometry(data)
         a = g[:aspect]
-        unless a == 4.0/3.0
-          puts "WARNING: Skipping image #{path} since aspect ratio (#{a}) is not 4/3."
-          next
+
+        if opts[:enforce_aspect]
+          unless a == 4.0/3.0
+            puts "WARNING: Skipping image #{path} since aspect ratio (#{a}) is not 4/3."
+            next
+          end
         end
 
         # Image must be at least 1024 wide.
