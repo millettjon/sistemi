@@ -122,7 +122,7 @@
                  [pathetic "0.5.1"]
 
                  ;; REPL related
-                 [cider/cider-nrepl "0.7.0"]
+                 [cider/cider-nrepl "0.8.2-SNAPSHOT"]
 
                  ;; For proper handling of internationalized chars in url path segments.
                  [com.google.gdata/core "1.47.1" :exclusions [com.google.code.findbugs/jsr305]]]
