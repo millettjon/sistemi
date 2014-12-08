@@ -113,3 +113,11 @@
        ["/foo/bar/baz" "/foo/bar/baz"] ""
        ["/foo/bar/baz/qux" "/foo/bar"] "baz/qux"
        ["/foo/bar/baz" "/foo/bar/qux"] "baz"))
+
+(deftest test-unqualify
+  (are [a b c] (= (str (sibling a b)) c)
+       "a" "b"        "b"
+       "/a" "b"       "/b"
+       "a/b" "c"      "a/c"
+       "/a/b" "c"     "/a/c"
+       "/a/b" "c/d"   "/a/c/d"))

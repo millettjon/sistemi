@@ -161,6 +161,13 @@
                path
                (:parts parent)))))
 
+(defn sibling
+  "Returns the sibling of a path."
+  [path sib]
+  (let [path (new-path path)
+        sib (new-path sib)]
+    (join (parent path) sib)))
+
 (defn to-file
   "Calls join on the arguments and the coerces the result to a File."
   [part & parts] (File. ^String (to-str (apply join part parts))))
