@@ -47,6 +47,11 @@ wget -c -O bin/lein https://raw.github.com/technomancy/leiningen/stable/bin/lein
 chmod +x bin/lein
 
 # ---------------------------------------------------
+# Image processing
+# ---------------------------------------------------
+ensure_package imagemagick
+
+# ---------------------------------------------------
 # File permissions
 # ---------------------------------------------------
 for DIR in .lein .m2 var/target; do
