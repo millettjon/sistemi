@@ -1,7 +1,7 @@
 (ns sistemi.product.gallery
   (:require [util.path :as p]
             [clojure.string :as s]
-            [clojure.edn :as edn]
+            [util.edn :as edn]
             [clojure.core.cache :as cache]))
 
 (def ^:private image-cache
@@ -28,14 +28,47 @@
   [category]
   (p/join root-dir (name category)))
 
+(defmulti filename-data
+  "Returns metadata from file name."
+  :type)
+
+(defmethod filename-data :default
+  [file] nil)
+
+(defn item-name
+  [item]
+  (cond
+   (instance? java.io.File item) (.getName item)
+   :default item))
+
+(defn furniture-dimensions
+  "Gets dimensions of an item based on Eric's naming
+  convention. Split by '.' and map the first three segments that
+  are digits only to length, height, and depth converting from mm to cm."
+  [file]
+  (prn "file" file)
+  (let [parts (-> file
+                  item-name
+                  (s/split #"\."))
+        numbers (->> parts
+                     (filter #(re-matches #"\d+" %))
+                     ;; convert from mm to cm
+                     (map #(/ (Integer. %) 10)))]
+    (zipmap [:width :height :depth] numbers)))
+
+#_ (furniture-dimensions "130218sm.2400.1500.0350.gradi.dbl.b.w.jpeg")
+
+(defmethod filename-data :bookshelf
+  [{:keys [file]}]
+  {:params (furniture-dimensions file)})
+
 (defn image-map
   "Returns a map of image data for an image file."
-  [file]
-  (let [edn-file (p/new-path (str file ".edn"))
-        edn-data (or (when (p/exists? edn-file)
-                       (-> edn-file p/to-file slurp edn/read-string))
-                     {})]
-    (merge default-data edn-data {:file file})))
+  [file default-data]
+  (let [m (merge {:file file} default-data)
+        m (merge m (filename-data m))
+        image-data (edn/slurp (p/new-path (str file ".edn")))]
+    (merge m image-data)))
 
 (defn compare-priority
   "Sort with higher priorities first."
@@ -45,10 +78,11 @@
 (defn get-images*
   "Returns a seq of images for category."
   [category & {:keys [compare-fn]}]
-  (let [images (filter #(image-extensions (p/extension %))
-                       (-> category name gallery-dir p/files))
-        images (map image-map images)
-        ]
+  (let [dir (-> category name gallery-dir)
+        default-data (edn/slurp (p/join dir "default.edn"))
+        images (filter #(image-extensions (p/extension %))
+                       (p/files dir))
+        images (map #(image-map % default-data) images)]
     (->> images
          (sort (or compare-fn compare-priority)))))
 #_ (get-images* :sofas)
@@ -62,12 +96,6 @@
             (swap! image-cache #(cache/miss % category (apply get-images* category opts))))]
     (clojure.core/get C category)))
 
-(defn item-name
-  [item]
-  (cond
-   (instance? java.io.File item) (.getName item)
-   :default item))
-
 (defn furniture-volume
   "Calculates volume of a furntiure based on Eric's naming
   convention. Split by '.' and multiply the first three segments that
@@ -80,6 +108,7 @@
            (map #(Integer. %))
            (apply *))))
 #_ (furniture-volume {:file (java.io.File. "130218sm.2400.1500.0350.gradi.dbl.b.w.jpeg")})
+;; width, height, depth in mm
 
 (defn compare-volume
   "Sort with lower volumes first."

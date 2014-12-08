@@ -4,7 +4,8 @@
             [sistemi.product.gallery :as g]
             [util.path :as p]
             [sistemi.translate :as tr])
-  (:use [ring.util.response :only (response content-type)]))
+  (:use [ring.util.response :only (response content-type)]
+        [util.map :only (map-vals)]))
 
 (def strings
   {:en {;; page
@@ -206,11 +207,21 @@
 (def head
   (seq []))
 
-(defn gallery-image
+
+(defmulti gallery-image
   "Returns an img element for a product image."
+  :type)
+
+(defmethod gallery-image :default
   [{:keys [file]}]
    [:img.gallery-image {:src (p/unqualify file "www/raw")
                         :width "200px"}])
+
+(defmethod gallery-image :bookshelf
+  [{:keys [file params]}]
+  [:a {:href (tr/localize "/bookcase.htm" {:query (map-vals str params)})}
+   [:img.gallery-image {:src (p/unqualify file "www/raw")
+                        :width "200px"}]])
 
 (defn gallery-section
   "Returns an h2 element for a product category."
