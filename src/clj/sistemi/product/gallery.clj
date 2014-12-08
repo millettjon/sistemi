@@ -2,7 +2,8 @@
   (:require [util.path :as p]
             [clojure.string :as s]
             [util.edn :as edn]
-            [clojure.core.cache :as cache]))
+            [clojure.core.cache :as cache]
+            [util.map :as map]))
 
 (def ^:private image-cache
   "Cache product images files for 1 minute."
@@ -41,26 +42,45 @@
    (instance? java.io.File item) (.getName item)
    :default item))
 
-(defn furniture-dimensions
+(defn mm->cm
+  "Convert mm (string) to cm."
+  [s]
+  (/ (Integer. s) 10))
+
+(defn bookcase-dimensions
   "Gets dimensions of an item based on Eric's naming
   convention. Split by '.' and map the first three segments that
   are digits only to length, height, and depth converting from mm to cm."
   [file]
-  (prn "file" file)
   (let [parts (-> file
                   item-name
                   (s/split #"\."))
         numbers (->> parts
                      (filter #(re-matches #"\d+" %))
-                     ;; convert from mm to cm
-                     (map #(/ (Integer. %) 10)))]
+                     (map mm->cm))]
     (zipmap [:width :height :depth] numbers)))
+#_ (bookcase-dimensions "130218sm.2400.1500.0350.gradi.dbl.b.w.jpeg")
 
-#_ (furniture-dimensions "130218sm.2400.1500.0350.gradi.dbl.b.w.jpeg")
-
-(defmethod filename-data :bookshelf
+(defmethod filename-data :bookcase
   [{:keys [file]}]
-  {:params (furniture-dimensions file)})
+  {:params (bookcase-dimensions file)})
+
+;; Format:  dateauthor.type.width-mm.depth-mm.color-name.(color-ral|V).quantity
+;;   color-ral implies laquer
+;;   V - valchromat
+;; Examples:
+;;   141103SM.Shelf.2000.0450.Wh.9010.5.jpg       # laquer ral 9010
+;;   141102SM.Shelf.2000.0450.LtGrey.V.5.jpg      # valchromat
+(defmethod filename-data :shelf
+  [{:keys [file]}]
+  (let [parts (-> file
+                  item-name
+                  (s/split #"\."))]
+    {:params {:width (mm->cm (parts 2))
+              :depth (mm->cm (parts 3))
+              :quantity (parts 6)}}))
+#_ (filename-data {:file "141103SM.Shelf.2000.0450.Wh.9010.5.jpg"
+                   :type :shelf})
 
 (defn image-map
   "Returns a map of image data for an image file."
@@ -68,7 +88,7 @@
   (let [m (merge {:file file} default-data)
         m (merge m (filename-data m))
         image-data (edn/slurp (p/new-path (str file ".edn")))]
-    (merge m image-data)))
+    (map/deep-merge m image-data)))
 
 (defn compare-priority
   "Sort with higher priorities first."
@@ -85,7 +105,7 @@
         images (map #(image-map % default-data) images)]
     (->> images
          (sort (or compare-fn compare-priority)))))
-#_ (get-images* :sofas)
+#_ (get-images* :bookshelves)
 
 (defn get-images
   "Returns a cached seq of images for category."
@@ -101,6 +121,8 @@
   convention. Split by '.' and multiply the first three segments that
   are digits only."
   [{:keys [file] :as item}]
+  (prn "ITEM" item)
+  (prn "FILE" file)
   (-> file
       item-name
       (s/split #"\.")

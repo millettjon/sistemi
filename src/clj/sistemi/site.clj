@@ -217,9 +217,15 @@
    [:img.gallery-image {:src (p/unqualify file "www/raw")
                         :width "200px"}])
 
-(defmethod gallery-image :bookshelf
+(defmethod gallery-image :bookcase
   [{:keys [file params]}]
   [:a {:href (tr/localize "/bookcase.htm" {:query (map-vals str params)})}
+   [:img.gallery-image {:src (p/unqualify file "www/raw")
+                        :width "200px"}]])
+
+(defmethod gallery-image :shelf
+  [{:keys [file params]}]
+  [:a {:href (tr/localize "/shelf.htm" {:query (map-vals str params)})}
    [:img.gallery-image {:src (p/unqualify file "www/raw")
                         :width "200px"}]])
 
