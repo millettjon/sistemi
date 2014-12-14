@@ -78,9 +78,13 @@
                   (s/split #"\."))]
     {:params {:width (mm->cm (parts 2))
               :depth (mm->cm (parts 3))
+;;              :finish
               :quantity (parts 6)}}))
 #_ (filename-data {:file "141103SM.Shelf.2000.0450.Wh.9010.5.jpg"
                    :type :shelf})
+;; ? How to specify finish?
+;; ? How to specify color?
+;; ? How to validate the color and finish etc?
 
 (defn image-map
   "Returns a map of image data for an image file."
@@ -121,8 +125,6 @@
   convention. Split by '.' and multiply the first three segments that
   are digits only."
   [{:keys [file] :as item}]
-  (prn "ITEM" item)
-  (prn "FILE" file)
   (-> file
       item-name
       (s/split #"\.")

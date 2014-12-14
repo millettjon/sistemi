@@ -213,21 +213,24 @@
   :type)
 
 (defmethod gallery-image :default
-  [{:keys [file]}]
-   [:img.gallery-image {:src (p/unqualify file "www/raw")
-                        :width "200px"}])
+  [{:keys [type file] :as item}]
+  ;; (prn "ITEM" item)
+  (let [img-thumb (p/unqualify file "www/raw")
+        img-large img-thumb]
+    [:a {:href (tr/localize "/development.htm" {:query {:type (name type)
+                                                        :image (str img-large)
+                                                        }})}
+     [:img.gallery-image {:src img-thumb}]]))
 
 (defmethod gallery-image :bookcase
   [{:keys [file params]}]
   [:a {:href (tr/localize "/bookcase.htm" {:query (map-vals str params)})}
-   [:img.gallery-image {:src (p/unqualify file "www/raw")
-                        :width "200px"}]])
+   [:img.gallery-image {:src (p/unqualify file "www/raw")}]])
 
 (defmethod gallery-image :shelf
   [{:keys [file params]}]
   [:a {:href (tr/localize "/shelf.htm" {:query (map-vals str params)})}
-   [:img.gallery-image {:src (p/unqualify file "www/raw")
-                        :width "200px"}]])
+   [:img.gallery-image {:src (p/unqualify file "www/raw")}]])
 
 (defn gallery-section
   "Returns an h2 element for a product category."
@@ -257,79 +260,17 @@
 (defn body []
   [:div#gallery
 
-   [:div
-    [:img.header-image {:src "graphics/gallery-intro.jpg"}]]
-
-   ;;   [:p {:style {:clear "both"}} (tr/translate :width)]
-
+   [:div [:img.header-image {:src "graphics/gallery-intro.jpg"}]]
 
    (gallery-section :bookshelves :compare-fn g/compare-volume)
    (gallery-section :single-shelf-systems)
    (gallery-section-modulo)
-
-   ;; TODO wall panels
    (gallery-section :credenzas)
    (gallery-section :credenzas-classic)
    (gallery-section :cupboards)
    (gallery-section :sofas)
    (gallery-section :office-cubicle-library)
 
-   ;; [:h2 "Shelving"]
-   ;; ;; TODO: shelving gallery here
-   ;; ;; TODO: scroll down
-
-   ;; [:p "Do you have a shelving support system and do you need a way to personalize the shelves?  Do you simply need panels colored and cut to a specific dimensions for a particular project?  Try our single shelf solution!"]
-
-   ;; [:h2 "Single Shelves"]
-   ;; ;; TODO: single shelf gallery here
-   ;; ;; TODO: scroll down
-
-   ;; [:p "Have a look at other products we have in development right now.  Please let us know what you like by either clicking on the  by each image or sending us a message by clicking on the ."]
-
-   ;; [:h2 "Modulo Wall Panels"]
-   ;; ;; TODO: modulo gallery
-
-   ;; [:h2 "Lamps"]
-   ;; [:p "Our patent pending lamp design is nearing launch!"]
-
-   ;; [:h2 "Wall Panels"]
-
-   ;; [:h2 "Tables"]
-
-   ;; [:h2 "Nata Sofas"]
-
-   ;; Map over sections?
-   ;; - attach text translations
-   ;; - specify order
-   ;; (map gallery-image
-   ;;      ["130102SM.1200.2400.0300.Ovale.Library.jpeg"
-   ;;       "130108SM.1200.2400.0300.Ovale.Office.jpeg"
-   ;;       "130215SM.2100.1500.0350.Claudo.6.jpeg"
-   ;;       "130217SM.2000.0760.0350.Credens.4.B.Blu.jpeg"
-   ;;       "130217SM.2000.0760.0350.Credens.4.jpeg"
-   ;;       "130217SM.2000.0760.0350.Credens.4.R.Grey.jpeg"
-   ;;       "130217SM.2000.0760.0350.Credens.4.R.Grey.Oil.jpeg"
-   ;;       "130218SM.2400.1500.0350.Gradi.Dbl.B.jpeg"
-   ;;       "130218SM.2400.1500.0350.Gradi.Dbl.B.W.jpeg"
-   ;;       "130218SM.2400.1500.0350.Gradi.Val.Y.Grey.Oil.jpeg"
-   ;;       "130219SM.2100.1500.0350.Claudo.6.Blu.Y.W.jpeg"
-   ;;       "130219SM.2100.1500.0350.Claudo.6.O.B.jpeg"
-   ;;       "130219SM.2400.1500.0350.Gradi.Val.O.R.Oil.jpeg"
-   ;;       "130220SM.0610.2100.0350.Claudo.6.Val.Gr.B.Oil.jpeg"
-   ;;       "130220SM.2000.0760.0350.Credens.4.R.B.Oil.jpeg"
-   ;;       "130221SM.2000.0760.0350.Credens.4.B.Blu.jpeg"
-   ;;       "130319.SM.Stools.3.jpeg"
-   ;;       "130424SM.1200.2400.0300.Ovale.Biblioteque.R.jpeg"
-   ;;       "130426SM.SofaNata.Br.Bl.R.jpeg"
-   ;;       "130426SM.SofaNata.V.Blegs.LGback.1.jpeg"
-   ;;       "130426SM.SofaNata.V.BluLegs.Yback.jpeg"
-   ;;       "130426SM.SofaNata.V.LGLegs.Gback.jpeg"
-   ;;       "130426SM.SofaNata.V.LGLegs.Yback.jpeg"
-   ;;       "130426SM.SofaNata.V.RLegs.Blback.jpeg"
-   ;;       "131209EG-sofa-blue-velvet.jpeg"
-   ;;       "131212EG-sofa-blue-velvet.jpeg"
-   ;;       "131221EG-sofa-blue-velvet.jpeg"
-   ;;       ])
    ])
 
 (defn handle
