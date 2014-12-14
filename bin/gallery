@@ -7,13 +7,13 @@ require 'shellwords'
 CONF = {
   default: {
     enforce_aspect: true,
-    width: 200
+    sizes: [200, 630]
   },
 
   # For the modulo, use a width of 630 px and don't worry about the aspect ratio.
   "Modulo" => {
     enforce_aspect: false,
-    width: 630
+    sizes: [630]
   }
 }
 
@@ -33,12 +33,6 @@ module Gallery
     def import_image(image, source_dir, target_dir, opts)
       rpath = image.gsub(source_dir + "/", "")  # relative path.
       trpath = munge(rpath)                     # target relative path
-
-      # Note: Don't bother cleaning up the names now since:
-      # a) they are useful to Eric
-      # b) it ensures that the filename is unique
-
-      # Get the 
       puts "Importing image: #{rpath} -> #{trpath}."
 
       # Create the target directory if necessary.
@@ -46,14 +40,22 @@ module Gallery
       tdir = File.dirname(tpath)
       File.exists? tdir or FileUtils.mkdir tdir
 
-      # Import the image, scaling as necessary.
-      size = opts[:width]
-      cmd = ['convert',
-             image,
-             '-resize', "#{size}x#{size}>",
-             tpath]
-      system(cmd.shelljoin)
-      
+      # Import the full resolution version.
+      FileUtils.cp image, tpath
+
+      # Create the scaled vesions.
+      opts[:sizes].each do |size|
+        sdir = tdir + "/#{size}"
+        File.exists? sdir or FileUtils.mkdir sdir
+        spath = sdir + "/" + File.basename(tpath)
+
+        # Scale the image.
+        cmd = ['convert',
+               image,
+               '-resize', "#{size}x#{size}>",
+               spath]
+        system(cmd.shelljoin)
+      end
     end
 
     def identify_image(path)
@@ -98,7 +100,7 @@ module Gallery
         # Determine directory specific options.
         dir_opts = CONF[File.basename(File.dirname(path))] || {}
         opts = CONF[:default].merge(dir_opts).merge(p_opts)
-        puts "  options: #{opts.inspect}"
+        # puts "  options: #{opts.inspect}"
 
         # CHECK PRECONDITIONS
         # Aspect ratio must be 4/3.

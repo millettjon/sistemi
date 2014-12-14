@@ -207,6 +207,19 @@
 (def head
   (seq []))
 
+(defn scaled-image
+  [px file]
+  (let [base (-> file (p/unqualify "www/raw") (p/parent))
+        name (p/name file)]
+    (str (p/join base px name))))
+
+(defn img-thumb
+  [file]
+  (scaled-image "200" file))
+
+(defn img-large
+  [file]
+  (scaled-image "630" file))
 
 (defmulti gallery-image
   "Returns an img element for a product image."
@@ -215,22 +228,19 @@
 (defmethod gallery-image :default
   [{:keys [type file] :as item}]
   ;; (prn "ITEM" item)
-  (let [img-thumb (p/unqualify file "www/raw")
-        img-large img-thumb]
-    [:a {:href (tr/localize "/development.htm" {:query {:type (name type)
-                                                        :image (str img-large)
-                                                        }})}
-     [:img.gallery-image {:src img-thumb}]]))
+  [:a {:href (tr/localize "/development.htm" {:query {:type (name type)
+                                                      :image (img-large file)}})}
+   [:img.gallery-image {:src (img-thumb file)}]])
 
 (defmethod gallery-image :bookcase
   [{:keys [file params]}]
   [:a {:href (tr/localize "/bookcase.htm" {:query (map-vals str params)})}
-   [:img.gallery-image {:src (p/unqualify file "www/raw")}]])
+   [:img.gallery-image {:src (img-thumb file)}]])
 
 (defmethod gallery-image :shelf
   [{:keys [file params]}]
   [:a {:href (tr/localize "/shelf.htm" {:query (map-vals str params)})}
-   [:img.gallery-image {:src (p/unqualify file "www/raw")}]])
+   [:img.gallery-image {:src (img-thumb file)}]])
 
 (defn gallery-section
   "Returns an h2 element for a product category."
