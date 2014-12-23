@@ -28,7 +28,7 @@
     (.add (LocalDate. "2014-12-25"))))
 
 (def calendar
-  (DefaultHolidayCalendar. holidays (LocalDate. "2013-12-01") (LocalDate. "2014-12-31")))
+  (DefaultHolidayCalendar. holidays (LocalDate. "2013-12-01") (LocalDate. "2030-12-31")))
 
 ;; Register the holidays, any calculator with name "FR" asked from now
 ;; on will receive an IMMUTABLE reference to this calendar.
