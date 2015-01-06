@@ -13,8 +13,7 @@
         [sistemi translate layout]))
 
 (def names
-  {:es "estantaría"
-   :fr "etagères"})
+  {})
 
 (def strings
   {:en {;;:title "Vision Of Modern Furniture : High Design, Resonably Priced, Sustainably."
