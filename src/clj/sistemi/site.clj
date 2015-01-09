@@ -278,7 +278,7 @@
    (gallery-section :credenzas)
    (gallery-section :credenzas-classic)
    (gallery-section :cupboards)
-   (gallery-section :natas)
+   (gallery-section :nata)
    (gallery-section :oasi)
 
    ])
