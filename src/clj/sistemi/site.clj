@@ -278,7 +278,7 @@
    (gallery-section :credenzas)
    (gallery-section :credenzas-classic)
    (gallery-section :cupboards)
-   (gallery-section :sofas)
+   (gallery-section :natas)
    (gallery-section :office-cubicle-library)
 
    ])

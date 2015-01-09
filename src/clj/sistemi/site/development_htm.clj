@@ -20,7 +20,7 @@ If you want to find out how to get your hands on this product, click on the cont
 
 To find out just how personalized Cupboard can be, give us a ring by clicking on the contact button below!
 "}
-        :sofa {:copy "The Nata sofa is truly amazing.  Like everything else we do, assembly of Nata is without fasteners.  But this time, you get to further personalize your furniture by choosing just the right fabric for your seating pleasure.  We have successfully prototyped her in New York.  There is still some work we have to do in order to bring Nata to Europe.  Perhaps you would like to be a part of that effort.<br><br>
+        :nata {:copy "The Nata sofa is truly amazing.  Like everything else we do, assembly of Nata is without fasteners.  But this time, you get to further personalize your furniture by choosing just the right fabric for your seating pleasure.  We have successfully prototyped her in New York.  There is still some work we have to do in order to bring Nata to Europe.  Perhaps you would like to be a part of that effort.<br><br>
 
 If you find Nata to be exactly the solution you were looking for, reach out to us by clicking on the contact button below.  We would love to make Nata especially for you on this continent!
 "}
