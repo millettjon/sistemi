@@ -279,7 +279,7 @@
    (gallery-section :credenzas-classic)
    (gallery-section :cupboards)
    (gallery-section :natas)
-   (gallery-section :office-cubicle-library)
+   (gallery-section :oasi)
 
    ])
 
