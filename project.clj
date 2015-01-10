@@ -107,7 +107,7 @@
                  ;; [flatland/ordered "1.5.2"] ; TODO use flatland/ordered as it is newer.
                  [ordered "1.3.2"]
                  [com.google.guava/guava "17.0"]
-                 [org.clojure/tools.namespace "0.2.4"]
+                 [org.clojure/tools.namespace "0.2.5"]
 
                  ;; event driven
                  [http-kit "2.1.18"]
@@ -122,7 +122,7 @@
                  [pathetic "0.5.1"]
 
                  ;; REPL related
-                 [cider/cider-nrepl "0.8.2-SNAPSHOT"]
+                 [cider/cider-nrepl "0.8.2"]
 
                  ;; For proper handling of internationalized chars in url path segments.
                  [com.google.gdata/core "1.47.1" :exclusions [com.google.code.findbugs/jsr305]]]
