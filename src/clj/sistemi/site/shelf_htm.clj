@@ -25,7 +25,11 @@
         :color "Color"
         :quantity "Quantity"
         :displayed "displayed"
-        }
+        :instructions "If you need to spice up your existing shelving system, our single
+shelves are the perfect solution.  Or maybe you just need some panels
+painted for a special project.  Create your solution by using the
+dropdown menus above."}
+
    :es {}
 
    :it {;:title "TODO: Italian"
@@ -84,6 +88,11 @@
         [:style "#shelf-form #color {width: 90px;}"]
         [:style "#shelf-form #submit {margin-top: 20px;}"]
         ]))
+
+(defn footer
+  []
+  [:div {:style {:color "#DDD" :font-size "15px"}}
+   (tr/translate :instructions)])
 
 (defn body
   [{{cart :cart} :session :as req}]
@@ -311,4 +320,4 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form (:shelf sf/cart-items) (:params req) (body req)) 544)))
+  (response (standard-page (head) (f/with-form (:shelf sf/cart-items) (:params req) (body req)) 544 {:footer (footer)})))

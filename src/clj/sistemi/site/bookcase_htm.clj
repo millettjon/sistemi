@@ -24,7 +24,12 @@
         :height "Height"
         :finish "Finish"
         :color "Color"
-        :quantity "Quantity"}
+        :quantity "Quantity"
+        :instructions "Did you need a high end bookcase that fits right, matches the colors
+in your room and assembles easily?  Biblio is the answer to your
+dreams.  Build your personalized Biblio by using the dropdown menus
+above."}
+
    :es {}
    :it {;; :title ""
         ;; :spin "Per ruotare l'oggetto,‭ ‬muovere il mouse mantenendone premuto il pulsante"
@@ -83,6 +88,11 @@
         [:style "#shelf-form #color {width: 90px;}"]
         [:style "#shelf-form #submit {margin-top: 20px;}"]
         ]))
+
+(defn footer
+  []
+  [:div {:style {:color "#DDD" :font-size "15px"}}
+   (tr/translate :instructions)])
 
 (defn body
   [{{cart :cart} :session :as req}]
@@ -318,4 +328,4 @@
 
 (defn handle
   [req]
-  (response (standard-page (head) (f/with-form (:bookcase sf/cart-items) (:params req) (body req)) 520)))
+  (response (standard-page (head) (f/with-form (:bookcase sf/cart-items) (:params req) (body req)) 520 {:footer (footer)})))
