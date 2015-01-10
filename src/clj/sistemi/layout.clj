@@ -107,7 +107,7 @@
    ])
 
 (defn standard-page
-  [head body sidebar]
+  [head body sidebar & [{:keys [:footer] :as opts}]]
   (doctype-html5
    (hcp/html
     [:html {:lang (req/*req* :locale)}
@@ -247,7 +247,10 @@
           [:div#address "SISTEMI MODERNI"
            [:br] "St. Martin d&rsquo;Uriage, France"
            [:br] "M. +33 6 09 46 92 00"]
-          [:div#copyright (interpose [:br] (tr/translate :copyright))]]]]]]])))
+          [:div#copyright (interpose [:br] (tr/translate :copyright))]]]
+        [:td {:colspan 3
+              :style {:padding-left "25px"}} footer]
+        ]]]])))
 
 (defn doctype-xhtml-strict
  [html]
