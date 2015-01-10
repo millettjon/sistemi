@@ -384,7 +384,7 @@ function drawBookcase(bookcase, container) {
 
   // Setup renderer.
   renderer = useWebGL ?
-    new THREE.WebGLRenderer( { antialias: true } ) :
+    new THREE.WebGLRenderer( { antialias: true, alpha: true } ) :
     new THREE.CanvasRenderer( { antialias: true } );
     //new THREE.SVGRenderer( { antialias: true } );
   renderer.setSize( rWidth, rHeight );
