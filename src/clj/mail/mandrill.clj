@@ -45,7 +45,8 @@
 ;; - Setup an email alias to handle responses: support
 ;; - Use a future to send and log with a timeout.
 ;; - Test to test sending a message (how to capture message? external mail receiver? gmail?)
-;; - Send mail using html.
+;; - Inline images into template.
+;;   - http://stackoverflow.com/questions/2996514/inline-images-in-email-using-javamail
 ;; - Handle mandrill outages by buffering to a persistent queueing mechanism.
 ;;   - message queue
 ;;   - use clojurewerkz/mailer to send to local mail server that sends to Mandril via SMTP/TLS
@@ -142,11 +143,15 @@ ______________________________________________________________________
 (defn qualify-href
   [n] (update-in n [:attrs :href] #(url/qualify % base-url)))
 
+(defn qualify-src
+  [n] (update-in n [:attrs :src] #(url/qualify % base-url)))
+
 (defn qualify
   [node]
   (html/at node
            [:a] qualify-href
-           [:link] qualify-href))
+           [:link] qualify-href
+           [:img] qualify-src))
 
 (defn a-target-blank
   [node]
