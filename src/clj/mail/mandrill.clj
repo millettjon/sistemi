@@ -2,7 +2,6 @@
   (:require [app.config :as c]
             [clj-mandrill.core :as m]
             [schema.core :as s]
-            [schema.core :as sm]
             [taoensso.timbre :as log]
             [net.cgrand.enlive-html :as html]
             [sistemi.layout :as lay]
@@ -11,7 +10,8 @@
             [sistemi.translate :as tr]
             [sistemi.order :as o]
             [sistemi.registry :as registry]
-            [www.url :as url])
+            [www.url :as url]
+            [clojure.string :as str])
   (:refer-clojure :exclude [send]))
 
 ;; REFENCES
@@ -43,7 +43,6 @@
 ;; TODO
 ;; - Log the mail response.
 ;; - Setup an email alias to handle responses: support
-;; - Translate the subject and support international chars.
 ;; - Use a future to send and log with a timeout.
 ;; - Test to test sending a message (how to capture message? external mail receiver? gmail?)
 ;; - Send mail using html.
@@ -94,7 +93,7 @@
       :status
       (contains? #{"sent" "queued" "scheduled"})))
 
-(sm/defn ^:always-validate send
+(s/defn ^:always-validate send
   "Sends a mail message using Mandrill."
   [{:as message {:keys [name email]} :from} :- Message]
   (let [message (-> message
@@ -183,17 +182,17 @@ ______________________________________________________________________
         render             ; Render back to html.
 
         css/inline
-        lay/doctype-xhtml-strict
-        )))
+        lay/doctype-xhtml-strict)))
 
 (defn order-confirmation-subject
-  [order]
-  (str "SistemiModerni - Order #" (:id order)))
+  [{:keys [id locale] :as order}]
+  (tr/with-page locale "/order"
+    (str (str/capitalize (tr/translate :order)) " #" (:id order))))
 
 (defn send-order-confirmation
   "Sends an order confirmation email."
   [order]
-  (let [message {:from {:email (c/conf :email :orders)}
+  (let [message {:from {:email (c/conf :email :orders) :name "Sistemi Moderni"}
                  :to [(select-keys (:contact order) [:name :email])]
                  :subject (order-confirmation-subject order)
                  :html (page->email (:locale order)

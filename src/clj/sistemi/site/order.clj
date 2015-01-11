@@ -3,19 +3,21 @@
             [sistemi.translate :as tr]
             [util.frinj :as fu]))
 
+(def names
+  {})
+
 (def strings
-  {:en {:payment "payment"
+  {:en {:order "order"
+        :payment "payment"
         :summary "Order Summary"
         :sub-total "Subtotal"
         :total "Total"}
-   :fr {:summary "Récapitulatif de Commande"
+   :fr {:order "commande"
+        :summary "Récapitulatif de Commande"
         :sub-total "Sous-total"
         :total "Total"}
    :it {}
    :es {}})
-
-(def names
-  {:es "orden"})
 
 (defn summary
   "Returns html for the order summary block."
