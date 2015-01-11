@@ -1,2 +1,3 @@
 {:host "www"
- :domain "sistemimoderni.com"}
+ :domain "sistemimoderni.com"
+ :ocsp true}
