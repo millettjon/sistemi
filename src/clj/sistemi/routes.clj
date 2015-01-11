@@ -38,8 +38,6 @@
      wrap-stacktrace          ; catch exceptions and 
      wrap-exception-response  ; handle responses thrown as exceptions (e.g., 4xx errors)
 
-     ;; TODO: gzip?  (see cemerick's ring solution)
-     ;; TODO: cache control (http://groups.google.com/group/ring-clojure/browse_thread/thread/cc8f72a15ae7fbc3)
      wrap-params              ; parse form and query string params
      wrap-keyword-params      ; keywordize the params map
 
