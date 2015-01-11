@@ -49,6 +49,10 @@ ul.side-nav {
 /* -------------------------------------------------- */
 /* CHANGES TO MAKE BLOG BLACK FOREGROUND AND WHITE BACKGROUND */
 
+.article-image {
+    width: 625px;
+}
+
 div#content {
     margin: 0px;
     padding: 25px;
