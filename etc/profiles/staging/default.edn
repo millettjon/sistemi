@@ -1,2 +1,3 @@
 {:host "www"
- :domain "sm1.in"}
+ :domain "sm1.in"
+ :ocsp true}
