@@ -28,10 +28,10 @@
                                   If you want to find out how to get your hands on this product, click on the contact button below!"}
 
         :cupboard {:copy "We are so busy that we have not even taken a moment to come up with a catchy name for this
-                          innovative storage solution.  Just like Credenza, Cupboard uses our patent pending connection
+                          innovative storage solution.  Just like Credenza, Armoire uses our patent pending connection
                           system to hide the magic of its easy assembly.  The choices are endless.
                           <br><br>
-                          To find out just how personalized Cupboard can be, give us a ring by clicking on the contact button below!"}
+                          To find out just how personalized Armoire can be, give us a ring by clicking on the contact button below!"}
 
         :nata {:copy "The Nata sofa is truly amazing.  Like everything else we do, assembly of Nata is without fasteners.  But this
                       time, you get to further personalize your furniture by choosing just the right fabric for your seating pleasure.
@@ -96,7 +96,7 @@
         image (:image p)]
     [:div {:style {:margin-left "25px" :margin-top "25px" :width "625px" :color "#DDD"}}
      [:img {:src image :style {:width "625px" :margin-bottom "15px"}}]
-     [:p {:style {:text-transform "uppercase"}} (tr/translate "/product" type :name)]
+     [:h2 {:style {:text-transform "uppercase"}} (tr/translate "/product" type :name)]
      [:p (tr/translate type :copy)]
 
      [:br]
