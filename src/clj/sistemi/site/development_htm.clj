@@ -9,7 +9,9 @@
    :fr "etagères"})
 
 (def strings
-  {:en {:credenza {:copy "Looks simple.  Does it not?  The only thing simple about Credenza is its assembly.
+  {:en {:back "Back"
+        :contact-us "Contact Us"
+        :credenza {:copy "Looks simple.  Does it not?  The only thing simple about Credenza is its assembly.
                           There are no screws, nails, dowels or glue necessary to put her together.  The ingenuity
                           is in the patent pending connection system that we cleverly hid from view.  You can
                           choose almost any dimension and color just like the bookcases and shelves.  However,
@@ -50,7 +52,9 @@
                       Does Oasi provide you the most amazing solution to your design problem?  If so, give us a call by clicking
                       on the contact button below."}}
 
-   :fr {:credenza {:copy "Simple, n'est-ce pas? La seule chose simple à propos de Credenza, c'est son assemblage. Il n'y a pas de vis, de
+   :fr {:contact-us "Nous Contacter"
+        :back "Retour"
+        :credenza {:copy "Simple, n'est-ce pas? La seule chose simple à propos de Credenza, c'est son assemblage. Il n'y a pas de vis, de
                           clous, de chevilles ou de colle nécessaire à son assemblage. L'ingéniosité réside dans le système d'assemblage
                           (ici caché de la vue de tous) dont le brevet est en cours de dépôt. Vous pouvez choisir n'importe quelle
                           dimension et couleur, tout comme nos bibliothèques et étagères. Cependant, le process n'est pas encore
@@ -99,10 +103,9 @@
      [:div {:style {:margin-bottom "15px"}}
       [:a {:href (tr/localize "/contact.htm")}
        ;; TODO Pass product information to the contact form.
-       [:button#submit.btn.btn-inverse {:typez "submit" :tabindex 1} "Contact Us"]]
+       [:button#submit.btn.btn-inverse {:tabindex 1} (tr/translate :contact-us)]]
       [:a {:href (tr/localize "/")}
-       [:button#submit.btn.btn-inverse {:typez "submit" :tabindex 2 :style {:margin-left "20px"}} "Back"]]]
-]))
+       [:button#submit.btn.btn-inverse {:tabindex 2 :style {:margin-left "20px"}} (tr/translate :back)]]]]))
 
 (defn handle
   [req]
