@@ -49,8 +49,11 @@ dropdown menus above."}
         :finish "Finition"
         :color "Couleur"
         :quantity "Quantité"
-        :displayed "présentées"}
-   })
+        :displayed "présentées"
+        :instructions "Si vous avez besoin de pimenter votre système d'étagères existantes,
+                       nos étagères simples sont la solution parfaite. Peut-être avez-vous
+                       juste besoin de panneaux peints pour un projet spécial. Créez votre
+                       solution sur mesure en utilisant les menus déroulants ci-dessus."}})
 
 (defn head
   []

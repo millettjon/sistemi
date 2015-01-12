@@ -50,7 +50,11 @@ above."}
         :finish "Finition"
         :color "Couleur"
         :cutout "Découpe"
-        :quantity "Quantité"}})
+        :quantity "Quantité"
+        :instructions "Avez-vous besoin d'une bibliothèque haut de gamme aux dimensions parfaites,
+                       qui correspond aux couleurs de votre chambre et s'assemble facilement? Biblio
+                       réalise vos rêves.  Construisez votre Biblio sur mesure en utilisant les menus
+                       déroulants ci-dessus."}})
 
 (defn head
   []
