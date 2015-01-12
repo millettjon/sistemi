@@ -246,7 +246,7 @@
   "Returns an h2 element for a product category."
   [section & opts]
   (list
-   [:h2 section]
+   [:h2 (tr/translate "/product" (g/get-type section) :name :category)]
    (->> (apply g/get-images section opts)
         (partition 3)  ; truncate to 3 items per row
         (take 3)       ; truncate to 3 rows (9 items) total

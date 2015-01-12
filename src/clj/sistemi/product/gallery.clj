@@ -120,6 +120,14 @@
             (swap! image-cache #(cache/miss % category (apply get-images* category opts))))]
     (clojure.core/get C category)))
 
+;; TODO: Remove this once the directory name is forced to match the type.
+(defn get-type
+  "Returns the type of a section i.e., internal keyword for the product."
+  [category]
+  (let [dir (-> category name gallery-dir)
+        default-data (edn/slurp (p/join dir "default.edn"))]
+    (:type default-data)))
+
 (defn furniture-volume
   "Calculates volume of a furntiure based on Eric's naming
   convention. Split by '.' and multiply the first three segments that
