@@ -4,7 +4,7 @@
 ;; TODO: Can some of these be bumped up to the top level as general terms?
 (def strings
   "translation strings"
-  {:en {:shelf {:name {:_ "Shelf"
+  {:en {:shelf {:name {:_ "Single Shelf System"
                        :custom "Custom Shelf"
                        :category "Single Shelf Systems"}
                 :width "width"
@@ -12,9 +12,9 @@
                 :finish {:_ "finish" :laquer-matte "matte" :laquer-satin "satin" :laquer-glossy "glossy"
                          :valchromat-raw "Valchromat – unfinished" :valchromat-oiled "Valchromat – oiled"}
                 :color "color"}
-        :bookcase {:name {:_ "Bookcase"
-                          :custom "Custom Bookcase"
-                          :category "Bookshelves"}
+        :bookcase {:name {:_ "Biblio"
+                          :custom "Custom Biblio"
+                          :category "Biblio"}
                    :width "width"
                    :depth "depth"
                    :height "height"
@@ -24,11 +24,11 @@
                    :cutout {:_ "cutout" :semplice "none" :ovale "oval" :quadro "rectangle"}}
 
         :credenza {:name {:_ "Credenza"
-                          :category "Credenzas"}}
-        :credenza-classic {:name {:_ "Credenza-Classic"
-                                  :category "Credenzas-Classic"}}
-        :cupboard {:name {:_ "Cupboard"
-                          :category "Cupboards"}}
+                          :category "Credenza"}}
+        :credenza-classic {:name {:_ "Credenza Classic"
+                                  :category "Credenza Classic"}}
+        :cupboard {:name {:_ "Armoire"
+                          :category "Armoire"}}
         :nata {:name {:_ "Nata"
                       :category "Nata"}}
         :oasi {:name {:_ "Oasi"
@@ -57,11 +57,11 @@
                    :cutout {:_ "Découpe" :semplice "semplice" :ovale "ovale" :quadro "quadro"}}
 
         :credenza {:name {:_ "Credenza"
-                          :category "Credenzas"}}
-        :credenza-classic {:name {:_ "Credenza-Classic"
-                                  :category "Credenzas-Classic"}}
+                          :category "Credenza"}}
+        :credenza-classic {:name {:_ "Credenza Classic"
+                                  :category "Credenza Classic"}}
         :cupboard {:name {:_ "Armoire"
-                          :category "Armoires"}}
+                          :category "Armoire"}}
         :nata {:name {:_ "Nata"
                       :category "Nata"}}
         :oasi {:name {:_ "Oasi"
