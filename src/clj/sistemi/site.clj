@@ -272,12 +272,12 @@
 
    [:div [:img.header-image {:src "graphics/gallery-intro.jpg"}]]
 
-   (gallery-section :bookshelves :compare-fn g/compare-volume)
+   (gallery-section :biblio :compare-fn g/compare-volume)
    (gallery-section :single-shelf-systems)
    (gallery-section-modulo)
-   (gallery-section :credenzas)
-   (gallery-section :credenzas-classic)
-   (gallery-section :cupboards)
+   (gallery-section :credenza)
+   (gallery-section :credenza-classic)
+   (gallery-section :armoire)
    (gallery-section :nata)
    (gallery-section :oasi)
 

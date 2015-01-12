@@ -27,7 +27,7 @@
                                   <br><br>
                                   If you want to find out how to get your hands on this product, click on the contact button below!"}
 
-        :cupboard {:copy "We are so busy that we have not even taken a moment to come up with a catchy name for this
+        :armoire {:copy "We are so busy that we have not even taken a moment to come up with a catchy name for this
                           innovative storage solution.  Just like Credenza, Armoire uses our patent pending connection
                           system to hide the magic of its easy assembly.  The choices are endless.
                           <br><br>
@@ -68,7 +68,7 @@
                                   sans attaches et peut être commandée personnalisée en termes de dimensions, couleurs et matériaux . Si vous
                                   voulez savoir comment obtenir ce produit, cliquez sur le bouton de contact ci-dessous !"}
 
-        :cupboard {:copy "Nous sommes tellement occupés que nous n'avons pas encore pris un moment pour trouver un nom
+        :armoire {:copy "Nous sommes tellement occupés que nous n'avons pas encore pris un moment pour trouver un nom
                           accrocheur pour cette solution de stockage innovante. Tout comme CREDENZA, nos armoires utilisent notre
                           brevet d'assemblage en instance de dépôt pour un montage facile. Les possibilités sont infinies. Pour
                           découvrir jusqu'à quel point peuvent être personnalisées nos armoires, cliquez sur le bouton de contact ci-dessous !"}

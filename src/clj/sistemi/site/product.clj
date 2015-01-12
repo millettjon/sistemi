@@ -27,7 +27,7 @@
                           :category "Credenza"}}
         :credenza-classic {:name {:_ "Credenza Classic"
                                   :category "Credenza Classic"}}
-        :cupboard {:name {:_ "Armoire"
+        :armoire {:name {:_ "Armoire"
                           :category "Armoire"}}
         :nata {:name {:_ "Nata"
                       :category "Nata"}}
@@ -60,7 +60,7 @@
                           :category "Credenza"}}
         :credenza-classic {:name {:_ "Credenza Classic"
                                   :category "Credenza Classic"}}
-        :cupboard {:name {:_ "Armoire"
+        :armoire {:name {:_ "Armoire"
                           :category "Armoire"}}
         :nata {:name {:_ "Nata"
                       :category "Nata"}}
