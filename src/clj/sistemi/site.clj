@@ -12,7 +12,6 @@
         :title "Modern Shelving Furniture : Sistemi Moderni"
 
         ;; layout
-        :beta "beta"
         :webgl_recommended "This site works best if WebGL rendering is enabled."
         :canvas_required "This site requires html5 canvas or WebGL to function."
         :recommended_browsers "We recommend <a href='http://www.mozilla.org'>Firefox</a> or <a href='http://www.google.com/chrome'>Chrome</a>."
@@ -78,7 +77,6 @@
         :title "Meubles Étagères Moderne : Sistemi Moderni"
 
         ;; layout
-        :beta "beta"
         :webgl_recommended "Ce site est optimisé pour une visualisation avec rendu WebGL activé."
         :canvas_required "Le bon fonctionnement de ce site nécessite HTML5 canvas, ou WebGL."
         :recommended_browsers "Nous recommandons des navigateurs comme <a href='http://www.mozilla.org'>Firefox</a> ou <a href='http://www.google.com/chrome'>Chrome</a>."
@@ -141,7 +139,6 @@
         :title ""
 
         ;; layout
-        :beta "beta"
         :webgl_recommended "Questo sito è ottimizzato per una visualizzazione con WebGL rendering attivato."
         :canvas_required "Il buon funzionamento di questo sito richiede HTML5 canvas, o WebGL."
         :recommended_browsers "Raccomandiamo browsers come <a href='http://www.mozilla.org'>Firefox</a> o <a href='http://www.google.com/chrome'>Chrome</a>."

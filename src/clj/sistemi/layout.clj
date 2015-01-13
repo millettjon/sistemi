@@ -151,7 +151,7 @@
          [:div
           {:style "padding: 10px; min-height: 19px; text-align: center; font-size: 20px; text-transform: uppercase;"}
           [:noscript {:style "color: #F00;"} (tr/translate :javascript_required)]
-          [:span#header_message {:style {:display "none"}} (tr/translate :beta)]
+          [:span#header_message {:style {:display "none"}} ""]
           [:span#webgl_recommended {:style "display: none; font-size: 16px;"} (tr/translate :webgl_recommended)
            ;; Recommend firefox/chrome for non firefox/chrome users.
            (case (:browser_group (ua/req->features req/*req*))
