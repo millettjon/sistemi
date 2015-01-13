@@ -134,4 +134,4 @@ end
 Dir.chdir File.dirname(File.dirname(File.expand_path(__FILE__)))
 
 # Import images.
-Gallery.import("dep/dropbox/Communication.Marketing/New Pages for Site/Images for Gallery Page")
+Gallery.import("dep/dropbox/Gallery")
