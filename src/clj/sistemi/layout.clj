@@ -104,6 +104,13 @@
                :href "//twitter.com/SistemiModerni"
                :tabindex "-1"}
     [:i.fa.fa-twitter.fa-lg]]
+
+   [:a.social {:onclick "window.open(this.href,'_blank'); return false;"
+               :href "//www.houzz.com/pro/sistemimoderni/sistemi-moderni-sas"
+               :tabindex "-1"
+               ;; Bump it over a bit since the spacing differs from the other font awesome icons.
+               :style {:position "relative" :left "-4px"}}
+    [:i.fa.icon-houzz.fa-lg]]
    ])
 
 (defn standard-page
@@ -119,6 +126,7 @@
       [:link {:href "/css/layout.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "/menu/menu.css", :rel "stylesheet", :type "text/css"}]
       [:link {:href "//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" :rel "stylesheet"}]
+      [:link {:href "/css/houzz-icon-font.css", :rel "stylesheet", :type "text/css"}]
 
       ;; social buttons styles
       [:style "a.social {color: #bbb;} a.social:hover {color: #fff;}"]

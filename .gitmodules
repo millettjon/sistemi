@@ -16,3 +16,6 @@
 [submodule "checkouts/dommy"]
 	path = checkouts/dommy
 	url = https://github.com/Prismatic/dommy.git
+[submodule "opt/houzz-iconf-font"]
+	path = opt/houzz-iconf-font
+	url = https://github.com/brandoncordell/houzz-icon-font.git
