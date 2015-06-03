@@ -1,44 +1,16 @@
-// TODO: Add svg support as fallback?
 // TODO: Add stop frame animation mode
 //       - disable animation
 //       - redraw on change only
 //       - factor mouse spin control into separate file
 //       - add spin buttons
 //       - auto switch to stop frame animation if frame rate is too slow
-// TODO: IE support
-//       - https://code.google.com/p/explorercanvas/
-//         - https://code.google.com/p/explorercanvas/wiki/Instructions
-//         - uses VML
-//         - needs work to be compatible with three.js
-//       - http://code.google.com/p/svgweb/
-//         - uses flash to render SVG
-//       - http://raphaeljs.com/
-//         - uses SVG and VML on IE
-//       - https://github.com/learnboost/node-canvas
-//         - renders as image over websocket
-//         - https://github.com/mrdoob/three.js/issues/2182
-//         - https://github.com/mrdoob/three.js/pull/2084
-//       - http://iewebgl.com/Faq.aspx
-//         - freeware plugin
-//       - unity3d?
-//         - requires plugin
 // TODO: Improve horizontal spacing using well defined layout algorithm.
-// TODO: Fix triangulation error in oval cutout.
 // TODO: Add sliders for dimensions? How to work on phones?
 //       - http://jqueryfordesigners.com/demo/slider-gallery.html (apple like)
 //       - http://papermashup.com/demos/jquery-slider-bar/ (another style)
 //       - http://www.ryancoughlin.com/demos/interactive-slider/ (basic)
 //       - http://d2o0t5hpnwv4c1.cloudfront.net/377_slider/slider_sourcefiles/slider.html
 // TODO: Get it working with window resize.
-//
-// TODO: Review compatability: http://caniuse.com/webgl
-// TODO: Test on IE9.
-// TODO: Test on iPad.
-// TODO: Add a fallback for browsers that don't support canvas?
-//       node.js render to png on server?/
-//       See: toDataURL
-//       See: http://stackoverflow.com/questions/8900498/exporting-html-canvas-as-an-image-sequence
-//       WebDriver https://gist.github.com/1666559
 //
 // TODO: Color members differently for debugging (easter egg?).
 // TODO: Explode for instructions?
@@ -145,67 +117,13 @@ function cutoutOval(shape, bbox) {
   var margin = 3.8;
   var box = innerBox(bbox, margin);
 
-  var path = new THREE.Path();
-
-  // AC from bottom center.
-  // Works with defects (triangulation error).
-  if (true) {
-    path.moveTo(box.center.x, box.bottom);
-    path.quadraticCurveTo( box.right, box.bottom, box.right, box.center.y);
-    path.quadraticCurveTo( box.right, box.top, box.center.x, box.top);
-    path.quadraticCurveTo( box.left, box.top, box.left, box.center.y);
-    path.quadraticCurveTo( box.left, box.bottom, box.center.x, box.bottom);
-  }
-
-  // AC from right center.
-  // Works with defects (triangulation error).
-  if (false) {
-    path.moveTo(box.right, box.center.y);
-    path.quadraticCurveTo( box.right, box.top, box.center.x, box.top);
-    path.quadraticCurveTo( box.left, box.top, box.left, box.center.y);
-    path.quadraticCurveTo( box.left, box.bottom, box.center.x, box.bottom);
-    path.quadraticCurveTo( box.right, box.bottom, box.right, box.center.y);
-  }
-
-  // AC from left center.
-  // Works with defects (triangulation error).
-  if (false) {
-    path.moveTo(box.left, box.center.y);
-    path.quadraticCurveTo( box.left, box.bottom, box.center.x, box.bottom);
-    path.quadraticCurveTo( box.right, box.bottom, box.right, box.center.y);
-    path.quadraticCurveTo( box.right, box.top, box.center.x, box.top);
-    path.quadraticCurveTo( box.left, box.top, box.left, box.center.y);
-  }
-
-  // AC from top center.
-  // Works with defects (triangulation error).
-  if (false) {
-    path.moveTo(box.center.x, box.top);
-    path.quadraticCurveTo( box.left, box.top, box.left, box.center.y);
-    path.quadraticCurveTo( box.left, box.bottom, box.center.x, box.bottom);
-    path.quadraticCurveTo( box.right, box.bottom, box.right, box.center.y);
-    path.quadraticCurveTo( box.right, box.top, box.center.x, box.top);
-  }
-
-  // CW from bottom center.
-  // Doesn't work at all (No holes, but no error either WTF).
-  if (false) {
-    path.moveTo(box.center.x, box.bottom);
-    path.quadraticCurveTo( box.left, box.bottom, box.left, box.center.y);
-    path.quadraticCurveTo( box.left, box.top, box.center.x, box.top);
-    path.quadraticCurveTo( box.right, box.top, box.right, box.center.y);
-    path.quadraticCurveTo( box.right, box.bottom, box.center.x, box.bottom);
-  }
-
-  // CW from top center.
-  // Doesn't work at all (No holes, but no error either WTF).
-  if (false) {
-    path.moveTo( box.center.x, box.top );
-    path.quadraticCurveTo( box.right, box.top,    box.right,    box.center.y );
-    path.quadraticCurveTo( box.right, box.bottom, box.center.x, box.bottom   );
-    path.quadraticCurveTo( box.left,  box.bottom, box.left,     box.center.y );
-    path.quadraticCurveTo( box.left,  box.top,    box.center.x, box.top      );
-  }
+  var curve = new THREE.EllipseCurve(
+	box.center.x,  box.center.y, // ax, aY
+	box.center.x - box.left, box.center.y - box.bottom,  // xRadius, yRadius
+	0,  2 * Math.PI,             // aStartAngle, aEndAngle
+	false                        // aClockwise
+  )
+  var path = new THREE.Path( curve.getPoints( 50 ) );
 
   shape.holes.push( path );
 }
