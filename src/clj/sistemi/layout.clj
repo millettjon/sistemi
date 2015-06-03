@@ -198,6 +198,8 @@
            [:li 
             [:a {:href (tr/localize "/team.htm") :tabindex "-1"} (tr/translate :header :team)]]
            [:li 
+            [:a {:href (tr/localize "/partners.htm") :tabindex "-1"} (tr/translate :header :partners)]]
+           [:li 
             [:a {:href (tr/localize "/careers.htm") :tabindex "-1"} (tr/translate :header :careers)]]]]]
 
         [:td

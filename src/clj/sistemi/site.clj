@@ -24,6 +24,7 @@
         :header {:signup "Sign Up For Emails"
                  :contact "Contact Us"
                  :careers "Careers"
+                 :partners "Partners"
                  :team "Team"}
         :menu {:home "home"
                :vision "our vision"
