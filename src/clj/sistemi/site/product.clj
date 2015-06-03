@@ -9,7 +9,7 @@
                        :category "Single Shelf Systems"}
                 :width "width"
                 :depth "depth"
-                :finish {:_ "finish" :laquer-matte "matte" :laquer-satin "satin" :laquer-glossy "glossy"
+                :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin"
                          :valchromat-raw "Valchromat – unfinished" :valchromat-oiled "Valchromat – oiled"}
                 :color "color"}
         :bookcase {:name {:_ "Biblio"
@@ -18,7 +18,7 @@
                    :width "width"
                    :depth "depth"
                    :height "height"
-                   :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin" :laquer-glossy "laquer - glossy"
+                   :finish {:_ "finish" :laquer-matte "laquer - matte" :laquer-satin "laquer - satin"
                             :valchromat-raw "Valchromat – unfinished" :valchromat-oiled "Valchromat – oiled"}
                    :color "color"
                    :cutout {:_ "cutout" :semplice "none" :ovale "oval" :quadro "rectangle"}}
@@ -41,7 +41,7 @@
                        :category "Systèmes d'étagères simples"}
                 :width "Largeur"
                 :depth "Profondeur"
-                :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
+                :finish {:_ "Finition" :laquer-matte "laqué - mat" :laquer-satin "laqué - satiné"
                          :valchromat-raw "Valchromat – brut" :valchromat-oiled "Valchromat – huilé"}
                 :color "Couleur"}
 
@@ -51,7 +51,7 @@
                    :width "Longeur"
                    :depth "Profondeur"
                    :height "Hauteur"
-                   :finish {:_ "Finition" :laquer-matte "Mat" :laquer-satin "Satiné" :laquer-glossy "Laqué"
+                   :finish {:_ "Finition" :laquer-matte "laqué - mat" :laquer-satin "laqué - satiné"
                             :valchromat-raw "Valchromat – brut" :valchromat-oiled "Valchromat – huilé"}
                    :color "Couleur"
                    :cutout {:_ "Découpe" :semplice "semplice" :ovale "ovale" :quadro "quadro"}}
@@ -72,14 +72,14 @@
                 :depth "Profondità"
                 :color "Colore"
                 :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
-                :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
+                :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato"
                          :valchromat-raw "Valchromat – naturale" :valchromat-oiled "Valchromat – oliato"}                }
         :bookcase {:width "Lunghezza"
                    :depth "Profondità"
                    :height "Altezza"
                    :color "Colore"
                    :cutout {:_ "Ritaglio" :semplice "nessuno" :ovale "ovale" :quadro "rettangolo"}
-                   :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato" :laquer-glossy "Lucido"
+                   :finish {:_ "Finitura" :laquer-matte "Opaco" :laquer-satin "Satinato"
                             :valchromat-raw "Valchromat – naturale" :valchromat-oiled "Valchromat – oliato"}}}})
 
 (def urls

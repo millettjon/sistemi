@@ -21,7 +21,7 @@
 (def shelf-params
   {:width {:type :bounded-number :units "cm" :min 64 :max 240 :default 120 :format fmt/cm}
    :depth {:type :bounded-number :units "cm" :min 20 :max 39 :default 30 :format fmt/cm}
-   :finish {:type :set :options [:laquer-matte :laquer-satin :laquer-glossy {:disabled true} :valchromat-raw :valchromat-oiled] :default :laquer-matte
+   :finish {:type :set :options [:laquer-matte :laquer-satin :valchromat-raw :valchromat-oiled] :default :laquer-matte
              :format (get-in fmt/parameter-formats [:shelf :finish])}
    :color {:type :color :default (ral/get-color 3027)}
    })

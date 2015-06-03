@@ -32,7 +32,7 @@
   "Converts the item finish value to the format expected by the spreadsheet."
   [finish]
   (case finish
-    (:laquer-matte :laquer-satin :laquer-glossy) "laquer"
+    (:laquer-matte :laquer-satin) "laquer"
     :valchromat-oiled "oil"
     :valchromat-raw "raw"))
 
