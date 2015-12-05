@@ -5,9 +5,9 @@
 
 (deftest url-from-blog-to-site
   (are [x y] (= (-> x b/url-from-blog-to-site str) y)
-       "https://blog.sm1.in/?p=31"                    "/en/blog?p=31"
-       "https://blog.sm1.in/?p=31&lang=fr"            "/fr/blog?p=31"
-       "https://blog.sm1.in/au-commencement/?lang=fr" "/fr/blog/au-commencement"))
+       "https://blog.sm1.in/en/blog?p=31"             "/en/blog?p=31"
+       "https://blog.sm1.in/fr/blog/?p=31"            "/fr/blog?p=31"
+       "https://blog.sm1.in/fr/blog/au-commencement"  "/fr/blog/au-commencement"))
 
 (deftest url-site->blog
   (are [w x y z] (= (-> {:locale w :uri x :params y} b/url-from-blog-to-site) (u/new-URL z))
