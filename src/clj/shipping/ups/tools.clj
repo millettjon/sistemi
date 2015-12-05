@@ -11,7 +11,7 @@
 (defn access-data-from-config
   "Pulled from our encrypted config"
   [access_config_info]
-  (println "access_config_info:" access_config_info)
+  ;; (println "access_config_info:" access_config_info)
   { :UserId (:UserId access_config_info)
     :Password (:Password access_config_info)
     :AccessLicenseNumber (:AccessLicenseNumber access_config_info)

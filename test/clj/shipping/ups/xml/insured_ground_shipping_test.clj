@@ -33,9 +33,9 @@
         ;ship_accept_rsp (ship/shipping-trans-part2 ship_confirm_rsp access_data ship/ship_accept_test_url)
         ]
 
-    (println "ups_access:\n" ups_access "\n")
-    (println "access_data:\n" access_data "\n")
-    (println "basic_data:\n" basic_data "\n")
+    ;; (println "ups_access:\n" ups_access "\n")
+    ;; (println "access_data:\n" access_data "\n")
+    ;; (println "basic_data:\n" basic_data "\n")
 
     ;(println "ship_confirm_rsp:\n" ship_confirm_rsp)
     ;(println "ship_accept_resp:\n" ship_accept_rsp)
